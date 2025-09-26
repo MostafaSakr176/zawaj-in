@@ -1,0 +1,32 @@
+{
+    "welcome":"Hi, Welcome",
+    "navbar": {
+        "loginButton": "Login",
+        "languageToggle": "AR",
+        "contactUs": "Contact Us",
+        "userOpinion": "User Opinion",
+        "subscriptions": "Subscriptions",
+        "whoAreWe": "Who Are We",
+        "mainPage": "Main Page",
+        "usagePolicy": "Usage Policy"
+    },
+    "hero": {
+        "successRate": "90%",
+        "successRateLabel": "Marriage Rate",
+        "welcomeText": "Welcome to Zawag Inn Community",
+        "mainTitle": "Electronic Marriage Platform...",
+        "subtitle": "With Human Spirit and Moral Values",
+        "registerButton": "Login",
+        "newRegisterButton": "New Registration",
+        "zodiacText": "Join Now... and Start Searching for the Suitable Partner.",
+        "suitablePartner": "Suitable Partner"
+    },
+    "stats": {
+        "title": "Platform Statistics",
+        "registered_males": "Registered Males",
+        "registered_females": "Registered Females",
+        "active_males": "Active Males",
+        "active_females": "Active Females"
+    
+    }
+}

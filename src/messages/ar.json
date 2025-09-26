@@ -1,0 +1,31 @@
+{
+    "stats": {
+        "title": "إحصائيات المنصة",
+        "registered_males": "عدد المسجلين من الذكور",
+        "registered_females": "عدد المسجلات من الإناث",
+        "active_males": "المتواجدون اليوم من الذكور",
+        "active_females": "المتواجدات اليوم من الإناث"
+    },
+    "welcome":"اهلا و سهلا",
+    "navbar": {
+        "loginButton": "تسجيل الدخول",
+        "languageToggle": "EN",
+        "contactUs": "تواصل معنا",
+        "userOpinion": "رأي المستخدم",
+        "subscriptions": "الاشتراكات",
+        "whoAreWe": "من نحن",
+        "mainPage": "الرئيسية",
+        "usagePolicy": "سياسة الاستخدام"
+    },
+    "hero": {
+        "successRate": "90%",
+        "successRateLabel": "معدل الزواج",
+        "welcomeText": "مرحبا بك في مجتمع زواج إن",
+        "mainTitle": "منصة زواج إلكتروني...",
+        "subtitle": "بروح إنسانية وقيم أخلاقية",
+        "registerButton": "تسجيل الدخول",
+        "newRegisterButton": "تسجيل جديد",
+        "zodiacText": "انضم الآن… وابدأ بالبحث عن الشريك المناسب.",
+        "suitablePartner": "الشريك المناسب"
+    }
+}
