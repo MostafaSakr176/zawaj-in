@@ -12,14 +12,14 @@ const PlatformStatistics = () => {
     const t = useTranslations('stats');
 
     return (
-        <div className='max-w-7xl mx-auto pt-16 pb-20'>
+        <div className='max-w-7xl mx-auto pt-16 pb-20 px-4'>
             <div className='flex items-center mx-auto w-fit'>
                 <Image src={"/photos/heading-smoth-shape-right.svg"} alt="Heading Shape" width={40} height={25} className='-ml-1 relative z-2' />
-                <div className='w-fit border border-white shadow-md rounded-4xl px-6 py-2 flex items-center gap-4'
+                <div className='w-fit border border-white shadow-md rounded-3xl lg:rounded-4xl px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4'
                     style={{
                         background: 'linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)'
                     }}>
-                    <span className='text-2xl text-black font-semibold leading-normal'>{t('title')}</span>
+                    <span className='text-lg md:text-2xl text-black font-semibold leading-normal'>{t('title')}</span>
                     <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
                         <Avatar>
                             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -41,7 +41,7 @@ const PlatformStatistics = () => {
                 </div>
                 <Image src={"/photos/heading-smoth-shape-left.svg"} alt="Heading Shape" width={40} height={25} className='-mr-1 relative z-2' />
             </div>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-10'>
                 <div className='flex flex-col items-center gap-6 p-6 rounded-[20px] shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300'
                 style={{
                     background: "linear-gradient(201.17deg, #F5E6FF -4.98%, #FFF4EA 119.25%)"
@@ -79,7 +79,6 @@ const PlatformStatistics = () => {
                     <p className='text-[#301B69] font-bold text-5xl'>300</p>
                 </div>
             </div>
-            
         </div>
     )
 }

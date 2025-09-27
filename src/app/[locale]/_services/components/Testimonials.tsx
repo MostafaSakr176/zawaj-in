@@ -16,12 +16,12 @@ const Testimonials = () => {
   const t = useTranslations("userOpinionSection");
   const locale = useLocale()
   return (
-    <div
-      className="w-full lg:py-16 md:max-w-[95%] mx-auto rounded-[48px] mt-20"
-      style={{
-        background: "linear-gradient(124.5deg, #E3EBFF 8.9%, #EFFFED 140.17%)"
-      }}
-    >
+    <div className='px-4 md:px-0'>
+      <div className='w-full px-4 md:px-8 py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px] mt-12 md:mt-20'
+        style={{
+          background: "linear-gradient(124.5deg, #E3EBFF 8.9%, #EFFFED 140.17%)"
+        }}
+      >
         <div className='flex flex-col items-center text-center gap-4 mb-10 max-w-3xl mx-auto px-4 '>
           <span className="mx-auto text-[#301B69] text-sm font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-2"
             style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}>
@@ -31,34 +31,40 @@ const Testimonials = () => {
           <h2 className="text-4xl lg:text-5xl font-bold text-[#301B69] leading-normal text-center">
             {t("title")}
           </h2>
-          <p className="text-lg font-medium text-[#301B69] text-center mb-10">
+          <p className="text-base md:text-lg font-medium text-[#301B69] text-center mb-10">
             {t("subtitle")}
           </p>
         </div>
 
         <div>
           <Swiper
-            slidesPerView={4}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1, spaceBetween: 12 },
+              768: { slidesPerView: 2, spaceBetween: 16 },
+              1024: { slidesPerView: 3, spaceBetween: 16 },
+              1280: { slidesPerView: 4, spaceBetween: 16 },
+            }}
             spaceBetween={16}
-            autoplay={{ delay: 1500, disableOnInteraction: false }} // 2.5 seconds per slide
+            autoplay={{ delay: 1500, disableOnInteraction: false }}
             loop={true}
             speed={2000}
             centeredSlides={true}
             pagination={{
               clickable: true,
             }}
-            modules={[Pagination, Autoplay]} // Add Autoplay here
+            modules={[Pagination, Autoplay]}
             className="mySwiper mb-4"
           >
             {[...Array(10)].map((_, i) => (
               <SwiperSlide key={i}>
                 <div className="bg-white rounded-[24px] border border-[#E3EBFF] p-6 max-w-md mx-auto flex flex-col gap-4"
-                style={{
-                  background: "linear-gradient(180deg, rgba(255, 255, 255, 0.64) 40%, rgba(255, 255, 255, 0.3072) 100%)",
-                  boxShadow: "0px 0px 0px 6px #CC81B10A",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid #301B6929"
-                }}>
+                  style={{
+                    background: "linear-gradient(180deg, rgba(255, 255, 255, 0.64) 40%, rgba(255, 255, 255, 0.3072) 100%)",
+                    boxShadow: "0px 0px 0px 6px #CC81B10A",
+                    backdropFilter: "blur(20px)",
+                    border: "1px solid #301B6929"
+                  }}>
                   {/* Stars */}
                   <div className="flex justify-start gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -91,7 +97,13 @@ const Testimonials = () => {
           </Swiper>
           <Swiper
             dir={locale === "en" ? "rtl" : "ltr"}
-            slidesPerView={4}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1, spaceBetween: 12 },
+              768: { slidesPerView: 2, spaceBetween: 16 },
+              1024: { slidesPerView: 3, spaceBetween: 16 },
+              1280: { slidesPerView: 4, spaceBetween: 16 },
+            }}
             spaceBetween={16}
             autoplay={{ delay: 1500, disableOnInteraction: false }}
             loop={true}
@@ -100,13 +112,13 @@ const Testimonials = () => {
             pagination={{
               clickable: true,
             }}
-            modules={[Pagination , Autoplay]}
+            modules={[Pagination, Autoplay]}
             className="mySwiper"
           >
             {[...Array(10)].map((_, i) => (
               <SwiperSlide key={i}>
                 <div
-                dir={locale === "en" ? "ltr":"rtl"}
+                  dir={locale === "en" ? "ltr" : "rtl"}
                   className="rounded-[24px] shadow-md border border-[#E3EBFF] p-6 max-w-md mx-auto flex flex-col gap-4 transition-all duration-300"
                   style={{
                     background:
@@ -146,7 +158,7 @@ const Testimonials = () => {
             ))}
           </Swiper>
         </div>
-
+      </div>
     </div>
   )
 }

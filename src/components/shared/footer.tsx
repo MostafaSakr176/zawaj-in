@@ -31,7 +31,7 @@ const Footer = () => {
                         >
                             {t("title")}
                         </h2>
-                        <p className="text-lg font-medium text-[#301B69] text-center">
+                        <p className="text-base md:text-lg font-medium text-[#301B69] text-center">
                             {t("subtitle")}
                         </p>
                     </div>
@@ -43,7 +43,7 @@ const Footer = () => {
                         </Button>
                     </div>
                     {/* Social Icons */}
-                    <div className="w-full flex items-center justify-between gap-4">
+                    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
                         <div className="text-4xl font-bold">
                             <span className="text-[#301B69]">زواج</span>{" "}
                             <span className="text-[#E30BCD]">إن</span>
