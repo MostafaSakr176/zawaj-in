@@ -1,5 +1,5 @@
 {
-    "welcome":"Hi, Welcome",
+    "welcome": "Hi, Welcome",
     "navbar": {
         "loginButton": "Login",
         "languageToggle": "AR",
@@ -27,6 +27,71 @@
         "registered_females": "Registered Females",
         "active_males": "Active Males",
         "active_females": "Active Females"
-    
+    },
+    "advantages": {
+        "features": "Features",
+        "title": "How Does the Platform Work?",
+        "subtitle": "Start your journey with us step by step towards your suitable life partner:",
+        "registerTitle": "Registration",
+        "registerDesc": "Create your account with ease and simplicity",
+        "preferencesTitle": "Add Preferences",
+        "preferencesDesc": "Tell us about the person you are looking for: Age - Education - Values - Background - Area",
+        "stepTitle": "A Step Towards Marriage",
+        "stepDesc": "If you like a certain person and have understood each other, you can coordinate here for engagement and marriage.",
+        "paymentTitle": "Paying the Site Fee",
+        "paymentDesc": "Once a serious agreement is reached with the other party, a small fee is paid to support the continuity of the service.",
+        "startNow": "Start Your Marriage Journey Now"
+    },
+    "subscriptions": {
+        "title": "Subscriptions",
+        "subtitle": "Get unlimited tools with an annual subscription, and enjoy exclusive discounts.",
+        "silver": {
+            "title": "Silver Package",
+            "duration": "Duration: 30 days",
+            "price": "$90",
+            "featuresTitle": "Offer Contents:",
+            "features": [
+                "Unlimited communication with all available members.",
+                "A custom badge appears on your profile."
+            ],
+            "button": "Subscribe Now"
+        },
+        "gold": {
+            "title": "Gold Package",
+            "duration": "Duration: 90 days",
+            "price": "$200",
+            "featuresTitle": "Offer Contents:",
+            "features": [
+                "Unlimited communication with all available members.",
+                "A custom badge appears on your profile.",
+                "Priority in search results."
+            ],
+            "button": "Subscribe Now"
+        },
+        "match": {
+            "title": "Match Package",
+            "duration": "Duration: 180 days",
+            "price": "$350",
+            "featuresTitle": "Offer Contents:",
+            "features": [
+                "Unlimited communication with all available members.",
+                "A custom badge appears on your profile.",
+                "Priority in search results.",
+                "Personalized matchmaking assistance."
+            ],
+            "button": "Subscribe Now"
+        }
+    },
+    "userOpinionSection": {
+        "badge": "Success Stories from Our Users",
+        "title": "Opinions from Those Who Found Love Through Zawag Inn",
+        "subtitle": "Zawag Inn brings hearts together with the intention of marriage, here are testimonials from people who found their partner with us"
+    },
+    "footerSection": {
+        "badge": "Start Your Journey in Marriage Now",
+        "title": "Are You Ready to Find Your Life Partner?",
+        "subtitle": "Discover a safe and caring marriage experience on our platform designed specifically for Muslims serious about marriage. Register today to be the first to start a stable and happy life story.",
+        "cta": "Start Now",
+        "copyright": "© Zawag Inn 2025 All Rights Reserved"
     }
 }
