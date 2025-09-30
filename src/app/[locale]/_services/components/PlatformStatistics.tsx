@@ -14,7 +14,7 @@ const PlatformStatistics = () => {
     return (
         <div className='max-w-7xl mx-auto pt-16 pb-20 px-4'>
             <div className='flex items-center mx-auto w-fit'>
-                <Image src={"/photos/heading-smoth-shape-right.svg"} alt="Heading Shape" width={40} height={25} className='-ml-1 relative z-2' />
+                <Image src={"/photos/heading-smoth-shape-right.svg"} alt="Heading Shape" width={40} height={25} className='-ml-[5px] relative z-2' />
                 <div className='w-fit border border-white shadow-md rounded-3xl lg:rounded-4xl px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4'
                     style={{
                         background: 'linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)'
@@ -39,7 +39,7 @@ const PlatformStatistics = () => {
                     </div>
 
                 </div>
-                <Image src={"/photos/heading-smoth-shape-left.svg"} alt="Heading Shape" width={40} height={25} className='-mr-1 relative z-2' />
+                <Image src={"/photos/heading-smoth-shape-left.svg"} alt="Heading Shape" width={40} height={25} className='-mr-[5px] relative z-2' />
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-10'>
                 <div className='flex flex-col items-center gap-6 p-6 rounded-[20px] shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300'
