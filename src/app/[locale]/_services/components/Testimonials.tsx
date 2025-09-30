@@ -17,7 +17,7 @@ const Testimonials = () => {
   const locale = useLocale()
   return (
     <div className='px-4 md:px-0'>
-      <div className='w-full px-4 md:px-8 py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px] mt-12 md:mt-20'
+      <div className='w-full py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px] mt-12 md:mt-20'
         style={{
           background: "linear-gradient(124.5deg, #E3EBFF 8.9%, #EFFFED 140.17%)"
         }}
@@ -36,7 +36,7 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div>
+        <div className='px-4 md:px-8'>
           <Swiper
             slidesPerView={1}
             breakpoints={{

@@ -61,7 +61,7 @@ const Advantages = () => {
                                 </span>
                             </div>
                             {/* Top icon */}
-                            <div className="absolute left-1/2 -translate-x-1/2 -top-9 bg-white rounded-full shadow-sm w-14 h-14 md:w-22 md:h-22 flex items-center justify-center">
+                            <div className="absolute left-1/2 -translate-x-1/2 -top-9 md:-top-14 bg-white rounded-full shadow-sm w-14 h-14 md:w-22 md:h-22 flex items-center justify-center">
                                 <Image src="/icons/advantages section/circle-shape/icon1.svg" alt="heart" width={42} height={42} className='w-6 h-6 md:w-10 md:h-10' />
                             </div>
                             {/* Top right icon */}
@@ -73,7 +73,7 @@ const Advantages = () => {
                                 <Image src="/icons/advantages section/circle-shape/icon3.svg" alt="document" width={42} height={42} className='w-6 h-6 md:w-10 md:h-10' />
                             </div>
                             {/* Bottom icon */}
-                            <div className="absolute left-1/2 -translate-x-1/2 -bottom-9 bg-white rounded-full shadow-sm w-14 h-14 md:w-22 md:h-22 flex items-center justify-center">
+                            <div className="absolute left-1/2 -translate-x-1/2 -bottom-9 md:-bottom-14 bg-white rounded-full shadow-sm w-14 h-14 md:w-22 md:h-22 flex items-center justify-center">
                                 <Image src="/icons/advantages section/circle-shape/icon4.svg" alt="ring" width={42} height={42} className='w-6 h-6 md:w-10 md:h-10' />
                             </div>
                             {/* Bottom left icon */}

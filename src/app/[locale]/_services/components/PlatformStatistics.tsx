@@ -19,17 +19,17 @@ const PlatformStatistics = () => {
                     style={{
                         background: 'linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)'
                     }}>
-                    <span className='text-lg md:text-2xl text-black font-semibold leading-normal'>{t('title')}</span>
+                    <span className='text-lg md:text-xl text-black font-semibold'>{t('title')}</span>
                     <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
-                        <Avatar>
+                        <Avatar className='w-6 h-6'>
                             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <Avatar>
+                        <Avatar className='w-6 h-6'>
                             <AvatarImage src="https://github.com/leerob.png" alt="@leerob" />
                             <AvatarFallback>LR</AvatarFallback>
                         </Avatar>
-                        <Avatar>
+                        <Avatar className='w-6 h-6'>
                             <AvatarImage
                                 src="https://github.com/evilrabbit.png"
                                 alt="@evilrabbit"

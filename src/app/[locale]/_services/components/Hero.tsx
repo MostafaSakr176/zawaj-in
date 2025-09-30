@@ -47,7 +47,7 @@ const Hero = () => {
 
                     {/* Left side - Image and Stats */}
                     <div className="flex justify-end rtl:lg:pl-8 ltr:lg:pr-8">
-                        <div className='relative w-[90%] mx-auto lg:w-[70%]'>
+                        <div className='relative w-[90%] md:w-[70%] mx-auto md:mx-0'>
                             <Image
                                 src="/photos/hero-img.png"
                                 alt="Couple silhouette"
