@@ -11,6 +11,7 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination, Autoplay } from 'swiper/modules';
+import { Star } from 'lucide-react';
 
 const Testimonials = () => {
   const t = useTranslations("userOpinionSection");
@@ -26,7 +27,7 @@ const Testimonials = () => {
           <span className="mx-auto text-[#301B69] text-sm font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-2"
             style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}>
             {t(`badge`)}
-            <Image src="/icons/Testimonials/star.svg" alt="Most Popular" width={16} height={16} />
+            <Star size={16} />
           </span>
           <h2 className="text-4xl lg:text-5xl font-bold text-[#301B69] leading-normal text-center">
             {t("title")}

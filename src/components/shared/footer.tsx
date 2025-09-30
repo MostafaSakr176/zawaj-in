@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Star } from 'lucide-react';
 
 const Footer = () => {
 
@@ -21,7 +21,7 @@ const Footer = () => {
                         <span className="mx-auto text-[#301B69] text-sm font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-2"
                             style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}>
                             {t(`badge`)}
-                            <Image src="/icons/Testimonials/star.svg" alt="Most Popular" width={16} height={16} />
+                            <Star size={16} />
                         </span>
                         <h2
                             className="text-4xl lg:text-7xl font-bold leading-[120%] text-center bg-clip-text text-transparent"
