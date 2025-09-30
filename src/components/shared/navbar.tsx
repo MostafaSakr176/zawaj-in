@@ -29,7 +29,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="w-full fixed top-8 z-50 px-4">
+        <div className="w-full fixed top-4 md:top-8 z-50 px-4">
             <div className="flex items-center justify-between max-w-7xl rounded-2xl md:rounded-[24px] mx-auto px-5 py-3 bg-white/80 backdrop-blur-lg shadow-lg">
                 {/* Logo */}
                 <div className="flex-shrink-0">
