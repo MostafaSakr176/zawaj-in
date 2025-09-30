@@ -53,94 +53,97 @@ const Subscriptions = () => {
         <p className="text-base md:text-lg font-medium text-[#301B69] text-center mb-10">
           {t("subtitle")}
         </p>
-        <Swiper
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1, spaceBetween: 12 },
-            768: { slidesPerView: 2, spaceBetween: 16 },
-            1024: { slidesPerView: 3, spaceBetween: 16 },
-            1280: { slidesPerView: 4, spaceBetween: 16 },
-          }}
-          spaceBetween={16}
-          // autoplay={{ delay: 1500, disableOnInteraction: false }}
-          loop={true}
-          speed={2000}
-          centeredSlides={false}
-          pagination={{
-            clickable: true,
-          }}
-          modules={[Pagination, Autoplay]}
-          className="mySwiper flex md:hidden"
-        >
-          {plans.map((plan, idx) => (
-            <SwiperSlide key={idx} className='h-full'>
-              <div
-                key={plan.key}
-                className={`my-4 h-full relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] py-8 px-6 flex flex-col justify-between shadow-sm ${plan.key !== "gold" ? "bg-white/60 backdrop-blur-md" : ""}`}
-              >
-                {/* Badge */}
-                {plan.badge && (
-                  <span className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 md:left-4 text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
-                    style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}>
-                    <Image src="/icons/plans/star.svg" alt="Most Popular" width={12} height={12} />
-                    {t(`${plan.key}.mostPopular`)}
-                    <Image src="/icons/plans/star.svg" alt="Most Popular" width={12} height={12} />
-                  </span>
-                )}
-                {/* Title & Duration */}
-                <div className='mb-20'>
-                  <h3 className="text-3xl font-bold text-[#301B69] text-center md:text-start mb-2">
-                    {t(`${plan.key}.title`)}
-                  </h3>
-                  <div className="text-lg font-medium text-[#301B69] text-center md:text-start mb-2">
-                    {t(`${plan.key}.duration`)}
+        <div className='flex md:hidden'>
+          <Swiper
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1, spaceBetween: 12 },
+              768: { slidesPerView: 2, spaceBetween: 16 },
+              1024: { slidesPerView: 3, spaceBetween: 16 },
+              1280: { slidesPerView: 4, spaceBetween: 16 },
+            }}
+            spaceBetween={16}
+            // autoplay={{ delay: 1500, disableOnInteraction: false }}
+            loop={true}
+            speed={2000}
+            centeredSlides={false}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[Pagination, Autoplay]}
+            className="mySwiper"
+          >
+            {plans.map((plan, idx) => (
+              <SwiperSlide key={idx} className='h-full'>
+                <div
+                  key={plan.key}
+                  className={`my-4 h-full relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] py-8 px-6 flex flex-col justify-between shadow-sm ${plan.key !== "gold" ? "bg-white/60 backdrop-blur-md" : ""}`}
+                >
+                  {/* Badge */}
+                  {plan.badge && (
+                    <span className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 rtl:md:left-4 ltr:md:right-4 text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
+                      style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}>
+                      <Image src="/icons/plans/star.svg" alt="Most Popular" width={12} height={12} />
+                      {t(`${plan.key}.mostPopular`)}
+                      <Image src="/icons/plans/star.svg" alt="Most Popular" width={12} height={12} />
+                    </span>
+                  )}
+                  {/* Title & Duration */}
+                  <div className='mb-20'>
+                    <h3 className="text-3xl font-bold text-[#301B69] text-center md:text-start mb-2">
+                      {t(`${plan.key}.title`)}
+                    </h3>
+                    <div className="text-lg font-medium text-[#301B69] text-center md:text-start mb-2">
+                      {t(`${plan.key}.duration`)}
+                    </div>
+                    <div className="text-3xl font-bold text-[#301B69] mb-4 flex items-center justify-center md:justify-start gap-1">
+                      {t(`${plan.key}.price`)} <SaudiRiyal size={30} />
+                    </div>
+                    <hr className="my-4 border-[#F3EFFE]" />
+                    <div className="text-[#301B69] text-right mb-4 font-semibold">
+                      {t(`${plan.key}.featuresTitle`)}
+                    </div>
+                    <ul className="space-y-2">
+                      {plan.key === "silver" && [
+                        "تواصل بلا حدود مع جميع الأعضاء المتاحة.",
+                        "شعار مخصص يظهر في ملفك الشخصي."
+                      ].map((feature, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
+                          <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                      {plan.key === "gold" && [
+                        "استلام إشعارات غير محدود.",
+                        "احصل على شعار مخصص يظهر ملفك عن الآخرين.",
+                        "استخدم خاصية الدخول السريع (حماية خصوصيتك).",
+                        "تواصل مع الأعضاء في أي وقت ومن أي مكان."
+                      ].map((feature, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
+                          <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                      {plan.key === "match" && [
+                        "في حال تم التوافق مع أحد الأعضاء وتم عقد النكاح، يتوجب على أحدكم سداد المبلغ أو دفعه في دفعتين."
+                      ].map((feature, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
+                          <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="text-3xl font-bold text-[#301B69] mb-4 flex items-center justify-center md:justify-start gap-1">
-                    {t(`${plan.key}.price`)} <SaudiRiyal size={30} />
-                  </div>
-                  <hr className="my-4 border-[#F3EFFE]" />
-                  <div className="text-[#301B69] text-right mb-4 font-semibold">
-                    {t(`${plan.key}.featuresTitle`)}
-                  </div>
-                  <ul className="space-y-2">
-                    {plan.key === "silver" && [
-                      "تواصل بلا حدود مع جميع الأعضاء المتاحة.",
-                      "شعار مخصص يظهر في ملفك الشخصي."
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
-                        <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                    {plan.key === "gold" && [
-                      "استلام إشعارات غير محدود.",
-                      "احصل على شعار مخصص يظهر ملفك عن الآخرين.",
-                      "استخدم خاصية الدخول السريع (حماية خصوصيتك).",
-                      "تواصل مع الأعضاء في أي وقت ومن أي مكان."
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
-                        <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                    {plan.key === "match" && [
-                      "في حال تم التوافق مع أحد الأعضاء وتم عقد النكاح، يتوجب على أحدكم سداد المبلغ أو دفعه في دفعتين."
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
-                        <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Button */}
+                  <Button variant={plan.key === "gold" ? "default" : "secondary"} >
+                    {t(`${plan.key}.button`)}
+                  </Button>
                 </div>
-                {/* Button */}
-                <Button variant={plan.key === "gold" ? "default" : "secondary"} >
-                  {t(`${plan.key}.button`)}
-                </Button>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
         <div className="max-w-7xl mx-auto hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8">
           {plans.map((plan, idx) => (
             <div
@@ -149,7 +152,7 @@ const Subscriptions = () => {
             >
               {/* Badge */}
               {plan.badge && (
-                <span className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 md:left-4 text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
+                <span className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 rtl:md:left-4 rtl:md:right-auto ltr:md:right-4 ltr:md:left-auto text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
                   style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}>
                   <Image src="/icons/plans/star.svg" alt="Most Popular" width={12} height={12} />
                   {t(`${plan.key}.mostPopular`)}

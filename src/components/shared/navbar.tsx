@@ -70,7 +70,6 @@ const Navbar = () => {
                         <RefreshCcw size={24} />
                         {t('languageToggle')}
                     </Button>
-
                     {/* Login Button */}
                     <Button>
                         {t('loginButton')}

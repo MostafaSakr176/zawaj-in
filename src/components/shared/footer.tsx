@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const Footer = () => {
 
@@ -38,8 +38,9 @@ const Footer = () => {
                     {/* CTA Button */}
                     <div>
                         <Button>
-                            <ArrowRight size={16} />
                             {t("cta")}
+                            <ArrowLeft size={16} className='rtl:inline-block ltr:hidden' />
+                            <ArrowRight size={16} className='rtl:hidden ltr:inline-block' />
                         </Button>
                     </div>
                     {/* Social Icons */}

@@ -36,7 +36,7 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className='px-4 md:px-8'>
+        <div className='px-4 md:px-0'>
           <Swiper
             slidesPerView={1}
             breakpoints={{
