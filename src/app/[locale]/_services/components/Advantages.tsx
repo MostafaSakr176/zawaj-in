@@ -45,9 +45,8 @@ const Advantages = () => {
   const t = useTranslations("advantages");
 
   return (
-    <section className="px-4 md:px-0">
       <div
-        className="w-full px-4 md:px-8 py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px] bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]"
+        className="stack-card absolute inset-0 h-auto w-full px-4 md:px-8 py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px] bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]"
       >
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Text column */}
@@ -110,7 +109,6 @@ const Advantages = () => {
           </div>
         </div>
       </div>
-    </section>
   );
 };
 
