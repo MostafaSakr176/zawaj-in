@@ -24,7 +24,7 @@ const StackedCards = () => {
         // Initial stacked layout
         gsap.set(cards, {
           yPercent: (i) => i * 4,           // small vertical offset between cards
-          scale: (i) => 1 - i * 0.04,       // subtle scale difference
+          scale: (i) => 0.8 - i * 0.04,       // subtle scale difference
           zIndex: (i) => 10 - i,            // keep top card clickable
           transformOrigin: "center top",
           borderRadius: 24,
@@ -51,7 +51,7 @@ const StackedCards = () => {
             cards[i],
             {
               yPercent: -120 - i * 5, // move out of view upward
-              scale: 0.9 - i * 0.04,
+              scale: 0.7 - i * 0.04,
               opacity: 0.7,
               boxShadow: "0 10px 24px rgba(48,27,105,0.06)",
             },
@@ -60,7 +60,7 @@ const StackedCards = () => {
             cards[i + 1],
             {
               yPercent: 0,
-              scale: 1,
+              scale: 0.8,
               opacity: 1,
               zIndex: 10,
             },
@@ -79,7 +79,7 @@ const StackedCards = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-[130vh] w-full my-12">
+    <section ref={containerRef} className="relative h-[80vh] w-full">
       {/* Card 1 */}
         <Advantages />
 
