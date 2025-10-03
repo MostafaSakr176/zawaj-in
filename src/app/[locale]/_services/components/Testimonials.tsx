@@ -16,8 +16,10 @@ import { Star } from 'lucide-react';
 const Testimonials = () => {
   const t = useTranslations("userOpinionSection");
   const locale = useLocale()
+
+  // stack-card absolute inset-0 h-auto w-full
   return (
-      <div className='stack-card absolute inset-0 h-auto w-full py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px]'
+      <section id='userOpinion' className='py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px]'
         style={{
           background: "linear-gradient(124.5deg, #E3EBFF 8.9%, #EFFFED 140.17%)"
         }}
@@ -158,7 +160,7 @@ const Testimonials = () => {
             ))}
           </Swiper>
         </div>
-      </div>
+      </section>
   )
 }
 

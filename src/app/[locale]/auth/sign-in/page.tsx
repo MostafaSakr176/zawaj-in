@@ -16,6 +16,7 @@ import Label from "@/components/ui/label";
 import { FormField } from "@/components/ui/form";
 import { TextField } from "@/components/ui/text-field";
 import { PasswordInput } from "@/components/ui/password-input";
+import Image from "next/image";
 
 const MailIcon = (
   <svg
@@ -97,11 +98,14 @@ export default function SignInPage() {
       : undefined;
 
   return (
-    <main className="relative min-h-[100dvh] pt-40 bg-gradient-to-br from-[#F5E6FF] via-[#F5E6FF] to-[#FFF4EA] px-4 py-12">
-      <div className="mx-auto max-w-xl">
-        <Card className="rounded-[32px] py-12 px-16 border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)] ">
-          <CardHeader className="pb-9">
-            <CardTitle className="text-center text-[2.5rem] font-extrabold text-[#1D1B23] md:text-5xl">
+    <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
+      style={{
+      }}>
+      <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+      <div className="px-4 mx-auto max-w-xl relative z-2">
+        <Card className="rounded-[32px] py-6 px-4 md:px-16 border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)] ">
+          <CardHeader  className="pb-4 pt-10">
+            <CardTitle className="text-center text-3xl font-extrabold text-[#1D1B23] md:text-5xl">
               {t("title")}
             </CardTitle>
           </CardHeader>
@@ -145,7 +149,7 @@ export default function SignInPage() {
               </Button>
             </div>
 
-            <div className="space-y-9 py-2 text-center text-sm">
+            <div className="space-y-6 md:space-y-9 py-2 text-center text-sm">
               <p>
                 {t("forgotLink")}{" "}
                 <a
@@ -169,6 +173,6 @@ export default function SignInPage() {
           <CardFooter />
         </Card>
       </div>
-    </main>
+    </section>
   );
 }

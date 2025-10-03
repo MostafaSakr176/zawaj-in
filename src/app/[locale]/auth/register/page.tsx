@@ -18,6 +18,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Select } from "@/components/ui/select";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Textarea } from "@/components/ui/textarea";
+import Image from "next/image";
 
 const MailIcon = (
   <svg
@@ -79,15 +80,18 @@ export default function RegisterPage() {
     form.confirm && form.confirm !== form.password ? "غير متطابقة" : undefined;
 
   return (
-    <main className="relative min-h-[100dvh] pt-40 bg-gradient-to-br from-[#F5E6FF] via-[#F5E6FF] to-[#FFF4EA] px-4 py-12">
-      <div className="mx-auto max-w-3xl">
+    <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
+      style={{
+      }}>
+      <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+      <div className="mx-auto max-w-3xl px-4 relative z-2">
         <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
-          <CardHeader className="pb-1 pt-10">
+          <CardHeader  className="pb-4 pt-10">
             <CardTitle className="text-center text-[2rem] font-extrabold text-[#1D1B23] md:text-5xl">
               {t("title")}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-5 px-32 pb-10">
+          <CardContent className="space-y-5 py-4 px-4 md:px-32 md:pb-10">
             <FormField
               label={<Label>{t("usernameLabel")}</Label>}
               hint={t("usernameHint")}
@@ -159,13 +163,13 @@ export default function RegisterPage() {
               />
             </FormField>
           </CardContent>
-          <CardFooter className="px-32 pb-10">
+          <CardFooter className="pb-8 px-4 md:px-32 md:pb-10">
             <Button className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)]">
               {t("submit")}
             </Button>
           </CardFooter>
         </Card>
       </div>
-    </main>
+    </section>
   );
 }

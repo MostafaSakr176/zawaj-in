@@ -61,7 +61,7 @@ function PlanCard({ plan, t }: { plan: Plan; t: (key: string) => string }) {
     <div className={`my-4 relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] py-8 px-6 flex flex-col justify-between shadow-sm ${glass}`}>
       {plan.badge && <Badge />}
 
-      <div className="mb-8">
+      <div className="mb-20">
         <h3 className="text-3xl font-bold text-[#301B69] text-center md:text-start mb-2">
           {t(`${plan.key}.title`)}
         </h3>
@@ -95,7 +95,7 @@ const Subscriptions = () => {
   const t = useTranslations("subscriptions");
 
   return (
-      <div className='stack-card absolute inset-0 h-full w-full px-4 md:px-8 py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px]'
+      <section id="subscriptions" className='px-4 md:px-8 py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px]'
         style={{
           background: "linear-gradient(201.17deg, #F5E6FF -4.98%, #FFF4EA 119.25%)"
         }}
@@ -139,7 +139,7 @@ const Subscriptions = () => {
             <PlanCard key={plan.key} plan={plan} t={t} />
           ))}
         </div>
-      </div>
+      </section>
   );
 };
 

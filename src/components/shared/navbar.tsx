@@ -8,11 +8,9 @@ import { BookUser, House, Menu, RefreshCcw } from 'lucide-react';
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { Link } from '@/i18n/navigation';
 
 const Navbar = () => {
   const t = useTranslations("navbar");
@@ -42,24 +40,42 @@ const Navbar = () => {
                 {/* Navigation Links - Center */}
                 <nav className="hidden lg:block">
                     <div className="flex items-center justify-around gap-6">
-                        <a href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-bold transition-colors border-b-2 border-[#301B69] ">
-                            {t('mainPage')}
-                        </a>
-                        <a href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                            {t('whoAreWe')}
-                        </a>
-                        <a href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                            {t('subscriptions')}
-                        </a>
-                        <a href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                            {t('userOpinion')}
-                        </a>
-                        <a href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                            {t('contactUs')}
-                        </a>
-                        <a href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                            {t('usagePolicy')}
-                        </a>
+                        {
+                            false ? <>
+                                <Link href="/" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-bold transition-colors border-b-2 border-[#301B69] ">
+                                    {t('mainPage')}
+                                </Link>
+                                <Link href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('whoAreWe')}
+                                </Link>
+                                <Link href="#subscriptions" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('subscriptions')}
+                                </Link>
+                                <Link href="#userOpinion" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('userOpinion')}
+                                </Link>
+                                <Link href="/contact-us" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('contactUs')}
+                                </Link>
+                                <Link href="/terms-of-use" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('usagePolicy')}
+                                </Link>
+                            </> : <>
+                                <Link href="/home" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-bold transition-colors border-b-2 border-[#301B69] ">
+                                    {t('mainPage')}
+                                </Link>
+                                <Link href="/chats" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('chats')}
+                                </Link>
+                                <Link href="/favorites" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('favorites')}
+                                </Link>
+                                <Link href="/profile" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                                    {t('profile')}
+                                </Link>
+                            </>
+                        }
+
                     </div>
                 </nav>
 
