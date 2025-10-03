@@ -95,7 +95,7 @@ const Subscriptions = () => {
   const t = useTranslations("subscriptions");
 
   return (
-      <section id="subscriptions" className='px-4 md:px-8 py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px]'
+      <section id="subscriptions" className='max-w-7xl mx-auto px-4 md:px-8 py-10 lg:py-16 rounded-3xl md:rounded-[48px]'
         style={{
           background: "linear-gradient(201.17deg, #F5E6FF -4.98%, #FFF4EA 119.25%)"
         }}
@@ -134,7 +134,7 @@ const Subscriptions = () => {
           </Swiper>
         </div>
 
-        <div className="max-w-7xl mx-auto hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8">
           {plans.map((plan, idx) => (
             <PlanCard key={plan.key} plan={plan} t={t} />
           ))}

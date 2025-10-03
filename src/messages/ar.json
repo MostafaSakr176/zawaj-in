@@ -15,7 +15,10 @@
     "subscriptions": "الاشتراكات",
     "whoAreWe": "من نحن",
     "mainPage": "الرئيسية",
-    "usagePolicy": "سياسة الاستخدام"
+    "usagePolicy": "سياسة الاستخدام",
+    "favorits": "التفضيلات",
+    "chats": "المحادثات",
+    "profile": "الملف الشخصي"
   },
   "hero": {
     "successRate": "90%",

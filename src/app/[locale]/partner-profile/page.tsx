@@ -50,11 +50,11 @@ const PartnerProfile = () => {
                     </div>
                     {/* Actions (left in RTL) */}
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-6 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none">
+                        <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none">
                             أضف للمفضلة
                             <Heart className="w-5 h-5 text-[#2D1F55]" />
                         </button>
-                        <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-6 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none">
+                        <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none">
                             ارسال رسالة
                             <MessageCircle className="w-5 h-5 text-[#2D1F55]" />
                         </button>

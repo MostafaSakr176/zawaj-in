@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { Heart, BadgeCheck, MapPin, Palette, HeartHandshake } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { useState } from "react";
 
 type IdCardProps = {
     name: string;
@@ -37,8 +39,10 @@ const IdCard = ({
     verified = true,
     online = true,
 }: IdCardProps) => {
+    const [Fav, setIsFav] = useState(isFav);
     return (
-        <div className="rounded-xl border border-[#301B6929] bg-white/70 backdrop-blur-md shadow-[0_10px_30px_rgba(48,27,105,0.06)] p-4">
+        <div className="relative rounded-xl border border-[#301B6929] bg-white/70 backdrop-blur-md shadow-[0_10px_30px_rgba(48,27,105,0.06)] p-4">
+            <Link href={"/partner-profile"} className="w-full h-full absolute inset-0 z-1" />
             {/* Header */}
             <div className="flex items-center justify-between">
                 {/* Avatar + name */}
@@ -68,11 +72,11 @@ const IdCard = ({
                 {/* Favorite */}
                 <button
                     aria-label="favorite"
-                    className="bg-transparent border-none cursor-pointer focus:outline-none"
+                    className="bg-transparent border-none cursor-pointer focus:outline-none relative z-2"
+                    onClick={(e) => { e.stopPropagation(); setIsFav(!Fav); }}
                 >
-                    {isFav ? <Image src="/icons/heart-fill.svg" alt="favorite" width={32} height={32} /> : <Image src="/icons/heart.svg" alt="favorite" width={32} height={32} />}
+                    {Fav ? <Image src="/icons/heart-fill.svg" alt="favorite" width={32} height={32} /> : <Image src="/icons/heart.svg" alt="favorite" width={32} height={32} />}
                 </button>
-
             </div>
 
             {/* Divider */}

@@ -17,6 +17,7 @@ import Label from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { TextField } from "@/components/ui/text-field";
 import { Textarea } from "@/components/ui/textarea";
+import Image from "next/image";
 
 export default function NewRequestPage() {
   const t = useTranslations("request");
@@ -55,8 +56,11 @@ export default function NewRequestPage() {
   const prev = () => setStep((s) => Math.max(0, s - 1));
 
   return (
-    <main className="relative min-h-[100dvh] pt-40 bg-gradient-to-br from-[#F5E6FF] via-[#F5E6FF] to-[#FFF4EA] px-4 py-12">
-      <div className="mx-auto max-w-6xl">
+    <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
+      style={{
+      }}>
+      <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+      <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
         <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
           <CardHeader className="pb-2 pt-10">
             <CardTitle className="text-start text-3xl font-extrabold text-[#1D1B23]">
@@ -223,9 +227,9 @@ export default function NewRequestPage() {
             )}
           </CardContent>
           <CardFooter className="flex justify-start gap-3 px-10 pb-10">
-            <Button variant="secondary" onClick={prev} className="min-w-32">
+            {step > 0 && <Button variant="secondary" onClick={prev} className="min-w-32">
               {t("buttons.prev")}
-            </Button>
+            </Button>}
             <Button onClick={next} className="min-w-32">
               {step === steps.length - 1
                 ? t("buttons.submit")
@@ -234,6 +238,6 @@ export default function NewRequestPage() {
           </CardFooter>
         </Card>
       </div>
-    </main>
+    </section>
   );
 }

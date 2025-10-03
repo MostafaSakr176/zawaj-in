@@ -19,7 +19,7 @@ const Testimonials = () => {
 
   // stack-card absolute inset-0 h-auto w-full
   return (
-      <section id='userOpinion' className='py-10 lg:py-16 md:max-w-[95%] mx-auto rounded-3xl md:rounded-[48px]'
+      <section id='userOpinion' className='max-w-7xl mx-auto py-10 lg:py-16 rounded-3xl md:rounded-[48px]'
         style={{
           background: "linear-gradient(124.5deg, #E3EBFF 8.9%, #EFFFED 140.17%)"
         }}
@@ -76,7 +76,7 @@ const Testimonials = () => {
                     ))}
                   </div>
                   {/* Testimonial Text */}
-                  <p className="text-[#301B69] text-lg">
+                  <p className="text-[#301B69] text-base">
                     "موقع زواج إن غير حياتي. تعرفت على زوجتي بعد شهرين فقط من التسجيل، واليوم نحن نعيش حياة سعيدة ومستقرة. ."
                   </p>
                   {/* User Info */}
@@ -138,7 +138,7 @@ const Testimonials = () => {
                     ))}
                   </div>
                   {/* Testimonial Text */}
-                  <p className="text-[#301B69] text-lg">
+                  <p className="text-[#301B69] text-base">
                     "موقع زواج إن غير حياتي. تعرفت على زوجتي بعد شهرين فقط من التسجيل، واليوم نحن نعيش حياة سعيدة ومستقرة. ."
                   </p>
                   {/* User Info */}

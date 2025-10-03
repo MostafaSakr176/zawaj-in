@@ -17,6 +17,7 @@ import { FormField } from "@/components/ui/form";
 import { TextField } from "@/components/ui/text-field";
 import { PasswordInput } from "@/components/ui/password-input";
 import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 
 const MailIcon = (
   <svg
@@ -104,7 +105,7 @@ export default function SignInPage() {
       <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
       <div className="px-4 mx-auto max-w-xl relative z-2">
         <Card className="rounded-[32px] py-6 px-4 md:px-16 border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)] ">
-          <CardHeader  className="pb-4 pt-10">
+          <CardHeader className="pb-4 pt-10">
             <CardTitle className="text-center text-3xl font-extrabold text-[#1D1B23] md:text-5xl">
               {t("title")}
             </CardTitle>
@@ -144,9 +145,12 @@ export default function SignInPage() {
             </FormField>
 
             <div className="pt-2">
-              <Button className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)]">
-                {t("submit")}
-              </Button>
+              <Link href="/new-request">
+                <Button className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)]">
+                  {t("submit")}
+                </Button>
+              </Link>
+
             </div>
 
             <div className="space-y-6 md:space-y-9 py-2 text-center text-sm">
