@@ -15,18 +15,18 @@ import {
 } from "@/components/ui/sheet"
 
 const Navbar = () => {
-    const t = useTranslations('navbar');
-    const router = useRouter();
-    const pathname = usePathname();
+  const t = useTranslations("navbar");
+  const router = useRouter();
+  const pathname = usePathname();
 
-    // Extract current locale from pathname
-    const currentLocale = pathname.split('/')[1];
+  // Extract current locale from pathname
+  const currentLocale = pathname.split("/")[1];
 
-    const toggleLanguage = () => {
-        const newLocale = currentLocale === 'ar' ? 'en' : 'ar';
-        const newPath = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
-        router.push(newPath);
-    };
+  const toggleLanguage = () => {
+    const newLocale = currentLocale === "ar" ? "en" : "ar";
+    const newPath = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
+    router.push(newPath);
+  };
 
     return (
         <div className="w-full fixed top-4 md:top-8 z-50 px-4">
