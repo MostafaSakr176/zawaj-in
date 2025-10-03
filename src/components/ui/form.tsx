@@ -57,7 +57,9 @@ export function FormField({
           <div className="mb-1 flex items-center justify-between">
             <label
               htmlFor={fieldId}
-              className={cn("text-sm font-medium text-foreground/80")}
+              className={cn(
+                "flex gap-3 text-sm font-medium text-foreground/80"
+              )}
             >
               {label}
               {required ? <span className="text-destructive"> *</span> : null}

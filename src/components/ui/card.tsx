@@ -6,7 +6,7 @@ export function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "rounded-[24px] border border-[#E5DDF7] bg-white shadow-[0_4px_24px_0_rgba(80,40,160,0.06)]",
+        "rounded-[24px] border border-[#E5DDF7] bg-[linear-gradient(180deg,_rgba(255,255,255,0.64)_0%,_rgba(255,255,255,0.256)_100%)] shadow-[0_4px_24px_0_rgba(80,40,160,0.06)]",
         className
       )}
       {...props}
@@ -34,14 +34,14 @@ export function CardContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  return <div className={cn("px-6 pb-6", className)} {...props} />;
+  return <div className={cn("", className)} {...props} />;
 }
 
 export function CardFooter({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  return <div className={cn("px-6 pb-6", className)} {...props} />;
+  return <div className={cn("", className)} {...props} />;
 }
 
 export default Card;

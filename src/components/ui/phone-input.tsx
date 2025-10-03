@@ -19,7 +19,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
   ({ className, dialCode = "+966", dialCodeSlot, ...props }, ref) => {
     const fieldProps = useFieldProps();
     const slot = dialCodeSlot ?? (
-      <span className="inline-flex items-center justify-center rounded-md border border-input bg-white px-2 py-1 text-sm text-foreground shadow-xs rtl:ml-2 ltr:mr-2">
+      <span className="inline-flex items-center justify-center rounded-[12px] border border-[#E5DDF7] bg-white px-3 py-2 text-sm text-foreground shadow-xs rtl:ml-2 ltr:mr-2">
         {dialCode}
       </span>
     );
@@ -33,7 +33,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
         <Input
           ref={ref}
           inputMode="tel"
-          className={cn("rtl:pr-[88px] ltr:pl-[88px]", className)}
+          className={cn("rtl:pr-[96px] ltr:pl-[96px] bg-white", className)}
           {...fieldProps}
           {...props}
         />

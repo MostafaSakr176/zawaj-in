@@ -1,32 +1,124 @@
 {
-    "welcome":"Hi, Welcome",
-    "navbar": {
-        "loginButton": "Login",
-        "languageToggle": "AR",
-        "contactUs": "Contact Us",
-        "userOpinion": "User Opinion",
-        "subscriptions": "Subscriptions",
-        "whoAreWe": "Who Are We",
-        "mainPage": "Main Page",
-        "usagePolicy": "Usage Policy"
+  "welcome": "Hi, Welcome",
+  "navbar": {
+    "loginButton": "Login",
+    "languageToggle": "AR",
+    "contactUs": "Contact Us",
+    "userOpinion": "User Opinion",
+    "subscriptions": "Subscriptions",
+    "whoAreWe": "Who Are We",
+    "mainPage": "Main Page",
+    "usagePolicy": "Usage Policy"
+  },
+  "hero": {
+    "successRate": "90%",
+    "successRateLabel": "Marriage Rate",
+    "welcomeText": "Welcome to Zawag Inn Community",
+    "mainTitle": "Electronic Marriage Platform...",
+    "subtitle": "With Human Spirit and Moral Values",
+    "registerButton": "Login",
+    "newRegisterButton": "New Registration",
+    "zodiacText": "Join Now... and Start Searching for the Suitable Partner.",
+    "suitablePartner": "Suitable Partner"
+  },
+  "stats": {
+    "title": "Platform Statistics",
+    "registered_males": "Registered Males",
+    "registered_females": "Registered Females",
+    "active_males": "Active Males",
+    "active_females": "Active Females"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Password",
+      "submit": "Sign in",
+      "forgotLink": "Forgot password?",
+      "registerLink": "Create an account"
     },
-    "hero": {
-        "successRate": "90%",
-        "successRateLabel": "Marriage Rate",
-        "welcomeText": "Welcome to Zawag Inn Community",
-        "mainTitle": "Electronic Marriage Platform...",
-        "subtitle": "With Human Spirit and Moral Values",
-        "registerButton": "Login",
-        "newRegisterButton": "New Registration",
-        "zodiacText": "Join Now... and Start Searching for the Suitable Partner.",
-        "suitablePartner": "Suitable Partner"
+    "register": {
+      "title": "Create a new account",
+      "usernameLabel": "Username",
+      "usernameHint": "Shown to others in the platform",
+      "genderLabel": "Gender",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email (hidden from users)",
+      "phoneLabel": "Mobile number",
+      "passwordLabel": "Password",
+      "confirmLabel": "Confirm password",
+      "submit": "Register"
     },
-    "stats": {
-        "title": "Platform Statistics",
-        "registered_males": "Registered Males",
-        "registered_females": "Registered Females",
-        "active_males": "Active Males",
-        "active_females": "Active Females"
-    
+    "forgot": {
+      "title": "Recover password via email",
+      "emailPlaceholder": "Enter your email address to recover your password",
+      "submit": "Recover password"
+    },
+    "otp": {
+      "title": "OTP Service",
+      "desc": "We sent a 6-digit verification code to your registered email. Please enter it below to proceed.",
+      "placeholder": "Enter the verification code sent to your email",
+      "submit": "Verify now",
+      "resend": "Resend after {seconds} seconds"
+    },
+    "reset": {
+      "title": "Reset new password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "submit": "Save password"
     }
+  },
+  "request": {
+    "title": "Register a new request",
+    "steps": {
+      "nationality": {
+        "label": "Nationality & Residence",
+        "desc": "Please specify your nationality and current residence"
+      },
+      "you": {
+        "label": "Your details",
+        "desc": "Share info like age, marital status, education"
+      },
+      "partner": {
+        "label": "Partner preferences",
+        "desc": "Define the traits you look for"
+      },
+      "types": {
+        "label": "Marriage types",
+        "desc": "Choose the marriage types that suit you"
+      }
+    },
+    "fields": {
+      "nationality": "Nationality",
+      "city": "City",
+      "age": "Age",
+      "origin": "Origin",
+      "marital": "Marital status",
+      "education": "Education",
+      "weight": "Weight (kg)",
+      "height": "Height (cm)",
+      "skin": "Skin color",
+      "hair": "Hair color",
+      "eyes": "Eye color",
+      "hairType": "Hair type",
+      "home": "Home available",
+      "job": "Job nature",
+      "about": "Details (talk about yourself)",
+      "partnerAbout": "Partner details",
+      "marriageType": "Marriage type",
+      "polygamyAgree": "Agree to polygamy"
+    },
+    "placeholders": {
+      "choose": "Choose",
+      "write": "Write",
+      "weight": "60 kg",
+      "height": "160 cm"
+    },
+    "buttons": { "next": "Next", "prev": "Back", "submit": "Submit" },
+    "hints": {
+      "serious": "Please write seriously; contact info is not allowed"
+    }
+  }
 }

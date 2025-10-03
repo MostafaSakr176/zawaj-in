@@ -1,31 +1,124 @@
 {
-    "stats": {
-        "title": "إحصائيات المنصة",
-        "registered_males": "عدد المسجلين من الذكور",
-        "registered_females": "عدد المسجلات من الإناث",
-        "active_males": "المتواجدون اليوم من الذكور",
-        "active_females": "المتواجدات اليوم من الإناث"
+  "stats": {
+    "title": "إحصائيات المنصة",
+    "registered_males": "عدد المسجلين من الذكور",
+    "registered_females": "عدد المسجلات من الإناث",
+    "active_males": "المتواجدون اليوم من الذكور",
+    "active_females": "المتواجدات اليوم من الإناث"
+  },
+  "welcome": "اهلا و سهلا",
+  "navbar": {
+    "loginButton": "تسجيل الدخول",
+    "languageToggle": "EN",
+    "contactUs": "تواصل معنا",
+    "userOpinion": "رأي المستخدم",
+    "subscriptions": "الاشتراكات",
+    "whoAreWe": "من نحن",
+    "mainPage": "الرئيسية",
+    "usagePolicy": "سياسة الاستخدام"
+  },
+  "hero": {
+    "successRate": "90%",
+    "successRateLabel": "معدل الزواج",
+    "welcomeText": "مرحبا بك في مجتمع زواج إن",
+    "mainTitle": "منصة زواج إلكتروني...",
+    "subtitle": "بروح إنسانية وقيم أخلاقية",
+    "registerButton": "تسجيل الدخول",
+    "newRegisterButton": "تسجيل جديد",
+    "zodiacText": "انضم الآن… وابدأ بالبحث عن الشريك المناسب.",
+    "suitablePartner": "الشريك المناسب"
+  },
+  "auth": {
+    "signIn": {
+      "title": "تسجيل الدخول",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "البريد الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "forgotLink": "نسيت كلمة المرور",
+      "registerLink": "تسجيل حساب جديد"
     },
-    "welcome":"اهلا و سهلا",
-    "navbar": {
-        "loginButton": "تسجيل الدخول",
-        "languageToggle": "EN",
-        "contactUs": "تواصل معنا",
-        "userOpinion": "رأي المستخدم",
-        "subscriptions": "الاشتراكات",
-        "whoAreWe": "من نحن",
-        "mainPage": "الرئيسية",
-        "usagePolicy": "سياسة الاستخدام"
+    "register": {
+      "title": "تسجيل حساب جديد",
+      "usernameLabel": "اسم المستخدم",
+      "usernameHint": "يظهر للأخرين داخل المنصة",
+      "genderLabel": "الجنس",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "ادخل البريد الإلكتروني لا يظهر للمستخدمين",
+      "phoneLabel": "رقم الجوال",
+      "passwordLabel": "كلمة المرور",
+      "confirmLabel": "إعادة كلمة المرور",
+      "submit": "تسجيل"
     },
-    "hero": {
-        "successRate": "90%",
-        "successRateLabel": "معدل الزواج",
-        "welcomeText": "مرحبا بك في مجتمع زواج إن",
-        "mainTitle": "منصة زواج إلكتروني...",
-        "subtitle": "بروح إنسانية وقيم أخلاقية",
-        "registerButton": "تسجيل الدخول",
-        "newRegisterButton": "تسجيل جديد",
-        "zodiacText": "انضم الآن… وابدأ بالبحث عن الشريك المناسب.",
-        "suitablePartner": "الشريك المناسب"
+    "forgot": {
+      "title": "استعادة كلمة المرور عبر البريد الإلكتروني",
+      "emailPlaceholder": "يرجى إدخال عنوان بريدك الإلكتروني لاستعادة كلمة المرور",
+      "submit": "استرجاع كلمة المرور"
+    },
+    "otp": {
+      "title": "خدمة OTP",
+      "desc": "لقد أرسلنا رمز تحقق مكون من 6 أرقام إلى بريدك الالكتروني المسجل. يرجى إدخاله أدناه لإتمام عملية الدخول.",
+      "placeholder": "أدخل رمز التحقق المرسل إلى البريد الالكتروني",
+      "submit": "تحقق الآن",
+      "resend": "أعد الإرسال بعد {seconds} ثانية"
+    },
+    "reset": {
+      "title": "اعادة كلمة المرور الجديدة",
+      "newPasswordPlaceholder": "ادخل كلمة المرور الجديدة",
+      "confirmPasswordPlaceholder": "إعادة كلمة المرور الجديدة",
+      "submit": "إحفظ كلمة المرور"
     }
+  },
+  "request": {
+    "title": "تسجيل بيانات طلب جديد",
+    "steps": {
+      "nationality": {
+        "label": "الجنسية و الإقامة",
+        "desc": "يرجى تحديد جنسيتك ومكان إقامتك الحالي"
+      },
+      "you": {
+        "label": "مواصفاتك",
+        "desc": "شارك بعض المعلومات عنك مثل عمرك، حالتك الاجتماعية، مستواك التعليمي"
+      },
+      "partner": {
+        "label": "مواصفات الطرف الآخر",
+        "desc": "حدد الصفات التي تبحث عنها في شريك الحياة"
+      },
+      "types": {
+        "label": "زواج التعدد والمسيار",
+        "desc": "اختر أنواع الزواج التي تناسبك"
+      }
+    },
+    "fields": {
+      "nationality": "الجنسية",
+      "city": "المدينة",
+      "age": "العمر",
+      "origin": "الأصل",
+      "marital": "الحالة الاجتماعية",
+      "education": "المؤهل",
+      "weight": "الوزن (كجم)",
+      "height": "الطول (سم)",
+      "skin": "لون البشرة",
+      "hair": "لون الشعر",
+      "eyes": "لون العيون",
+      "hairType": "نوع الشعر",
+      "home": "متوفر المنزل",
+      "job": "طبيعة العمل",
+      "about": "بياناتك بالتفصيل (تحدث عن نفسك)",
+      "partnerAbout": "مواصفات الطرف الآخر",
+      "marriageType": "نوع الزواج",
+      "polygamyAgree": "أوافق على التعدد"
+    },
+    "placeholders": {
+      "choose": "فضلاً اختر",
+      "write": "اكتب",
+      "weight": "60 كجم",
+      "height": "160 سم"
+    },
+    "buttons": { "next": "التالي", "prev": "قبل", "submit": "تسجيل" },
+    "hints": {
+      "serious": "يرجى الكتابة بطريقة جادة، ويمنع كتابة أي وسيلة تواصل"
+    }
+  }
 }

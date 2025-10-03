@@ -30,12 +30,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <FieldControl>
         <FieldAdornment position="end">
-          <ChevronDown size={18} />
+          <ChevronDown size={18} className="text-[#AFAFAF]" />
         </FieldAdornment>
         <select
           ref={ref}
           className={cn(
-            "appearance-none bg-transparent rtl:pl-10 ltr:pr-10 h-9 w-full rounded-md border border-input px-3 py-1 text-base shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+            "appearance-none bg-white rtl:pl-10 ltr:pr-10 h-14 w-full rounded-[20px] border border-[#E5DDF7] px-6 text-[1rem] shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
             className
           )}
           {...fieldProps}

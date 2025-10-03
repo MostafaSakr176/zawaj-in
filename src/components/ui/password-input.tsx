@@ -14,6 +14,8 @@ import {
 export type PasswordInputProps = React.ComponentProps<typeof Input> & {
   revealAriaLabel?: string;
   hideAriaLabel?: string;
+  startAdornment?: React.ReactNode;
+  togglePosition?: "start" | "end";
 };
 
 export const PasswordInput = React.forwardRef<
@@ -25,6 +27,8 @@ export const PasswordInput = React.forwardRef<
       className,
       revealAriaLabel = "Show password",
       hideAriaLabel = "Hide password",
+      startAdornment,
+      togglePosition = "end",
       ...props
     },
     ref
@@ -34,7 +38,10 @@ export const PasswordInput = React.forwardRef<
 
     return (
       <FieldControl>
-        <FieldAdornment position="end">
+        {startAdornment ? (
+          <FieldAdornment position="start">{startAdornment}</FieldAdornment>
+        ) : null}
+        <FieldAdornment position={togglePosition}>
           <button
             type="button"
             className={cn(
@@ -49,7 +56,12 @@ export const PasswordInput = React.forwardRef<
         <Input
           ref={ref}
           type={visible ? "text" : "password"}
-          className={cn("rtl:pl-10 ltr:pr-10", className)}
+          className={cn(
+            startAdornment && "rtl:pr-10 ltr:pl-10",
+            togglePosition === "end" && "rtl:pl-10 ltr:pr-10",
+            togglePosition === "start" && "rtl:pr-10 ltr:pl-10",
+            className
+          )}
           {...fieldProps}
           {...props}
         />
