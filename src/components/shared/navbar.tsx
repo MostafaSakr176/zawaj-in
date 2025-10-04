@@ -4,16 +4,24 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { BookUser, House, Menu, RefreshCcw } from 'lucide-react';
+import { BookUser, ChevronDown, FileText, Headset, House, Menu, Package, RefreshCcw, User } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Link } from '@/i18n/navigation';
 
 const Navbar = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const t = useTranslations("navbar");
   const router = useRouter();
   const pathname = usePathname();
@@ -42,7 +50,7 @@ const Navbar = () => {
         <nav className="hidden lg:block">
           <div className="flex items-center justify-around gap-6">
             {
-              isLogin ? <>
+              !isLogin ? <>
                 <Link href="/" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-bold transition-colors border-b-2 border-[#301B69] ">
                   {t('mainPage')}
                 </Link>
@@ -88,11 +96,35 @@ const Navbar = () => {
             {t('languageToggle')}
           </Button>
           {/* Login Button */}
-          <Link href="/auth/sign-in">
-            <Button>
-              {t('loginButton')}
-            </Button>
-          </Link>
+          {isLogin ? (
+            <DropdownMenu dir={currentLocale === "ar" ? 'rtl' : 'ltr'} >
+              <DropdownMenuTrigger className='flex items-center gap-4 px-4 py-3 rounded-[16px] text-lg font-normal transition-all disabled:opacity-50 shrink-0 bg-gradient-to-b from-[#6B3FA0] to-[#2D0B5A] text-white shadow-[0_4px_24px_0_rgba(80,40,160,0.10),inset_0_2px_8px_0_rgba(255,255,255,0.20)] border-[3px] border-[#E5DDF7]'> حسابي<ChevronDown size={20} /></DropdownMenuTrigger>
+              <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[1.6rem] ltr:-translate-x-[1.2rem]'>
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <Headset size={22} />
+                  تواصل معنا
+                </DropdownMenuItem>
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <User size={22} />
+                  الملف الشخصي
+                </DropdownMenuItem>
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <FileText size={22} />
+                  الفواتير
+                </DropdownMenuItem>
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <Package size={22} />
+                  الاشتراك
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href="/auth/sign-in">
+              <Button>
+                {t('loginButton')}
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile menu button */}

@@ -194,5 +194,26 @@
         "subtitle": "Discover a safe and caring marriage experience on our platform designed specifically for Muslims serious about marriage. Register today to be the first to start a stable and happy life story.",
         "cta": "Start Now",
         "copyright": "© Zawag Inn 2025 All Rights Reserved"
+    },
+    "idCard": {
+        "years": "years old",
+        "single": "Single",
+        "married": "Married",
+        "divorced": "Divorced",
+        "widowed": "Widowed",
+        "teacher": "Teacher",
+        "engineer": "Engineer",
+        "doctor": "Doctor",
+        "lawyer": "Lawyer",
+        "businessman": "Businessman",
+        "student": "Student",
+        "unemployed": "Unemployed",
+        "other": "Other",
+        "lightSkin": "Light skin",
+        "mediumSkin": "Medium skin",
+        "darkSkin": "Dark skin",
+        "normalMarriage": "Normal marriage",
+        "misyarMarriage": "Misyar marriage",
+        "temporaryMarriage": "Temporary marriage"
     }
 }

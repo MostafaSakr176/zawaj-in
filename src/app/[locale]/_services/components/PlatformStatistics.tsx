@@ -20,10 +20,10 @@ const PlatformStatistics = () => {
   const t = useTranslations("stats");
 
   const stats: Stat[] = [
-    { icon: "/photos/male-icon.svg", alt: "male users", labelKey: "registered_males", value: 300 },
-    { icon: "/photos/male-icon.svg", alt: "female users", labelKey: "registered_females", value: 300 },
-    { icon: "/photos/male-icon.svg", alt: "active males today", labelKey: "active_males", value: 100 },
-    { icon: "/photos/male-icon.svg", alt: "active females today", labelKey: "active_females", value: 200 },
+    { icon: "/icons/male.svg", alt: "male users", labelKey: "registered_males", value: 300 },
+    { icon: "/icons/female-icon.svg", alt: "female users", labelKey: "registered_females", value: 300 },
+    { icon: "/icons/male-o.svg", alt: "active males today", labelKey: "active_males", value: 100 },
+    { icon: "/icons/female-o.svg", alt: "active females today", labelKey: "active_females", value: 200 },
   ];
 
   const StatCard = ({ icon, labelKey, value, alt }: Stat) => (
@@ -31,7 +31,7 @@ const PlatformStatistics = () => {
       className="flex flex-col items-center gap-6 p-6 rounded-[20px] shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]"
       role="listitem"
     >
-      <Image src={icon} alt={alt} width={48} height={48} />
+      <Image src={icon} alt={alt} width={56} height={56} />
       <p className="text-lg font-semibold text-[#301B69]">{t(labelKey)}</p>
       <p className="text-[#301B69] font-bold text-5xl">{value}</p>
     </div>
