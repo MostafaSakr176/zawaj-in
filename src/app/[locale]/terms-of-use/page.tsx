@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React from 'react'
 
@@ -67,6 +68,7 @@ const TermsAndConditions = () => {
                             <br />
                             يحتفظ الموقع بالحق بتعديل أو تغيير الشروط والأحكام في أي وقت وبدون الرجوع للمستخدم، وذلك عبر تحديثها في صفحة الموقع. يُعتبر استمرار الاستخدام للموقع بعد تاريخ التحديث للشروط والأحكام إقراراً من المستخدم بالموافقة على النسخة المحدثة من الشروط والأحكام فور نشرها.
                         </p>
+                        <Button className='mt-8'>اتعهد بذلك</Button>
                     </div>
                 </div>
             </div>
