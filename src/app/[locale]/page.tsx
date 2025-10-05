@@ -1,5 +1,6 @@
 import Advantages from "./_services/components/Advantages";
 import Hero from "./_services/components/Hero";
+import NewSubscribers from "./_services/components/NewSubscribers";
 import PlatformStatistics from "./_services/components/PlatformStatistics";
 import StackedCards from "./_services/components/StackedCards";
 import Subscriptions from "./_services/components/Subscriptions";
@@ -15,6 +16,8 @@ export default function Home() {
       <div className="space-y-16">
         {/* Card 1 */}
         <Advantages />
+
+        <NewSubscribers />
 
         {/* Card 2 */}
         <Subscriptions />

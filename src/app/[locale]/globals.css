@@ -6,7 +6,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -14,6 +14,7 @@ body {
   font-family: "El Messiri", sans-serif;
   scroll-behavior: smooth;
 }
+
 /* Use Lexend when document direction is LTR (e.g., English) */
 :where(html[dir="ltr"]) body {
   font-family: "Lexend", sans-serif;
@@ -130,6 +131,7 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -143,12 +145,60 @@ body {
   width: 100%;
   height: 100%;
 }
+
 /* Hide Swiper pagination dots */
 .mySwiper .swiper-pagination {
   display: none !important;
 }
 
-body[data-scroll-locked]{
+.mySwiper .subscriptions-swiper .swiper-pagination {
+  display: flex justify-center mt-4;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+body[data-scroll-locked] {
   margin-right: 0 !important;
   margin-left: 0 !important;
+}
+
+
+@keyframes expand {
+  0% {
+    width: 0rem;
+    /* w-20 */
+  }
+
+  10% {
+    width: 3rem;
+    /* w-48 */
+  }
+
+  20% {
+    width: 1.5rem;
+    /* w-48 */
+  }
+
+  30% {
+    width: 6rem;
+    /* w-48 */
+  }
+
+  40% {
+    width: 3rem;
+    /* w-48 */
+  }
+
+  50% {
+    width: 9rem;
+    /* w-48 */
+  }
+  60% {
+    scale: 0.9;
+  }
+  100% {
+    width: 15rem;
+    /* w-48 */
+    scale: 1.2;
+  }
 }

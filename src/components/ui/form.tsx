@@ -104,8 +104,8 @@ export function FieldAdornment({
 }: FieldAdornmentProps) {
   const posClass =
     position === "start"
-      ? "inset-y-0 rtl:right-3 ltr:left-3"
-      : "inset-y-0 rtl:left-3 ltr:right-3";
+      ? "inset-y-0 rtl:right-2 ltr:left-2"
+      : "inset-y-0 rtl:left-2 ltr:right-2";
   return (
     <div
       className={cn(

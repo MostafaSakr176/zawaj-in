@@ -5,12 +5,13 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
 
 const Hero = () => {
     const t = useTranslations('hero');
 
     return (
-    <div className="pt-40 md:pt-48 pb-20 bg-gradient-to-br from-[#F5E6FF] via-[#F5E6FF] to-[#FFF4EA] px-4 py-8">
+        <div className="pt-40 md:pt-48 pb-20 bg-gradient-to-br from-[#F5E6FF] via-[#F5E6FF] to-[#FFF4EA] px-4 py-8">
             <div className="max-w-7xl mx-auto">
                 <div className="grid lg:grid-cols-2 gap-16 lg:gap-8 items-center">
                     {/* Right side - Content */}
@@ -33,15 +34,19 @@ const Hero = () => {
                         </h1>
 
                         {/* Action buttons */}
-                        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                            <Button>
-                                <ArrowRight size={16} className='rtl:inline-block ltr:hidden' />
-                                <ArrowLeft size={16} className='rtl:hidden ltr:inline-block' />
-                                {t('registerButton')}
-                            </Button>
-                            <Button variant="secondary">
-                                {t('newRegisterButton')}
-                            </Button>
+                        <div className="flex items-center gap-4 mb-8">
+                            <Link href="/auth/sign-in">
+                                <Button>
+                                    <ArrowRight size={16} className='rtl:inline-block ltr:hidden' />
+                                    <ArrowLeft size={16} className='rtl:hidden ltr:inline-block' />
+                                    {t('registerButton')}
+                                </Button>
+                            </Link>
+                            <Link href="/new-request">
+                                <Button variant="secondary">
+                                    {t('newRegisterButton')}
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 
@@ -108,7 +113,7 @@ const Hero = () => {
                                                 background: 'linear-gradient(182.28deg, #301B69 36.46%, #B07CD1 97.83%)'
                                             }}
                                         >
-                                            <Image src={"/photos/vows.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
+                                            <Image src={"/icons/hero-users-Icon.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
                                         </div>
                                         <div
                                             className="rounded-full p-2 shadow-lg"
@@ -116,7 +121,7 @@ const Hero = () => {
                                                 background: 'linear-gradient(182.28deg, #301B69 36.46%, #B07CD1 97.83%)'
                                             }}
                                         >
-                                            <Image src={"/photos/vows.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
+                                            <Image src={"/icons/hero-chat-Icon.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
                                         </div>
                                         <div
                                             className="rounded-full p-2 shadow-lg"
@@ -124,7 +129,7 @@ const Hero = () => {
                                                 background: 'linear-gradient(182.28deg, #301B69 36.46%, #B07CD1 97.83%)'
                                             }}
                                         >
-                                            <Image src={"/photos/vows.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
+                                            <Image src={"/icons/hero-smiley-Icon.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
                                         </div>
                                         <div
                                             className="rounded-full p-2 shadow-lg"
@@ -132,7 +137,7 @@ const Hero = () => {
                                                 background: 'linear-gradient(182.28deg, #301B69 36.46%, #B07CD1 97.83%)'
                                             }}
                                         >
-                                            <Image src={"/photos/vows.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
+                                            <Image src={"/icons/hero-heart-Icon.svg"} alt='icon' width={24} height={24} className='w-4 h-4 md:w-6 md:h-6' />
                                         </div>
                                     </div>
                                     <div className="text-sm text-[#301B69]">

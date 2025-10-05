@@ -62,12 +62,12 @@ export default function NewRequestPage() {
       <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
       <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
         <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
-          <CardHeader className="pb-6 pt-10">
-            <CardTitle className="text-start text-3xl font-extrabold text-[#1D1B23]">
+          <CardHeader className="py-8 pb-2 md:pb-6 md:pt-10">
+            <CardTitle className="text-start text-xl md:text-3xl font-extrabold text-[#1D1B23]">
               {t("title")}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-10 px-10 pb-10">
+          <CardContent className="space-y-10 px-4 md:px-10 pb-10">
             <Stepper steps={steps} activeIndex={step} direction={dir} />
 
             {step === 0 && (

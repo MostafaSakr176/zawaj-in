@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Ellipsis, ArrowRight, Mic, Search, Check, Play } from "lucide-react";
+import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 
 type Message = {
@@ -155,10 +155,19 @@ function MessagesList({
 const Chats = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeChat, setActiveChat] = useState<ChatItem | null>(null);
+  const [messageText, setMessageText] = useState("");
 
   const openChat = (c: ChatItem) => {
     setActiveChat(c);
     setIsOpen(true);
+  };
+
+  const handleSendMessage = () => {
+    if (messageText.trim()) {
+      // TODO: send message logic
+      console.log("Sending message:", messageText);
+      setMessageText("");
+    }
   };
 
   return (
@@ -217,11 +226,21 @@ const Chats = () => {
           <div className="p-4">
             <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
               <input
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="رسالة"
                 className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
               />
-              <button className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white">
-                <Mic size={18} />
+              <button 
+                onClick={handleSendMessage}
+                className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+              >
+                {messageText.trim() ? (
+                  <Send size={18} />
+                ) : (
+                  <Mic size={18} />
+                )}
               </button>
             </div>
           </div>
@@ -239,7 +258,6 @@ const Chats = () => {
             className={`fixed inset-y-0 right-0 z-50 p-4 pt-28 bg-gradient-to-b from-[#E0DAFF] to-[#fff] w-full transform transition-transform duration-300 ease-out
             ${isOpen ? "translate-x-0" : "translate-x-full"}`}
           >
-            {/* Make the container a column flex with min-h-0 so middle area can scroll */}
             <div className="h-full rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
               {/* Header (fixed height) */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
@@ -282,11 +300,21 @@ const Chats = () => {
               <div className="p-4 border-t border-[#F0F2FA] shrink-0">
                 <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
                   <input
+                    value={messageText}
+                    onChange={(e) => setMessageText(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     placeholder="رسالة"
                     className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
                   />
-                  <button className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white">
-                    <Mic size={18} />
+                  <button 
+                    onClick={handleSendMessage}
+                    className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+                  >
+                    {messageText.trim() ? (
+                      <Send size={18} />
+                    ) : (
+                      <Mic size={18} />
+                    )}
                   </button>
                 </div>
               </div>

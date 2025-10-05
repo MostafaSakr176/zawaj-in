@@ -46,7 +46,14 @@ const PlatformStatistics = () => {
           alt="right shape"
           width={40}
           height={25}
-          className="-ml-[5px] relative z-10"
+          className="-ml-[5px] relative z-10 ltr:hidden rtl:inline-block"
+        />
+        <Image
+          src="/photos/heading-smoth-shape-left.svg"
+          alt="left shape"
+          width={40}
+          height={25}
+          className="-mr-[5px] relative z-10 rtl:hidden ltr:inline-block"
         />
         <div
           className="w-fit border border-white shadow-md rounded-3xl lg:rounded-4xl px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 bg-[linear-gradient(229.14deg,#F2EFFF_-7.04%,#FFF1FE_121.07%)]"
@@ -56,25 +63,38 @@ const PlatformStatistics = () => {
           </span>
           <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
             <Avatar className="w-6 h-6">
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarImage src="/icons/boy-img.png" alt="@shadcn" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <Avatar className="w-6 h-6">
-              <AvatarImage src="https://github.com/leerob.png" alt="@leerob" />
-              <AvatarFallback>LR</AvatarFallback>
-            </Avatar>
-            <Avatar className="w-6 h-6">
-              <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
+              <AvatarImage src="/photos/male-icon.svg" alt="@evilrabbit" />
               <AvatarFallback>ER</AvatarFallback>
             </Avatar>
+            <Avatar className="w-6 h-6">
+              <AvatarImage src="/icons/female-img.png" alt="@evilrabbit" />
+              <AvatarFallback>ER</AvatarFallback>
+            </Avatar>
+            <Avatar className="w-6 h-6">
+              <AvatarImage src="/icons/girl-img.png" alt="@leerob" />
+              <AvatarFallback>LR</AvatarFallback>
+            </Avatar>
+
+
           </div>
         </div>
+        <Image
+          src="/photos/heading-smoth-shape-right.svg"
+          alt="right shape"
+          width={40}
+          height={25}
+          className="-ml-[5px] relative z-10 rtl:hidden ltr:inline-block"
+        />
         <Image
           src="/photos/heading-smoth-shape-left.svg"
           alt="left shape"
           width={40}
           height={25}
-          className="-mr-[5px] relative z-10"
+          className="-mr-[5px] relative z-10 ltr:hidden rtl:inline-block"
         />
       </div>
 

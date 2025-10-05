@@ -106,7 +106,7 @@ const Subscriptions = () => {
         <p className="text-base md:text-lg font-medium text-[#301B69] text-center mb-10">
           {t("subtitle")}
         </p>
-        <div className='flex md:hidden'>
+        <div className='flex md:hidden subscriptions-swiper'>
           <Swiper
             slidesPerView={1}
             breakpoints={{

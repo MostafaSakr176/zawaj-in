@@ -29,13 +29,14 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     const fieldProps = useFieldProps();
     return (
       <FieldControl>
-        <FieldAdornment position="end">
+        <FieldAdornment position="end" className="">
           <ChevronDown size={18} className="text-[#AFAFAF]" />
         </FieldAdornment>
         <select
           ref={ref}
           className={cn(
-            "appearance-none bg-white rtl:pl-10 ltr:pr-10 h-11 w-full rounded-[8px] border border-[#D0D5DD] px-4 text-[1rem] shadow-xs outline-none transition-[color,box-shadow]",
+            "appearance-none bg-white rtl:pl-6 ltr:pr-6 rtl:md:pl-10 ltr:md:pr-10 h-11 w-full rounded-[8px] border border-[#D0D5DD] px-4 text-[1rem] shadow-xs outline-none transition-[color,box-shadow]",
+            "[&_option:disabled]:text-[#AFAFAF]",
             className
           )}
           {...fieldProps}
@@ -46,6 +47,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               value=""
               disabled
               selected={props.defaultValue == null && props.value == null}
+              className="text-[#AFAFAF]"
             >
               {placeholder as any}
             </option>
@@ -55,6 +57,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               key={String(opt.value)}
               value={opt.value}
               disabled={opt.disabled}
+              className={opt.disabled ? "text-[#AFAFAF]" : ""}
             >
               {opt.label as any}
             </option>
