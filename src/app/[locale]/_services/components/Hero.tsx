@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
+// Memoize icons array outside component for performance
 const ICONS = [
   "/icons/hero-users-Icon.svg",
   "/icons/hero-chat-Icon.svg",
@@ -59,7 +60,7 @@ const Hero = React.memo(() => {
                 width={320}
                 height={400}
                 className="w-full object-cover"
-                priority
+                priority // Only hero image should be priority for FCP
               />
               {/* Success Rate Card */}
               <div className="absolute -top-8 rtl:-left-4 ltr:-right-4 rtl:md:-left-8 ltr:md:-right-8 border-[0.84px] border-[#ECEFF2] bg-white rounded-xl md:rounded-3xl px-2 md:px-4 pt-2 shadow-lg z-10">
@@ -116,7 +117,7 @@ const Hero = React.memo(() => {
               <div className="w-52 absolute -bottom-10 md:-bottom-6 rtl:-right-4 ltr:-left-4 rtl:md:-right-8 ltr:md:-left-8 bg-white rounded-xl md:rounded-2xl px-4 md:px-6 py-3 shadow-lg z-10">
                 <div className="flex flex-col items-start gap-2">
                   <div className="flex -space-x-2">
-                    {ICONS.map((icon, i) => (
+                    {ICONS.map((icon) => (
                       <div
                         key={icon}
                         className="rounded-full p-2 shadow-lg"

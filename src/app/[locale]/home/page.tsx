@@ -1,9 +1,12 @@
+"use client"
 import IdCard from '@/components/shared/IdCard'
+import ProtectedRoute from '@/components/shared/ProtectedRoute'
 import Image from 'next/image'
 import React from 'react'
 
 const MyFavorites = () => {
   return (
+    <ProtectedRoute>
     <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
       style={{
         // background: 'linear-gradient(224.16deg, #E0DAFF -2.22%, #FECDFB 112.2%)',
@@ -59,6 +62,7 @@ const MyFavorites = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   )
 }
 

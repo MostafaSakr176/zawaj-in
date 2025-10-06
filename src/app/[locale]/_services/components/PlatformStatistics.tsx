@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import {
@@ -7,7 +8,14 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
-import React from "react";
+
+// Memoize static data outside the component for performance
+const AVATARS = [
+  { src: "/icons/boy-img.png", alt: "@shadcn", fallback: "CN" },
+  { src: "/photos/male-icon.svg", alt: "@evilrabbit", fallback: "ER" },
+  { src: "/icons/female-img.png", alt: "@evilrabbit", fallback: "ER" },
+  { src: "/icons/girl-img.png", alt: "@leerob", fallback: "LR" },
+];
 
 type Stat = {
   icon: string;
@@ -15,13 +23,6 @@ type Stat = {
   value: number | string;
   alt: string;
 };
-
-const AVATARS = [
-  { src: "/icons/boy-img.png", alt: "@shadcn", fallback: "CN" },
-  { src: "/photos/male-icon.svg", alt: "@evilrabbit", fallback: "ER" },
-  { src: "/icons/female-img.png", alt: "@evilrabbit", fallback: "ER" },
-  { src: "/icons/girl-img.png", alt: "@leerob", fallback: "LR" },
-];
 
 const STATS: Stat[] = [
   { icon: "/icons/male.svg", alt: "male users", labelKey: "registered_males", value: 300 },
@@ -37,7 +38,7 @@ const StatCard = React.memo(function StatCard({ icon, labelKey, value, alt }: St
       className="flex flex-col items-center gap-6 p-6 rounded-[20px] shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]"
       role="listitem"
     >
-      <Image src={icon} alt={alt} width={56} height={56} />
+      <Image src={icon} alt={alt} width={56} height={56} loading="lazy" />
       <p className="text-lg font-semibold text-[#301B69]">{t(labelKey)}</p>
       <p className="text-[#301B69] font-bold text-5xl">{value}</p>
     </div>
@@ -46,6 +47,24 @@ const StatCard = React.memo(function StatCard({ icon, labelKey, value, alt }: St
 
 const PlatformStatistics = React.memo(function PlatformStatistics() {
   const t = useTranslations("stats");
+
+  // Memoize avatar list for performance
+  const avatarList = useMemo(
+    () =>
+      AVATARS.map(({ src, alt, fallback }) => (
+        <Avatar className="w-6 h-6" key={src}>
+          <AvatarImage src={src} alt={alt} />
+          <AvatarFallback>{fallback}</AvatarFallback>
+        </Avatar>
+      )),
+    []
+  );
+
+  // Memoize stat cards for performance
+  const statCards = useMemo(
+    () => STATS.map((stat) => <StatCard key={stat.labelKey} {...stat} />),
+    [t]
+  );
 
   return (
     <section className="max-w-7xl mx-auto pt-16 pb-20 px-4">
@@ -57,6 +76,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
           width={40}
           height={25}
           className="-ml-[5px] relative z-10 ltr:hidden rtl:inline-block"
+          loading="lazy"
         />
         <Image
           src="/photos/heading-smoth-shape-left.svg"
@@ -64,6 +84,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
           width={40}
           height={25}
           className="-mr-[5px] relative z-10 rtl:hidden ltr:inline-block"
+          loading="lazy"
         />
         <div
           className="w-fit border border-white shadow-md rounded-3xl lg:rounded-4xl px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 bg-[linear-gradient(229.14deg,#F2EFFF_-7.04%,#FFF1FE_121.07%)]"
@@ -72,12 +93,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
             {t("title")}
           </span>
           <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
-            {AVATARS.map(({ src, alt, fallback }) => (
-              <Avatar className="w-6 h-6" key={src}>
-                <AvatarImage src={src} alt={alt} />
-                <AvatarFallback>{fallback}</AvatarFallback>
-              </Avatar>
-            ))}
+            {avatarList}
           </div>
         </div>
         <Image
@@ -86,6 +102,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
           width={40}
           height={25}
           className="-ml-[5px] relative z-10 rtl:hidden ltr:inline-block"
+          loading="lazy"
         />
         <Image
           src="/photos/heading-smoth-shape-left.svg"
@@ -93,6 +110,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
           width={40}
           height={25}
           className="-mr-[5px] relative z-10 ltr:hidden rtl:inline-block"
+          loading="lazy"
         />
       </div>
 
@@ -102,9 +120,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
         role="list"
         aria-label={t("title")}
       >
-        {STATS.map((stat) => (
-          <StatCard key={stat.labelKey} {...stat} />
-        ))}
+        {statCards}
       </div>
     </section>
   );

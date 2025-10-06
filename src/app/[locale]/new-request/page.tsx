@@ -18,6 +18,7 @@ import { Select } from "@/components/ui/select";
 import { TextField } from "@/components/ui/text-field";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
+import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 export default function NewRequestPage() {
   const t = useTranslations("request");
@@ -56,6 +57,7 @@ export default function NewRequestPage() {
   const prev = () => setStep((s) => Math.max(0, s - 1));
 
   return (
+    <ProtectedRoute>
     <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
       style={{
       }}>
@@ -239,5 +241,6 @@ export default function NewRequestPage() {
         </Card>
       </div>
     </section>
+    </ProtectedRoute>
   );
 }

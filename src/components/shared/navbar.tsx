@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -14,18 +14,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthContext';
 
 const Navbar = () => {
-  const [isLogin, setIsLogin] = useState(false);
   const t = useTranslations("navbar");
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated, logout } = useAuth();
 
   // Extract current locale from pathname
   const currentLocale = pathname.split("/")[1];
@@ -35,6 +34,23 @@ const Navbar = () => {
     const newPath = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
     router.push(newPath);
   };
+
+  // Navigation links for guests and authenticated users
+  const guestLinks = [
+    { href: "/", label: t('mainPage'), icon: <House strokeWidth={1.75} size={24} />, bold: true },
+    { href: "#", label: t('whoAreWe'), icon: <BookUser strokeWidth={1.25} size={24} /> },
+    { href: "#subscriptions", label: t('subscriptions'), icon: <House strokeWidth={1.25} size={24} /> },
+    { href: "#userOpinion", label: t('userOpinion'), icon: <House strokeWidth={1.25} size={24} /> },
+    { href: "/contact-us", label: t('contactUs'), icon: <House strokeWidth={1.25} size={24} /> },
+    { href: "/terms-of-use", label: t('usagePolicy'), icon: <House strokeWidth={1.25} size={24} /> },
+  ];
+
+  const authLinks = [
+    { href: "/home", label: t('mainPage'), icon: <House strokeWidth={1.25} size={24} />, bold: true },
+    { href: "/chats", label: t('chats'), icon: <MessageCircle strokeWidth={1.25} size={24} /> },
+    { href: "/favorites", label: t('favorits'), icon: <Heart strokeWidth={1.25} size={24} /> },
+    { href: "/profile", label: t('profile'), icon: <User strokeWidth={1.25} size={24} /> },
+  ];
 
   return (
     <div className="w-full fixed top-4 md:top-8 z-50 px-4">
@@ -48,56 +64,31 @@ const Navbar = () => {
         {/* Navigation Links - Center */}
         <nav className="hidden lg:block">
           <div className="flex items-center justify-around gap-6">
-            {
-              !isLogin ? <>
-                <Link href="/" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-bold transition-colors border-b-2 border-[#301B69] ">
-                  {t('mainPage')}
-                </Link>
-                <Link href="#" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('whoAreWe')}
-                </Link>
-                <Link href="#subscriptions" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('subscriptions')}
-                </Link>
-                <Link href="#userOpinion" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('userOpinion')}
-                </Link>
-                <Link href="/contact-us" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('contactUs')}
-                </Link>
-                <Link href="/terms-of-use" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('usagePolicy')}
-                </Link>
-              </> : <>
-                <Link href="/home" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-bold transition-colors border-b-2 border-[#301B69] ">
-                  {t('mainPage')}
-                </Link>
-                <Link href="/chats" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('chats')}
-                </Link>
-                <Link href="/favorites" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('favorits')}
-                </Link>
-                <Link href="/profile" className="text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  {t('profile')}
-                </Link>
-              </>
-            }
-
+            {(isAuthenticated ? authLinks : guestLinks).map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-[#301B69] hover:text-[#301B69] p-1 text-lg font-${link.bold ? "bold" : "medium"} transition-colors${link.bold ? " border-b-2 border-[#301B69]" : ""}`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </nav>
 
-        {/* Right side - Language toggle and Login */}
+        {/* Right side - Language toggle and Auth */}
         <div className="hidden md:flex items-center space-x-4">
           {/* Language Toggle */}
           <Button onClick={toggleLanguage} variant={"ghost"} className='font-sans hover:decoration-0 text-2xl flex items-center gap-2 font-bold p-1'>
             <RefreshCcw size={24} />
             {t('languageToggle')}
           </Button>
-          {/* Login Button */}
-          {isLogin ? (
-            <DropdownMenu dir={currentLocale === "ar" ? 'rtl' : 'ltr'} >
-              <DropdownMenuTrigger className='flex items-center gap-4 px-4 py-3 rounded-[16px] text-lg font-normal transition-all disabled:opacity-50 shrink-0 bg-gradient-to-b from-[#6B3FA0] to-[#2D0B5A] text-white shadow-[0_4px_24px_0_rgba(80,40,160,0.10),inset_0_2px_8px_0_rgba(255,255,255,0.20)] border-[3px] border-[#E5DDF7]'> حسابي<ChevronDown size={20} /></DropdownMenuTrigger>
+          {/* Auth Buttons */}
+          {isAuthenticated ? (
+            <DropdownMenu dir={currentLocale === "ar" ? 'rtl' : 'ltr'}>
+              <DropdownMenuTrigger className='flex items-center gap-4 px-4 py-3 rounded-[16px] text-lg font-normal transition-all disabled:opacity-50 shrink-0 bg-gradient-to-b from-[#6B3FA0] to-[#2D0B5A] text-white shadow-[0_4px_24px_0_rgba(80,40,160,0.10),inset_0_2px_8px_0_rgba(255,255,255,0.20)] border-[3px] border-[#E5DDF7]'>
+                {t("accountMenu.myAccount")}<ChevronDown size={20} />
+              </DropdownMenuTrigger>
               <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[1.6rem] ltr:-translate-x-[1.2rem]'>
                 <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                   <Headset size={22} color='#301B69' />
@@ -115,20 +106,22 @@ const Navbar = () => {
                   <Package size={22} color='#301B69' />
                   {t("accountMenu.subscriptions")}
                 </DropdownMenuItem>
-                <DropdownMenuItem className='text-[#FF3B30] font-medium text-lg'>
+                <DropdownMenuItem
+                  className='text-[#FF3B30] font-medium text-lg'
+                  onClick={logout}
+                >
                   <Power size={22} color='#FF3B30' />
                   {t("accountMenu.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            // <Link href="/auth/sign-in">
-            <Button onClick={() => setIsLogin(true)}>
-              {t('loginButton')}
-            </Button>
-            // </Link>
+            <Link href="/auth/sign-in">
+              <Button>
+                {t('loginButton')}
+              </Button>
+            </Link>
           )}
-
         </div>
 
         {/* Mobile menu button */}
@@ -138,29 +131,21 @@ const Navbar = () => {
           </SheetTrigger>
           <SheetContent>
             <div className="flex flex-col items-start justify-around gap-6">
-              {!isLogin ? (<>
-                <Link href="/" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-bold transition-colors">
-                  <House strokeWidth={1.75} size={24} /> {t('mainPage')}
+              {(isAuthenticated ? authLinks : guestLinks).map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors"
+                >
+                  {link.icon}
+                  {link.label}
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <BookUser strokeWidth={1.25} size={24} /> {t('whoAreWe')}
-                </Link>
-                <Link href="#subscriptions" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <House strokeWidth={1.25} size={24} /> {t('subscriptions')}
-                </Link>
-                <Link href="#userOpinion" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <House strokeWidth={1.25} size={24} /> {t('userOpinion')}
-                </Link>
-                <Link href="/contact-us" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <House strokeWidth={1.25} size={24} /> {t('contactUs')}
-                </Link>
-                <Link href="/terms-of-use" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <House strokeWidth={1.25} size={24} /> {t('usagePolicy')}
-                </Link>
-                <Button onClick={toggleLanguage} variant={"ghost"} className='flex md:hidden items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors'>
-                  <RefreshCcw size={24} />
-                  {t('languageToggle')}
-                </Button>
+              ))}
+              <Button onClick={toggleLanguage} variant={"ghost"} className='flex md:hidden items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors'>
+                <RefreshCcw size={24} />
+                {t('languageToggle')}
+              </Button>
+              {!isAuthenticated && (
                 <Link href="/auth/sign-in" className='w-full'>
                   <Button className='w-full block md:hidden rounded-[50px]'
                     style={{
@@ -169,28 +154,7 @@ const Navbar = () => {
                     {t('loginButton')}
                   </Button>
                 </Link>
-              </>) : (<>
-                <Link href="/home" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <House strokeWidth={1.25} size={24} />
-                  {t('mainPage')}
-                </Link>
-                <Link href="/chats" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <MessageCircle strokeWidth={1.25} size={24} />
-                  {t('chats')}
-                </Link>
-                <Link href="/favorites" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <Heart strokeWidth={1.25} size={24} />
-                  {t('favorits')}
-                </Link>
-                <Link href="/profile" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
-                  <User strokeWidth={1.25} size={24} />
-                  {t('profile')}
-                </Link>
-                <Button onClick={toggleLanguage} variant={"ghost"} className='flex md:hidden items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors'>
-                  <RefreshCcw size={24} />
-                  {t('languageToggle')}
-                </Button>
-              </>)}
+              )}
             </div>
           </SheetContent>
         </Sheet>

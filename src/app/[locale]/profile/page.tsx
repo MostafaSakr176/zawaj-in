@@ -1,3 +1,5 @@
+"use client"
+import ProtectedRoute from '@/components/shared/ProtectedRoute';
 import Label from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { BadgeCheck, Heart, MessageCircle } from 'lucide-react'
@@ -15,6 +17,7 @@ const Field = ({ label, value }: FieldProps) => (
 
 const PartnerProfile = () => {
   return (
+    <ProtectedRoute>
     <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'
       style={{
         // background: 'linear-gradient(224.16deg, #E0DAFF -2.22%, #FECDFB 112.2%)',
@@ -237,6 +240,7 @@ const PartnerProfile = () => {
 
       </div>
     </div>
+    </ProtectedRoute>
   )
 }
 

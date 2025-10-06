@@ -1,15 +1,10 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-type Feature = {
-  icon: string;
-  titleKey: string;
-  descKey: string;
-};
-
-const features: Feature[] = [
+// Memoize static data outside the component for performance
+const features = [
   { icon: "/icons/phone-heart.svg", titleKey: "registerTitle", descKey: "registerDesc" },
   { icon: "/icons/wedding-rings.svg", titleKey: "stepTitle", descKey: "stepDesc" },
   { icon: "/icons/love-hate.svg", titleKey: "preferencesTitle", descKey: "preferencesDesc" },
@@ -43,21 +38,13 @@ const RingIcon = React.memo(function RingIcon({ src, pos }: { src: string; pos: 
   );
 });
 
-const Advantages = () => {
+const Advantages = React.memo(function Advantages() {
   const t = useTranslations("advantages");
-  const imgRef1 = useRef<HTMLImageElement>(null);
-  const imgRef2 = useRef<HTMLImageElement>(null);
-  const showFirst = useRef(true);
+  const [showFirst, setShowFirst] = useState(true);
 
-  // Use a single interval and direct DOM manipulation for best performance
+  // Use state instead of refs for toggling images, and avoid direct DOM manipulation
   useEffect(() => {
-    const interval = setInterval(() => {
-      showFirst.current = !showFirst.current;
-      if (imgRef1.current && imgRef2.current) {
-        imgRef1.current.style.display = showFirst.current ? "block" : "none";
-        imgRef2.current.style.display = showFirst.current ? "none" : "block";
-      }
-    }, 500);
+    const interval = setInterval(() => setShowFirst((prev) => !prev), 500);
     return () => clearInterval(interval);
   }, []);
 
@@ -67,7 +54,7 @@ const Advantages = () => {
         {/* Text column */}
         <div className="flex flex-col justify-center items-start gap-4">
           <h6 className="rounded-3xl shadow-sm px-4 py-2 bg-white text-[#301B69] font-medium text-sm flex items-center gap-2">
-            <Image src="/icons/MagicWand.svg" alt="" width={20} height={20} aria-hidden="true" />
+            <Image src="/icons/MagicWand.svg" alt="" width={20} height={20} aria-hidden="true" loading="lazy" />
             {t("features")}
           </h6>
 
@@ -92,7 +79,7 @@ const Advantages = () => {
                   ].join(" ")}
                 >
                   <div className="flex items-center gap-2 md:gap-4">
-                    <Image src={f.icon} alt="" width={30} height={30} aria-hidden="true" />
+                    <Image src={f.icon} alt="" width={30} height={30} aria-hidden="true" loading="lazy" />
                     <p className="text-base md:text-2xl font-semibold text-[#301B69]">
                       {t(f.titleKey)}
                     </p>
@@ -109,28 +96,28 @@ const Advantages = () => {
         {/* Graphics column */}
         <div className="flex justify-center items-center relative min-h-[320px] md:min-h-[420px] mb-8 lg:mb-0">
           <div className="relative w-[280px] h-[280px] md:w-[500px] md:h-[500px] aspect-square rounded-full border-[15px] md:border-[25px] border-white">
-            {/* Center logo */}
+            {/* Center logo and toggling images */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 select-none flex flex-col items-center">
               <Image
-                ref={imgRef1}
                 src="/icons/advantages/trans1.svg"
                 alt=""
                 width={230}
                 height={166}
-                style={{ display: "block" }}
-                priority={false}
+                style={{ display: showFirst ? "block" : "none" }}
+                loading="eager"
+                priority
               />
               <Image
-                ref={imgRef2}
                 src="/icons/advantages/trans2.svg"
                 alt=""
                 width={230}
                 height={166}
-                style={{ display: "none" }}
-                priority={false}
+                style={{ display: showFirst ? "none" : "block" }}
+                loading="eager"
+                priority
               />
-              <Image src="/photos/logo-ar.svg" alt="" width={233} height={84} className="rtl:block ltr:hidden" />
-              <Image src="/photos/logo-en.svg" alt="" width={233} height={84} className="rtl:hidden ltr:block" />
+              <Image src="/photos/logo-ar.svg" alt="" width={233} height={84} className="rtl:block ltr:hidden" loading="lazy" />
+              <Image src="/photos/logo-en.svg" alt="" width={233} height={84} className="rtl:hidden ltr:block" loading="lazy" />
             </div>
             {ringIcons.map((ri) => (
               <RingIcon key={ri.src} src={ri.src} pos={ri.pos} />
@@ -140,6 +127,6 @@ const Advantages = () => {
       </div>
     </section>
   );
-};
+});
 
-export default React.memo(Advantages);
+export default Advantages;

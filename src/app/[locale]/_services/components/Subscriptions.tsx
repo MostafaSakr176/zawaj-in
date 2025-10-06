@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,8 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
+// Memoize static data outside the component for performance
 type PlanKey = "silver" | "gold" | "match";
-
 type Plan = {
   key: PlanKey;
   highlight?: boolean;
@@ -27,7 +27,6 @@ const plans: Plan[] = [
   { key: "match", bg: "bg-white", border: "border border-[#F3EFFE]", button: "bg-white text-[#301B69]" }
 ];
 
-// static features (no translations)
 const FEATURES: Record<PlanKey, string[]> = {
   silver: [
     "تواصل بلا حدود مع جميع الأعضاء المتاحة.",
@@ -49,9 +48,9 @@ const Badge = React.memo(() => (
     className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 rtl:md:left-4 rtl:md:right-auto ltr:md:right-4 ltr:md:left-auto text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
     style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}
   >
-    <Image src="/icons/plans/star.svg" alt="الأكثر شهرة" width={12} height={12} />
+    <Image src="/icons/plans/star.svg" alt="الأكثر شهرة" width={12} height={12} loading="lazy" />
     الأكثر شهرة
-    <Image src="/icons/plans/star.svg" alt="" width={12} height={12} />
+    <Image src="/icons/plans/star.svg" alt="" width={12} height={12} loading="lazy" />
   </span>
 ));
 
@@ -60,7 +59,6 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
   return (
     <div className={`my-4 relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] py-8 px-6 flex flex-col justify-between shadow-sm ${glass}`}>
       {plan.badge && <Badge />}
-
       <div className="mb-20">
         <h3 className="text-3xl font-bold text-[#301B69] text-center md:text-start mb-2">
           {t(`${plan.key}.title`)}
@@ -78,7 +76,7 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
         <ul className="space-y-2">
           {FEATURES[plan.key].map((feature, i) => (
             <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
-              <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} />
+              <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} loading="lazy" />
               <span>{feature}</span>
             </li>
           ))}
@@ -93,6 +91,12 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
 
 const Subscriptions = React.memo(function Subscriptions() {
   const t = useTranslations("subscriptions");
+
+  // Memoize plan cards for performance
+  const planCards = useMemo(
+    () => plans.map((plan) => <PlanCard key={plan.key} plan={plan} t={t} />),
+    [t]
+  );
 
   return (
     <section
@@ -137,9 +141,7 @@ const Subscriptions = React.memo(function Subscriptions() {
       </div>
       {/* Desktop Grid */}
       <div className="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {plans.map((plan) => (
-          <PlanCard key={plan.key} plan={plan} t={t} />
-        ))}
+        {planCards}
       </div>
     </section>
   );

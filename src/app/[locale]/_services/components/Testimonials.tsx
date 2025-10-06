@@ -1,14 +1,14 @@
 "use client";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import React from "react";
+import React, { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import { Star } from "lucide-react";
 
-// Testimonial data could be fetched or passed as props for real use
+// Memoize static testimonial data outside the component
 const TESTIMONIALS = [
   {
     name: "أحمد",
@@ -63,6 +63,7 @@ const TestimonialCard = React.memo(function TestimonialCard({
           width={50}
           height={50}
           className="rounded-full border-2 border-white"
+          loading="lazy"
         />
         <div className="flex flex-col items-start">
           <span className="text-[#301B69] font-bold text-base">{name}</span>
@@ -77,8 +78,8 @@ const Testimonials = React.memo(function Testimonials() {
   const t = useTranslations("userOpinionSection");
   const locale = useLocale();
 
-  // For demo, repeat the static testimonial
-  const testimonials = React.useMemo(
+  // Memoize testimonials for performance
+  const testimonials = useMemo(
     () => Array.from({ length: 10 }, (_, i) => ({ ...TESTIMONIALS[0], key: i })),
     []
   );
@@ -132,68 +133,7 @@ const Testimonials = React.memo(function Testimonials() {
         >
           {testimonials.map((item) => (
             <SwiperSlide key={item.key}>
-              <TestimonialCard name={item.name} text={item.text} avatar={item.avatar} city={item.city} rating={item.rating} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        <Swiper
-          dir={locale === "en" ? "rtl" : "ltr"}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1, spaceBetween: 12 },
-            768: { slidesPerView: 2, spaceBetween: 16 },
-            1024: { slidesPerView: 3, spaceBetween: 16 },
-            1280: { slidesPerView: 4, spaceBetween: 16 },
-          }}
-          spaceBetween={16}
-          autoplay={{ delay: 1500, disableOnInteraction: false }}
-          loop={true}
-          speed={2000}
-          centeredSlides={false}
-          pagination={{
-            clickable: true,
-          }}
-          modules={[Pagination, Autoplay]}
-          className="mySwiper"
-        >
-          {testimonials.map((item) => (
-            <SwiperSlide key={item.key}>
-              <div
-                dir={locale === "en" ? "ltr" : "rtl"}
-                className="rounded-[24px] shadow-md border border-[#E3EBFF] p-6 max-w-md mx-auto flex flex-col gap-4 transition-all duration-300"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(255, 255, 255, 0.64) 40%, rgba(255, 255, 255, 0.3072) 100%)",
-                  boxShadow: "0px 0px 0px 6px #CC81B10A",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid #301B6929",
-                }}
-              >
-                {/* Stars */}
-                <div className="flex gap-1">
-                  {Array.from({ length: item.rating }).map((_, i) => (
-                    <svg key={i} width="24" height="24" viewBox="0 0 24 24" fill="#301B69">
-                      <path d="M12 17.3l6.18 3.7-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                  ))}
-                </div>
-                {/* Testimonial Text */}
-                <p className="text-[#301B69] text-base">"{item.text}"</p>
-                {/* User Info */}
-                <div className="flex items-center gap-2 mt-2 ">
-                  <Image
-                    src={item.avatar}
-                    alt={item.name}
-                    width={50}
-                    height={50}
-                    className="rounded-full border-2 border-white"
-                  />
-                  <div className="flex flex-col items-start">
-                    <span className="text-[#301B69] font-bold text-base">{item.name}</span>
-                    <span className="text-[#301B69] text-sm">{item.city}</span>
-                  </div>
-                </div>
-              </div>
+              <TestimonialCard avatar={item.avatar} name={item.name} city={item.city} text={item.text} rating={item.rating} />
             </SwiperSlide>
           ))}
         </Swiper>

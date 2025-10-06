@@ -1,30 +1,24 @@
-import Advantages from "./_services/components/Advantages";
+'use client';
+import dynamic from "next/dynamic";
 import Hero from "./_services/components/Hero";
-import NewSubscribers from "./_services/components/NewSubscribers";
 import PlatformStatistics from "./_services/components/PlatformStatistics";
-import Subscriptions from "./_services/components/Subscriptions";
-import Testimonials from "./_services/components/Testimonials";
+
+const Advantages = dynamic(() => import("./_services/components/Advantages"), { ssr: false });
+const NewSubscribers = dynamic(() => import("./_services/components/NewSubscribers"), { ssr: false });
+const Subscriptions = dynamic(() => import("./_services/components/Subscriptions"), { ssr: false });
+const Testimonials = dynamic(() => import("./_services/components/Testimonials"), { ssr: false });
 
 export default function Home() {
   return (
     <main>
       <Hero />
       <PlatformStatistics />
-      {/* Cards stacked with GSAP scroll animation */}
-      {/* <StackedCards /> */}
       <div className="space-y-16">
-        {/* Card 1 */}
         <Advantages />
-
         <NewSubscribers />
-
-        {/* Card 2 */}
         <Subscriptions />
-
-        {/* Card 3 */}
         <Testimonials />
       </div>
-
     </main>
   );
 }

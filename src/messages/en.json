@@ -72,7 +72,11 @@
             "desc": "We sent a 6-digit verification code to your registered email. Please enter it below to proceed.",
             "placeholder": "Enter the verification code sent to your email",
             "submit": "Verify now",
-            "resend": "Resend after {seconds} seconds"
+            "resendafter": "Resend after {seconds} seconds",
+            "resend": "Resend",
+            "didntReceive": "Didn't receive the code?",
+            "loading": "Verifying...",
+            "sending": "Sending..."
         },
         "reset": {
             "title": "Reset new password",

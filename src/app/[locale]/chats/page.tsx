@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
+import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 type Message = {
     id: number;
@@ -171,6 +172,7 @@ const Chats = () => {
   };
 
   return (
+    <ProtectedRoute>
     <section className='relative pt-28 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
       <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
       <div className="max-w-7xl mx-auto px-4 md:px-0 grid grid-cols-1 lg:grid-cols-12 gap-4 relative z-2">
@@ -324,6 +326,7 @@ const Chats = () => {
         {/* End mobile panel */}
       </div>
     </section>
+    </ProtectedRoute>
   );
 };
 
