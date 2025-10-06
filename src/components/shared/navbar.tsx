@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Link } from '@/i18n/navigation';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -40,10 +41,8 @@ const Navbar = () => {
       <div className="flex items-center justify-between max-w-7xl rounded-2xl md:rounded-[24px] mx-auto px-5 py-3 bg-white/80 backdrop-blur-lg shadow-lg">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0">
-          <div className="text-4xl font-bold">
-            <span className="text-[#301B69]">زواج</span>{" "}
-            <span className="text-[#E30BCD]">إن</span>
-          </div>
+          <Image src="/photos/logo-ar.svg" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
+          <Image src="/photos/logo-en.svg" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
         </Link>
 
         {/* Navigation Links - Center */}
@@ -103,7 +102,7 @@ const Navbar = () => {
                 <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                   <Headset size={22} color='#301B69' />
                   {t("accountMenu.contactUs")}
-                  </DropdownMenuItem>
+                </DropdownMenuItem>
                 <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                   <User size={22} color='#301B69' />
                   {t("accountMenu.profile")}
@@ -192,8 +191,6 @@ const Navbar = () => {
                   {t('languageToggle')}
                 </Button>
               </>)}
-
-
             </div>
           </SheetContent>
         </Sheet>

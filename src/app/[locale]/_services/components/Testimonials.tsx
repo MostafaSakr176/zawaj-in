@@ -132,7 +132,7 @@ const Testimonials = React.memo(function Testimonials() {
         >
           {testimonials.map((item) => (
             <SwiperSlide key={item.key}>
-              <TestimonialCard {...item} />
+              <TestimonialCard name={item.name} text={item.text} avatar={item.avatar} city={item.city} rating={item.rating} />
             </SwiperSlide>
           ))}
         </Swiper>

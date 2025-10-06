@@ -129,10 +129,8 @@ const Advantages = () => {
                 style={{ display: "none" }}
                 priority={false}
               />
-              <span className="text-4xl md:text-7xl font-bold" style={{ fontFamily: "inherit" }}>
-                <span className="text-[#301B69]">زواج</span>{" "}
-                <span className="text-[#E30BCD]">إن</span>
-              </span>
+              <Image src="/photos/logo-ar.svg" alt="" width={233} height={84} className="rtl:block ltr:hidden" />
+              <Image src="/photos/logo-en.svg" alt="" width={233} height={84} className="rtl:hidden ltr:block" />
             </div>
             {ringIcons.map((ri) => (
               <RingIcon key={ri.src} src={ri.src} pos={ri.pos} />

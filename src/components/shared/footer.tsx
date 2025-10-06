@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight, Star } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
 
 const Footer = () => {
 
@@ -45,10 +46,10 @@ const Footer = () => {
                     </div>
                     {/* Social Icons */}
                     <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="text-4xl font-bold">
-                            <span className="text-[#301B69]">زواج</span>{" "}
-                            <span className="text-[#E30BCD]">إن</span>
-                        </div>
+                        <Link href="/" className="flex-shrink-0">
+                            <Image src="/photos/logo-ar.svg" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
+                            <Image src="/photos/logo-en.svg" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
+                        </Link>
                         <div className='flex items-center gap-2'>
                             <Button size="icon">
                                 <Image src="/icons/footer/f_1_.svg" alt="Facebook" width={24} height={24} className='w-6 h-6' />
