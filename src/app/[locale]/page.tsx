@@ -2,7 +2,6 @@ import Advantages from "./_services/components/Advantages";
 import Hero from "./_services/components/Hero";
 import NewSubscribers from "./_services/components/NewSubscribers";
 import PlatformStatistics from "./_services/components/PlatformStatistics";
-import StackedCards from "./_services/components/StackedCards";
 import Subscriptions from "./_services/components/Subscriptions";
 import Testimonials from "./_services/components/Testimonials";
 

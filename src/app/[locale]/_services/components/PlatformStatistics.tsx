@@ -16,17 +16,23 @@ type Stat = {
   alt: string;
 };
 
-const PlatformStatistics = () => {
+const AVATARS = [
+  { src: "/icons/boy-img.png", alt: "@shadcn", fallback: "CN" },
+  { src: "/photos/male-icon.svg", alt: "@evilrabbit", fallback: "ER" },
+  { src: "/icons/female-img.png", alt: "@evilrabbit", fallback: "ER" },
+  { src: "/icons/girl-img.png", alt: "@leerob", fallback: "LR" },
+];
+
+const STATS: Stat[] = [
+  { icon: "/icons/male.svg", alt: "male users", labelKey: "registered_males", value: 300 },
+  { icon: "/icons/female-icon.svg", alt: "female users", labelKey: "registered_females", value: 300 },
+  { icon: "/icons/male-o.svg", alt: "active males today", labelKey: "active_males", value: 100 },
+  { icon: "/icons/female-o.svg", alt: "active females today", labelKey: "active_females", value: 200 },
+];
+
+const StatCard = React.memo(function StatCard({ icon, labelKey, value, alt }: Stat) {
   const t = useTranslations("stats");
-
-  const stats: Stat[] = [
-    { icon: "/icons/male.svg", alt: "male users", labelKey: "registered_males", value: 300 },
-    { icon: "/icons/female-icon.svg", alt: "female users", labelKey: "registered_females", value: 300 },
-    { icon: "/icons/male-o.svg", alt: "active males today", labelKey: "active_males", value: 100 },
-    { icon: "/icons/female-o.svg", alt: "active females today", labelKey: "active_females", value: 200 },
-  ];
-
-  const StatCard = ({ icon, labelKey, value, alt }: Stat) => (
+  return (
     <div
       className="flex flex-col items-center gap-6 p-6 rounded-[20px] shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]"
       role="listitem"
@@ -36,6 +42,10 @@ const PlatformStatistics = () => {
       <p className="text-[#301B69] font-bold text-5xl">{value}</p>
     </div>
   );
+});
+
+const PlatformStatistics = React.memo(function PlatformStatistics() {
+  const t = useTranslations("stats");
 
   return (
     <section className="max-w-7xl mx-auto pt-16 pb-20 px-4">
@@ -62,24 +72,12 @@ const PlatformStatistics = () => {
             {t("title")}
           </span>
           <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
-            <Avatar className="w-6 h-6">
-              <AvatarImage src="/icons/boy-img.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <Avatar className="w-6 h-6">
-              <AvatarImage src="/photos/male-icon.svg" alt="@evilrabbit" />
-              <AvatarFallback>ER</AvatarFallback>
-            </Avatar>
-            <Avatar className="w-6 h-6">
-              <AvatarImage src="/icons/female-img.png" alt="@evilrabbit" />
-              <AvatarFallback>ER</AvatarFallback>
-            </Avatar>
-            <Avatar className="w-6 h-6">
-              <AvatarImage src="/icons/girl-img.png" alt="@leerob" />
-              <AvatarFallback>LR</AvatarFallback>
-            </Avatar>
-
-
+            {AVATARS.map(({ src, alt, fallback }) => (
+              <Avatar className="w-6 h-6" key={src}>
+                <AvatarImage src={src} alt={alt} />
+                <AvatarFallback>{fallback}</AvatarFallback>
+              </Avatar>
+            ))}
           </div>
         </div>
         <Image
@@ -104,12 +102,13 @@ const PlatformStatistics = () => {
         role="list"
         aria-label={t("title")}
       >
-        {stats.map((stat) => (
+        {STATS.map((stat) => (
           <StatCard key={stat.labelKey} {...stat} />
         ))}
       </div>
     </section>
   );
-};
+});
 
+PlatformStatistics.displayName = "PlatformStatistics";
 export default PlatformStatistics;

@@ -151,10 +151,19 @@ body {
   display: none !important;
 }
 
-.mySwiper .subscriptions-swiper .swiper-pagination {
-  display: flex justify-center mt-4;
+.subscriptions-swiper .mySwiper .swiper-pagination {
+  display: flex !important;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  bottom: 0 !important;
+}
+.subscriptions-swiper .mySwiper .swiper-pagination .swiper-pagination-bullet{
+  transition: all 0.3s;
+}
+.subscriptions-swiper .mySwiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #301B69;
+  width: 25px;
+  border-radius: 5px;
 }
 
 body[data-scroll-locked] {

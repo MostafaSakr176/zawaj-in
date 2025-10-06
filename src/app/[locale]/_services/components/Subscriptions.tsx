@@ -44,7 +44,7 @@ const FEATURES: Record<PlanKey, string[]> = {
   ]
 };
 
-const Badge = () => (
+const Badge = React.memo(() => (
   <span
     className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 rtl:md:left-4 rtl:md:right-auto ltr:md:right-4 ltr:md:left-auto text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
     style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}
@@ -53,9 +53,9 @@ const Badge = () => (
     الأكثر شهرة
     <Image src="/icons/plans/star.svg" alt="" width={12} height={12} />
   </span>
-);
+));
 
-function PlanCard({ plan, t }: { plan: Plan; t: (key: string) => string }) {
+const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key: string) => string }) {
   const glass = plan.key !== "gold" ? "bg-white/60 backdrop-blur-md" : "";
   return (
     <div className={`my-4 relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] py-8 px-6 flex flex-col justify-between shadow-sm ${glass}`}>
@@ -84,63 +84,65 @@ function PlanCard({ plan, t }: { plan: Plan; t: (key: string) => string }) {
           ))}
         </ul>
       </div>
-      <Button variant={plan.key === "gold" ? "default" : "secondary"} >
+      <Button variant={plan.key === "gold" ? "default" : "secondary"}>
         {t(`${plan.key}.button`)}
       </Button>
     </div>
   );
-}
+});
 
-const Subscriptions = () => {
+const Subscriptions = React.memo(function Subscriptions() {
   const t = useTranslations("subscriptions");
 
   return (
-      <section id="subscriptions" className='max-w-7xl mx-auto px-4 md:px-8 py-10 lg:py-16 rounded-3xl md:rounded-[48px]'
-        style={{
-          background: "linear-gradient(201.17deg, #F5E6FF -4.98%, #FFF4EA 119.25%)"
-        }}
-      >
-        <h2 className="text-4xl lg:text-5xl font-bold text-[#301B69] leading-normal text-center">
-          {t("title")}
-        </h2>
-        <p className="text-base md:text-lg font-medium text-[#301B69] text-center mb-10">
-          {t("subtitle")}
-        </p>
-        <div className='flex md:hidden subscriptions-swiper'>
-          <Swiper
-            slidesPerView={1}
-            breakpoints={{
-              640: { slidesPerView: 1, spaceBetween: 12 },
-              768: { slidesPerView: 2, spaceBetween: 16 },
-              1024: { slidesPerView: 3, spaceBetween: 16 },
-              1280: { slidesPerView: 4, spaceBetween: 16 },
-            }}
-            spaceBetween={16}
-            // autoplay={{ delay: 1500, disableOnInteraction: false }}
-            loop={true}
-            speed={2000}
-            centeredSlides={false}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Pagination, Autoplay]}
-            className="mySwiper"
-          >
-            {plans.map((plan, idx) => (
-              <SwiperSlide key={idx} className='h-full'>
-                <PlanCard plan={plan} t={t} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        <div className="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {plans.map((plan, idx) => (
-            <PlanCard key={plan.key} plan={plan} t={t} />
+    <section
+      id="subscriptions"
+      className="max-w-7xl mx-auto px-4 md:px-8 py-10 lg:py-16 rounded-3xl md:rounded-[48px]"
+      style={{
+        background: "linear-gradient(201.17deg, #F5E6FF -4.98%, #FFF4EA 119.25%)"
+      }}
+    >
+      <h2 className="text-4xl lg:text-5xl font-bold text-[#301B69] leading-normal text-center">
+        {t("title")}
+      </h2>
+      <p className="text-base md:text-lg font-medium text-[#301B69] text-center mb-10">
+        {t("subtitle")}
+      </p>
+      {/* Mobile Swiper */}
+      <div className="flex md:hidden subscriptions-swiper">
+        <Swiper
+          slidesPerView={1}
+          breakpoints={{
+            640: { slidesPerView: 1, spaceBetween: 12 },
+            768: { slidesPerView: 2, spaceBetween: 16 },
+            1024: { slidesPerView: 3, spaceBetween: 16 },
+            1280: { slidesPerView: 4, spaceBetween: 16 },
+          }}
+          spaceBetween={16}
+          loop={true}
+          speed={2000}
+          centeredSlides={false}
+          pagination={{
+            clickable: true,
+          }}
+          modules={[Pagination, Autoplay]}
+          className="mySwiper"
+        >
+          {plans.map((plan) => (
+            <SwiperSlide key={plan.key} className="h-full">
+              <PlanCard plan={plan} t={t} />
+            </SwiperSlide>
           ))}
-        </div>
-      </section>
+        </Swiper>
+      </div>
+      {/* Desktop Grid */}
+      <div className="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {plans.map((plan) => (
+          <PlanCard key={plan.key} plan={plan} t={t} />
+        ))}
+      </div>
+    </section>
   );
-};
+});
 
 export default Subscriptions;

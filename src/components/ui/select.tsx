@@ -41,12 +41,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           )}
           {...fieldProps}
           {...props}
+          defaultValue={props.defaultValue || ""}
         >
           {placeholder ? (
             <option
               value=""
               disabled
-              selected={props.defaultValue == null && props.value == null}
               className="text-[#AFAFAF]"
             >
               {placeholder as any}

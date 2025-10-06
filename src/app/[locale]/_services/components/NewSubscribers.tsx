@@ -8,8 +8,11 @@ import "swiper/css/pagination";
 import Select from "@/components/ui/select";
 import { FormField } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const NewSubscribers = () => {
+    const t = useTranslations("filters");
+
     return (
         <section id="subscriptions" className='max-w-7xl mx-auto px-4 md:px-8 py-10 lg:py-16 rounded-3xl md:rounded-[48px]'
             style={{
@@ -22,41 +25,41 @@ const NewSubscribers = () => {
 
             <div className="max-w-5xl mx-auto">
                 <Tabs defaultValue="all">
-                    <TabsList className='w-full md:w-fit my-10 md:mb-6 md:mt-0 flex gap-4 items-center flex-col-reverse md:flex-row'>
+                    <TabsList className='w-full md:w-full my-10 md:mb-6 md:mt-0 flex gap-4 items-center justify-center flex-col-reverse md:flex-row'>
                         <div className="flex gap-1 items-center">
-                            <TabsTrigger value="all" className="!rounded-[15px]">الكل</TabsTrigger>
-                            <TabsTrigger value="males" className="!rounded-[15px]">الذكور</TabsTrigger>
-                            <TabsTrigger value="females" className="!rounded-[15px]">الاناث</TabsTrigger>
+                            <TabsTrigger value="all" className="!rounded-[15px]">{t("all")}</TabsTrigger>
+                            <TabsTrigger value="males" className="!rounded-[15px]">{t("males")}</TabsTrigger>
+                            <TabsTrigger value="females" className="!rounded-[15px]">{t("females")}</TabsTrigger>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FormField required className="w-28">
+                            <FormField required className="w-30">
                                 <Select
                                     className="bg-white/40"
                                     options={[
                                         { value: "sa", label: "السعودية" },
                                         { value: "eg", label: "مصر" },
                                     ]}
-                                    placeholder="الدولة"
+                                    placeholder={t("country")}
                                 />
                             </FormField>
-                            <FormField required className="w-28">
+                            <FormField required className="w-30">
                                 <Select
                                     className="bg-white/40"
                                     options={[
                                         { value: "riyadh", label: "الرياض" },
                                         { value: "jeddah", label: "جدة" },
                                     ]}
-                                    placeholder="المدن"
+                                    placeholder={t("city")}
                                 />
                             </FormField>
-                            <FormField required className="w-28">
+                            <FormField required className="w-30">
                                 <Select
                                     className="bg-white/40"
                                     options={[
                                         { value: "normalMarriage", label: "زواج عادي" },
                                         { value: "misyarMarriage", label: "زواج مسيار" },
                                     ]}
-                                    placeholder="نوع الزواج"
+                                    placeholder={t("marriageType")}
                                 />
                             </FormField>
                         </div>
@@ -79,10 +82,10 @@ const NewSubscribers = () => {
                         <div className="flex items-center justify-between gap-4">
                             <div className="flex items-center gap-2">
                                 <button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
-                                    السابق
+                                   {t("prev")} 
                                 </button>
                                 <button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
-                                    التالي
+                                    {t("next")}
                                 </button>
                             </div>
                             <div className="flex items-center gap-2">
@@ -105,10 +108,10 @@ const NewSubscribers = () => {
                         <div className="flex items-center justify-between gap-4">
                             <div className="flex items-center gap-2">
                                 <button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
-                                    السابق
+                                    {t("prev")}
                                 </button>
                                 <button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
-                                    التالي
+                                    {t("next")}
                                 </button>
                             </div>
                             <div className="flex items-center gap-2">
@@ -130,10 +133,10 @@ const NewSubscribers = () => {
                         <div className="flex items-center justify-between gap-4">
                             <div className="flex items-center gap-2">
                                 <button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
-                                    السابق
+                                    {t("prev")}
                                 </button>
                                 <button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
-                                    التالي
+                                    {t("next")}
                                 </button>
                             </div>
                             <div className="flex items-center gap-2">

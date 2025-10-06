@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { BookUser, ChevronDown, FileText, Headset, Heart, House, Menu, MessageCircle, Package, RefreshCcw, User } from 'lucide-react';
+import { BookUser, ChevronDown, FileText, Headset, Heart, House, Menu, MessageCircle, Package, Power, RefreshCcw, User } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -96,35 +96,39 @@ const Navbar = () => {
             {t('languageToggle')}
           </Button>
           {/* Login Button */}
-            {isLogin ? (
-              <DropdownMenu dir={currentLocale === "ar" ? 'rtl' : 'ltr'} >
-                <DropdownMenuTrigger className='flex items-center gap-4 px-4 py-3 rounded-[16px] text-lg font-normal transition-all disabled:opacity-50 shrink-0 bg-gradient-to-b from-[#6B3FA0] to-[#2D0B5A] text-white shadow-[0_4px_24px_0_rgba(80,40,160,0.10),inset_0_2px_8px_0_rgba(255,255,255,0.20)] border-[3px] border-[#E5DDF7]'> حسابي<ChevronDown size={20} /></DropdownMenuTrigger>
-                <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[1.6rem] ltr:-translate-x-[1.2rem]'>
-                  <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                    <Headset size={22} />
-                    تواصل معنا
+          {isLogin ? (
+            <DropdownMenu dir={currentLocale === "ar" ? 'rtl' : 'ltr'} >
+              <DropdownMenuTrigger className='flex items-center gap-4 px-4 py-3 rounded-[16px] text-lg font-normal transition-all disabled:opacity-50 shrink-0 bg-gradient-to-b from-[#6B3FA0] to-[#2D0B5A] text-white shadow-[0_4px_24px_0_rgba(80,40,160,0.10),inset_0_2px_8px_0_rgba(255,255,255,0.20)] border-[3px] border-[#E5DDF7]'> حسابي<ChevronDown size={20} /></DropdownMenuTrigger>
+              <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[1.6rem] ltr:-translate-x-[1.2rem]'>
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <Headset size={22} color='#301B69' />
+                  {t("accountMenu.contactUs")}
                   </DropdownMenuItem>
-                  <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                    <User size={22} />
-                    الملف الشخصي
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                    <FileText size={22} />
-                    الفواتير
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                    <Package size={22} />
-                    الاشتراك
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              // <Link href="/auth/sign-in">
-                <Button onClick={()=>setIsLogin(true)}>
-                  {t('loginButton')}
-                </Button>
-              // </Link>
-            )}
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <User size={22} color='#301B69' />
+                  {t("accountMenu.profile")}
+                </DropdownMenuItem>
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <FileText size={22} color='#301B69' />
+                  {t("accountMenu.invoices")}
+                </DropdownMenuItem>
+                <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  <Package size={22} color='#301B69' />
+                  {t("accountMenu.subscriptions")}
+                </DropdownMenuItem>
+                <DropdownMenuItem className='text-[#FF3B30] font-medium text-lg'>
+                  <Power size={22} color='#FF3B30' />
+                  {t("accountMenu.logout")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            // <Link href="/auth/sign-in">
+            <Button onClick={() => setIsLogin(true)}>
+              {t('loginButton')}
+            </Button>
+            // </Link>
+          )}
 
         </div>
 
@@ -167,7 +171,7 @@ const Navbar = () => {
                   </Button>
                 </Link>
               </>) : (<>
-                <Link href="/home"className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
+                <Link href="/home" className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors">
                   <House strokeWidth={1.25} size={24} />
                   {t('mainPage')}
                 </Link>

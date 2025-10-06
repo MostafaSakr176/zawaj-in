@@ -11,7 +11,15 @@
         "usagePolicy": "Usage Policy",
         "favorits": "Favorites",
         "chats": "Chats",
-        "profile": "Profile"
+        "profile": "Profile",
+        "accountMenu": {
+            "contactUs": "Contact Us",
+            "profile": "Profile",
+            "invoices": "Invoices",
+            "subscriptions": "Subscriptions",
+            "logout": "Logout",
+            "myAccount": "My Account"
+        }
     },
     "hero": {
         "successRate": "90%",
@@ -148,7 +156,7 @@
         "silver": {
             "title": "Silver Package",
             "duration": "Duration: 30 days",
-            "price": "$90",
+            "price": "90",
             "featuresTitle": "Offer Contents:",
             "features": [
                 "Unlimited communication with all available members.",
@@ -159,7 +167,7 @@
         "gold": {
             "title": "Gold Package",
             "duration": "Duration: 90 days",
-            "price": "$200",
+            "price": "200",
             "featuresTitle": "Offer Contents:",
             "features": [
                 "Unlimited communication with all available members.",
@@ -172,7 +180,7 @@
         "match": {
             "title": "Match Package",
             "duration": "Duration: 180 days",
-            "price": "$350",
+            "price": "350",
             "featuresTitle": "Offer Contents:",
             "features": [
                 "Unlimited communication with all available members.",
@@ -215,5 +223,16 @@
         "normalMarriage": "Normal marriage",
         "misyarMarriage": "Misyar marriage",
         "temporaryMarriage": "Temporary marriage"
+    },
+    "filters": {
+        "all": "All",
+        "males": "Males",
+        "females": "Females",
+        "country": "Country",
+        "city": "Cities",
+        "job": "Job",
+        "marriageType": "Marriage type",
+        "next": "Next",
+        "prev": "Back"
     }
 }
