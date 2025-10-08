@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 // Memoize static data outside the component for performance
 const MALE_MEMBERS = [
 	{
+        id: "1",
 		isFav: true,
 		name: "أحمد",
 		avatar: "/photos/male-icon.svg",
@@ -21,6 +22,7 @@ const MALE_MEMBERS = [
 		status: "single",
 	},
 	{
+		id: "2",
 		isFav: false,
 		name: "محمد",
 		avatar: "/photos/male-icon.svg",
@@ -32,6 +34,7 @@ const MALE_MEMBERS = [
 		status: "divorced",
 	},
 	{
+		id: "3",
 		isFav: true,
 		name: "علي",
 		avatar: "/photos/male-icon.svg",
@@ -46,6 +49,7 @@ const MALE_MEMBERS = [
 
 const FEMALE_MEMBERS = [
 	{
+        id: "4",
 		isFav: false,
 		name: "فاطمة",
 		avatar: "/icons/female-img.png",
@@ -57,6 +61,7 @@ const FEMALE_MEMBERS = [
 		status: "single",
 	},
 	{
+        id: "5",
 		isFav: true,
 		name: "عائشة",
 		avatar: "/icons/female-img.png",
@@ -68,6 +73,7 @@ const FEMALE_MEMBERS = [
 		status: "single",
 	},
 	{
+        id: "6",
 		isFav: true,
 		name: "خديجة",
 		avatar: "/icons/female-img.png",

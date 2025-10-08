@@ -48,7 +48,8 @@
       "passwordPlaceholder": "كلمة المرور",
       "submit": "تسجيل الدخول",
       "forgotLink": "نسيت كلمة المرور",
-      "registerLink": "تسجيل حساب جديد"
+      "registerLink": "تسجيل حساب جديد",
+      "loading": "جاري الدخول..."
     },
     "register": {
       "title": "تسجيل حساب جديد",
@@ -60,7 +61,8 @@
       "phoneLabel": "رقم الجوال",
       "passwordLabel": "كلمة المرور",
       "confirmLabel": "إعادة كلمة المرور",
-      "submit": "تسجيل"
+      "submit": "تسجيل",
+      "loading": "جاري التسجيل..."
     },
     "forgot": {
       "title": "استعادة كلمة المرور عبر البريد الإلكتروني",

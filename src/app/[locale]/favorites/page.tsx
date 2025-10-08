@@ -3,51 +3,183 @@ import IdCard from '@/components/shared/IdCard'
 import ProtectedRoute from '@/components/shared/ProtectedRoute'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import api from '@/lib/axiosClient'
+
+type LikedUser = {
+  id: string;
+  fullName: string;
+  email: string;
+  gender: string;
+  phone: string;
+  chartNumber: string;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
+  isActive: boolean;
+  dateOfBirth: string | null;
+  age: number;
+  location: {
+    city: string;
+    country: string;
+  };
+  origin: string | null;
+  maritalStatus: string;
+  profession: string;
+  weight: number | null;
+  height: number | null;
+  bodyColor: string | null;
+  hairColor: string | null;
+  hairType: string | null;
+  eyeColor: string | null;
+  houseAvailable: boolean | null;
+  natureOfWork: string | null;
+  bio: string;
+  preferredMinWeight: number | null;
+  preferredMaxWeight: number | null;
+  preferredMinHeight: number | null;
+  preferredMaxHeight: number | null;
+  preferredBodyColors: string[] | null;
+  preferredHairColors: string[] | null;
+  preferredEyeColors: string[] | null;
+  partnerPreferencesBio: string | null;
+  marriageType: string | null;
+  acceptPolygamy: boolean | null;
+  religiousPractice: string;
+  sect: string;
+  prayerLevel: string;
+  role: string;
+  permissions: any;
+  isBanned: boolean;
+  banType: string | null;
+  bannedAt: string | null;
+  bannedUntil: string | null;
+  bannedReason: string | null;
+  bannedBy: string | null;
+  isVerified: boolean;
+  verifiedAt: string | null;
+  verifiedBy: string | null;
+  isDeleted: boolean;
+  deletedAt: string | null;
+  roleAssignedBy: string | null;
+  roleAssignedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Like = {
+  id: string;
+  likedUser: LikedUser;
+  createdAt: string;
+};
 
 const MyFavorites = () => {
+  const [likes, setLikes] = useState<Like[]>([]);
+  const [interested, setInterested] = useState<Like[]>([]);
+  const [loadingLikes, setLoadingLikes] = useState(true);
+  const [loadingInterested, setLoadingInterested] = useState(true);
+
+  useEffect(() => {
+    const fetchLikes = async () => {
+      setLoadingLikes(true);
+      try {
+        const res = await api.get("/users/likes/sent");
+        setLikes(res.data.data?.likes || []);
+      } catch {
+        setLikes([]);
+      } finally {
+        setLoadingLikes(false);
+      }
+    };
+    fetchLikes();
+  }, []);
+
+  useEffect(() => {
+    const fetchInterested = async () => {
+      setLoadingInterested(true);
+      try {
+        const res = await api.get("/users/likes/received");
+        setInterested(res.data.data?.likes || []);
+      } catch {
+        setInterested([]);
+      } finally {
+        setLoadingInterested(false);
+      }
+    };
+    fetchInterested();
+  }, []);
+
   return (
     <ProtectedRoute>
-    <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
-      style={{
-        // background: 'linear-gradient(224.16deg, #E0DAFF -2.22%, #FECDFB 112.2%)',
-      }}>
-      <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+      <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
+        <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
 
-      <div className='max-w-7xl mx-auto px-4 md:px-0 relative z-2'>
-        <Tabs defaultValue="favorites">
-          <TabsList className='w-fit mb-6'>
-            <TabsTrigger value="favorites">التفضيلات</TabsTrigger>
-            <TabsTrigger value="interested">من يهتم بي</TabsTrigger>
-          </TabsList>
-          <TabsContent value="favorites">
-            <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={false} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={false} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={false} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={false} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={false} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-            </div>
-          </TabsContent>
-          <TabsContent value="interested">
-            <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={false} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={true} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-              <IdCard isFav={false} name='mostafa' avatar='/photos/male-icon.svg' age={20} city="New York" job="Engineer" marriageType="Single" skinColor="Light" status="Active" />
-            </div>
-          </TabsContent>
-        </Tabs>
+        <div className='max-w-7xl mx-auto px-4 md:px-0 relative z-2'>
+          <Tabs defaultValue="favorites">
+            <TabsList className='w-fit mb-6'>
+              <TabsTrigger value="favorites">التفضيلات</TabsTrigger>
+              <TabsTrigger value="interested">من يهتم بي</TabsTrigger>
+            </TabsList>
+            <TabsContent value="favorites">
+              {loadingLikes ? (
+                <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل المفضلات...</div>
+              ) : (
+                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
+                  {likes.length === 0 ? (
+                    <div className="col-span-full text-center text-[#301B69] py-8">
+                      لا توجد مفضلات حالياً.
+                    </div>
+                  ) : (
+                    likes.map((like) => (
+                      <IdCard
+                        key={like.likedUser.id}
+                        id={like.likedUser.id}
+                        isFav={true}
+                        name={like.likedUser.fullName}
+                        avatar={like.likedUser.gender === "female" ? "/icons/female-img.png" : "/photos/male-icon.svg"}
+                        age={like.likedUser.age}
+                        city={like.likedUser.location.city}
+                        job={like.likedUser?.natureOfWork}
+                        marriageType={like.likedUser?.marriageType}
+                        skinColor={like.likedUser?.bodyColor}
+                        status={like.likedUser?.maritalStatus}
+                      />
+                    ))
+                  )}
+                </div>
+              )}
+            </TabsContent>
+            <TabsContent value="interested">
+              {loadingInterested ? (
+                <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل البيانات...</div>
+              ) : (
+                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
+                  {interested.length === 0 ? (
+                    <div className="col-span-full text-center text-[#301B69] py-8">
+                      لا توجد بيانات حالياً.
+                    </div>
+                  ) : (
+                    interested.map((like) => (
+                      <IdCard
+                        key={like.likedUser.id}
+                        id={like.likedUser.id}
+                        isFav={true}
+                        name={like.likedUser.fullName}
+                        avatar={like.likedUser.gender === "female" ? "/icons/female-img.png" : "/photos/male-icon.svg"}
+                        age={like.likedUser.age}
+                        city={like.likedUser.location.city}
+                        job={like.likedUser?.natureOfWork}
+                        marriageType={like.likedUser?.marriageType}
+                        skinColor={like.likedUser?.bodyColor}
+                        status={like.likedUser?.maritalStatus}
+                      />
+                    ))
+                  )}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
-    </div>
     </ProtectedRoute>
   )
 }

@@ -121,7 +121,7 @@ export default function RegisterPage() {
       if (typeof window !== "undefined") {
         localStorage.setItem("registerEmail", form.email);
       }
-      router.push("/auth/otp");
+      router.push("/auth/verify-email");
     } catch (error) {
       setErrors({ api: "حدث خطأ أثناء التسجيل. حاول مرة أخرى لاحقًا." });
     } finally {
@@ -232,7 +232,7 @@ export default function RegisterPage() {
               onClick={handleSubmit}
               disabled={loading}
             >
-              {loading ? "جاري التسجيل..." : t("submit")}
+              {loading ? t("loading") : t("submit")}
             </Button>
           </CardFooter>
         </Card>

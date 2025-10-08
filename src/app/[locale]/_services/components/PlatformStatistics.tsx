@@ -35,12 +35,12 @@ const StatCard = React.memo(function StatCard({ icon, labelKey, value, alt }: St
   const t = useTranslations("stats");
   return (
     <div
-      className="flex flex-col items-center gap-6 p-6 rounded-[20px] shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]"
+      className="flex flex-col items-center gap-2 md:gap-6 p-3 md:p-6 rounded-[12px] md:rounded-[20px] shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]"
       role="listitem"
     >
-      <Image src={icon} alt={alt} width={56} height={56} loading="lazy" />
-      <p className="text-lg font-semibold text-[#301B69]">{t(labelKey)}</p>
-      <p className="text-[#301B69] font-bold text-5xl">{value}</p>
+      <Image src={icon} alt={alt} width={56} height={56} className="w-7 h-7 md:w-14 md:h-14" loading="lazy" />
+      <p className="text-xs md:text-lg font-semibold text-[#301B69]">{t(labelKey)}</p>
+      <p className="text-[#301B69] font-bold text-2xl md:text-5xl">{value}</p>
     </div>
   );
 });
@@ -116,7 +116,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
 
       {/* Stats grid */}
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-10"
+        className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-10"
         role="list"
         aria-label={t("title")}
       >

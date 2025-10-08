@@ -3,12 +3,63 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import api from "@/lib/axiosClient";
 
 type Profile = {
-  userId: string;
-  email: string;
+  id: string;
   fullName: string;
+  email: string;
   gender: string;
+  phone: string;
+  chartNumber: string;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
+  isActive: boolean;
+  dateOfBirth: string | null;
+  age: number | null;
+  location: {
+    city: string;
+    country: string;
+  } | null;
+  origin: string | null;
+  maritalStatus: string | null;
+  profession: string | null;
+  weight: number | null;
+  height: number | null;
+  bodyColor: string | null;
+  hairColor: string | null;
+  hairType: string | null;
+  eyeColor: string | null;
+  houseAvailable: boolean | null;
+  natureOfWork: string | null;
+  bio: string | null;
+  preferredMinWeight: number | null;
+  preferredMaxWeight: number | null;
+  preferredMinHeight: number | null;
+  preferredMaxHeight: number | null;
+  preferredBodyColors: string[] | null;
+  preferredHairColors: string[] | null;
+  preferredEyeColors: string[] | null;
+  partnerPreferencesBio: string | null;
+  marriageType: string | null;
+  acceptPolygamy: boolean | null;
+  religiousPractice: string | null;
+  sect: string | null;
+  prayerLevel: string | null;
+  role: string;
+  permissions: any;
+  isBanned: boolean;
+  banType: string | null;
+  bannedAt: string | null;
+  bannedUntil: string | null;
+  bannedReason: string | null;
+  bannedBy: string | null;
   isVerified: boolean;
-  // ...add more fields as needed
+  verifiedAt: string | null;
+  verifiedBy: string | null;
+  isDeleted: boolean;
+  deletedAt: string | null;
+  roleAssignedBy: string | null;
+  roleAssignedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type AuthContextType = {

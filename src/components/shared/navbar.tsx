@@ -64,15 +64,22 @@ const Navbar = () => {
         {/* Navigation Links - Center */}
         <nav className="hidden lg:block">
           <div className="flex items-center justify-around gap-6">
-            {(isAuthenticated ? authLinks : guestLinks).map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-[#301B69] hover:text-[#301B69] p-1 text-lg font-${link.bold ? "bold" : "medium"} transition-colors${link.bold ? " border-b-2 border-[#301B69]" : ""}`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {(isAuthenticated ? authLinks : guestLinks).map(link => {
+              const isActive = pathname.includes(link.href) || (link.href !== "/" && pathname.startsWith(link.href));
+              console.log({ pathname, href: link.href, isActive });
+              
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
+                    ${isActive ? "border-b-2 border-[#301B69] font-bold" : "font-medium"}
+                  `}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         </nav>
 
@@ -91,14 +98,19 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[1.6rem] ltr:-translate-x-[1.2rem]'>
                 <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                  <Headset size={22} color='#301B69' />
-                  {t("accountMenu.contactUs")}
+                  <Link href="/contact-us" className='flex items-center gap-3 w-full'>
+                    <Headset size={22} color='#301B69' />
+                    {t("accountMenu.contactUs")}
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                  <User size={22} color='#301B69' />
-                  {t("accountMenu.profile")}
+                  <Link href="/profile" className='flex items-center gap-3 w-full'>
+                    <User size={22} color='#301B69' />
+                    {t("accountMenu.profile")}
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  
                   <FileText size={22} color='#301B69' />
                   {t("accountMenu.invoices")}
                 </DropdownMenuItem>
@@ -131,16 +143,21 @@ const Navbar = () => {
           </SheetTrigger>
           <SheetContent>
             <div className="flex flex-col items-start justify-around gap-6">
-              {(isAuthenticated ? authLinks : guestLinks).map(link => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors"
-                >
-                  {link.icon}
-                  {link.label}
-                </Link>
-              ))}
+              {(isAuthenticated ? authLinks : guestLinks).map(link => {
+                const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors
+                      ${isActive ? "border-b-2 border-[#301B69] font-bold" : ""}
+                    `}
+                  >
+                    {link.icon}
+                    {link.label}
+                  </Link>
+                );
+              })}
               <Button onClick={toggleLanguage} variant={"ghost"} className='flex md:hidden items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors'>
                 <RefreshCcw size={24} />
                 {t('languageToggle')}

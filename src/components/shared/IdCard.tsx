@@ -4,45 +4,69 @@ import Image from "next/image";
 import { Heart, BadgeCheck, MapPin, Palette, HeartHandshake } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useState } from "react";
+import api from "@/lib/axiosClient";
 
 type IdCardProps = {
+    id: string;
     name: string;
-    age: number;
+    age: number | string;
     city: string;
     status: string;
-    job: string;
-    skinColor: string;
-    marriageType: string;
+    job: string | null;
+    skinColor: string | null;
+    marriageType: string | null;
     avatar: string;
     verified?: boolean;
     online?: boolean;
     isFav?: boolean;
 };
 
-const InfoItem = ({ icon, text }: { icon: React.ReactNode; text: string }) => (
+const InfoItem = ({ icon, text }: { icon: React.ReactNode; text: string | null }) => (
     <div className="flex items-center justify-start gap-1">
         <span className="text-[#E30BCD]">{icon}</span>
-        <span className="text-sm text-[#8A97AB]">{text}</span>
+        <span className="text-sm text-[#8A97AB]">{text || "غير محدد"}</span>
     </div>
 );
 
 const IdCard = ({
-    name = "سامية",
-    age = 32,
-    city = "جدة",
-    status = "عزب",
-    job = "معلم",
-    skinColor = "لون البشرة أبيض",
-    marriageType = "الزواج مسيار",
-    avatar = "/photos/avatar-female.png",
-    isFav = false,
-    verified = true,
-    online = true,
+    id,
+    name,
+    age,
+    city,
+    status,
+    job,
+    skinColor,
+    marriageType,
+    avatar,
+    isFav,
+    verified,
+    online,
 }: IdCardProps) => {
     const [Fav, setIsFav] = useState(isFav);
+    const [loading, setLoading] = useState(false);
+
+    const handleLikeToggle = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (loading) return;
+        setLoading(true);
+        try {
+            if (!Fav) {
+                await api.post(`/users/${id}/like`);
+                setIsFav(true);
+            } else {
+                await api.delete(`/users/${id}/like`);
+                setIsFav(false);
+            }
+        } catch (err) {
+            // Optionally handle error (show toast, etc.)
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="relative rounded-xl border border-[#301B6929] bg-white/70 backdrop-blur-md shadow-[0_10px_30px_rgba(48,27,105,0.06)] p-4">
-            <Link href={"/partner-profile"} className="w-full h-full absolute inset-0 z-1" />
+            <Link href={`/partner-profile/${id}`} className="w-full h-full absolute inset-0 z-1" />
             {/* Header */}
             <div className="flex items-center justify-between">
                 {/* Avatar + name */}
@@ -73,9 +97,14 @@ const IdCard = ({
                 <button
                     aria-label="favorite"
                     className="bg-transparent border-none cursor-pointer focus:outline-none relative z-2"
-                    onClick={(e) => { e.stopPropagation(); setIsFav(!Fav); }}
+                    onClick={handleLikeToggle}
+                    disabled={loading}
                 >
-                    {Fav ? <Image src="/icons/heart-fill.svg" alt="favorite" width={32} height={32} /> : <Image src="/icons/heart.svg" alt="favorite" width={32} height={32} />}
+                    {Fav ? (
+                        <Image src="/icons/heart-fill.svg" alt="favorite" width={32} height={32} />
+                    ) : (
+                        <Image src="/icons/heart.svg" alt="favorite" width={32} height={32} />
+                    )}
                 </button>
             </div>
 

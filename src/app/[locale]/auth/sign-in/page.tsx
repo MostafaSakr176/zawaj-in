@@ -19,6 +19,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import Image from "next/image";
 import { Link, useRouter } from "@/i18n/navigation";
 import Cookies from "js-cookie";
+import { useAuth } from "@/context/AuthContext";
 
 const MailIcon = (
   <svg
@@ -102,6 +103,7 @@ export default function SignInPage() {
   const [error, setError] = React.useState<string | null>(null);
   const t = useTranslations("auth.signIn");
   const router = useRouter();
+  const { refreshProfile } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,19 +117,28 @@ export default function SignInPage() {
 
     setLoading(true);
     try {
-      const res = await api.post("/auth/login", {
-        email: state.email,
-        password: state.password,
-        fcmToken: "optional-fcm-token", // Add your FCM token if available
-      }, { headers: { skipAuth: true } });
+      const res = await api.post(
+        "/auth/login",
+        {
+          email: state.email,
+          password: state.password,
+          fcmToken: "optional-fcm-token",
+        },
+        { headers: { skipAuth: true } }
+      );
 
-      // Save tokens in cookies if present in response
       if (res?.data?.data) {
-        Cookies.set("access_token", res.data.data.access_token, { path: "/", expires: 7 });
-        Cookies.set("refresh_token", res.data.data.refresh_token, { path: "/", expires: 30 });
+        Cookies.set("access_token", res.data.data.access_token, {
+          path: "/",
+          expires: 7,
+        });
+        Cookies.set("refresh_token", res.data.data.refresh_token, {
+          path: "/",
+          expires: 30,
+        });
+        await refreshProfile();
       }
 
-      // Redirect or show success
       router.push("/");
     } catch (err: any) {
       setError(
@@ -145,8 +156,14 @@ export default function SignInPage() {
       : undefined;
 
   return (
-    <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
-      <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+    <section className="relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
+      <Image
+        src="/photos/terms-bg.svg"
+        alt="Terms Background"
+        width={100}
+        height={100}
+        className="absolute w-full inset-x-0 top-0 z-1"
+      />
       <div className="px-4 mx-auto max-w-xl relative z-2">
         <Card className="rounded-[32px] py-6 px-4 md:px-16 border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)] ">
           <form onSubmit={handleSubmit}>

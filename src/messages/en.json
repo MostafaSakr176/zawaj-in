@@ -48,7 +48,8 @@
             "passwordPlaceholder": "Password",
             "submit": "Sign in",
             "forgotLink": "Forgot password?",
-            "registerLink": "Create an account"
+            "registerLink": "Create an account",
+            "loading": "Signing in..."
         },
         "register": {
             "title": "Create a new account",
@@ -60,7 +61,8 @@
             "phoneLabel": "Mobile number",
             "passwordLabel": "Password",
             "confirmLabel": "Confirm password",
-            "submit": "Register"
+            "submit": "Register",
+            "loading": "Registering..."
         },
         "forgot": {
             "title": "Recover password via email",
