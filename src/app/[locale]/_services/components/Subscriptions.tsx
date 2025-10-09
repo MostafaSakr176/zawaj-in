@@ -48,9 +48,9 @@ const Badge = React.memo(() => (
     className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 rtl:md:left-4 rtl:md:right-auto ltr:md:right-4 ltr:md:left-auto text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
     style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}
   >
-    <Image src="/icons/plans/star.svg" alt="الأكثر شهرة" width={12} height={12} loading="lazy" />
+    <Image src="/icons/plans/star.webp" alt="الأكثر شهرة" width={12} height={12} loading="lazy" />
     الأكثر شهرة
-    <Image src="/icons/plans/star.svg" alt="" width={12} height={12} loading="lazy" />
+    <Image src="/icons/plans/star.webp" alt="" width={12} height={12} loading="lazy" />
   </span>
 ));
 
@@ -76,7 +76,7 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
         <ul className="space-y-2">
           {FEATURES[plan.key].map((feature, i) => (
             <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
-              <Image src="/icons/plans/Check Circle.svg" alt="Check icon" width={20} height={20} loading="lazy" />
+              <Image src="/icons/plans/Check Circle.webp" alt="Check icon" width={20} height={20} loading="lazy" />
               <span>{feature}</span>
             </li>
           ))}

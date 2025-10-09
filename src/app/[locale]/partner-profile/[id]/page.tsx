@@ -142,7 +142,7 @@ const PartnerProfile = () => {
                 style={{
                     // background: 'linear-gradient(224.16deg, #E0DAFF -2.22%, #FECDFB 112.2%)',
                 }}>
-                <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+                <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
 
                 <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
                     {/* Header */}
@@ -152,7 +152,7 @@ const PartnerProfile = () => {
                         <div className="flex items-center gap-3">
                             <div className="relative">
                                 <Image
-                                    src={user.gender === "female" ? "/icons/female-img.png" : "/photos/male-icon.svg"}
+                                    src={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
                                     alt="avatar"
                                     width={72}
                                     height={72}
@@ -168,7 +168,7 @@ const PartnerProfile = () => {
                                         <h4 className="text-2xl font-semibold text-[#301B69] leading-none">
                                             {user.fullName}
                                         </h4>
-                                        {user.isVerified && <Image src={"/icons/virify.svg"} alt="virify" width={16} height={16} />}
+                                        {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                     </div>
                                     <div className="text-[#8A97AB] text-base mb-1">آخر ظهور منذ 2 ساعات</div>
                                 </div>

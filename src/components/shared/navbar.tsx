@@ -65,8 +65,8 @@ const Navbar = () => {
         <div className="flex items-center justify-between max-w-7xl rounded-2xl md:rounded-[24px] mx-auto px-5 py-3 bg-white/80 backdrop-blur-lg shadow-lg">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <Image src="/photos/logo-ar.svg" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
-            <Image src="/photos/logo-en.svg" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
+            <Image src="/photos/logo-ar.webp" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
+            <Image src="/photos/logo-en.webp" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
           </Link>
 
           {/* Navigation Links - Center */}

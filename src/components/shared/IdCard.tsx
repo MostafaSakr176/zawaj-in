@@ -88,7 +88,7 @@ const IdCard = ({
                             <h4 className="text-base font-semibold text-[#301B69] leading-none">
                                 {name}
                             </h4>
-                            {verified && <Image src={"/icons/virify.svg"} alt="virify" width={16} height={16} />}
+                            {verified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                         </div>
                         <div className="text-[#301B69] text-sm font-semibold mt-1">{age} سنة</div>
                     </div>
@@ -101,9 +101,9 @@ const IdCard = ({
                     disabled={loading}
                 >
                     {Fav ? (
-                        <Image src="/icons/heart-fill.svg" alt="favorite" width={32} height={32} />
+                        <Image src="/icons/heart-fill.webp" alt="favorite" width={32} height={32} />
                     ) : (
-                        <Image src="/icons/heart.svg" alt="favorite" width={32} height={32} />
+                        <Image src="/icons/heart.webp" alt="favorite" width={32} height={32} />
                     )}
                 </button>
             </div>

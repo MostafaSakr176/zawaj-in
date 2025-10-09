@@ -11,7 +11,7 @@ const Footer = () => {
     return (
         <footer className="w-full text-center mt-20"
             style={{
-                backgroundImage: "url('/photos/footer-bg.png')",
+                backgroundImage: "url('/photos/footer-bg.webp')",
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat'
@@ -47,24 +47,24 @@ const Footer = () => {
                     {/* Social Icons */}
                     <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
                         <Link href="/" className="flex-shrink-0">
-                            <Image src="/photos/logo-ar.svg" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
-                            <Image src="/photos/logo-en.svg" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
+                            <Image src="/photos/logo-ar.webp" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
+                            <Image src="/photos/logo-en.webp" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
                         </Link>
                         <div className='flex items-center gap-2'>
                             <Button size="icon">
-                                <Image src="/icons/footer/f_1_.svg" alt="Facebook" width={24} height={24} className='w-6 h-6' />
+                                <Image src="/icons/footer/f_1_.webp" alt="Facebook" width={24} height={24} className='w-6 h-6' />
                             </Button>
                             <Button size="icon">
-                                <Image src="/icons/footer/f_1_.svg" alt="Facebook" width={24} height={24} className='w-6 h-6' />
+                                <Image src="/icons/footer/f_1_.webp" alt="Facebook" width={24} height={24} className='w-6 h-6' />
                             </Button>
                             <Button size="icon">
-                                <Image src="/icons/footer/f_1_.svg" alt="Facebook" width={24} height={24} className='w-6 h-6' />
+                                <Image src="/icons/footer/f_1_.webp" alt="Facebook" width={24} height={24} className='w-6 h-6' />
                             </Button>
                             <Button size="icon">
-                                <Image src="/icons/footer/f_1_.svg" alt="Facebook" width={24} height={24} className='w-6 h-6' />
+                                <Image src="/icons/footer/f_1_.webp" alt="Facebook" width={24} height={24} className='w-6 h-6' />
                             </Button>
                             <Button size="icon">
-                                <Image src="/icons/footer/f_1_.svg" alt="Facebook" width={24} height={24} className='w-6 h-6' />
+                                <Image src="/icons/footer/f_1_.webp" alt="Facebook" width={24} height={24} className='w-6 h-6' />
                             </Button>
                         </div>
                     </div>

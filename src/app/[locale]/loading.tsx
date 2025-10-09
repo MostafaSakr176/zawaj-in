@@ -5,7 +5,7 @@ const loading = () => {
         <div className="w-screen h-screen bg-white text-center fixed top-0 left-0 z-[999999] flex items-center justify-center">
             <div className='w-full h-full flex items-center justify-center'
                 style={{
-                    backgroundImage: "url('/photos/footer-bg.png')",
+                    backgroundImage: "url('/photos/footer-bg.webp')",
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'

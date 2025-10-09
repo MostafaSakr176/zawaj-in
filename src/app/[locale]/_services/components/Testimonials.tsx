@@ -15,7 +15,7 @@ const TESTIMONIALS = [
     city: "القاهرة",
     text:
       "موقع زواج إن غير حياتي. تعرفت على زوجتي بعد شهرين فقط من التسجيل، واليوم نحن نعيش حياة سعيدة ومستقرة.",
-    avatar: "/icons/Testimonials/user.png",
+    avatar: "/icons/Testimonials/user.webp",
     rating: 5,
   },
   // ...add more testimonials as needed

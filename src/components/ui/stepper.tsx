@@ -93,7 +93,7 @@ export function Stepper({
                   )}
                 >
                   {isCompleted ? (
-                    <Image src={"/icons/complete.svg"} alt="Completed" width={14} height={14} className="w-5" />
+                    <Image src={"/icons/complete.webp"} alt="Completed" width={14} height={14} className="w-5" />
                   ) : (
                     <span
                       className={cn(

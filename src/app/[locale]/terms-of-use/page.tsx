@@ -8,12 +8,12 @@ const TermsAndConditions = () => {
             style={{
                 // background: 'linear-gradient(224.16deg, #E0DAFF -2.22%, #FECDFB 112.2%)',
             }}>
-            <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+            <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
             <div className='max-w-7xl mx-auto px-4 md:px-0 relative z-2'>
                 <div className='grid grid-cols-1 md:grid-cols-7 gap-8'>
                     <div className='md:col-span-2 '>
                         <div className='rounded-3xl overflow-hidden relative'>
-                            <Image src="/photos/terms-img.svg" alt='Terms Background' width={100} height={100} className='w-full' />
+                            <Image src="/photos/terms-img.webp" alt='Terms Background' width={100} height={100} className='w-full' />
                             <h3 className='text-3xl font-bold text-center px-6 absolute bottom-8 inset-x-0 z-4'
                                 style={{
                                     background: 'linear-gradient(182.28deg, #301B69 36.46%, #B07CD1 97.83%)',

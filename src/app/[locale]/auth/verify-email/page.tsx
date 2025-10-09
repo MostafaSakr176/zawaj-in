@@ -132,7 +132,7 @@ export default function OtpPage() {
   return (
     <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
       <Image
-        src='/photos/terms-bg.svg'
+        src='/photos/terms-bg.webp'
         alt='Terms Background'
         width={100}
         height={100}

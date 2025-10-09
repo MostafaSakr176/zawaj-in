@@ -5,19 +5,19 @@ import { useTranslations } from "next-intl";
 
 // Memoize static data outside the component for performance
 const features = [
-  { icon: "/icons/phone-heart.svg", titleKey: "registerTitle", descKey: "registerDesc" },
-  { icon: "/icons/wedding-rings.svg", titleKey: "stepTitle", descKey: "stepDesc" },
-  { icon: "/icons/love-hate.svg", titleKey: "preferencesTitle", descKey: "preferencesDesc" },
-  { icon: "/icons/checklist.svg", titleKey: "paymentTitle", descKey: "paymentDesc" },
+  { icon: "/icons/phone-heart.webp", titleKey: "registerTitle", descKey: "registerDesc" },
+  { icon: "/icons/wedding-rings.webp", titleKey: "stepTitle", descKey: "stepDesc" },
+  { icon: "/icons/love-hate.webp", titleKey: "preferencesTitle", descKey: "preferencesDesc" },
+  { icon: "/icons/checklist.webp", titleKey: "paymentTitle", descKey: "paymentDesc" },
 ];
 
 const ringIcons = [
-  { src: "/icons/advantages section/circle-shape/icon1.svg", pos: "left-1/2 -translate-x-1/2 -top-9 md:-top-14" },
-  { src: "/icons/advantages section/circle-shape/icon2.svg", pos: "-right-[10%] top-1/5" },
-  { src: "/icons/advantages section/circle-shape/icon3.svg", pos: "-right-[10%] bottom-1/5" },
-  { src: "/icons/advantages section/circle-shape/icon4.svg", pos: "left-1/2 -translate-x-1/2 -bottom-9 md:-bottom-14" },
-  { src: "/icons/advantages section/circle-shape/icon5.svg", pos: "-left-[10%] bottom-1/5" },
-  { src: "/icons/advantages section/circle-shape/icon6.svg", pos: "-left-[10%] top-1/5" },
+  { src: "/icons/advantages section/circle-shape/icon1.webp", pos: "left-1/2 -translate-x-1/2 -top-9 md:-top-14" },
+  { src: "/icons/advantages section/circle-shape/icon2.webp", pos: "-right-[10%] top-1/5" },
+  { src: "/icons/advantages section/circle-shape/icon3.webp", pos: "-right-[10%] bottom-1/5" },
+  { src: "/icons/advantages section/circle-shape/icon4.webp", pos: "left-1/2 -translate-x-1/2 -bottom-9 md:-bottom-14" },
+  { src: "/icons/advantages section/circle-shape/icon5.webp", pos: "-left-[10%] bottom-1/5" },
+  { src: "/icons/advantages section/circle-shape/icon6.webp", pos: "-left-[10%] top-1/5" },
 ];
 
 const RingIcon = React.memo(function RingIcon({ src, pos }: { src: string; pos: string }) {
@@ -54,7 +54,7 @@ const Advantages = React.memo(function Advantages() {
         {/* Text column */}
         <div className="flex flex-col justify-center items-start gap-4">
           <h6 className="rounded-3xl shadow-sm px-4 py-2 bg-white text-[#301B69] font-medium text-sm flex items-center gap-2">
-            <Image src="/icons/MagicWand.svg" alt="" width={20} height={20} aria-hidden="true" loading="lazy" />
+            <Image src="/icons/MagicWand.webp" alt="" width={20} height={20} aria-hidden="true" loading="lazy" />
             {t("features")}
           </h6>
 
@@ -99,7 +99,7 @@ const Advantages = React.memo(function Advantages() {
             {/* Center logo and toggling images */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 select-none flex flex-col items-center">
               <Image
-                src="/icons/advantages/trans1.svg"
+                src="/icons/advantages/trans1.webp"
                 alt=""
                 width={230}
                 height={166}
@@ -108,7 +108,7 @@ const Advantages = React.memo(function Advantages() {
                 priority
               />
               <Image
-                src="/icons/advantages/trans2.svg"
+                src="/icons/advantages/trans2.webp"
                 alt=""
                 width={230}
                 height={166}
@@ -116,8 +116,8 @@ const Advantages = React.memo(function Advantages() {
                 loading="eager"
                 priority
               />
-              <Image src="/photos/logo-ar.svg" alt="" width={233} height={84} className="rtl:block ltr:hidden" loading="lazy" />
-              <Image src="/photos/logo-en.svg" alt="" width={233} height={84} className="rtl:hidden ltr:block" loading="lazy" />
+              <Image src="/photos/logo-ar.webp" alt="" width={233} height={84} className="rtl:block ltr:hidden" loading="lazy" />
+              <Image src="/photos/logo-en.webp" alt="" width={233} height={84} className="rtl:hidden ltr:block" loading="lazy" />
             </div>
             {ringIcons.map((ri) => (
               <RingIcon key={ri.src} src={ri.src} pos={ri.pos} />

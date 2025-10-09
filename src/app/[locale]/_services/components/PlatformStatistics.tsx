@@ -11,10 +11,10 @@ import {
 
 // Memoize static data outside the component for performance
 const AVATARS = [
-  { src: "/icons/boy-img.png", alt: "@shadcn", fallback: "CN" },
-  { src: "/photos/male-icon.svg", alt: "@evilrabbit", fallback: "ER" },
-  { src: "/icons/female-img.png", alt: "@evilrabbit", fallback: "ER" },
-  { src: "/icons/girl-img.png", alt: "@leerob", fallback: "LR" },
+  { src: "/icons/boy-img.webp", alt: "@shadcn", fallback: "CN" },
+  { src: "/photos/male-icon.webp", alt: "@evilrabbit", fallback: "ER" },
+  { src: "/icons/female-img.webp", alt: "@evilrabbit", fallback: "ER" },
+  { src: "/icons/girl-img.webp", alt: "@leerob", fallback: "LR" },
 ];
 
 type Stat = {
@@ -25,10 +25,10 @@ type Stat = {
 };
 
 const STATS: Stat[] = [
-  { icon: "/icons/male.svg", alt: "male users", labelKey: "registered_males", value: 300 },
-  { icon: "/icons/female-icon.svg", alt: "female users", labelKey: "registered_females", value: 300 },
-  { icon: "/icons/male-o.svg", alt: "active males today", labelKey: "active_males", value: 100 },
-  { icon: "/icons/female-o.svg", alt: "active females today", labelKey: "active_females", value: 200 },
+  { icon: "/icons/male.webp", alt: "male users", labelKey: "registered_males", value: 300 },
+  { icon: "/icons/female-icon.webp", alt: "female users", labelKey: "registered_females", value: 300 },
+  { icon: "/icons/male-o.webp", alt: "active males today", labelKey: "active_males", value: 100 },
+  { icon: "/icons/female-o.webp", alt: "active females today", labelKey: "active_females", value: 200 },
 ];
 
 const StatCard = React.memo(function StatCard({ icon, labelKey, value, alt }: Stat) {
@@ -71,7 +71,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
       {/* Section badge with avatars */}
       <div className="flex items-center mx-auto w-fit">
         <Image
-          src="/photos/heading-smoth-shape-right.svg"
+          src="/photos/heading-smoth-shape-right.webp"
           alt="right shape"
           width={40}
           height={25}
@@ -79,7 +79,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
           loading="lazy"
         />
         <Image
-          src="/photos/heading-smoth-shape-left.svg"
+          src="/photos/heading-smoth-shape-left.webp"
           alt="left shape"
           width={40}
           height={25}
@@ -97,7 +97,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
           </div>
         </div>
         <Image
-          src="/photos/heading-smoth-shape-right.svg"
+          src="/photos/heading-smoth-shape-right.webp"
           alt="right shape"
           width={40}
           height={25}
@@ -105,7 +105,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
           loading="lazy"
         />
         <Image
-          src="/photos/heading-smoth-shape-left.svg"
+          src="/photos/heading-smoth-shape-left.webp"
           alt="left shape"
           width={40}
           height={25}

@@ -35,7 +35,7 @@ export default function ContactUs() {
         <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
             style={{
             }}>
-            <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+            <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
             <div className="px-4 mx-auto max-w-2xl relative z-2">
                 <h2
                     className="mb-2 text-4xl lg:text-7xl font-medium leading-[120%] text-center bg-clip-text text-transparent"
@@ -52,11 +52,11 @@ export default function ContactUs() {
                 <div className="flex items-center justify-center flex-col md:flex-row gap-4 md:gap-8 mb-8">
                     <div className="flex items-center gap-2">
                         <a href="https://wa.me/1234567890" className="text-[#301B69] underline text-lg">+1 (555) 000-0000</a>
-                        <Image src="/icons/whatsapp.svg" alt="" width={24} height={24} />
+                        <Image src="/icons/whatsapp.webp" alt="" width={24} height={24} />
                     </div>
                     <div className="flex items-center gap-2">
                         <a href="mailto:email@example.com" className="text-[#301B69] underline text-lg">email@example.com</a>
-                        <Image src="/icons/mail.svg" alt="" width={24} height={24} />
+                        <Image src="/icons/mail.webp" alt="" width={24} height={24} />
                     </div>
                 </div>
 

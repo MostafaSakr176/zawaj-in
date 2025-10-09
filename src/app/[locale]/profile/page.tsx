@@ -30,7 +30,7 @@ const Profile = () => {
   return (
     <ProtectedRoute>
       <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'>
-        <Image src="/photos/terms-bg.svg" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+        <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
 
         <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
           {/* Header */}
@@ -40,7 +40,7 @@ const Profile = () => {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Image
-                    src={profile.gender === "female" ? "/icons/female-img.png" : "/photos/male-icon.svg"}
+                    src={profile.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
                     alt="avatar"
                     width={72}
                     height={72}
@@ -56,7 +56,7 @@ const Profile = () => {
                       <h4 className="text-xl md:text-2xl font-semibold text-[#301B69] leading-none">
                         {profile.fullName}
                       </h4>
-                      {profile.isVerified && <Image src={"/icons/virify.svg"} alt="virify" width={16} height={16} />}
+                      {profile.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                     </div>
                   </div>
                   <div className="text-[#8A97AB] text-sm md:text-base">رقم العضوية {profile.chartNumber}</div>
@@ -75,13 +75,13 @@ const Profile = () => {
                 <Label htmlFor="airplane-mode" className='mb-0'>متصل</Label>
               </div>
               <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-4 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
-                <Image src="/icons/foots.svg" alt="favorite" width={24} height={24} />
+                <Image src="/icons/foots.webp" alt="favorite" width={24} height={24} />
                 من زار بياناتي
                 <span className='text-lg w-5 h-5 rounded-full bg-[#FF3B30] text-white flex items-center justify-center leading-1'>5</span>
               </button>
               <Link href="/profile/edit">
                 <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-4 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
-                  <Image src="/icons/edit-user.svg" alt="favorite" width={24} height={24} />
+                  <Image src="/icons/edit-user.webp" alt="favorite" width={24} height={24} />
                   تعديل بياناتي
                 </button>
               </Link>

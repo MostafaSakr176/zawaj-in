@@ -9,10 +9,10 @@ import { Link } from "@/i18n/navigation";
 
 // Memoize icons array outside component for performance
 const ICONS = [
-  "/icons/hero-users-Icon.svg",
-  "/icons/hero-chat-Icon.svg",
-  "/icons/hero-smiley-Icon.svg",
-  "/icons/hero-heart-Icon.svg",
+  "/icons/hero-users-Icon.webp",
+  "/icons/hero-chat-Icon.webp",
+  "/icons/hero-smiley-Icon.webp",
+  "/icons/hero-heart-Icon.webp",
 ];
 
 const Hero = React.memo(() => {
@@ -55,7 +55,7 @@ const Hero = React.memo(() => {
           <div className="flex justify-end rtl:lg:pl-8 ltr:lg:pr-8">
             <div className="relative w-[90%] md:w-[70%] mx-auto md:mx-0">
               <Image
-                src="/photos/hero-img.png"
+                src="/photos/hero-img.webp"
                 alt={t("mainTitle")}
                 width={320}
                 height={400}
@@ -105,7 +105,7 @@ const Hero = React.memo(() => {
                 }}
               >
                 <Image
-                  src="/photos/vows.svg"
+                  src="/photos/vows.webp"
                   alt="icon"
                   width={32}
                   height={32}

@@ -97,7 +97,7 @@ const MyFavorites = () => {
     <ProtectedRoute>
       <div className="relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
         <Image
-          src="/photos/terms-bg.svg"
+          src="/photos/terms-bg.webp"
           alt="Terms Background"
           width={100}
           height={100}
@@ -120,7 +120,7 @@ const MyFavorites = () => {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <Image
-                  src={"/photos/male-icon.svg"}
+                  src={"/photos/male-icon.webp"}
                   alt={"avatar"}
                   width={80}
                   height={80}
@@ -136,7 +136,7 @@ const MyFavorites = () => {
                   <h4 className="text-3xl font-semibold text-[#301B69] leading-none">
                     {profile?.fullName || "User"}
                   </h4>
-                  {true && <Image src={"/icons/virify.svg"} alt="virify" width={16} height={16} />}
+                  {true && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                 </div>
               </div>
             </div>
@@ -156,7 +156,7 @@ const MyFavorites = () => {
                     id={rec.userId}
                     isFav={rec?.hasLiked}
                     name={rec.fullName || "User"}
-                    avatar={rec.gender === "female" ? "/icons/female-img.png" : "/photos/male-icon.svg"}
+                    avatar={rec.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
                     age={rec.age}
                     city={rec?.location?.city}
                     job={rec?.natureOfWork}
