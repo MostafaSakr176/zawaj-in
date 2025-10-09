@@ -74,7 +74,6 @@ const Navbar = () => {
             <div className="flex items-center justify-around gap-6">
               {(isAuthenticated ? authLinks : guestLinks).map(link => {
                 const isActive = pathname.includes(link.href) || (link.href !== "/" && pathname.startsWith(link.href));
-                console.log({ pathname, href: link.href, isActive });
 
                 return (
                   <Link
