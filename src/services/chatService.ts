@@ -1,6 +1,6 @@
 import api from "@/lib/axiosClient";
 
-export type MessageType = "text" | "image" | "system";
+export type MessageType = "text" | "image" | "audio" | "system";
 export type MessageStatus = "sent" | "delivered" | "read";
 
 export interface Message {

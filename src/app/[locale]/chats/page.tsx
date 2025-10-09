@@ -14,10 +14,10 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
   if (m.messageType === "audio" || m.messageType === "image") {
     return (
       <div className="flex items-end gap-3">
-        <Image src="/photos/male-icon.svg" alt="" width={36} height={36} className="rounded-full" />
+        <Image src="/photos/male-icon.webp" alt="" width={36} height={36} className="rounded-full" />
         <div className="rounded-full rounded-br-none border border-[#0000001A] bg-white px-3 py-2 flex items-center gap-3">
           <button className="grid place-items-center size-7 rounded-full bg-[#F5E6FF] text-[#301B69]">
-            <Image src="/icons/play.svg" alt="" width={7} height={10} className="w-2" />
+            <Image src="/icons/play.webp" alt="" width={7} height={10} className="w-2" />
           </button>
           <div className="w-40 h-1.5 rounded bg-[#E9ECF6] overflow-hidden">
             <div className="h-full w-1/2 bg-[#B9C0CF]" />
@@ -35,11 +35,11 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
       <div className={`${common} bg-[#3B0C46] text-white rounded-bl-none`}>
         {m.content}
       </div>
-      <Image src="/photos/male-icon.svg" alt="" width={36} height={36} className="rounded-full" />
+      <Image src="/photos/male-icon.webp" alt="" width={36} height={36} className="rounded-full" />
     </div>
   ) : (
     <div className="flex items-end justify-start gap-2">
-      <Image src="/photos/male-icon.svg" alt="" width={36} height={36} className="rounded-full" />
+      <Image src="/photos/male-icon.webp" alt="" width={36} height={36} className="rounded-full" />
       <div className={`${common} bg-[#EDF3FF] text-[#2D1F55] rounded-br-none`}>
         {m.content}
       </div>
@@ -77,7 +77,7 @@ function ChatListItem({
     >
       <div className="relative">
         <Image
-          src="/photos/male-icon.svg"
+          src="/photos/male-icon.webp"
           alt={otherParticipant?.fullName || "User"}
           width={40}
           height={40}
@@ -228,7 +228,7 @@ const Chats = () => {
   return (
     <ProtectedRoute>
       <section className="relative pt-28 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
-        <Image src="/photos/terms-bg.svg" alt="Terms Background" width={100} height={100} className="absolute w-full inset-x-0 top-0 z-1" />
+        <Image src="/photos/terms-bg.webp" alt="Terms Background" width={100} height={100} className="absolute w-full inset-x-0 top-0 z-1" />
         <div className="max-w-7xl mx-auto px-4 md:px-0 grid grid-cols-1 lg:grid-cols-12 gap-4 relative z-2">
           {/* Right: Conversations list */}
           <aside className="lg:col-span-4 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl p-3">
@@ -270,7 +270,7 @@ const Chats = () => {
                       <ArrowRight className="text-[#2D1F55]" />
                     </button>
                     <div className="relative">
-                      <Image src="/photos/male-icon.svg" alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                      <Image src="/photos/male-icon.webp" alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
                       {isOtherUserOnline && (
                         <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                       )}
@@ -365,7 +365,7 @@ const Chats = () => {
                       </div>
                       <div className="relative">
                         <Image
-                          src="/photos/male-icon.svg"
+                          src="/photos/male-icon.webp"
                           alt=""
                           width={44}
                           height={44}
