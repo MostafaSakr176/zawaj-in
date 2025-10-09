@@ -34,36 +34,43 @@ const Profile = () => {
 
         <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
           {/* Header */}
-          <div className="flex items-center justify-between gap-4 px-3">
+          <div className="flex items-center justify-between gap-4 md:px-3 flex-col md:flex-row">
             {/* Profile summary (right in RTL) */}
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Image
-                  src={profile.gender === "female" ? "/icons/female-img.png" : "/photos/male-icon.svg"}
-                  alt="avatar"
-                  width={72}
-                  height={72}
-                  className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
-                />
-                {profile.isActive && (
-                  <span className="absolute top-1 left-1 w-3.5 h-3.5 rounded-full bg-[#28C76F] ring-2 ring-white" />
-                )}
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-end gap-1">
-                    <h4 className="text-2xl font-semibold text-[#301B69] leading-none">
-                      {profile.fullName}
-                    </h4>
-                    {profile.isVerified && <Image src={"/icons/virify.svg"} alt="virify" width={16} height={16} />}
-                  </div>
+            <div className='w-full md:w-auto flex items-center justify-between gap-6'>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Image
+                    src={profile.gender === "female" ? "/icons/female-img.png" : "/photos/male-icon.svg"}
+                    alt="avatar"
+                    width={72}
+                    height={72}
+                    className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
+                  />
+                  {profile.isActive && (
+                    <span className="absolute top-1 left-1 w-3.5 h-3.5 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                  )}
                 </div>
-                <div className="text-[#8A97AB] text-base">رقم العضوية {profile.chartNumber}</div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-end gap-1">
+                      <h4 className="text-xl md:text-2xl font-semibold text-[#301B69] leading-none">
+                        {profile.fullName}
+                      </h4>
+                      {profile.isVerified && <Image src={"/icons/virify.svg"} alt="virify" width={16} height={16} />}
+                    </div>
+                  </div>
+                  <div className="text-[#8A97AB] text-sm md:text-base">رقم العضوية {profile.chartNumber}</div>
+                </div>
+              </div>
+              <div className="flex md:hidden items-center space-x-2">
+                <Switch id="airplane-mode" />
+                <Label htmlFor="airplane-mode" className='mb-0'>متصل</Label>
               </div>
             </div>
+
             {/* Actions (left in RTL) */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center space-x-2">
                 <Switch id="airplane-mode" />
                 <Label htmlFor="airplane-mode" className='mb-0'>متصل</Label>
               </div>
@@ -99,7 +106,7 @@ const Profile = () => {
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-[#2D1F55] font-semibold text-base">السكن و الحالة الإجتماعية</h4>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label="البلد" value={profile?.location?.country} />
               </div>
@@ -122,7 +129,7 @@ const Profile = () => {
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label="لون البشرة" value={profile?.bodyColor} />
               </div>
@@ -151,7 +158,7 @@ const Profile = () => {
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-[#2D1F55] font-semibold text-base">الدراسة و العمل</h4>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label="المؤهل الدراسي" value={profile.profession} />
               </div>
@@ -168,7 +175,7 @@ const Profile = () => {
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-[#2D1F55] font-semibold text-base">الديانة والممارسة</h4>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label="المذهب" value={profile.sect} />
               </div>
@@ -191,7 +198,7 @@ const Profile = () => {
           <h3 className='font-semibold text-3xl text-[#301B69]'>مواصفات شريك حياتي</h3>
 
           <div className="px-2 md:px-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center flex-wrap gap-4">
               <div className="">
                 <Field label="شريكة حياتي" value={profile.partnerPreferencesBio} />
               </div>
@@ -204,7 +211,7 @@ const Profile = () => {
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label="لون البشرة" value={profile?.preferredBodyColors?.join(", ")} />
               </div>

@@ -213,7 +213,7 @@ const PartnerProfile = () => {
                         <div className="flex items-center justify-between mb-4">
                             <h4 className="text-[#2D1F55] font-semibold text-base">السكن و الحالة الإجتماعية</h4>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                                 <Field label="البلد" value={user.location.country} />
                             </div>
@@ -236,7 +236,7 @@ const PartnerProfile = () => {
                         <div className="flex items-center justify-between mb-4">
                             <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                                 <Field label="لون البشرة" value={user?.bodyColor} />
                             </div>
@@ -265,7 +265,7 @@ const PartnerProfile = () => {
                         <div className="flex items-center justify-between mb-4">
                             <h4 className="text-[#2D1F55] font-semibold text-base">الدراسة و العمل</h4>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center flex-wrap gap-4">
 
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                                 <Field label="المؤهل الدراسي" value={user.profession} />
@@ -283,7 +283,7 @@ const PartnerProfile = () => {
                         <div className="flex items-center justify-between mb-4">
                             <h4 className="text-[#2D1F55] font-semibold text-base">الديانة والممارسة</h4>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                                 <Field label="المذهب" value={user.sect} />
                             </div>
@@ -306,7 +306,7 @@ const PartnerProfile = () => {
                     <h3 className='font-semibold text-3xl text-[#301B69]'>مواصفات شريك حياتي</h3>
 
                     <div className="px-2 md:px-4">
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center flex-wrap gap-4">
                             <div className="">
                                 <Field label="شريكة حياتي" value={user.partnerPreferencesBio} />
                             </div>
@@ -319,7 +319,7 @@ const PartnerProfile = () => {
                         <div className="flex items-center justify-between mb-4">
                             <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                                 <Field label="لون البشرة" value={user?.preferredBodyColors?.join(", ")} />
                             </div>
