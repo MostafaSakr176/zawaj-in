@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import Navbar from "../../components/shared/navbar";
 import Footer from "@/components/shared/footer";
 import { AuthProvider } from "@/context/AuthContext";
+import { SocketProvider } from "@/context/SocketContext";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -41,9 +42,11 @@ export default async function RootLayout({
       <body className="!mr-0 !ml-0 !overflow-auto">
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
-            <Navbar />
-            {children}
-            <Footer />
+            <SocketProvider>
+              <Navbar />
+              {children}
+              <Footer />
+            </SocketProvider>
           </AuthProvider>
 
         </NextIntlClientProvider>
