@@ -154,21 +154,21 @@ const NewSubscribers = React.memo(() => {
 							</TabsTrigger>
 						</div>
 						<div className="flex items-center gap-2">
-							<FormField required className="w-30">
+							<FormField required className="w-28">
 								<Select
 									className="bg-white/40"
 									options={countryOptions}
 									placeholder={t("country")}
 								/>
 							</FormField>
-							<FormField required className="w-30">
+							<FormField required className="w-28">
 								<Select
 									className="bg-white/40"
 									options={cityOptions}
 									placeholder={t("city")}
 								/>
 							</FormField>
-							<FormField required className="w-30">
+							<FormField required className="w-28">
 								<Select
 									className="bg-white/40"
 									options={marriageTypeOptions}
