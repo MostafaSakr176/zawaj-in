@@ -35,7 +35,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           className={cn(
-            "appearance-none bg-white rtl:pl-6 ltr:pr-6 rtl:md:pl-10 ltr:md:pr-10 h-11 w-full rounded-[8px] border border-[#D0D5DD] px-3 md:px-4 text-[1rem] shadow-xs outline-none transition-[color,box-shadow]",
+            "appearance-none bg-white rtl:pl-6 ltr:pr-6 rtl:md:pl-8 ltr:md:pr-8 h-11 w-full rounded-[8px] border border-[#D0D5DD] px-3 md:px-4 text-[1rem] shadow-xs outline-none transition-[color,box-shadow]",
             "[&_option:disabled]:text-[#AFAFAF]",
             className
           )}

@@ -1,131 +1,112 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import IdCard from "@/components/shared/IdCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Select from "@/components/ui/select";
 import { FormField } from "@/components/ui/form";
 import { useTranslations } from "next-intl";
-
-// Memoize static data outside the component for performance
-const MALE_MEMBERS = [
-	{
-        id: "1",
-		isFav: true,
-		name: "أحمد",
-		avatar: "/photos/male-icon.webp",
-		age: 28,
-		city: "الرياض",
-		job: "teacher",
-		marriageType: "normalMarriage",
-		skinColor: "lightSkin",
-		status: "single",
-	},
-	{
-		id: "2",
-		isFav: false,
-		name: "محمد",
-		avatar: "/photos/male-icon.webp",
-		age: 32,
-		city: "الدمام",
-		job: "doctor",
-		marriageType: "normalMarriage",
-		skinColor: "darkSkin",
-		status: "divorced",
-	},
-	{
-		id: "3",
-		isFav: true,
-		name: "علي",
-		avatar: "/photos/male-icon.webp",
-		age: 30,
-		city: "المدينة",
-		job: "businessman",
-		marriageType: "normalMarriage",
-		skinColor: "mediumSkin",
-		status: "single",
-	},
-];
-
-const FEMALE_MEMBERS = [
-	{
-        id: "4",
-		isFav: false,
-		name: "فاطمة",
-		avatar: "/icons/female-img.webp",
-		age: 24,
-		city: "جدة",
-		job: "engineer",
-		marriageType: "misyarMarriage",
-		skinColor: "mediumSkin",
-		status: "single",
-	},
-	{
-        id: "5",
-		isFav: true,
-		name: "عائشة",
-		avatar: "/icons/female-img.webp",
-		age: 26,
-		city: "مكة",
-		job: "lawyer",
-		marriageType: "temporaryMarriage",
-		skinColor: "lightSkin",
-		status: "single",
-	},
-	{
-        id: "6",
-		isFav: true,
-		name: "خديجة",
-		avatar: "/icons/female-img.webp",
-		age: 22,
-		city: "الطائف",
-		job: "student",
-		marriageType: "normalMarriage",
-		skinColor: "lightSkin",
-		status: "single",
-	},
-];
-
-const ALL_MEMBERS = [
-	...MALE_MEMBERS,
-	...FEMALE_MEMBERS,
-	// Add more as needed, or fetch from API
-];
+import api from "@/lib/axiosClient";
+import Cookies from "js-cookie";
 
 const countryOptions = [
-	{ value: "sa", label: "السعودية" },
-	{ value: "eg", label: "مصر" },
+	{ value: "UAE", label: "الإمارات" },
+	{ value: "SA", label: "السعودية" },
+	{ value: "EG", label: "مصر" },
 ];
 
 const cityOptions = [
-	{ value: "riyadh", label: "الرياض" },
-	{ value: "jeddah", label: "جدة" },
+	{ value: "Dubai", label: "دبي" },
+	{ value: "Abu Dhabi", label: "أبو ظبي" },
+	{ value: "Sharjah", label: "الشارقة" },
+	{ value: "Riyadh", label: "الرياض" },
+	{ value: "Jeddah", label: "جدة" },
 ];
 
 const marriageTypeOptions = [
 	{ value: "normalMarriage", label: "زواج عادي" },
 	{ value: "misyarMarriage", label: "زواج مسيار" },
+	{ value: "religious", label: "زواج ديني" },
+	{ value: "temporaryMarriage", label: "زواج مؤقت" },
 ];
+
+const genderTabs = [
+	{ value: "all", labelKey: "all" },
+	{ value: "male", labelKey: "males" },
+	{ value: "female", labelKey: "females" },
+];
+
+const PAGE_SIZE = 9;
 
 const NewSubscribers = React.memo(() => {
 	const t = useTranslations("filters");
 
-	// Memoize rendered lists for performance
-	const allCards = useMemo(
-		() =>
-			ALL_MEMBERS.map((props, idx) => <IdCard key={props.name + idx} {...props} />),
-		[]
-	);
-	const maleCards = useMemo(
-		() =>
-			MALE_MEMBERS.map((props, idx) => <IdCard key={props.name + idx} {...props} />),
-		[]
-	);
-	const femaleCards = useMemo(
-		() =>
-			FEMALE_MEMBERS.map((props, idx) => <IdCard key={props.name + idx} {...props} />),
-		[]
-	);
+	// Filters and pagination state
+	const [gender, setGender] = useState<string | undefined>(undefined);
+	const [country, setCountry] = useState<string | undefined>(undefined);
+	const [city, setCity] = useState<string | undefined>(undefined);
+	const [marriageType, setMarriageType] = useState<string | undefined>(undefined);
+	const [page, setPage] = useState(1);
+
+	// Data state
+	const [users, setUsers] = useState<any[]>([]);
+	const [pagination, setPagination] = useState<{ total: number; page: number; limit: number; totalPages: number }>({
+		total: 0,
+		page: 1,
+		limit: PAGE_SIZE,
+		totalPages: 1,
+	});
+	const [loading, setLoading] = useState(false);
+
+	// Fetch users from API
+	useEffect(() => {
+		setLoading(true);
+		const params: Record<string, any> = {
+			page,
+			limit: PAGE_SIZE,
+		};
+		if (gender && gender !== "all") params.gender = gender;
+		if (country) params.country = country;
+		if (city) params.city = city;
+		if (marriageType) params.marriageType = marriageType;
+
+		const token = Cookies.get("access_token"); // or whatever your key is
+
+		api
+			.get("/users", {
+				params,
+				headers: token ? { Authorization: `Bearer ${token}` } : {},
+			})
+			.then((res) => {
+				setUsers(res.data.data.users);
+				setPagination(res.data.data.pagination);
+			})
+			.catch(() => {
+				setUsers([]);
+				setPagination({ total: 0, page: 1, limit: PAGE_SIZE, totalPages: 1 });
+			})
+			.finally(() => setLoading(false));
+	}, [gender, country, city, marriageType, page]);
+
+	// Handle tab change
+	const handleTabChange = (tab: string) => {
+		setGender(tab === "all" ? undefined : tab);
+		setPage(1);
+	};
+
+	// Handle filter change
+	const handleCountryChange = (val: string) => {
+		setCountry(val);
+		setPage(1);
+	};
+	const handleCityChange = (val: string) => {
+		setCity(val);
+		setPage(1);
+	};
+	const handleMarriageTypeChange = (val: string) => {
+		setMarriageType(val);
+		setPage(1);
+	};
 
 	return (
 		<section
@@ -140,58 +121,83 @@ const NewSubscribers = React.memo(() => {
 			</h2>
 
 			<div className="max-w-5xl mx-auto">
-				<Tabs defaultValue="all">
+				<Tabs value={gender ?? "all"} onValueChange={handleTabChange}>
 					<TabsList className="w-full my-10 md:mb-6 md:mt-0 flex gap-4 items-center justify-center flex-col-reverse md:flex-row">
 						<div className="flex gap-1 items-center">
-							<TabsTrigger value="all" className="!rounded-[15px]">
-								{t("all")}
-							</TabsTrigger>
-							<TabsTrigger value="males" className="!rounded-[15px]">
-								{t("males")}
-							</TabsTrigger>
-							<TabsTrigger value="females" className="!rounded-[15px]">
-								{t("females")}
-							</TabsTrigger>
+							{genderTabs.map((tab) => (
+								<TabsTrigger key={tab.value} value={tab.value} className="!rounded-[15px]">
+									{t(tab.labelKey)}
+								</TabsTrigger>
+							))}
 						</div>
 						<div className="flex items-center gap-2">
-							<FormField required className="w-28">
+							<FormField required>
 								<Select
 									className="bg-white/40"
 									options={countryOptions}
 									placeholder={t("country")}
+									value={country}
+									onChange={(e) => handleCountryChange(e.target.value)}
 								/>
 							</FormField>
-							<FormField required className="w-28">
+							<FormField required>
 								<Select
 									className="bg-white/40"
 									options={cityOptions}
 									placeholder={t("city")}
+									value={city}
+									onChange={(e) => handleCityChange(e.target.value)}
 								/>
 							</FormField>
-							<FormField required className="w-28">
+							<FormField required>
 								<Select
 									className="bg-white/40"
 									options={marriageTypeOptions}
 									placeholder={t("marriageType")}
+									value={marriageType}
+									onChange={(e) => handleMarriageTypeChange(e.target.value)}
 								/>
 							</FormField>
 						</div>
 					</TabsList>
 
-					<TabsContent value="all">
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-3">{allCards}</div>
-						<div className="h-px bg-[#301B6914] mt-6 mb-3" />
-						<Pagination t={t} />
-					</TabsContent>
-					<TabsContent value="males">
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">{maleCards}</div>
-						<div className="h-px bg-[#301B6914] mt-6 mb-3" />
-						<Pagination t={t} />
-					</TabsContent>
-					<TabsContent value="females">
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-3">{femaleCards}</div>
-						<div className="h-px bg-[#301B6914] mt-6 mb-3" />
-						<Pagination t={t} />
+					<TabsContent value={gender ?? "all"}>
+						{loading ? (
+							<div className="text-center py-12 text-lg text-[#301B69]">{t("loading")}</div>
+						) : (
+							<>
+								<div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+									{users.length === 0 ? (
+										<div className="col-span-full text-center text-[#301B69] py-8">
+											{t("noResults")}
+										</div>
+									) : (
+										users.map((user) => (
+											<IdCard
+												key={user.id}
+												id={user?.id}
+												isFav={user?.hasLiked}
+												name={user?.fullName}
+												avatar={user?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+												age={user?.age}
+												city={user?.location?.city}
+												job={user?.natureOfWork}
+												marriageType={user?.marriageType}
+												skinColor={user?.bodyColor}
+												status={user?.maritalStatus}
+											/>
+										))
+									)}
+								</div>
+								<div className="h-px bg-[#301B6914] mt-6 mb-3" />
+								<Pagination
+									t={t}
+									page={pagination.page}
+									totalPages={pagination.totalPages}
+									onPageChange={setPage}
+								/>
+							</>
+						)}
 					</TabsContent>
 				</Tabs>
 			</div>
@@ -199,19 +205,39 @@ const NewSubscribers = React.memo(() => {
 	);
 });
 
-function Pagination({ t }: { t: (key: string) => string }) {
+function Pagination({
+	t,
+	page,
+	totalPages,
+	onPageChange,
+}: {
+	t: (key: string, values?: Record<string, any>) => string;
+	page: number;
+	totalPages: number;
+	onPageChange: (page: number) => void;
+}) {
 	return (
 		<div className="flex items-center justify-between gap-4">
 			<div className="flex items-center gap-2">
-				<button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
+				<button
+					className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
+					onClick={() => onPageChange(Math.max(1, page - 1))}
+					disabled={page === 1}
+				>
 					{t("prev")}
 				</button>
-				<button className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition">
+				<button
+					className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
+					onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+					disabled={page === totalPages}
+				>
 					{t("next")}
 				</button>
 			</div>
 			<div className="flex items-center gap-2">
-				<span className="text-[#8A97AB] text-sm">Page 1 of 100</span>
+				<span className="text-[#8A97AB] text-sm">
+					{t("pageInfo", { page, totalPages })}
+				</span>
 			</div>
 		</div>
 	);

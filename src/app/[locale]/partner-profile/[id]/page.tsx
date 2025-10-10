@@ -75,7 +75,9 @@ type UserDetails = {
     roleAssignedAt: string | null;
     createdAt: string;
     updatedAt: string;
-    hasLiked: boolean;
+    likedme: boolean;
+    isliked: boolean;
+    matching: boolean;
 };
 
 const PartnerProfile = () => {
@@ -214,7 +216,7 @@ const PartnerProfile = () => {
                             </button>
                             <button 
                                 onClick={handleSendMessage}
-                                disabled={chatLoading}
+                                disabled={user.matching || chatLoading}
                                 className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50"
                             >
                                 {chatLoading ? t("loadingAction") : t("sendMessage")}

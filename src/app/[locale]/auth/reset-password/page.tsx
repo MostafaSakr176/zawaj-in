@@ -73,11 +73,21 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     try {
-      await api.post("/auth/reset-password", {
-        email,
-        newPassword: password,
-        confirmPassword: confirm,
-      }, { headers: { skipAuth: true } });
+      const resetToken = localStorage.getItem("resetToken");
+      await api.post(
+        "/auth/reset-password",
+        {
+          email,
+          newPassword: password,
+          confirmPassword: confirm,
+        },
+        {
+          headers: {
+            skipAuth: true,
+            ...(resetToken ? { Authorization : `Bearer ${resetToken}` } : {}),
+          },
+        }
+      );
 
       // Clear localStorage
       localStorage.removeItem("resetPasswordEmail");

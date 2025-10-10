@@ -273,7 +273,10 @@
     "marriageType": "نوع الزواج",
     "next": "التالي",
     "prev": "قبل",
-    "newMembersTitle": "احدث الاعضاء الجدد"
+    "newMembersTitle": "احدث الاعضاء الجدد",
+    "loading": "جاري التحميل...",
+    "noResults": "لا توجد نتائج.",
+    "pageInfo": "صفحة {page} من {totalPages}"
   },
   "chats": {
     "searchPlaceholder": "ابحث عن رسالة...",

@@ -72,7 +72,7 @@ export default function VerifyResetPasswordPage() {
       );
 
       // Save verification data for reset password step
-      localStorage.setItem("resetOtpVerified", "true");
+      localStorage.setItem("resetOtpVerified", res.data.data?.isVerified);
       localStorage.setItem("resetToken", res.data.data?.resetToken || "verified");
 
       // Success: redirect to reset password page

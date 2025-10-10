@@ -273,7 +273,10 @@
         "marriageType": "Marriage type",
         "next": "Next",
         "prev": "Back",
-        "newMembersTitle": "Latest New Members"
+        "newMembersTitle": "Latest New Members",
+        "loading": "Loading...",
+        "noResults": "No results found.",
+        "pageInfo": "Page {page} of {totalPages}"
     },
     "chats": {
         "searchPlaceholder": "Search for a message...",

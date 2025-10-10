@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://zawajin.vercel.app",
   headers: {
     "Content-Type": "application/json",
   },

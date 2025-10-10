@@ -60,6 +60,11 @@ type Profile = {
   roleAssignedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  profileCompletion: {
+    percentage: number,
+    completedFields: string[],
+    missingFields: string[]
+  }
 };
 
 type AuthContextType = {
@@ -74,8 +79,8 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   profile: null,
   loading: true,
-  refreshProfile: async () => {},
-  logout: () => {},
+  refreshProfile: async () => { },
+  logout: () => { },
 });
 
 export const useAuth = () => useContext(AuthContext);
