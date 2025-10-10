@@ -157,7 +157,7 @@ export default function OtpPage() {
                   placeholder={t("placeholder")}
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  aria-label='رمز التحقق'
+                  aria-label={t("codeLabel")}
                   maxLength={8}
                 />
               </FormField>

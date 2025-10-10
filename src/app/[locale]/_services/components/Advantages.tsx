@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 // Memoize static data outside the component for performance
 const features = [
@@ -11,7 +11,7 @@ const features = [
   { icon: "/icons/checklist.webp", titleKey: "paymentTitle", descKey: "paymentDesc" },
 ];
 
-const frameImages = [
+const ArframeImages = [
   "/icons/advantages/frame-1.svg",
   "/icons/advantages/frame-2.svg",
   "/icons/advantages/frame-3.svg",
@@ -23,15 +23,28 @@ const frameImages = [
   "/icons/advantages/frame-9.svg",
 ];
 
+const EnframeImages = [
+  "/icons/advantages/en-frame-1.svg",
+  "/icons/advantages/en-frame-2.svg",
+  "/icons/advantages/en-frame-3.svg",
+  "/icons/advantages/en-frame-4.svg",
+  "/icons/advantages/en-frame-5.svg",
+  "/icons/advantages/en-frame-6.svg",
+  "/icons/advantages/en-frame-7.svg",
+  "/icons/advantages/en-frame-8.svg",
+  "/icons/advantages/en-frame-9.svg",
+];
+
 const Advantages = React.memo(function Advantages() {
   const t = useTranslations("advantages");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const locale = useLocale();
 
   // Animation to show images one by one
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => {
-        if (prevIndex < frameImages.length - 1) {
+        if (prevIndex < (locale === "ar" ? ArframeImages : EnframeImages).length - 1) {
           return prevIndex + 1;
         } else {
           // Reset to start over or keep showing all images
@@ -92,7 +105,7 @@ const Advantages = React.memo(function Advantages() {
         {/* Graphics column with animated images */}
         <div className="flex justify-end items-center">
           <div className="relative w-full max-w-md aspect-[600/596]">
-            {frameImages.map((src, index) => (
+            {(locale === "ar" ? ArframeImages : EnframeImages).map((src, index) => (
               <Image
                 key={index}
                 src={src}

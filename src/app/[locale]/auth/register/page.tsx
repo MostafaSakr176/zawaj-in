@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useTranslations } from "next-intl";
-import { z } from "zod"; // <-- Make sure you have an axios instance here
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -57,19 +57,6 @@ const MailIcon = (
   </svg>
 );
 
-// Zod schema for validation
-const registerSchema = z.object({
-  fullName: z.string().min(2, "الاسم مطلوب"),
-  gender: z.enum(["male", "female"], "النوع مطلوب"),
-  email: z.string().email("صيغة البريد غير صحيحة"),
-  phone: z.string().min(8, "رقم الهاتف مطلوب"),
-  password: z.string().min(6, "كلمة المرور مطلوبة"),
-  confirmPassword: z.string().min(6, "تأكيد كلمة المرور مطلوب"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "كلمتا المرور غير متطابقتين",
-  path: ["confirmPassword"],
-});
-
 export default function RegisterPage() {
   const t = useTranslations("auth.register");
   const [form, setForm] = React.useState({
@@ -85,10 +72,32 @@ export default function RegisterPage() {
   const [success, setSuccess] = React.useState<string | null>(null);
   const router = useRouter();
 
-  const genderOptions = [
-    { value: "male", label: "ذكر" },
-    { value: "female", label: "أنثى" },
-  ];
+  // Create Zod schema with translations
+  const registerSchema = React.useMemo(
+    () =>
+      z
+        .object({
+          fullName: z.string().min(2, t("validation.nameRequired")),
+          gender: z.enum(["male", "female"], t("validation.genderRequired")),
+          email: z.string().email(t("validation.emailInvalid")),
+          phone: z.string().min(8, t("validation.phoneRequired")),
+          password: z.string().min(6, t("validation.passwordRequired")),
+          confirmPassword: z.string().min(6, t("validation.confirmRequired")),
+        })
+        .refine((data) => data.password === data.confirmPassword, {
+          message: t("validation.passwordMismatch"),
+          path: ["confirmPassword"],
+        }),
+    [t]
+  );
+
+  const genderOptions = React.useMemo(
+    () => [
+      { value: "male", label: t("genderMale") },
+      { value: "female", label: t("genderFemale") },
+    ],
+    [t]
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,35 +117,44 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      await api.post("/auth/register", {
-        fullName: form.fullName,
-        gender: form.gender,
-        email: form.email,
-        phone: form.phone,
-        password: form.password,
-        confirmPassword: form.confirmPassword,
-      },{ headers: { skipAuth: true } });
-      setSuccess("تم التسجيل بنجاح!");
+      await api.post(
+        "/auth/register",
+        {
+          fullName: form.fullName,
+          gender: form.gender,
+          email: form.email,
+          phone: form.phone,
+          password: form.password,
+          confirmPassword: form.confirmPassword,
+        },
+        { headers: { skipAuth: true } }
+      );
+
+      setSuccess(t("successMessage"));
       // Save email to localStorage for OTP page
       if (typeof window !== "undefined") {
         localStorage.setItem("registerEmail", form.email);
       }
       router.push("/auth/verify-email");
     } catch (error) {
-      setErrors({ api: "حدث خطأ أثناء التسجيل. حاول مرة أخرى لاحقًا." });
+      setErrors({ api: t("errorMessage") });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
-      style={{
-      }}>
-      <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+    <section className="relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
+      <Image
+        src="/photos/terms-bg.webp"
+        alt="Terms Background"
+        width={100}
+        height={100}
+        className="absolute w-full inset-x-0 top-0 z-1"
+      />
       <div className="mx-auto max-w-3xl px-4 relative z-2">
         <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
-          <CardHeader  className="pb-4 pt-10">
+          <CardHeader className="pb-4 pt-10">
             <CardTitle className="text-center text-[2rem] font-semibold text-[#1D1B23] md:text-5xl">
               {t("title")}
             </CardTitle>
@@ -156,7 +174,10 @@ export default function RegisterPage() {
               />
             </FormField>
 
-            <FormField label={<Label>{t("genderLabel")}</Label>} error={errors.gender}>
+            <FormField
+              label={<Label>{t("genderLabel")}</Label>}
+              error={errors.gender}
+            >
               <Select
                 options={genderOptions}
                 placeholder={t("genderLabel")}
@@ -181,7 +202,10 @@ export default function RegisterPage() {
               />
             </FormField>
 
-            <FormField label={<Label>{t("phoneLabel")}</Label>} error={errors.phone}>
+            <FormField
+              label={<Label>{t("phoneLabel")}</Label>}
+              error={errors.phone}
+            >
               <PhoneInput
                 placeholder="5xxxxxxxx"
                 value={form.phone}
@@ -191,7 +215,10 @@ export default function RegisterPage() {
               />
             </FormField>
 
-            <FormField label={<Label>{t("passwordLabel")}</Label>} error={errors.password}>
+            <FormField
+              label={<Label>{t("passwordLabel")}</Label>}
+              error={errors.password}
+            >
               <PasswordInput
                 placeholder="********"
                 value={form.password}

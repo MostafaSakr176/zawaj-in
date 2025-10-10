@@ -7,22 +7,28 @@ import Image from 'next/image'
 import React from 'react'
 import { useAuth } from '@/context/AuthContext';
 import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 type FieldProps = { label: string; value: string | number | null | undefined };
-const Field = ({ label, value }: FieldProps) => (
-  <div className="flex flex-col gap-1 px-3">
-    <span className="text-base text-[#727272]">{label}</span>
-    <span className="text-[#301B69]">{value !== null && value !== undefined ? value : 'غير محدد'}</span>
-  </div>
-);
+
 
 const Profile = () => {
   const { profile } = useAuth();
+  const tProfile = useTranslations("profile");
+  const tPartner = useTranslations("partnerProfile");
+
+
+  const Field = ({ label, value }: FieldProps) => (
+    <div className="flex flex-col gap-1 px-3">
+      <span className="text-base text-[#727272]">{label}</span>
+      <span className="text-[#301B69]">{value !== null && value !== undefined ? value : tPartner("notSpecified")}</span>
+    </div>
+  );
 
   if (!profile) {
     return (
       <ProtectedRoute>
-        <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل البيانات...</div>
+        <div className="text-center py-12 text-lg text-[#301B69]">{tPartner("loading")}</div>
       </ProtectedRoute>
     );
   }
@@ -59,12 +65,14 @@ const Profile = () => {
                       {profile.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                     </div>
                   </div>
-                  <div className="text-[#8A97AB] text-sm md:text-base">رقم العضوية {profile.chartNumber}</div>
+                  <div className="text-[#8A97AB] text-sm md:text-base">
+                    {tPartner("membershipNumber")} {profile.chartNumber}
+                  </div>
                 </div>
               </div>
               <div className="flex md:hidden items-center space-x-2">
                 <Switch id="airplane-mode" />
-                <Label htmlFor="airplane-mode" className='mb-0'>متصل</Label>
+                <Label htmlFor="airplane-mode" className='mb-0'>{tProfile("online")}</Label>
               </div>
             </div>
 
@@ -72,17 +80,17 @@ const Profile = () => {
             <div className="flex items-center gap-2">
               <div className="hidden md:flex items-center space-x-2">
                 <Switch id="airplane-mode" />
-                <Label htmlFor="airplane-mode" className='mb-0'>متصل</Label>
+                <Label htmlFor="airplane-mode" className='mb-0'>{tProfile("online")}</Label>
               </div>
               <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-4 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
                 <Image src="/icons/foots.webp" alt="favorite" width={24} height={24} />
-                من زار بياناتي
+                {tProfile("whoVisitedMe")}
                 <span className='text-lg w-5 h-5 rounded-full bg-[#FF3B30] text-white flex items-center justify-center leading-1'>5</span>
               </button>
               <Link href="/profile/edit">
                 <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-4 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
                   <Image src="/icons/edit-user.webp" alt="favorite" width={24} height={24} />
-                  تعديل بياناتي
+                  {tProfile("editProfile")}
                 </button>
               </Link>
             </div>
@@ -94,7 +102,7 @@ const Profile = () => {
           {profile.bio && (
             <>
               <div className="px-2 md:px-4">
-                <h4 className="text-[#2D1F55] font-semibold text-base mb-4">نبذة شخصية</h4>
+                <h4 className="text-[#2D1F55] font-semibold text-base mb-4">{tPartner("bioTitle")}</h4>
                 <p className="text-[#301B69] leading-relaxed">{profile.bio}</p>
               </div>
               <hr className="border-[#ECEBFF]" />
@@ -104,20 +112,20 @@ const Profile = () => {
           {/* Section: السكن و الحالة الإجتماعية */}
           <div className="px-2 md:px-4">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">السكن و الحالة الإجتماعية</h4>
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionResidence")}</h4>
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="البلد" value={profile?.location?.country} />
+                <Field label={tPartner("country")} value={profile?.location?.country} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="مكان الإقامة" value={profile?.location?.city} />
+                <Field label={tPartner("city")} value={profile?.location?.city} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="العمر" value={`${profile.age} سنة`} />
+                <Field label={tPartner("age")} value={`${profile.age} ${tPartner("years")}`} />
               </div>
               <div>
-                <Field label="الحالة العائلية" value={profile.maritalStatus} />
+                <Field label={tPartner("maritalStatus")} value={profile.maritalStatus} />
               </div>
             </div>
           </div>
@@ -127,26 +135,26 @@ const Profile = () => {
           {/* Section: الدراسة و العمل */}
           <div className="px-2 md:px-4">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionAppearance")}</h4>
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="لون البشرة" value={profile?.bodyColor} />
+                <Field label={tPartner("skinColor")} value={profile?.bodyColor} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="الطول" value={profile?.height} />
+                <Field label={tPartner("height")} value={profile?.height} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="الوزن" value={profile?.weight} />
+                <Field label={tPartner("weight")} value={profile?.weight} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="لون الشعر" value={profile?.hairColor} />
+                <Field label={tPartner("hairColor")} value={profile?.hairColor} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="لون العينين" value={profile?.eyeColor} />
+                <Field label={tPartner("eyeColor")} value={profile?.eyeColor} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="نوع الشعر" value={profile?.hairType} />
+                <Field label={tPartner("hairType")} value={profile?.hairType} />
               </div>
             </div>
           </div>
@@ -156,14 +164,14 @@ const Profile = () => {
           {/* Section: الدراسة و العمل */}
           <div className="px-2 md:px-4">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">الدراسة و العمل</h4>
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionEducation")}</h4>
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="المؤهل الدراسي" value={profile.profession} />
+                <Field label={tPartner("education")} value={profile.profession} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="الوظيفة" value={profile.natureOfWork} />
+                <Field label={tPartner("job")} value={profile.natureOfWork} />
               </div>
             </div>
           </div>
@@ -173,34 +181,34 @@ const Profile = () => {
           {/* Section: الديانة والممارسة */}
           <div className="px-2 md:px-4">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">الديانة والممارسة</h4>
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionReligion")}</h4>
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="المذهب" value={profile.sect} />
+                <Field label={tPartner("sect")} value={profile.sect} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="الممارسة الدينية" value={profile.religiousPractice} />
+                <Field label={tPartner("religiousPractice")} value={profile.religiousPractice} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="مستوى الصلاة" value={profile.prayerLevel} />
+                <Field label={tPartner("prayerLevel")} value={profile.prayerLevel} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="نوع الزواج" value={profile.marriageType} />
+                <Field label={tPartner("marriageType")} value={profile.marriageType} />
               </div>
               <div>
-                <Field label="اقبل التعدد؟" value={profile.acceptPolygamy ? "نعم" : "لا"} />
+                <Field label={tPartner("acceptPolygamy")} value={profile.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
               </div>
             </div>
           </div>
         </div>
         <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
-          <h3 className='font-semibold text-3xl text-[#301B69]'>مواصفات شريك حياتي</h3>
+          <h3 className='font-semibold text-3xl text-[#301B69]'>{tPartner("partnerPreferencesTitle")}</h3>
 
           <div className="px-2 md:px-4">
             <div className="flex items-center flex-wrap gap-4">
               <div className="">
-                <Field label="شريكة حياتي" value={profile.partnerPreferencesBio} />
+                <Field label={tPartner("partnerBio")} value={profile.partnerPreferencesBio} />
               </div>
             </div>
           </div>
@@ -209,23 +217,23 @@ const Profile = () => {
           {/* Section: الدراسة و العمل */}
           <div className="px-2 md:px-4">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionAppearance")}</h4>
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="لون البشرة" value={profile?.preferredBodyColors?.join(", ")} />
+                <Field label={tPartner("skinColor")} value={profile?.preferredBodyColors?.join(", ")} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="الطول" value={`${profile?.preferredMinHeight} - ${profile?.preferredMaxHeight} سم`} />
+                <Field label={tPartner("height")} value={`${profile?.preferredMinHeight} - ${profile?.preferredMaxHeight} ${tPartner("cm")}`} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="الوزن" value={`${profile?.preferredMinWeight} - ${profile?.preferredMaxWeight} كغ`} />
+                <Field label={tPartner("weight")} value={`${profile?.preferredMinWeight} - ${profile?.preferredMaxWeight} ${tPartner("kg")}`} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="لون الشعر" value={profile?.preferredHairColors?.join(", ")} />
+                <Field label={tPartner("hairColor")} value={profile?.preferredHairColors?.join(", ")} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label="لون العينين" value={profile?.preferredEyeColors?.join(", ")} />
+                <Field label={tPartner("eyeColor")} value={profile?.preferredEyeColors?.join(", ")} />
               </div>
             </div>
           </div>

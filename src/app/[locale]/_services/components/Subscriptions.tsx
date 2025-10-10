@@ -27,29 +27,24 @@ const plans: Plan[] = [
   { key: "match", bg: "bg-white", border: "border border-[#F3EFFE]", button: "bg-white text-[#301B69]" }
 ];
 
-const FEATURES: Record<PlanKey, string[]> = {
-  silver: [
-    "تواصل بلا حدود مع جميع الأعضاء المتاحة.",
-    "شعار مخصص يظهر في ملفك الشخصي."
-  ],
+const planFeatures: Record<string, string[]> = {
+  silver: ["silver.features1", "silver.features2"],
   gold: [
-    "استلام إشعارات غير محدود.",
-    "احصل على شعار مخصص يظهر ملفك عن الآخرين.",
-    "استخدم خاصية الدخول السريع (حماية خصوصيتك).",
-    "تواصل مع الأعضاء في أي وقت ومن أي مكان."
+    "gold.features1",
+    "gold.features2",
+    "gold.features3",
+    "gold.features4"
   ],
-  match: [
-    "في حال تم التوافق مع أحد الأعضاء وتم عقد النكاح، يتوجب على أحدكم سداد المبلغ أو دفعه في دفعتين."
-  ]
+  match: ["match.features1"]
 };
 
-const Badge = React.memo(() => (
+const Badge = React.memo(({ t }: { t: (key: string) => string }) => (
   <span
     className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:-translate-x-0 md:-translate-y-0 md:top-6 rtl:md:left-4 rtl:md:right-auto ltr:md:right-4 ltr:md:left-auto text-[#301B69] text-[10px] font-semibold px-3 py-1 rounded-full border-2 border-white flex items-center gap-1"
     style={{ background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)" }}
   >
-    <Image src="/icons/plans/star.webp" alt="الأكثر شهرة" width={12} height={12} loading="lazy" />
-    الأكثر شهرة
+    <Image src="/icons/plans/star.webp" alt={t("mostPopular")} width={12} height={12} loading="lazy" />
+    {t("mostPopular")}
     <Image src="/icons/plans/star.webp" alt="" width={12} height={12} loading="lazy" />
   </span>
 ));
@@ -58,7 +53,7 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
   const glass = plan.key !== "gold" ? "bg-white/60 backdrop-blur-md" : "";
   return (
     <div className={`my-4 relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] py-8 px-6 flex flex-col justify-between shadow-sm ${glass}`}>
-      {plan.badge && <Badge />}
+      {plan.badge && <Badge t={t} />}
       <div className="mb-20">
         <h3 className="text-3xl font-bold text-[#301B69] text-center md:text-start mb-2">
           {t(`${plan.key}.title`)}
@@ -74,10 +69,10 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
           {t(`${plan.key}.featuresTitle`)}
         </div>
         <ul className="space-y-2">
-          {FEATURES[plan.key].map((feature, i) => (
+          {planFeatures[plan.key].map((featureKey, i) => (
             <li key={i} className="flex items-start gap-2 text-[#301B69] text-[16px]">
               <Image src="/icons/plans/Check Circle.webp" alt="Check icon" width={20} height={20} loading="lazy" />
-              <span>{feature}</span>
+              <span>{t(featureKey)}</span>
             </li>
           ))}
         </ul>

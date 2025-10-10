@@ -57,6 +57,7 @@ type FormData = {
 
 export default function EditProfilePage() {
   const t = useTranslations("request");
+  const tEdit = useTranslations("profileEdit");
   const { profile, refreshProfile } = useAuth();
   const [step, setStep] = React.useState(0);
   const [dir, setDir] = React.useState<"rtl" | "ltr">("ltr");
@@ -267,7 +268,7 @@ export default function EditProfilePage() {
   if (!profile) {
     return (
       <ProtectedRoute>
-        <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل البيانات...</div>
+        <div className="text-center py-12 text-lg text-[#301B69]">{tEdit("loading")}</div>
       </ProtectedRoute>
     );
   }
@@ -280,7 +281,7 @@ export default function EditProfilePage() {
           <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
             <CardHeader className="py-8 pb-2 md:pb-6 md:pt-10">
               <CardTitle className="text-start text-xl md:text-3xl font-extrabold text-[#1D1B23]">
-                تعديل الملف الشخصي
+                {tEdit("title")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-10 px-4 md:px-10 pb-10">
@@ -300,9 +301,9 @@ export default function EditProfilePage() {
                   >
                     <Select
                       options={[
-                        { value: "SA", label: "السعودية" },
-                        { value: "EG", label: "مصر" },
-                        { value: "UAE", label: "الإمارات" },
+                        { value: "SA", label: tEdit("saudiArabia") },
+                        { value: "EG", label: tEdit("egypt") },
+                        { value: "UAE", label: tEdit("uae") },
                       ]} 
                       value={formData.location.country}
                       onChange={(e) => {updateNestedField("location", "country", e.target.value)}}
@@ -316,7 +317,7 @@ export default function EditProfilePage() {
                       placeholder="المدينة"
                     />
                   </FormField>
-                  <FormField label={<Label>تاريخ الميلاد</Label>}>
+                  <FormField label={<Label>{tEdit("dateOfBirth")}</Label>}>
                     <TextField
                       type="date"
                       value={formData.dateOfBirth}
@@ -336,9 +337,9 @@ export default function EditProfilePage() {
                   >
                     <Select
                       options={[
-                        { value: "single", label: "أعزب" },
-                        { value: "divorced", label: "مطلق" },
-                        { value: "widowed", label: "أرمل" },
+                        { value: "single", label: tEdit("single") },
+                        { value: "divorced", label: tEdit("divorced") },
+                        { value: "widowed", label: tEdit("widowed") },
                       ]}
                       value={formData.maritalStatus}
                       onChange={(e) => updateField("maritalStatus", e.target.value)}
@@ -376,9 +377,9 @@ export default function EditProfilePage() {
                   <FormField label={<Label>{t("fields.skin")}</Label>}>
                     <Select
                       options={[
-                        { value: "fair", label: "فاتح" },
-                        { value: "medium", label: "متوسط" },
-                        { value: "dark", label: "غامق" },
+                        { value: "fair", label: tEdit("fair") },
+                        { value: "medium", label: tEdit("medium") },
+                        { value: "dark", label: tEdit("dark") },
                       ]}
                       value={formData.bodyColor}
                       onChange={(e) => updateField("bodyColor", e.target.value)}
@@ -545,7 +546,7 @@ export default function EditProfilePage() {
               )}
               <Button onClick={next} disabled={loading} className="min-w-32">
                 {loading
-                  ? "جاري الحفظ..."
+                  ? tEdit("saving")
                   : step === steps.length - 1
                   ? t("buttons.submit")
                   : t("buttons.next")}

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/axiosClient';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslations } from 'next-intl';
 
 type Recommendation = {
   userId: string;
@@ -60,6 +61,7 @@ const MyFavorites = () => {
   });
 
   const {profile} = useAuth();
+  const t = useTranslations("home");
 
   const fetchRecommendations = async (page = 1) => {
     setLoading(true);
@@ -131,7 +133,7 @@ const MyFavorites = () => {
                 )}
               </div>
               <div>
-                <div className="text-[#301B69] text-2xl">اهلا بك</div>
+                <div className="text-[#301B69] text-2xl">{t("welcome")}</div>
                 <div className="flex items-center justify-end gap-1">
                   <h4 className="text-3xl font-semibold text-[#301B69] leading-none">
                     {profile?.fullName || "User"}
@@ -142,12 +144,12 @@ const MyFavorites = () => {
             </div>
           </div>
           {loading ? (
-            <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل التوصيات...</div>
+            <div className="text-center py-12 text-lg text-[#301B69]">{t("loadingRecommendations")}</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {recommendations.length === 0 ? (
                 <div className="col-span-full text-center text-[#301B69] py-8">
-                  لا توجد توصيات حالياً.
+                  {t("noRecommendations")}
                 </div>
               ) : (
                 recommendations.map((rec) => (
@@ -175,19 +177,19 @@ const MyFavorites = () => {
                 onClick={handlePrev}
                 disabled={pagination.page <= 1 || loading}
               >
-                Prev
+                {t("prev")}
               </button>
               <button
                 className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-[#FFFFFF] text-[#344054] hover:bg-white transition disabled:opacity-50"
                 onClick={handleNext}
                 disabled={pagination.page >= pagination.totalPages || loading}
               >
-                Next
+                {t("next")}
               </button>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[#8A97AB] text-sm">
-                Page {pagination.page} of {pagination.totalPages}
+                {t("pageInfo", { page: pagination.page, totalPages: pagination.totalPages })}
               </span>
             </div>
           </div>

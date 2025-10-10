@@ -17,6 +17,7 @@ import { useConversations, useChat } from "@/hooks/useChat";
 import { useAuth } from "@/context/AuthContext";
 import { Conversation, Message } from "@/services/chatService";
 import api from "@/lib/axiosClient";
+import { useTranslations } from "next-intl";
 
 function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string }) {
   const fromMe = m.senderId === currentUserId;
@@ -195,6 +196,7 @@ const Chats = () => {
   const searchParams = useSearchParams();
   const conversationId = searchParams.get('conversation');
   const locale = useLocale();
+  const t = useTranslations("chats");
 
   // Load conversations list
   const { conversations, loading: conversationsLoading, refreshConversations } = useConversations();
@@ -292,10 +294,10 @@ const Chats = () => {
       // Add user to blocked set
       setBlockedUsers(prev => new Set([...prev, userId]));
 
-      alert("تم حظر المستخدم بنجاح");
+      alert(t("blockSuccess"));
     } catch (error: any) {
       console.error("Error blocking user:", error);
-      alert(error?.response?.data?.message || "حدث خطأ أثناء حظر المستخدم");
+      alert(error?.response?.data?.message || t("blockError"));
     } finally {
       setBlockLoading(false);
     }
@@ -315,10 +317,10 @@ const Chats = () => {
         return newSet;
       });
 
-      alert("تم إلغاء حظر المستخدم بنجاح");
+      alert(t("unblockSuccess"));
     } catch (error: any) {
       console.error("Error unblocking user:", error);
-      alert(error?.response?.data?.message || "حدث خطأ أثناء إلغاء حظر المستخدم");
+      alert(error?.response?.data?.message || t("unblockError"));
     } finally {
       setBlockLoading(false);
     }
@@ -343,7 +345,7 @@ const Chats = () => {
       >
         <div className='flex items-center gap-3 w-full'>
           <Ban size={22} color='#301B69' />
-          {blockLoading ? "جاري التحميل..." : isBlocked ? "إلغاء حظر المستخدم" : "حظر المستخدم"}
+          {blockLoading ? t("blockLoading") : isBlocked ? t("unblockUser") : t("blockUser")}
         </div>
       </DropdownMenuItem>
     );
@@ -363,16 +365,16 @@ const Chats = () => {
             <div className="relative mb-3">
               <input
                 className="w-full ps-10 pe-3 py-2 rounded-xl border border-[#E3EBFF] bg-white/70 outline-none placeholder:text-[#8A97AB] text-sm"
-                placeholder="ابحث عن رسالة..."
+                placeholder={t("searchPlaceholder")}
               />
               <Search size={16} className="absolute top-1/2 -translate-y-1/2 rtl:left-3 ltr:right-3 text-[#8A97AB]" />
             </div>
 
             <div className="space-y-1 max-h-[70vh] overflow-auto pr-1">
               {conversationsLoading ? (
-                <div className="text-center py-8 text-[#8A97AB]">جاري التحميل...</div>
+                <div className="text-center py-8 text-[#8A97AB]">{t("loading")}</div>
               ) : conversations.length === 0 ? (
-                <div className="text-center py-8 text-[#8A97AB]">لا توجد محادثات</div>
+                <div className="text-center py-8 text-[#8A97AB]">{t("noConversations")}</div>
               ) : (
                 conversations.map((c) => (
                   <ChatListItem
@@ -406,7 +408,7 @@ const Chats = () => {
                     <div>
                       <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
                       <div className="text-xs text-[#8A97AB]">
-                        {isCurrentUserBlocked ? "محظور" : isTyping ? "يكتب..." : isOtherUserOnline ? "نشط الآن" : "غير متصل"}
+                        {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
                       </div>
                     </div>
                   </div>
@@ -418,26 +420,26 @@ const Chats = () => {
                       <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                         <div className='flex items-center gap-3 w-full'>
                           <MessageSquareHeart size={22} color='#301B69' />
-                          اطلب خطوبة
+                          {t("engagementRequest")}
                         </div>
                       </DropdownMenuItem>
                       <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                         <div className='flex items-center gap-3 w-full'>
                           <Volume2 size={22} color='#301B69' />
-                          كتم
+                          {t("mute")}
                         </div>
                       </DropdownMenuItem>
                       <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                         <div className='flex items-center gap-3 w-full'>
                           <Trash2 size={22} color='#301B69' />
-                          مسح المحادثة
+                          {t("deleteConversation")}
                         </div>
                       </DropdownMenuItem>
                       <BlockMenuItem userId={otherParticipant.id} />
                       <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                         <div className='flex items-center gap-3 w-full'>
                           <Flag size={22} color='#301B69' />
-                          ابلغ
+                          {t("report")}
                         </div>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -449,13 +451,13 @@ const Chats = () => {
                   <div className="flex items-center justify-center h-[60vh] text-center text-[#8A97AB]">
                     <div>
                       <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
-                      <p className="text-lg font-semibold">تم حظر هذا المستخدم</p>
-                      <p className="text-sm">لا يمكنك إرسال أو استقبال الرسائل</p>
+                      <p className="text-lg font-semibold">{t("blockedTitle")}</p>
+                      <p className="text-sm">{t("blockedDesc")}</p>
                     </div>
                   </div>
                 ) : messagesLoading ? (
                   <div className="flex items-center justify-center h-[60vh]">
-                    <div className="text-[#8A97AB]">جاري تحميل الرسائل...</div>
+                    <div className="text-[#8A97AB]">{t("messagesLoading")}</div>
                   </div>
                 ) : (
                   <MessagesList
@@ -475,7 +477,7 @@ const Chats = () => {
                         onChange={handleTyping}
                         onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                         onBlur={stopTyping}
-                        placeholder="رسالة"
+                        placeholder={t("messagePlaceholder")}
                         className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
                       />
                       <button
@@ -492,11 +494,11 @@ const Chats = () => {
               <div className="flex items-center justify-center h-full">
                 <div className="text-center text-[#8A97AB]">
                   {conversationsLoading ? (
-                    <p className="text-lg">جاري التحميل...</p>
+                    <p className="text-lg">{t("loading")}</p>
                   ) : conversations.length === 0 ? (
-                    <p className="text-lg">لا توجد محادثات</p>
+                    <p className="text-lg">{t("noConversations")}</p>
                   ) : (
-                    <p className="text-lg">اختر محادثة لبدء الدردشة</p>
+                    <p className="text-lg">{t("startChat")}</p>
                   )}
                 </div>
               </div>
@@ -533,7 +535,7 @@ const Chats = () => {
                     <div>
                       <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
                       <div className="text-xs text-[#8A97AB]">
-                        {isCurrentUserBlocked ? "محظور" : isTyping ? "يكتب..." : isOtherUserOnline ? "نشط الآن" : "غير متصل"}
+                        {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
                       </div>
                     </div>
                   </div>
@@ -545,26 +547,26 @@ const Chats = () => {
                         <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                           <div className='flex items-center gap-3 w-full'>
                             <MessageSquareHeart size={22} color='#301B69' />
-                            اطلب خطوبة
+                            {t("engagementRequest")}
                           </div>
                         </DropdownMenuItem>
                         <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                           <div className='flex items-center gap-3 w-full'>
                             <Volume2 size={22} color='#301B69' />
-                            كتم
+                            {t("mute")}
                           </div>
                         </DropdownMenuItem>
                         <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                           <div className='flex items-center gap-3 w-full'>
                             <Trash2 size={22} color='#301B69' />
-                            مسح المحادثة
+                            {t("deleteConversation")}
                           </div>
                         </DropdownMenuItem>
                         <BlockMenuItem userId={otherParticipant.id} />
                         <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                           <div className='flex items-center gap-3 w-full'>
                             <Flag size={22} color='#301B69' />
-                            ابلغ
+                            {t("report")}
                           </div>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -576,13 +578,13 @@ const Chats = () => {
                     <div className="flex-1 flex items-center justify-center text-center text-[#8A97AB]">
                       <div>
                         <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
-                        <p className="text-lg font-semibold">تم حظر هذا المستخدم</p>
-                        <p className="text-sm">لا يمكنك إرسال أو استقبال الرسائل</p>
+                        <p className="text-lg font-semibold">{t("blockedTitle")}</p>
+                        <p className="text-sm">{t("blockedDesc")}</p>
                       </div>
                     </div>
                   ) : messagesLoading ? (
                     <div className="flex-1 flex items-center justify-center">
-                      <div className="text-[#8A97AB]">جاري تحميل الرسائل...</div>
+                      <div className="text-[#8A97AB]">{t("messagesLoading")}</div>
                     </div>
                   ) : (
                     <MessagesList
@@ -602,7 +604,7 @@ const Chats = () => {
                           onChange={handleTyping}
                           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                           onBlur={stopTyping}
-                          placeholder="رسالة"
+                          placeholder={t("messagePlaceholder")}
                           className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
                         />
                         <button

@@ -44,12 +44,16 @@
             "title": "Sign in",
             "emailLabel": "Email",
             "emailPlaceholder": "Email",
+            "emailInvalid": "Invalid email format",
             "passwordLabel": "Password",
             "passwordPlaceholder": "Password",
+            "passwordRequired": "Password is required",
             "submit": "Sign in",
             "forgotLink": "Forgot password?",
             "registerLink": "Create an account",
-            "loading": "Signing in..."
+            "loading": "Signing in...",
+            "invalidData": "Invalid data",
+            "loginFailed": "Login failed. Please check your credentials."
         },
         "register": {
             "title": "Create a new account",
@@ -62,12 +66,32 @@
             "passwordLabel": "Password",
             "confirmLabel": "Confirm password",
             "submit": "Register",
-            "loading": "Registering..."
+            "loading": "Registering...",
+            "genderMale": "Male",
+            "genderFemale": "Female",
+            "successMessage": "Registration successful!",
+            "errorMessage": "An error occurred during registration. Please try again later.",
+            "validation": {
+                "nameRequired": "Name is required",
+                "genderRequired": "Gender is required",
+                "emailInvalid": "Invalid email format",
+                "phoneRequired": "Phone number is required",
+                "passwordRequired": "Password is required",
+                "confirmRequired": "Password confirmation is required",
+                "passwordMismatch": "Passwords do not match"
+            }
         },
         "forgot": {
             "title": "Recover password via email",
             "emailPlaceholder": "Enter your email address to recover your password",
-            "submit": "Recover password"
+            "submit": "Recover password",
+            "emailRequired": "Email is required",
+            "sending": "Sending...",
+            "error": "An error occurred while sending the password reset request",
+            "successTitle": "Successfully Sent",
+            "successMessage": "A verification code has been sent to your email. Please check your inbox.",
+            "nextButton": "Next",
+            "emailLabel": "Email"
         },
         "otp": {
             "title": "OTP Service",
@@ -78,13 +102,30 @@
             "resend": "Resend",
             "didntReceive": "Didn't receive the code?",
             "loading": "Verifying...",
-            "sending": "Sending..."
+            "sending": "Sending...",
+            "codeRequired": "Verification code is required",
+            "invalidCode": "Invalid verification code",
+            "invalidEmail": "Invalid email address",
+            "codeLabel": "Verification code"
         },
         "reset": {
             "title": "Reset new password",
             "newPasswordPlaceholder": "Enter new password",
             "confirmPasswordPlaceholder": "Confirm new password",
-            "submit": "Save password"
+            "submit": "Save password",
+            "loading": "Updating...",
+            "passwordMismatch": "Passwords don't match",
+            "invalidData": "Invalid data",
+            "apiError": "An error occurred while resetting the password",
+            "successTitle": "Password changed successfully",
+            "successMessage": "You can now sign in with your new password.",
+            "signInButton": "Sign In",
+            "newPasswordLabel": "New password",
+            "confirmPasswordLabel": "Confirm new password",
+            "validation": {
+                "passwordMinLength": "Password must be at least 8 characters",
+                "passwordMismatch": "Passwords do not match"
+            }
         }
     },
     "request": {
@@ -159,41 +200,33 @@
     "subscriptions": {
         "title": "Subscriptions",
         "subtitle": "Get unlimited tools with an annual subscription, and enjoy exclusive discounts.",
+        "mostPopular": "Most Popular",
         "silver": {
             "title": "Silver Package",
             "duration": "Duration: 30 days",
             "price": "90",
-            "featuresTitle": "Offer Contents:",
-            "features": [
-                "Unlimited communication with all available members.",
-                "A custom badge appears on your profile."
-            ],
+            "featuresTitle": "Features:",
+            "features1": "Unlimited communication with all available members.",
+            "features2": "A custom badge appears on your profile.",
             "button": "Subscribe Now"
         },
         "gold": {
             "title": "Gold Package",
             "duration": "Duration: 90 days",
             "price": "200",
-            "featuresTitle": "Offer Contents:",
-            "features": [
-                "Unlimited communication with all available members.",
-                "A custom badge appears on your profile.",
-                "Priority in search results."
-            ],
-            "button": "Subscribe Now",
-            "mostPopular": "Most Popular"
+            "featuresTitle": "Features:",
+            "features1": "Unlimited notifications.",
+            "features2": "Get a custom badge that highlights your profile.",
+            "features3": "Use quick login feature (protect your privacy).",
+            "features4": "Communicate with members anytime, anywhere.",
+            "button": "Subscribe Now"
         },
         "match": {
             "title": "Match Package",
-            "duration": "Duration: 180 days",
-            "price": "350",
-            "featuresTitle": "Offer Contents:",
-            "features": [
-                "Unlimited communication with all available members.",
-                "A custom badge appears on your profile.",
-                "Priority in search results.",
-                "Personalized matchmaking assistance."
-            ],
+            "duration": "One time",
+            "price": "1000",
+            "featuresTitle": "Features:",
+            "features1": "If you match with a member and marriage is contracted, one of you must pay the amount or pay it in two installments.",
             "button": "Subscribe Now"
         }
     },
@@ -239,6 +272,160 @@
         "job": "Job",
         "marriageType": "Marriage type",
         "next": "Next",
-        "prev": "Back"
+        "prev": "Back",
+        "newMembersTitle": "Latest New Members"
+    },
+    "chats": {
+        "searchPlaceholder": "Search for a message...",
+        "loading": "Loading...",
+        "noConversations": "No conversations",
+        "startChat": "Select a conversation to start chatting",
+        "startConversation": "Start the conversation",
+        "messagePlaceholder": "Message",
+        "statusBlocked": "Blocked",
+        "statusTyping": "Typing...",
+        "statusOnline": "Online",
+        "statusOffline": "Offline",
+        "engagementRequest": "Request engagement",
+        "mute": "Mute",
+        "deleteConversation": "Delete conversation",
+        "report": "Report",
+        "blockUser": "Block user",
+        "unblockUser": "Unblock user",
+        "blockLoading": "Loading...",
+        "blockSuccess": "User blocked successfully",
+        "blockError": "An error occurred while blocking the user",
+        "unblockSuccess": "User unblocked successfully",
+        "unblockError": "An error occurred while unblocking the user",
+        "blockedTitle": "This user is blocked",
+        "blockedDesc": "You cannot send or receive messages",
+        "messagesLoading": "Loading messages..."
+    },
+    "contact": {
+        "title": "Contact Us",
+        "subtitle": "Have a question? Fill out the form and we’ll be happy to hear from you and will get back to you soon.",
+        "subject": "Subject",
+        "name": "Name",
+        "email": "Email",
+        "message": "Message",
+        "send": "Send Message",
+        "emailInvalid": "Invalid email format"
+    },
+    "favorites": {
+        "tabFavorites": "Favorites",
+        "tabInterested": "Interested in Me",
+        "loadingFavorites": "Loading favorites...",
+        "loadingInterested": "Loading data...",
+        "emptyFavorites": "No favorites currently.",
+        "emptyInterested": "No data currently."
+    },
+    "home": {
+        "welcome": "Welcome",
+        "loadingRecommendations": "Loading recommendations...",
+        "noRecommendations": "No recommendations currently.",
+        "prev": "Prev",
+        "next": "Next",
+        "pageInfo": "Page {page} of {totalPages}"
+    },
+    "partnerProfile": {
+        "loading": "Loading data...",
+        "notFound": "User not found",
+        "removeFavorite": "Remove from favorites",
+        "addFavorite": "Add to favorites",
+        "loadingAction": "Loading...",
+        "sendMessage": "Send message",
+        "lastSeen": "Last seen 2 hours ago",
+        "membershipNumber": "Membership number",
+        "bioTitle": "Personal bio",
+        "notSpecified": "Not specified",
+        "sectionResidence": "Residence & Marital Status",
+        "country": "Country",
+        "city": "City",
+        "age": "Age",
+        "years": "years",
+        "maritalStatus": "Marital status",
+        "sectionAppearance": "Appearance & Health",
+        "skinColor": "Skin color",
+        "height": "Height",
+        "weight": "Weight",
+        "hairColor": "Hair color",
+        "eyeColor": "Eye color",
+        "hairType": "Hair type",
+        "sectionEducation": "Education & Work",
+        "education": "Education",
+        "job": "Job",
+        "sectionReligion": "Religion & Practice",
+        "sect": "Sect",
+        "religiousPractice": "Religious practice",
+        "prayerLevel": "Prayer level",
+        "marriageType": "Marriage type",
+        "acceptPolygamy": "Accept polygamy?",
+        "yes": "Yes",
+        "no": "No",
+        "partnerPreferencesTitle": "Partner Preferences",
+        "partnerBio": "Partner bio",
+        "cm": "cm",
+        "kg": "kg"
+    },
+    "profile": {
+        "online": "Online",
+        "whoVisitedMe": "Who visited me",
+        "editProfile": "Edit my data"
+    },
+    "profileEdit": {
+        "title": "Edit profile",
+        "loading": "Loading data...",
+        "dateOfBirth": "Date of birth",
+        "cityPlaceholder": "City",
+        "single": "Single",
+        "divorced": "Divorced",
+        "widowed": "Widowed",
+        "saudiArabia": "Saudi Arabia",
+        "egypt": "Egypt",
+        "uae": "UAE",
+        "fair": "Fair",
+        "medium": "Medium",
+        "dark": "Dark",
+        "black": "Black",
+        "brown": "Brown",
+        "blonde": "Blonde",
+        "green": "Green",
+        "blue": "Blue",
+        "straight": "Straight",
+        "wavy": "Wavy",
+        "curly": "Curly",
+        "available": "Available",
+        "notAvailable": "Not available",
+        "preferredWeightFrom": "Preferred weight (from)",
+        "preferredWeightTo": "Preferred weight (to)",
+        "preferredHeightFrom": "Preferred height (from)",
+        "preferredHeightTo": "Preferred height (to)",
+        "traditional": "Traditional",
+        "misyar": "Misyar",
+        "both": "Both",
+        "yes": "Yes",
+        "no": "No",
+        "saving": "Saving..."
+    },
+    "terms": {
+        "imageHeading": "We connect hearts with the intention of marriage, not for fun",
+        "title": "Terms of Use",
+        "religiousIntro": "In the name of Allah, the Most Gracious, the Most Merciful\nAllah Almighty said: \"And fulfill the covenant Allah when you have taken it, and do not break oaths after their confirmation while you have made Allah, over you, a witness.\" — Quran",
+        "introduction": "By using this website, you agree to the following:",
+        "content1": "The site is available for adults 18 years and older. It may not be used by children or teenagers. Users are responsible for entering truthful and accurate data. The site is not responsible for use by those outside the permitted age group.",
+        "content2": "You pledge the credibility and accuracy of the data you enter and bear all legal, ethical, and religious consequences if you violate this. The site is not responsible for any breach of this pledge and does not guarantee marriage results.",
+        "content3": "You pledge not to write unserious data or messages unrelated to marriage.",
+        "content4": "You pledge not to use the site to abuse the site or any of its members.",
+        "content5": "You pledge not to write data or messages that imply belittling others in any way. If you find the applicant unsuitable, you can ignore the message without offense.",
+        "content6": "The site charges a fee from any member who marries through the site. This is a binding agreement. The fee is 1000 SAR.",
+        "content7": "You pledge not to register more than one account for yourself on the site.",
+        "content8": "It is strictly forbidden to include any contact information in the registration request (email, phone number, mobile number, P.O. box, or any means leading to communication outside the site).",
+        "content9": "Mobile number and email appear only to site management and never to members.",
+        "content10": "Users pay a subscription fee (if any) to use Zawag Inn services. Payment is immediate and electronic. After payment, users cannot request a refund for any reason. Deleting your account ends your subscription immediately with no refund, regardless of remaining time. You cannot access the site again except by subscribing and paying anew.",
+        "content11": "The site is not responsible for any content or violations by users. The site may delete or disable any account or content, temporarily or permanently, if it violates the terms or for any reason deemed necessary, without user consent. The site may correct incorrect information entered by users or modify violating content with or without user request. The site does not guarantee any content, operation, user compatibility, or marriage.",
+        "content12": "Site management may suspend any account if seriousness cannot be confirmed. No paid amounts will be refunded.",
+        "content13": "The site cares deeply about user privacy. No human has access to private conversations. Despite efforts to ensure privacy and security, the site cannot guarantee against misuse of login information, device sharing, technical errors, or hacking. The site may use email, calls, SMS, or WhatsApp as primary means of communication or advertising.",
+        "content14": "The site reserves the right to modify these terms at any time without user consent, by updating this page. Continued use after updates constitutes acceptance of the new terms.",
+        "agreeButton": "I agree"
     }
 }

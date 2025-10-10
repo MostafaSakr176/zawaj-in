@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation'
 import { useRouter } from '@/i18n/navigation';
 import api from '@/lib/axiosClient';
 import { chatService } from '@/services/chatService';
+import { useTranslations } from 'next-intl';
 
 type FieldProps = { label: string; value: string | number | null | undefined };
 const Field = ({ label, value }: FieldProps) => (
@@ -86,6 +87,7 @@ const PartnerProfile = () => {
     const [isLiked, setIsLiked] = useState(false);
     const [likeLoading, setLikeLoading] = useState(false);
     const [chatLoading, setChatLoading] = useState(false);
+    const t = useTranslations("partnerProfile");
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -145,7 +147,7 @@ const PartnerProfile = () => {
     if (loading) {
         return (
             <ProtectedRoute>
-                <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل البيانات...</div>
+                <div className="text-center py-12 text-lg text-[#301B69]">{t("loading")}</div>
             </ProtectedRoute>
         );
     }
@@ -153,7 +155,7 @@ const PartnerProfile = () => {
     if (!user) {
         return (
             <ProtectedRoute>
-                <div className="text-center py-12 text-lg text-[#301B69]">لم يتم العثور على المستخدم</div>
+                <div className="text-center py-12 text-lg text-[#301B69]">{t("notFound")}</div>
             </ProtectedRoute>
         );
     }
@@ -192,9 +194,9 @@ const PartnerProfile = () => {
                                         </h4>
                                         {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                     </div>
-                                    <div className="text-[#8A97AB] text-base mb-1">آخر ظهور منذ 2 ساعات</div>
+                                    <div className="text-[#8A97AB] text-base mb-1">{t("lastSeen")}</div>
                                 </div>
-                                <div className="text-[#8A97AB] text-base">رقم العضوية {user.chartNumber}</div>
+                                <div className="text-[#8A97AB] text-base">{t("membershipNumber")} {user.chartNumber}</div>
                             </div>
                         </div>
                         {/* Actions (left in RTL) */}
@@ -207,7 +209,7 @@ const PartnerProfile = () => {
                                     : 'border-[#E9E6FF] bg-[#301B6914] text-[#2D1F55] hover:bg-white'
                                     }`}
                             >
-                                {isLiked ? 'إزالة من المفضلة' : 'أضف للمفضلة'}
+                                {isLiked ? t("removeFavorite") : t("addFavorite")}
                                 <Heart className={`w-5 h-5 ${isLiked ? 'text-red-600 fill-red-600' : 'text-[#2D1F55]'}`} />
                             </button>
                             <button 
@@ -215,7 +217,7 @@ const PartnerProfile = () => {
                                 disabled={chatLoading}
                                 className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50"
                             >
-                                {chatLoading ? 'جاري التحميل...' : 'ارسال رسالة'}
+                                {chatLoading ? t("loadingAction") : t("sendMessage")}
                                 <MessageCircle className="w-5 h-5 text-[#2D1F55]" />
                             </button>
                         </div>
@@ -227,7 +229,7 @@ const PartnerProfile = () => {
                     {user.bio && (
                         <>
                             <div className="px-2 md:px-4">
-                                <h4 className="text-[#2D1F55] font-semibold text-base mb-4">نبذة شخصية</h4>
+                                <h4 className="text-[#2D1F55] font-semibold text-base mb-4">{t("bioTitle")}</h4>
                                 <p className="text-[#301B69] leading-relaxed">{user.bio}</p>
                             </div>
                             <hr className="border-[#ECEBFF]" />
@@ -237,20 +239,20 @@ const PartnerProfile = () => {
                     {/* Section: السكن و الحالة الإجتماعية */}
                     <div className="px-2 md:px-4">
                         <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-[#2D1F55] font-semibold text-base">السكن و الحالة الإجتماعية</h4>
+                            <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionResidence")}</h4>
                         </div>
                         <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="البلد" value={user.location.country} />
+                                <Field label={t("country")} value={user.location.country} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="مكان الإقامة" value={user.location.city} />
+                                <Field label={t("city")} value={user.location.city} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="العمر" value={`${user.age} سنة`} />
+                                <Field label={t("age")} value={`${user.age} ${t("years")}`} />
                             </div>
                             <div>
-                                <Field label="الحالة العائلية" value={user.maritalStatus} />
+                                <Field label={t("maritalStatus")} value={user.maritalStatus} />
                             </div>
                         </div>
                     </div>
@@ -260,26 +262,26 @@ const PartnerProfile = () => {
                     {/* Section: الدراسة و العمل */}
                     <div className="px-2 md:px-4">
                         <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
+                            <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionAppearance")}</h4>
                         </div>
                         <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="لون البشرة" value={user?.bodyColor} />
+                                <Field label={t("skinColor")} value={user?.bodyColor} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="الطول" value={user?.height} />
+                                <Field label={t("height")} value={user?.height} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="الوزن" value={user?.weight} />
+                                <Field label={t("weight")} value={user?.weight} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="لون الشعر" value={user?.hairColor} />
+                                <Field label={t("hairColor")} value={user?.hairColor} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="لون العينين" value={user?.eyeColor} />
+                                <Field label={t("eyeColor")} value={user?.eyeColor} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="نوع الشعر" value={user?.hairType} />
+                                <Field label={t("hairType")} value={user?.hairType} />
                             </div>
                         </div>
                     </div>
@@ -289,15 +291,15 @@ const PartnerProfile = () => {
                     {/* Section: الدراسة و العمل */}
                     <div className="px-2 md:px-4">
                         <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-[#2D1F55] font-semibold text-base">الدراسة و العمل</h4>
+                            <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionEducation")}</h4>
                         </div>
                         <div className="flex items-center flex-wrap gap-4">
 
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="المؤهل الدراسي" value={user.profession} />
+                                <Field label={t("education")} value={user.profession} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="الوظيفة" value={user.natureOfWork} />
+                                <Field label={t("job")} value={user.natureOfWork} />
                             </div>
                         </div>
                     </div>
@@ -307,34 +309,34 @@ const PartnerProfile = () => {
                     {/* Section: الديانة والممارسة */}
                     <div className="px-2 md:px-4">
                         <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-[#2D1F55] font-semibold text-base">الديانة والممارسة</h4>
+                            <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionReligion")}</h4>
                         </div>
                         <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="المذهب" value={user.sect} />
+                                <Field label={t("sect")} value={user.sect} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="الممارسة الدينية" value={user.religiousPractice} />
+                                <Field label={t("religiousPractice")} value={user.religiousPractice} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="مستوى الصلاة" value={user.prayerLevel} />
+                                <Field label={t("prayerLevel")} value={user.prayerLevel} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="نوع الزواج" value={user.marriageType} />
+                                <Field label={t("marriageType")} value={user.marriageType} />
                             </div>
                             <div>
-                                <Field label="اقبل التعدد؟" value={user.acceptPolygamy ? "نعم" : "لا"} />
+                                <Field label={t("acceptPolygamy")} value={user.acceptPolygamy ? t("yes") : t("no")} />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
-                    <h3 className='font-semibold text-3xl text-[#301B69]'>مواصفات شريك حياتي</h3>
+                    <h3 className='font-semibold text-3xl text-[#301B69]'>{t("partnerPreferencesTitle")}</h3>
 
                     <div className="px-2 md:px-4">
                         <div className="flex items-center flex-wrap gap-4">
                             <div className="">
-                                <Field label="شريكة حياتي" value={user.partnerPreferencesBio} />
+                                <Field label={t("partnerBio")} value={user.partnerPreferencesBio} />
                             </div>
                         </div>
                     </div>
@@ -343,23 +345,23 @@ const PartnerProfile = () => {
                     {/* Section: الدراسة و العمل */}
                     <div className="px-2 md:px-4">
                         <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-[#2D1F55] font-semibold text-base">المظهر و الصحة</h4>
+                            <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionAppearance")}</h4>
                         </div>
                         <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="لون البشرة" value={user?.preferredBodyColors?.join(", ")} />
+                                <Field label={t("skinColor")} value={user?.preferredBodyColors?.join(", ")} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="الطول" value={`${user?.preferredMinHeight} - ${user?.preferredMaxHeight} سم`} />
+                                <Field label={t("height")} value={`${user?.preferredMinHeight} - ${user?.preferredMaxHeight} ${t("cm")}`} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="الوزن" value={`${user?.preferredMinWeight} - ${user?.preferredMaxWeight} كغ`} />
+                                <Field label={t("weight")} value={`${user?.preferredMinWeight} - ${user?.preferredMaxWeight} ${t("kg")}`} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="لون الشعر" value={user?.preferredHairColors?.join(", ")} />
+                                <Field label={t("hairColor")} value={user?.preferredHairColors?.join(", ")} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label="لون العينين" value={user?.preferredEyeColors?.join(", ")} />
+                                <Field label={t("eyeColor")} value={user?.preferredEyeColors?.join(", ")} />
                             </div>
                         </div>
                     </div>

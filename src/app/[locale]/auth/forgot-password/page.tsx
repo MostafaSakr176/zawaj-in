@@ -28,7 +28,7 @@ export default function ForgotPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) {
-      setError("البريد الإلكتروني مطلوب");
+      setError(t("emailRequired"));
       return;
     }
 
@@ -52,8 +52,7 @@ export default function ForgotPasswordPage() {
       }, 2000);
     } catch (err: any) {
       setError(
-        err?.response?.data?.message ||
-          "حدث خطأ أثناء إرسال طلب استعادة كلمة المرور"
+        err?.response?.data?.message || t("error")
       );
     } finally {
       setLoading(false);
@@ -87,15 +86,14 @@ export default function ForgotPasswordPage() {
                 </svg>
               </div>
               <h2 className="text-2xl font-bold text-[#1D1B23] mb-4">
-                تم الإرسال بنجاح
+                {t("successTitle")}
               </h2>
               <p className="text-[#301B69] mb-6">
-                تم إرسال رمز التحقق إلى بريدك الإلكتروني. يرجى التحقق من صندوق
-                الوارد.
+                {t("successMessage")}
               </p>
               <Link href="/auth/verify-reset-password">
                 <Button className="w-full rounded-[20px] bg-[#301B69] hover:bg-[#2D0B5A]">
-                  التالي
+                  {t("nextButton")}
                 </Button>
               </Link>
             </CardContent>
@@ -128,13 +126,13 @@ export default function ForgotPasswordPage() {
                   {error}
                 </div>
               )}
-              <FormField label={<Label className="sr-only">{t("title")}</Label>}>
+              <FormField label={<Label className="sr-only">{t("emailLabel")}</Label>}>
                 <TextField
                   type="email"
                   placeholder={t("emailPlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  aria-label="البريد الإلكتروني"
+                  aria-label={t("emailLabel")}
                   required
                 />
               </FormField>
@@ -145,7 +143,7 @@ export default function ForgotPasswordPage() {
                 disabled={loading}
                 className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)] disabled:opacity-70"
               >
-                {loading ? "جاري الإرسال..." : t("submit")}
+                {loading ? t("sending") : t("submit")}
               </Button>
             </CardFooter>
           </form>

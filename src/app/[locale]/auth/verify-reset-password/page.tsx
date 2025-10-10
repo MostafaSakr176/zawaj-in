@@ -120,19 +120,19 @@ export default function VerifyResetPasswordPage() {
           <form onSubmit={handleSubmit}>
             <CardHeader className="pb-4 pt-10">
               <CardTitle className="text-center text-[2rem] font-extrabold text-[#1D1B23]">
-                تحقق من رمز إعادة تعيين كلمة المرور
+                {t("verifyResetTitle")}
               </CardTitle>
               <p className="px-4 md:px-8 text-center text-base text-foreground/70">
-                أدخل الرمز المرسل إلى بريدك الإلكتروني {email}
+                {t("verifyResetDesc", { email })}
               </p>
             </CardHeader>
             <CardContent className="py-4 px-4 md:px-12 md:pb-10">
-              <FormField label={<Label className="sr-only">رمز التحقق</Label>}>
+              <FormField label={<Label className="sr-only">{t("codeLabel")}</Label>}>
                 <TextField
-                  placeholder="أدخل رمز التحقق"
+                  placeholder={t("placeholder")}
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  aria-label="رمز التحقق"
+                  aria-label={t("codeLabel")}
                   maxLength={8}
                 />
               </FormField>
@@ -148,10 +148,10 @@ export default function VerifyResetPasswordPage() {
                 type="submit"
                 disabled={loading}
               >
-                {loading ? "جاري التحقق..." : "تحقق"}
+                {loading ? t("loading") : t("submit")}
               </Button>
               <p className="text-center text-[#301B69] font-bold">
-                لم تستلم الرمز؟{" "}
+                {t("didntReceive")}{" "}
                 <button
                   className="underline underline-offset-2 disabled:opacity-50 cursor-pointer"
                   disabled={seconds > 0 || loading}
@@ -159,8 +159,8 @@ export default function VerifyResetPasswordPage() {
                   type="button"
                 >
                   {seconds > 0
-                    ? `إعادة الإرسال خلال ${seconds} ثانية`
-                    : "إعادة الإرسال"}
+                    ? t("resendafter", { seconds })
+                    : t("resend")}
                 </button>
               </p>
             </CardFooter>

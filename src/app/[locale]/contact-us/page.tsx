@@ -24,12 +24,7 @@ import Textarea from "@/components/ui/textarea";
 
 export default function ContactUs() {
     const [state, setState] = React.useState({ email: "", message: "", subject: "", name: "" });
-    const t = useTranslations("auth.signIn");
-
-    const emailError =
-        state.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email)
-            ? "صيغة البريد غير صحيحة"
-            : undefined;
+    const t = useTranslations("contact");
 
     return (
         <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
@@ -43,10 +38,10 @@ export default function ContactUs() {
                         backgroundImage: "linear-gradient(182.28deg, #301B69 36.46%, #B07CD1 97.83%)"
                     }}
                 >
-                    تواصل بنا
+                    {t("title")}
                 </h2>
                 <p className="text-base md:text-lg font-medium text-[#301B69] text-center mb-6">
-                    هل لديك أي سؤال؟ املأ النموذج وسنكون سعداء لسماعك، وسنتواصل معك قريبًا.
+                    {t("subtitle")}
                 </p>
 
                 <div className="flex items-center justify-center flex-col md:flex-row gap-4 md:gap-8 mb-8">
@@ -64,28 +59,28 @@ export default function ContactUs() {
                     <CardContent className="space-y-5 pt-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormField
-                                label={<Label>الموضوع</Label>}
+                                label={<Label>{t("subject")}</Label>}
                             >
                                 <TextField
-                                    placeholder="الموضوع"
+                                    placeholder={t("subject")}
                                     endAdornment={null}
                                     value={state.subject}
                                     className="text-[1rem]"
-                                    aria-label="الموضوع"
+                                    aria-label={t("subject")}
                                     onChange={(e) =>
                                         setState((s) => ({ ...s, subject: e.target.value }))
                                     }
                                 />
                             </FormField>
                             <FormField
-                                label={<Label>الاسم</Label>}
+                                label={<Label>{t("name")}</Label>}
                             >
                                 <TextField
-                                    placeholder="الاسم"
+                                    placeholder={t("name")}
                                     endAdornment={null}
                                     value={state.name}
                                     className="text-[1rem]"
-                                    aria-label="الاسم"
+                                    aria-label={t("name")}
                                     onChange={(e) =>
                                         setState((s) => ({ ...s, name: e.target.value }))
                                     }
@@ -93,38 +88,38 @@ export default function ContactUs() {
                             </FormField>
                         </div>
                         <FormField
-                            label={<Label>البريد الإلكتروني</Label>}
-                            error={emailError}
+                            label={<Label>{t("email")}</Label>}
+                            error={state.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email) ? t("emailInvalid") : undefined}
                         >
                             <TextField
-                                placeholder={t("emailPlaceholder")}
+                                placeholder={t("email")}
                                 endAdornment={null}
                                 value={state.email}
                                 onChange={(e) =>
                                     setState((s) => ({ ...s, email: e.target.value }))
                                 }
                                 className="text-[1rem]"
-                                aria-label="البريد الإلكتروني"
+                                aria-label={t("email")}
                             />
                         </FormField>
 
                         <FormField
-                            label={<Label>الرسالة</Label>}
+                            label={<Label>{t("message")}</Label>}
                         >
                             <Textarea
-                                placeholder="الرسالة"
+                                placeholder={t("message")}
                                 value={state.message}
                                 onChange={(e) =>
                                     setState((s) => ({ ...s, message: e.target.value }))
                                 }
                                 className="text-[1rem]"
-                                aria-label="الرسالة"
+                                aria-label={t("message")}
                             />
                         </FormField>
 
                         <div className="pt-2">
                             <Button className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)]">
-                                ارسال رسالة
+                                {t("send")}
                             </Button>
                         </div>
                     </CardContent>

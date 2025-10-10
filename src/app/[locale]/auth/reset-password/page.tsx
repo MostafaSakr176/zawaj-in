@@ -44,17 +44,17 @@ export default function ResetPasswordPage() {
   }, [router]);
 
   const confirmError =
-    confirm && confirm !== password ? "غير متطابقة" : undefined;
+    confirm && confirm !== password ? t("passwordMismatch") : undefined;
 
-  // Zod schema for validation
-  const resetSchema = z.object({
+  // Zod schema for validation with translations
+  const resetSchema = React.useMemo(() => z.object({
     email: z.string().email(),
-    newPassword: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل"),
+    newPassword: z.string().min(8, t("validation.passwordMinLength")),
     confirmPassword: z.string(),
   }).refine((data) => data.newPassword === data.confirmPassword, {
-    message: "كلمة المرور غير متطابقة",
+    message: t("validation.passwordMismatch"),
     path: ["confirmPassword"],
-  });
+  }), [t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +67,7 @@ export default function ResetPasswordPage() {
     });
 
     if (!result.success) {
-      setError(result.error.issues[0]?.message || "بيانات غير صحيحة");
+      setError(result.error.issues[0]?.message || t("invalidData"));
       return;
     }
 
@@ -92,8 +92,7 @@ export default function ResetPasswordPage() {
       }, 2000);
     } catch (err: any) {
       setError(
-        err?.response?.data?.message ||
-          "حدث خطأ أثناء إعادة تعيين كلمة المرور"
+        err?.response?.data?.message || t("apiError")
       );
     } finally {
       setLoading(false);
@@ -113,14 +112,14 @@ export default function ResetPasswordPage() {
                 </svg>
               </div>
               <h2 className="text-2xl font-bold text-[#1D1B23] mb-4">
-                تم تغيير كلمة المرور بنجاح
+                {t("successTitle")}
               </h2>
               <p className="text-[#301B69] mb-6">
-                يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة.
+                {t("successMessage")}
               </p>
               <Link href="/auth/sign-in">
                 <Button className="w-full rounded-[20px] bg-[#301B69] hover:bg-[#2D0B5A]">
-                  تسجيل الدخول
+                  {t("signInButton")}
                 </Button>
               </Link>
             </CardContent>
@@ -149,21 +148,21 @@ export default function ResetPasswordPage() {
               )}
               <FormField
                 label={
-                  <Label className="sr-only">{t("newPasswordPlaceholder")}</Label>
+                  <Label className="sr-only">{t("newPasswordLabel")}</Label>
                 }
               >
                 <PasswordInput
                   placeholder={t("newPasswordPlaceholder")}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  aria-label="كلمة المرور الجديدة"
+                  aria-label={t("newPasswordLabel")}
                   required
                 />
               </FormField>
               <FormField
                 label={
                   <Label className="sr-only">
-                    {t("confirmPasswordPlaceholder")}
+                    {t("confirmPasswordLabel")}
                   </Label>
                 }
                 error={confirmError}
@@ -172,7 +171,7 @@ export default function ResetPasswordPage() {
                   placeholder={t("confirmPasswordPlaceholder")}
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
-                  aria-label="إعادة كلمة المرور الجديدة"
+                  aria-label={t("confirmPasswordLabel")}
                   required
                 />
               </FormField>
@@ -183,7 +182,7 @@ export default function ResetPasswordPage() {
                 disabled={loading || !!confirmError}
                 className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)] disabled:opacity-70"
               >
-                {loading ? "جاري التحديث..." : t("submit")}
+                {loading ? t("loading") : t("submit")}
               </Button>
             </CardFooter>
           </form>

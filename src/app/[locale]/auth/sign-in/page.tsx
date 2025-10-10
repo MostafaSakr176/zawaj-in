@@ -91,11 +91,7 @@ const LockIcon = (
   </svg>
 );
 
-const loginSchema = z.object({
-  email: z.string().email("صيغة البريد غير صحيحة"),
-  password: z.string().min(6, "كلمة المرور مطلوبة"),
-  fcmToken: z.string().optional(),
-});
+
 
 export default function SignInPage() {
   const [state, setState] = React.useState({ email: "", password: "" });
@@ -105,13 +101,19 @@ export default function SignInPage() {
   const router = useRouter();
   const { refreshProfile } = useAuth();
 
+
+  const loginSchema = z.object({
+    email: z.string().email(t("emailInvalid")),
+    password: z.string().min(6, t("passwordRequired")),
+    fcmToken: z.string().optional(),
+  });
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     const result = loginSchema.safeParse({ ...state });
     if (!result.success) {
-      setError(result.error.issues[0]?.message || "بيانات غير صحيحة");
+      setError(result.error.issues[0]?.message || t("invalidData"));
       return;
     }
 
@@ -143,7 +145,7 @@ export default function SignInPage() {
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||
-          "فشل تسجيل الدخول. تأكد من صحة البيانات."
+        t("loginFailed")
       );
     } finally {
       setLoading(false);
@@ -174,7 +176,7 @@ export default function SignInPage() {
             </CardHeader>
             <CardContent className="space-y-5 pt-2">
               <FormField
-                label={<Label className="sr-only">البريد الإلكتروني</Label>}
+                label={<Label className="sr-only">{t("emailLabel")}</Label>}
                 error={emailError}
               >
                 <TextField
@@ -186,7 +188,7 @@ export default function SignInPage() {
                     setState((s) => ({ ...s, email: e.target.value }))
                   }
                   className="text-[1rem]"
-                  aria-label="البريد الإلكتروني"
+                  aria-label={t("emailLabel")}
                 />
               </FormField>
 
@@ -202,7 +204,7 @@ export default function SignInPage() {
                     setState((s) => ({ ...s, password: e.target.value }))
                   }
                   className="text-[1rem]"
-                  aria-label="كلمة المرور"
+                  aria-label={t("passwordLabel")}
                 />
               </FormField>
 

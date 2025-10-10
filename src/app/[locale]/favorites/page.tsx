@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import api from '@/lib/axiosClient'
+import { useTranslations } from 'next-intl';
 
 type user = {
   id: string;
@@ -79,6 +80,7 @@ type interest = {
 };
 
 const MyFavorites = () => {
+  const t = useTranslations("favorites");
   const [likes, setLikes] = useState<Like[]>([]);
   const [interested, setInterested] = useState<interest[]>([]);
   const [loadingLikes, setLoadingLikes] = useState(true);
@@ -122,17 +124,17 @@ const MyFavorites = () => {
         <div className='max-w-7xl mx-auto px-4 md:px-0 relative z-2'>
           <Tabs defaultValue="favorites">
             <TabsList className='w-fit mb-6'>
-              <TabsTrigger value="favorites">التفضيلات</TabsTrigger>
-              <TabsTrigger value="interested">من يهتم بي</TabsTrigger>
+              <TabsTrigger value="favorites">{t("tabFavorites")}</TabsTrigger>
+              <TabsTrigger value="interested">{t("tabInterested")}</TabsTrigger>
             </TabsList>
             <TabsContent value="favorites">
               {loadingLikes ? (
-                <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل المفضلات...</div>
+                <div className="text-center py-12 text-lg text-[#301B69]">{t("loadingFavorites")}</div>
               ) : (
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
                   {likes.length === 0 ? (
                     <div className="col-span-full text-center text-[#301B69] py-8">
-                      لا توجد مفضلات حالياً.
+                      {t("emptyFavorites")}
                     </div>
                   ) : (
                     likes?.map((like) => (
@@ -156,7 +158,7 @@ const MyFavorites = () => {
             </TabsContent>
             <TabsContent value="interested">
               {loadingInterested ? (
-                <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل البيانات...</div>
+                <div className="text-center py-12 text-lg text-[#301B69]">{t("loadingInterested")}</div>
               ) : (
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
                   {interested?.length === 0 ? (

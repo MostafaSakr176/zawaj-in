@@ -136,7 +136,7 @@ const NewSubscribers = React.memo(() => {
 			}}
 		>
 			<h2 className="text-4xl lg:text-5xl font-bold text-[#301B69] leading-normal text-center mb-8">
-				احدث الاعضاء الجدد
+				{t("newMembersTitle")}
 			</h2>
 
 			<div className="max-w-5xl mx-auto">
