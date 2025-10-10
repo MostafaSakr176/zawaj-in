@@ -81,7 +81,13 @@ export default function RegisterPage() {
           gender: z.enum(["male", "female"], t("validation.genderRequired")),
           email: z.string().email(t("validation.emailInvalid")),
           phone: z.string().min(8, t("validation.phoneRequired")),
-          password: z.string().min(6, t("validation.passwordRequired")),
+          password: z
+            .string()
+            .min(6, t("validation.passwordRequired"))
+            .regex(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+              t("validation.passwordComplexity")
+            ),
           confirmPassword: z.string().min(6, t("validation.confirmRequired")),
         })
         .refine((data) => data.password === data.confirmPassword, {
@@ -136,8 +142,15 @@ export default function RegisterPage() {
         localStorage.setItem("registerEmail", form.email);
       }
       router.push("/auth/verify-email");
-    } catch (error) {
-      setErrors({ api: t("errorMessage") });
+    } catch (error: any) {
+      // Handle API error messages
+      if (error?.response?.data?.errors) {
+        // If the API returns field errors as an object
+        setErrors(error.response.data.errors);
+      } else if (error?.response?.data?.message) {
+        // If the API returns a general message
+        setErrors({ api: error.response.data.message });
+      }
     } finally {
       setLoading(false);
     }
