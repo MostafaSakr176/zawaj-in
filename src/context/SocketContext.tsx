@@ -38,14 +38,11 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     // Get token from cookies
     const token = Cookies.get("access_token");
     if (!token) {
-      console.warn("No access token found for socket connection");
       return;
     }
 
-    console.log("Initializing socket connection with token:", token.substring(0, 20) + "...");
-
     // Create socket connection
-    const newSocket = io("http://localhost:3001", {
+    const newSocket = io("http://localhost:3000", {
       auth: {
         token,
       },
@@ -58,27 +55,22 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
     // Connection event handlers
     newSocket.on("connect", () => {
-      console.log("Socket connected:", newSocket.id);
       setIsConnected(true);
     });
 
     newSocket.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
       setIsConnected(false);
     });
 
     newSocket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error.message);
       setIsConnected(false);
     });
 
     // Listen to online/offline events
     newSocket.on("user_online", (data: { userId: string }) => {
-      console.log("User came online:", data.userId);
     });
 
     newSocket.on("user_offline", (data: { userId: string }) => {
-      console.log("User went offline:", data.userId);
     });
 
     socketRef.current = newSocket;

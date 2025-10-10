@@ -119,7 +119,7 @@ The main chat UI with:
 ### Backend URL
 The socket URL is configured in `src/context/SocketContext.tsx`:
 ```typescript
-const newSocket = io("http://localhost:3001", {
+const newSocket = io("http://localhost:3000", {
   // ... config
 });
 ```
@@ -127,12 +127,12 @@ const newSocket = io("http://localhost:3001", {
 The HTTP API base URL is configured in `src/lib/axiosClient.ts`:
 ```typescript
 const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://localhost:3000",
   // ... config
 });
 ```
 
-**Note**: Both are currently set to `http://localhost:3001`. Update these URLs to match your backend server address.
+**Note**: Both are currently set to `http://localhost:3000`. Update these URLs to match your backend server address.
 
 ### Environment Variables
 No additional environment variables needed. The socket connection uses the same authentication token as the HTTP API.

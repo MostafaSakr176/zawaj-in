@@ -155,8 +155,8 @@ const Navbar = () => {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg font-medium transition-colors
-                      ${isActive ? "border-b-2 border-[#301B69] font-bold" : ""}
+                      className={`flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
+                      ${isActive ? "font-bold" : "font-medium"}
                     `}
                     >
                       {link.icon}

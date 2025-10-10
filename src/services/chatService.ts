@@ -27,7 +27,7 @@ export interface Conversation {
   participant1Id: string;
   participant2Id: string;
   matchId: string;
-  lastMessage: string | null;
+  lastMessagePreview: string | null;
   lastMessageAt: Date | null;
   createdAt: Date;
   updatedAt: Date;

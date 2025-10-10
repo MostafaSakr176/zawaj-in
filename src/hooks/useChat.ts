@@ -29,11 +29,6 @@ export function useChat(conversationId: string | null) {
       setError(null);
       try {
         const response = await chatService.getConversationMessages(conversationId, 1, 50);
-        console.log("Loaded messages:", response.data);
-        if (response.data.length > 0) {
-          console.log("First message createdAt:", response.data[0].createdAt, "Type:", typeof response.data[0].createdAt);
-          console.log("Parsed as Date:", new Date(response.data[0].createdAt));
-        }
         setMessages(response.data);
         setHasMoreMessages(response.page < response.totalPages);
         setCurrentPage(1);
@@ -48,15 +43,12 @@ export function useChat(conversationId: string | null) {
         try {
           const presence = await chatService.getUserPresence(otherUserId);
           setIsOtherUserOnline(presence.isOnline);
-          console.log("Other user presence:", presence);
         } catch (err) {
-          console.error("Failed to get user presence:", err);
           setIsOtherUserOnline(false);
         }
 
       } catch (err: any) {
         setError(err.response?.data?.message || "Failed to load messages");
-        console.error("Failed to load messages:", err);
       } finally {
         setLoading(false);
       }
@@ -71,9 +63,7 @@ export function useChat(conversationId: string | null) {
 
     socket.emit("join_conversation", { conversationId }, (response: any) => {
       if (response?.success) {
-        console.log("Joined conversation:", conversationId);
       } else {
-        console.error("Failed to join conversation:", response?.error);
       }
     });
 
@@ -81,7 +71,6 @@ export function useChat(conversationId: string | null) {
     return () => {
       if (socket && conversationId) {
         socket.emit("leave_conversation", { conversationId });
-        console.log("Left conversation:", conversationId);
       }
     };
   }, [socket, conversationId, isConnected]);
@@ -232,14 +221,12 @@ export function useChat(conversationId: string | null) {
               );
             } else {
               // Remove optimistic message on error
-              console.error("Failed to send message:", response?.error);
               setError(response?.error || "Failed to send message");
               setMessages((prev) => prev.filter((msg) => msg.id !== optimisticMessage.id));
             }
           }
         );
       } catch (err: any) {
-        console.error("Error sending message:", err);
         setError(err.message || "Failed to send message");
         // Remove optimistic message on error
         setMessages((prev) => prev.filter((msg) => msg.id !== optimisticMessage.id));
@@ -254,7 +241,6 @@ export function useChat(conversationId: string | null) {
 
     socket.emit("message_read", { conversationId }, (response: any) => {
       if (!response?.success) {
-        console.error("Failed to mark messages as read:", response?.error);
       }
     });
   }, [socket, conversationId]);
@@ -298,7 +284,6 @@ export function useChat(conversationId: string | null) {
       setHasMoreMessages(response.page < response.totalPages);
       setCurrentPage(nextPage);
     } catch (err: any) {
-      console.error("Failed to load more messages:", err);
     }
   }, [conversationId, hasMoreMessages, loading, currentPage]);
 
@@ -334,7 +319,6 @@ export function useConversations() {
         setConversations(response.data);
       } catch (err: any) {
         setError(err.response?.data?.message || "Failed to load conversations");
-        console.error("Failed to load conversations:", err);
       } finally {
         setLoading(false);
       }
@@ -373,7 +357,6 @@ export function useConversations() {
       const response = await chatService.getConversations(1, 50);
       setConversations(response.data);
     } catch (err: any) {
-      console.error("Failed to refresh conversations:", err);
     }
   }, []);
 

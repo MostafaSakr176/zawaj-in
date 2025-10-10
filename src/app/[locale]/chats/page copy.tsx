@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send, CircleEllipsis, MessageSquareHeart } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send, CircleEllipsis, MessageSquareHeart } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -208,7 +208,6 @@ const Chats = () => {
 
       alert("تم حظر المستخدم بنجاح");
     } catch (error: any) {
-      console.error("Error blocking user:", error);
       alert(error?.response?.data?.message || "حدث خطأ أثناء حظر المستخدم");
     } finally {
       setLoading(false);
@@ -234,7 +233,6 @@ const Chats = () => {
 
       alert("تم إلغاء حظر المستخدم بنجاح");
     } catch (error: any) {
-      console.error("Error unblocking user:", error);
       alert(error?.response?.data?.message || "حدث خطأ أثناء إلغاء حظر المستخدم");
     } finally {
       setLoading(false);

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import api from '@/lib/axiosClient'
 
-type LikedUser = {
+type user = {
   id: string;
   fullName: string;
   email: string;
@@ -68,13 +68,19 @@ type LikedUser = {
 
 type Like = {
   id: string;
-  likedUser: LikedUser;
+  likedUser: user;
+  createdAt: string;
+};
+
+type interest = {
+  id: string;
+  user: user;
   createdAt: string;
 };
 
 const MyFavorites = () => {
   const [likes, setLikes] = useState<Like[]>([]);
-  const [interested, setInterested] = useState<Like[]>([]);
+  const [interested, setInterested] = useState<interest[]>([]);
   const [loadingLikes, setLoadingLikes] = useState(true);
   const [loadingInterested, setLoadingInterested] = useState(true);
 
@@ -129,19 +135,19 @@ const MyFavorites = () => {
                       لا توجد مفضلات حالياً.
                     </div>
                   ) : (
-                    likes.map((like) => (
+                    likes?.map((like) => (
                       <IdCard
-                        key={like.likedUser.id}
-                        id={like.likedUser.id}
+                        key={like?.likedUser?.id}
+                        id={like?.likedUser?.id}
                         isFav={true}
-                        name={like.likedUser.fullName}
-                        avatar={like.likedUser.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
-                        age={like.likedUser.age}
-                        city={like.likedUser.location.city}
-                        job={like.likedUser?.natureOfWork}
-                        marriageType={like.likedUser?.marriageType}
-                        skinColor={like.likedUser?.bodyColor}
-                        status={like.likedUser?.maritalStatus}
+                        name={like?.likedUser?.fullName}
+                        avatar={like?.likedUser?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                        age={like?.likedUser?.age}
+                        city={like?.likedUser?.location?.city}
+                        job={like?.likedUser?.natureOfWork}
+                        marriageType={like?.likedUser?.marriageType}
+                        skinColor={like?.likedUser?.bodyColor}
+                        status={like?.likedUser?.maritalStatus}
                       />
                     ))
                   )}
@@ -153,24 +159,24 @@ const MyFavorites = () => {
                 <div className="text-center py-12 text-lg text-[#301B69]">جاري تحميل البيانات...</div>
               ) : (
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
-                  {interested.length === 0 ? (
+                  {interested?.length === 0 ? (
                     <div className="col-span-full text-center text-[#301B69] py-8">
                       لا توجد بيانات حالياً.
                     </div>
                   ) : (
                     interested.map((like) => (
                       <IdCard
-                        key={like.likedUser.id}
-                        id={like.likedUser.id}
+                        key={like?.user?.id}
+                        id={like?.user?.id}
                         isFav={true}
-                        name={like.likedUser.fullName}
-                        avatar={like.likedUser.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
-                        age={like.likedUser.age}
-                        city={like.likedUser.location.city}
-                        job={like.likedUser?.natureOfWork}
-                        marriageType={like.likedUser?.marriageType}
-                        skinColor={like.likedUser?.bodyColor}
-                        status={like.likedUser?.maritalStatus}
+                        name={like?.user?.fullName}
+                        avatar={like?.user?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                        age={like?.user?.age}
+                        city={like?.user?.location?.city}
+                        job={like?.user?.natureOfWork}
+                        marriageType={like?.user?.marriageType}
+                        skinColor={like?.user?.bodyColor}
+                        status={like?.user?.maritalStatus}
                       />
                     ))
                   )}

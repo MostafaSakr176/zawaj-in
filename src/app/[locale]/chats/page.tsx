@@ -1,12 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { Ellipsis, ArrowRight, Mic, Search, Check, Send } from "lucide-react";
+import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send, CheckCheck, CircleEllipsis, MessageSquareHeart } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Volume2, Trash2, Ban, Flag } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
+import { useSearchParams } from 'next/navigation';
+import { useLocale } from "next-intl";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { useConversations, useChat } from "@/hooks/useChat";
 import { useAuth } from "@/context/AuthContext";
 import { Conversation, Message } from "@/services/chatService";
+import api from "@/lib/axiosClient";
 
 function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string }) {
   const fromMe = m.senderId === currentUserId;
@@ -34,6 +44,7 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
     <div className="flex items-end justify-end gap-2">
       <div className={`${common} bg-[#3B0C46] text-white rounded-bl-none`}>
         {m.content}
+        {m.status === "sent" ? (<Check color="#8A97AB" size={16} />) : m.status === "delivered" ? (<CheckCheck color="#8A97AB" size={16} />) : m.status === "read" ? (<CheckCheck color="#3B0C46" size={16} />) : null}
       </div>
       <Image src="/photos/male-icon.webp" alt="" width={36} height={36} className="rounded-full" />
     </div>
@@ -50,18 +61,19 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
 function ChatListItem({
   c,
   onOpen,
-  currentUserId
+  currentUserId,
+  isActive = false
 }: {
   c: Conversation;
   onOpen: (c: Conversation) => void;
   currentUserId: string;
+  isActive?: boolean;
 }) {
   // Determine the other participant
   const otherParticipant = c.participant1Id === currentUserId ? c.participant2 : c.participant1;
 
   const formatTime = (date: Date | null | string) => {
     if (!date) return "";
-    // Ensure we create a proper Date object from the server timestamp
     const d = typeof date === 'string' ? new Date(date) : new Date(date);
     return d.toLocaleTimeString(undefined, {
       hour: "2-digit",
@@ -73,7 +85,10 @@ function ChatListItem({
   return (
     <button
       onClick={() => onOpen(c)}
-      className="w-full text-right px-3 py-3 rounded-xl hover:bg-white/60 transition flex items-center gap-3"
+      className={`w-full text-right px-3 py-3 transition flex items-center gap-3 ${isActive
+        ? 'bg-[#4B164C]/5'
+        : 'hover:bg-white/60'
+        }`}
     >
       <div className="relative">
         <Image
@@ -87,13 +102,13 @@ function ChatListItem({
       </div>
       <div className="flex-1">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-[#2D1F55]">
+          <span className={`font-semibold ${isActive ? 'text-[#3B0C46]' : 'text-[#2D1F55]'}`}>
             {otherParticipant?.fullName || "مستخدم"}
           </span>
           <span className="text-xs text-[#8A97AB]">{formatTime(c.lastMessageAt)}</span>
         </div>
         <p className="text-xs text-[#8A97AB] line-clamp-1">
-          {c.lastMessage || "ابدأ المحادثة"}
+          {c.lastMessagePreview || "ابدأ المحادثة"}
         </p>
       </div>
       {c.unreadCount && c.unreadCount > 0 ? (
@@ -174,10 +189,15 @@ const Chats = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
   const [messageText, setMessageText] = useState("");
+  const [blockLoading, setBlockLoading] = useState(false);
+  const [blockedUsers, setBlockedUsers] = useState<Set<string>>(new Set());
   const { profile } = useAuth();
+  const searchParams = useSearchParams();
+  const conversationId = searchParams.get('conversation');
+  const locale = useLocale();
 
   // Load conversations list
-  const { conversations, loading: conversationsLoading } = useConversations();
+  const { conversations, loading: conversationsLoading, refreshConversations } = useConversations();
 
   // Load messages for active conversation
   const {
@@ -191,6 +211,41 @@ const Chats = () => {
     stopTyping,
     loadMoreMessages,
   } = useChat(activeConversation?.id || null);
+
+  // Handle conversation ID from URL parameter or set first chat as default
+  useEffect(() => {
+    if (conversationsLoading || conversations.length === 0) return;
+
+    if (conversationId) {
+      // If there's a specific conversation ID in URL, open that one
+      const targetConversation = conversations.find(c => c.id === conversationId);
+      if (targetConversation) {
+        setActiveConversation(targetConversation);
+        setIsOpen(true); // Open on mobile
+        // Mark messages as read
+        setTimeout(() => {
+          markAsRead();
+        }, 500);
+      }
+    } else if (!activeConversation) {
+      // If no specific conversation and no active conversation, open the first one
+      const firstConversation = conversations[0];
+      if (firstConversation) {
+        setActiveConversation(firstConversation);
+        // Don't auto-open on mobile unless there's a URL parameter
+        // setIsOpen(false); 
+        // Mark messages as read
+        setTimeout(() => {
+          markAsRead();
+        }, 500);
+      }
+    }
+  }, [conversationId, conversations, conversationsLoading, markAsRead, activeConversation]);
+
+  // Refresh conversations when component mounts to get any new conversations
+  useEffect(() => {
+    refreshConversations();
+  }, [refreshConversations]);
 
   const openChat = (c: Conversation) => {
     setActiveConversation(c);
@@ -225,6 +280,78 @@ const Chats = () => {
 
   const otherParticipant = getOtherParticipant(activeConversation);
 
+  const handleBlockUser = async (userId: string) => {
+    if (!userId || blockLoading) return;
+
+    setBlockLoading(true);
+    try {
+      await api.post(`/users/${userId}/block`, {
+        reason: "Inappropriate behavior"
+      });
+
+      // Add user to blocked set
+      setBlockedUsers(prev => new Set([...prev, userId]));
+
+      alert("تم حظر المستخدم بنجاح");
+    } catch (error: any) {
+      console.error("Error blocking user:", error);
+      alert(error?.response?.data?.message || "حدث خطأ أثناء حظر المستخدم");
+    } finally {
+      setBlockLoading(false);
+    }
+  };
+
+  const handleUnblockUser = async (userId: string) => {
+    if (!userId || blockLoading) return;
+
+    setBlockLoading(true);
+    try {
+      await api.delete(`/users/${userId}/block`);
+
+      // Remove user from blocked set
+      setBlockedUsers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(userId);
+        return newSet;
+      });
+
+      alert("تم إلغاء حظر المستخدم بنجاح");
+    } catch (error: any) {
+      console.error("Error unblocking user:", error);
+      alert(error?.response?.data?.message || "حدث خطأ أثناء إلغاء حظر المستخدم");
+    } finally {
+      setBlockLoading(false);
+    }
+  };
+
+  const BlockMenuItem = ({ userId }: { userId: string | null }) => {
+    if (!userId) return null;
+
+    const isBlocked = blockedUsers.has(userId);
+
+    return (
+      <DropdownMenuItem
+        className='text-[#301B69] font-medium text-lg'
+        onClick={() => {
+          if (isBlocked) {
+            handleUnblockUser(userId);
+          } else {
+            handleBlockUser(userId);
+          }
+        }}
+        disabled={blockLoading}
+      >
+        <div className='flex items-center gap-3 w-full'>
+          <Ban size={22} color='#301B69' />
+          {blockLoading ? "جاري التحميل..." : isBlocked ? "إلغاء حظر المستخدم" : "حظر المستخدم"}
+        </div>
+      </DropdownMenuItem>
+    );
+  };
+
+  // Check if current conversation is with a blocked user
+  const isCurrentUserBlocked = otherParticipant ? blockedUsers.has(otherParticipant.id) : false;
+
   return (
     <ProtectedRoute>
       <section className="relative pt-28 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
@@ -253,6 +380,7 @@ const Chats = () => {
                     c={c}
                     onOpen={openChat}
                     currentUserId={profile?.id || ""}
+                    isActive={activeConversation?.id === c.id}
                   />
                 ))
               )}
@@ -271,24 +399,61 @@ const Chats = () => {
                     </button>
                     <div className="relative">
                       <Image src="/photos/male-icon.webp" alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
-                      {isOtherUserOnline && (
+                      {isOtherUserOnline && !isCurrentUserBlocked && (
                         <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                       )}
                     </div>
-                    <div className="text-right">
+                    <div>
                       <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
                       <div className="text-xs text-[#8A97AB]">
-                        {isTyping ? "يكتب..." : isOtherUserOnline ? "نشط الآن" : "غير متصل"}
+                        {isCurrentUserBlocked ? "محظور" : isTyping ? "يكتب..." : isOtherUserOnline ? "نشط الآن" : "غير متصل"}
                       </div>
                     </div>
                   </div>
-                  <button className="p-2 rounded-full hover:bg-white/70">
-                    <Ellipsis className="text-[#2D1F55]" />
-                  </button>
+                  <DropdownMenu dir={locale === "ar" ? 'rtl' : 'ltr'}>
+                    <DropdownMenuTrigger disabled={blockLoading}>
+                      <CircleEllipsis className="text-[#2D1F55]" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
+                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                        <div className='flex items-center gap-3 w-full'>
+                          <MessageSquareHeart size={22} color='#301B69' />
+                          اطلب خطوبة
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                        <div className='flex items-center gap-3 w-full'>
+                          <Volume2 size={22} color='#301B69' />
+                          كتم
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                        <div className='flex items-center gap-3 w-full'>
+                          <Trash2 size={22} color='#301B69' />
+                          مسح المحادثة
+                        </div>
+                      </DropdownMenuItem>
+                      <BlockMenuItem userId={otherParticipant.id} />
+                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                        <div className='flex items-center gap-3 w-full'>
+                          <Flag size={22} color='#301B69' />
+                          ابلغ
+                        </div>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
 
                 {/* Messages */}
-                {messagesLoading ? (
+                {isCurrentUserBlocked ? (
+                  <div className="flex items-center justify-center h-[60vh] text-center text-[#8A97AB]">
+                    <div>
+                      <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
+                      <p className="text-lg font-semibold">تم حظر هذا المستخدم</p>
+                      <p className="text-sm">لا يمكنك إرسال أو استقبال الرسائل</p>
+                    </div>
+                  </div>
+                ) : messagesLoading ? (
                   <div className="flex items-center justify-center h-[60vh]">
                     <div className="text-[#8A97AB]">جاري تحميل الرسائل...</div>
                   </div>
@@ -302,98 +467,8 @@ const Chats = () => {
                 )}
 
                 {/* Input */}
-                <div className="p-4">
-                  <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
-                    <input
-                      value={messageText}
-                      onChange={handleTyping}
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                      onBlur={stopTyping}
-                      placeholder="رسالة"
-                      className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
-                    />
-                    <button
-                      onClick={handleSendMessage}
-                      className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
-                    >
-                      {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
-                    </button>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center text-[#8A97AB]">
-                  <p className="text-lg">اختر محادثة لبدء الدردشة</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile slide-in chat window */}
-          <div className="lg:hidden">
-            {/* Overlay */}
-            <div
-              onClick={() => setIsOpen(false)}
-              className={`fixed inset-0 z-40 transition-opacity duration-300 ${
-                isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-              }`}
-            />
-            {/* Panel */}
-            <div
-              className={`fixed inset-y-0 right-0 z-50 p-4 pt-28 bg-gradient-to-b from-[#E0DAFF] to-[#fff] w-full transform transition-transform duration-300 ease-out ${
-                isOpen ? "translate-x-0" : "translate-x-full"
-              }`}
-            >
-              {activeConversation && otherParticipant && (
-                <div className="h-full rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
-                  {/* Header (fixed height) */}
-                  <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
-                    <button
-                      onClick={() => setIsOpen(false)}
-                      className="p-2 rounded-full hover:bg-white/70"
-                      aria-label="back"
-                    >
-                      <ArrowRight className="text-[#2D1F55]" />
-                    </button>
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
-                        <div className="text-xs text-[#8A97AB]">
-                          {isTyping ? "يكتب..." : isOtherUserOnline ? "نشط الآن" : "غير متصل"}
-                        </div>
-                      </div>
-                      <div className="relative">
-                        <Image
-                          src="/photos/male-icon.webp"
-                          alt=""
-                          width={44}
-                          height={44}
-                          className="rounded-full ring-4 ring-white"
-                        />
-                        {isOtherUserOnline && (
-                          <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Messages (take available height and scroll) */}
-                  {messagesLoading ? (
-                    <div className="flex-1 flex items-center justify-center">
-                      <div className="text-[#8A97AB]">جاري تحميل الرسائل...</div>
-                    </div>
-                  ) : (
-                    <MessagesList
-                      messages={messages}
-                      className="flex-1 overflow-y-auto p-3 md:p-6 min-h-0"
-                      onReachTop={loadMoreMessages}
-                      currentUserId={profile?.id || ""}
-                    />
-                  )}
-
-                  {/* Input (sticks to bottom) */}
-                  <div className="p-4 border-t border-[#F0F2FA] shrink-0">
+                {!isCurrentUserBlocked && (
+                  <div className="p-4">
                     <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
                       <input
                         value={messageText}
@@ -411,6 +486,134 @@ const Chats = () => {
                       </button>
                     </div>
                   </div>
+                )}
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center text-[#8A97AB]">
+                  {conversationsLoading ? (
+                    <p className="text-lg">جاري التحميل...</p>
+                  ) : conversations.length === 0 ? (
+                    <p className="text-lg">لا توجد محادثات</p>
+                  ) : (
+                    <p className="text-lg">اختر محادثة لبدء الدردشة</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile slide-in chat window */}
+          <div className="lg:hidden">
+            {/* Overlay */}
+            <div
+              onClick={() => setIsOpen(false)}
+              className={`fixed inset-0 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                }`}
+            />
+            {/* Panel */}
+            <div
+              className={`fixed inset-y-0 right-0 z-50 p-4 pt-28 bg-gradient-to-b from-[#E0DAFF] to-[#fff] w-full transform transition-transform duration-300 ease-out ${isOpen ? "translate-x-0" : "translate-x-full"
+                }`}
+            >
+              {activeConversation && otherParticipant && (
+                <div className="h-full rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
+                  {/* Header (fixed height) */}
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
+                    <div className="flex items-center gap-3">
+                    <button onClick={() => setActiveConversation(null)}>
+                      <ArrowRight className="text-[#2D1F55]" />
+                    </button>
+                    <div className="relative">
+                      <Image src="/photos/male-icon.webp" alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                      {isOtherUserOnline && !isCurrentUserBlocked && (
+                        <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
+                      <div className="text-xs text-[#8A97AB]">
+                        {isCurrentUserBlocked ? "محظور" : isTyping ? "يكتب..." : isOtherUserOnline ? "نشط الآن" : "غير متصل"}
+                      </div>
+                    </div>
+                  </div>
+                    <DropdownMenu dir={locale === "ar" ? 'rtl' : 'ltr'}>
+                      <DropdownMenuTrigger disabled={blockLoading}>
+                        <CircleEllipsis className="text-[#2D1F55]" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
+                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                          <div className='flex items-center gap-3 w-full'>
+                            <MessageSquareHeart size={22} color='#301B69' />
+                            اطلب خطوبة
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                          <div className='flex items-center gap-3 w-full'>
+                            <Volume2 size={22} color='#301B69' />
+                            كتم
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                          <div className='flex items-center gap-3 w-full'>
+                            <Trash2 size={22} color='#301B69' />
+                            مسح المحادثة
+                          </div>
+                        </DropdownMenuItem>
+                        <BlockMenuItem userId={otherParticipant.id} />
+                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                          <div className='flex items-center gap-3 w-full'>
+                            <Flag size={22} color='#301B69' />
+                            ابلغ
+                          </div>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  {/* Messages (take available height and scroll) */}
+                  {isCurrentUserBlocked ? (
+                    <div className="flex-1 flex items-center justify-center text-center text-[#8A97AB]">
+                      <div>
+                        <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
+                        <p className="text-lg font-semibold">تم حظر هذا المستخدم</p>
+                        <p className="text-sm">لا يمكنك إرسال أو استقبال الرسائل</p>
+                      </div>
+                    </div>
+                  ) : messagesLoading ? (
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="text-[#8A97AB]">جاري تحميل الرسائل...</div>
+                    </div>
+                  ) : (
+                    <MessagesList
+                      messages={messages}
+                      className="flex-1 overflow-y-auto p-3 md:p-6 min-h-0"
+                      onReachTop={loadMoreMessages}
+                      currentUserId={profile?.id || ""}
+                    />
+                  )}
+
+                  {/* Input (sticks to bottom) */}
+                  {!isCurrentUserBlocked && (
+                    <div className="p-4 border-t border-[#F0F2FA] shrink-0">
+                      <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
+                        <input
+                          value={messageText}
+                          onChange={handleTyping}
+                          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                          onBlur={stopTyping}
+                          placeholder="رسالة"
+                          className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
+                        />
+                        <button
+                          onClick={handleSendMessage}
+                          className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+                        >
+                          {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

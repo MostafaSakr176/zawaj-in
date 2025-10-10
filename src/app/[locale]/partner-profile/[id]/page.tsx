@@ -4,7 +4,9 @@ import { BadgeCheck, Heart, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation';
 import api from '@/lib/axiosClient';
+import { chatService } from '@/services/chatService';
 
 type FieldProps = { label: string; value: string | number | null | undefined };
 const Field = ({ label, value }: FieldProps) => (
@@ -77,11 +79,13 @@ type UserDetails = {
 
 const PartnerProfile = () => {
     const params = useParams();
+    const router = useRouter();
     const userId = params?.id as string;
     const [user, setUser] = useState<UserDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [isLiked, setIsLiked] = useState(false);
     const [likeLoading, setLikeLoading] = useState(false);
+    const [chatLoading, setChatLoading] = useState(false);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -93,7 +97,6 @@ const PartnerProfile = () => {
                 // You can check if user is already liked here
                 setIsLiked(res.data.data.hasLiked || false);
             } catch (err) {
-                console.error('Failed to fetch user details:', err);
             } finally {
                 setLoading(false);
             }
@@ -114,9 +117,28 @@ const PartnerProfile = () => {
                 setIsLiked(false);
             }
         } catch (err) {
-            console.error('Failed to toggle like:', err);
         } finally {
             setLikeLoading(false);
+        }
+    };
+
+    const handleSendMessage = async () => {
+        if (!userId || chatLoading) return;
+        
+        setChatLoading(true);
+        try {
+            // Try to create a conversation (this will return existing one if it exists)
+            const conversation = await chatService.createConversation(userId);
+            
+            // Navigate to chats page with the conversation ID
+            router.push(`/chats?conversation=${conversation.id}`);
+        } catch (error: any) {
+            console.error('Error creating/opening conversation:', error);
+            // If there's an error, still navigate to chats page
+            // The user can try to send a message from there
+            router.push('/chats');
+        } finally {
+            setChatLoading(false);
         }
     };
 
@@ -188,8 +210,12 @@ const PartnerProfile = () => {
                                 {isLiked ? 'إزالة من المفضلة' : 'أضف للمفضلة'}
                                 <Heart className={`w-5 h-5 ${isLiked ? 'text-red-600 fill-red-600' : 'text-[#2D1F55]'}`} />
                             </button>
-                            <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none">
-                                ارسال رسالة
+                            <button 
+                                onClick={handleSendMessage}
+                                disabled={chatLoading}
+                                className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50"
+                            >
+                                {chatLoading ? 'جاري التحميل...' : 'ارسال رسالة'}
                                 <MessageCircle className="w-5 h-5 text-[#2D1F55]" />
                             </button>
                         </div>

@@ -73,8 +73,8 @@ export default function ContactUs() {
                                     className="text-[1rem]"
                                     aria-label="الموضوع"
                                     onChange={(e) =>
-                                    setState((s) => ({ ...s, subject: e.target.value }))
-                                }
+                                        setState((s) => ({ ...s, subject: e.target.value }))
+                                    }
                                 />
                             </FormField>
                             <FormField
@@ -87,8 +87,8 @@ export default function ContactUs() {
                                     className="text-[1rem]"
                                     aria-label="الاسم"
                                     onChange={(e) =>
-                                    setState((s) => ({ ...s, name: e.target.value }))
-                                }
+                                        setState((s) => ({ ...s, name: e.target.value }))
+                                    }
                                 />
                             </FormField>
                         </div>
@@ -123,11 +123,9 @@ export default function ContactUs() {
                         </FormField>
 
                         <div className="pt-2">
-                            <Link href="/new-request">
-                                <Button className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)]">
-                                    ارسال رسالة
-                                </Button>
-                            </Link>
+                            <Button className="w-full rounded-[20px] border-[3px] border-[#E5DDF7] bg-[linear-gradient(180deg,#6B3FA0_0%,#2D0B5A_100%)] py-4 text-xl font-semibold shadow-[0_12px_24px_0_rgba(80,40,160,0.25),inset_0_2px_8px_0_rgba(255,255,255,0.20)]">
+                                ارسال رسالة
+                            </Button>
                         </div>
                     </CardContent>
                     <CardFooter />
