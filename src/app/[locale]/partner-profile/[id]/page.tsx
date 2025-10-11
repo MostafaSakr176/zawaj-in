@@ -128,19 +128,32 @@ const PartnerProfile = () => {
 
     const handleSendMessage = async () => {
         if (!userId || chatLoading) return;
-        
+
         setChatLoading(true);
         try {
             // Try to create a conversation (this will return existing one if it exists)
             const conversation = await chatService.createConversation(userId);
-            
+
             // Navigate to chats page with the conversation ID
             router.push(`/chats?conversation=${conversation.id}`);
         } catch (error: any) {
             console.error('Error creating/opening conversation:', error);
-            // If there's an error, still navigate to chats page
-            // The user can try to send a message from there
-            router.push('/chats');
+
+            // Better error handling for 403
+            if (error.response?.status === 403) {
+                const errorMsg = error.response?.data?.message || 'You are not authorized to start a conversation with this user';
+                alert(errorMsg);
+                console.error('403 Error Details:', {
+                    message: errorMsg,
+                    data: error.response?.data,
+                    headers: error.response?.headers
+                });
+            } else if (error.response?.status === 401) {
+                alert('Your session has expired. Please log in again.');
+                router.push('/login');
+            } else {
+                alert('Failed to create conversation. Please try again.');
+            }
         } finally {
             setChatLoading(false);
         }
@@ -214,10 +227,11 @@ const PartnerProfile = () => {
                                 {isLiked ? t("removeFavorite") : t("addFavorite")}
                                 <Heart className={`w-5 h-5 ${isLiked ? 'text-red-600 fill-red-600' : 'text-[#2D1F55]'}`} />
                             </button>
-                            <button 
+                            <button
                                 onClick={handleSendMessage}
-                                disabled={user.matching || chatLoading}
-                                className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50"
+                                disabled={!user.matching || chatLoading}
+                                className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                title={!user.matching ? "You need to match with this user first" : ""}
                             >
                                 {chatLoading ? t("loadingAction") : t("sendMessage")}
                                 <MessageCircle className="w-5 h-5 text-[#2D1F55]" />
@@ -245,16 +259,16 @@ const PartnerProfile = () => {
                         </div>
                         <div className="flex items-center flex-wrap gap-4">
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label={t("country")} value={user.location.country} />
+                                <Field label={t("country")} value={user?.location?.country} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label={t("city")} value={user.location.city} />
+                                <Field label={t("city")} value={user?.location?.city} />
                             </div>
                             <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                                <Field label={t("age")} value={`${user.age} ${t("years")}`} />
+                                <Field label={t("age")} value={`${user?.age} ${t("years")}`} />
                             </div>
                             <div>
-                                <Field label={t("maritalStatus")} value={user.maritalStatus} />
+                                <Field label={t("maritalStatus")} value={user?.maritalStatus} />
                             </div>
                         </div>
                     </div>
