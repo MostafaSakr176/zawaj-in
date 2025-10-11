@@ -71,6 +71,7 @@
             "genderFemale": "Female",
             "successMessage": "Registration successful!",
             "errorMessage": "An error occurred during registration. Please try again later.",
+            "phonePlaceholder": "5xxxxxxxx",
             "validation": {
                 "nameRequired": "Name is required",
                 "genderRequired": "Gender is required",
@@ -78,7 +79,9 @@
                 "phoneRequired": "Phone number is required",
                 "passwordRequired": "Password is required",
                 "confirmRequired": "Password confirmation is required",
-                "passwordMismatch": "Passwords do not match"
+                "passwordMismatch": "Passwords do not match",
+                "passwordMinLength": "Password must be at least 8 characters",
+                "passwordComplexity": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
             }
         },
         "forgot": {

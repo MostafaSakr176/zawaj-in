@@ -220,7 +220,7 @@ export default function RegisterPage() {
               error={errors.phone}
             >
               <PhoneInput
-                placeholder="5xxxxxxxx"
+                placeholder={t("phonePlaceholder")}
                 value={form.phone}
                 onChange={(e) =>
                   setForm((s) => ({ ...s, phone: e.target.value }))

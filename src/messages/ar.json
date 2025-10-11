@@ -71,6 +71,7 @@
       "genderFemale": "أنثى",
       "successMessage": "تم التسجيل بنجاح!",
       "errorMessage": "حدث خطأ أثناء التسجيل. حاول مرة أخرى لاحقًا.",
+      "phonePlaceholder": "5xxxxxxxx",
       "validation": {
         "nameRequired": "الاسم مطلوب",
         "genderRequired": "النوع مطلوب",
@@ -78,7 +79,9 @@
         "phoneRequired": "رقم الهاتف مطلوب",
         "passwordRequired": "كلمة المرور مطلوبة",
         "confirmRequired": "تأكيد كلمة المرور مطلوب",
-        "passwordMismatch": "كلمتا المرور غير متطابقتين"
+        "passwordMismatch": "كلمتا المرور غير متطابقتين",
+        "passwordMinLength": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "passwordComplexity": "يجب أن تحتوي كلمة المرور على حرف كبير، حرف صغير ورقم واحد على الأقل"
       }
     },
     "forgot": {
