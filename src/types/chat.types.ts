@@ -2,7 +2,7 @@
 // Note: These types are also defined in services/chatService.ts
 // This file serves as a central reference
 
-export type MessageType = "text" | "image" | "system";
+export type MessageType = "text" | "image" | "audio" | "system";
 export type MessageStatus = "sent" | "delivered" | "read";
 
 export interface Message {
@@ -17,6 +17,8 @@ export interface Message {
   readAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  fileUrl?: string | null;
+  audioDuration?: number | null;
   sender?: {
     id: string;
     fullName: string;

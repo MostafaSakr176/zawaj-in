@@ -15,6 +15,8 @@ export interface Message {
   readAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  fileUrl?: string | null;
+  audioDuration?: number | null;
   sender?: {
     id: string;
     fullName: string;
@@ -129,5 +131,36 @@ export const chatService = {
   async getUserPresence(userId: string): Promise<{ userId: string; isOnline: boolean; lastSeenAt: Date | null }> {
     const response = await api.get(`/chat/users/${userId}/presence`);
     return response.data;
+  },
+
+  // Upload audio file
+  async uploadAudio(audioBlob: Blob): Promise<{ fileUrl: string; fileName: string }> {
+    const formData = new FormData();
+    formData.append("file", audioBlob, "audio.webm");
+
+    const response = await api.post("/chat/upload/audio", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  },
+
+  // Upload image file
+  async uploadImage(imageFile: File): Promise<{ fileUrl: string; fileName: string }> {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+
+    const response = await api.post("/chat/upload/image", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  },
+
+  // Delete a conversation
+  async deleteConversation(conversationId: string): Promise<void> {
+    await api.delete(`/chat/conversations/${conversationId}`);
   },
 };
