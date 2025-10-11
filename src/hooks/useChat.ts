@@ -173,7 +173,7 @@ export function useChat(conversationId: string | null) {
 
   // Send message via socket
   const sendMessage = useCallback(
-    async (content: string) => {
+    async (content: string, messageType: "text" | "audio" = "text", fileUrl?: string, audioDuration?: number) => {
       if (!socket || !conversationId || !content.trim() || !profile) {
         return;
       }
@@ -184,13 +184,15 @@ export function useChat(conversationId: string | null) {
         conversationId,
         senderId: profile.id,
         content: content.trim(),
-        messageType: "text",
+        messageType,
         status: "sent",
         isDeleted: false,
         deletedAt: null,
         readAt: null,
         createdAt: new Date(),
         updatedAt: new Date(),
+        fileUrl: fileUrl || null,
+        audioDuration: audioDuration || null,
         sender: {
           id: profile.id,
           fullName: profile.fullName,
@@ -208,7 +210,9 @@ export function useChat(conversationId: string | null) {
             conversationId,
             message: {
               content: content.trim(),
-              messageType: "text",
+              messageType,
+              fileUrl,
+              audioDuration,
             },
           },
           (response: any) => {

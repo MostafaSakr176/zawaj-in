@@ -19,22 +19,86 @@ import { Conversation, Message } from "@/services/chatService";
 import api from "@/lib/axiosClient";
 import { useTranslations } from "next-intl";
 
+function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(duration || 0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setAudioDuration(audio.duration);
+    const handleEnded = () => setIsPlaying(false);
+
+    audio.addEventListener('timeupdate', updateTime);
+    audio.addEventListener('durationchange', updateDuration);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateTime);
+      audio.removeEventListener('durationchange', updateDuration);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0;
+
+  return (
+    <div className={`rounded-full ${fromMe ? 'rounded-bl-none bg-[#3B0C46]' : 'rounded-br-none bg-white border border-[#0000001A]'} px-3 py-2 flex items-center gap-3`}>
+      <audio ref={audioRef} src={audioUrl} preload="metadata" />
+      <button
+        onClick={togglePlay}
+        className={`grid place-items-center size-7 rounded-full ${fromMe ? 'bg-white text-[#3B0C46]' : 'bg-[#F5E6FF] text-[#301B69]'}`}
+      >
+        {isPlaying ? (
+          <div className="w-2 h-2.5 flex gap-0.5">
+            <div className="w-0.5 h-full bg-current" />
+            <div className="w-0.5 h-full bg-current" />
+          </div>
+        ) : (
+          <Play size={12} fill="currentColor" />
+        )}
+      </button>
+      <div className="w-40 h-1.5 rounded bg-[#E9ECF6] overflow-hidden">
+        <div className="h-full bg-[#B9C0CF] transition-all" style={{ width: `${progress}%` }} />
+      </div>
+      <span className={`text-xs ${fromMe ? 'text-white/70' : 'text-[#8A97AB]'}`}>
+        {formatTime(isPlaying ? currentTime : audioDuration)}
+      </span>
+    </div>
+  );
+}
+
 function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string }) {
   const fromMe = m.senderId === currentUserId;
 
-  if (m.messageType === "audio" || m.messageType === "image") {
+  if (m.messageType === "audio" && m.fileUrl) {
     return (
-      <div className="flex items-end gap-3">
-        <Image src="/photos/male-icon.webp" alt="" width={36} height={36} className="rounded-full" />
-        <div className="rounded-full rounded-br-none border border-[#0000001A] bg-white px-3 py-2 flex items-center gap-3">
-          <button className="grid place-items-center size-7 rounded-full bg-[#F5E6FF] text-[#301B69]">
-            <Image src="/icons/play.webp" alt="" width={7} height={10} className="w-2" />
-          </button>
-          <div className="w-40 h-1.5 rounded bg-[#E9ECF6] overflow-hidden">
-            <div className="h-full w-1/2 bg-[#B9C0CF]" />
-          </div>
-          <span className="text-xs text-[#8A97AB]">1:04:16</span>
-        </div>
+      <div className={`flex items-end gap-3 ${fromMe ? 'justify-end' : 'justify-start'}`}>
+        {!fromMe && <Image src="/photos/male-icon.webp" alt="" width={36} height={36} className="rounded-full" />}
+        <AudioPlayer audioUrl={m.fileUrl} duration={m.audioDuration || undefined} fromMe={fromMe} />
+        {fromMe && <Image src="/photos/male-icon.webp" alt="" width={36} height={36} className="rounded-full" />}
       </div>
     );
   }
@@ -192,6 +256,12 @@ const Chats = () => {
   const [messageText, setMessageText] = useState("");
   const [blockLoading, setBlockLoading] = useState(false);
   const [blockedUsers, setBlockedUsers] = useState<Set<string>>(new Set());
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const [isUploadingAudio, setIsUploadingAudio] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { profile } = useAuth();
   const searchParams = useSearchParams();
   const conversationId = searchParams.get('conversation');
@@ -275,6 +345,105 @@ const Chats = () => {
     }
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      setRecordingDuration(0);
+
+      // Update duration every second
+      recordingIntervalRef.current = setInterval(() => {
+        setRecordingDuration((prev) => prev + 1);
+      }, 1000);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      alert("Could not access microphone. Please check permissions.");
+    }
+  };
+
+  const stopRecording = async () => {
+    const mediaRecorder = mediaRecorderRef.current;
+    if (!mediaRecorder || mediaRecorder.state === "inactive") return;
+
+    return new Promise<void>((resolve) => {
+      mediaRecorder.onstop = async () => {
+        // Stop all tracks
+        mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+
+        // Clear interval
+        if (recordingIntervalRef.current) {
+          clearInterval(recordingIntervalRef.current);
+          recordingIntervalRef.current = null;
+        }
+
+        // Create audio blob
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        const duration = recordingDuration;
+
+        setIsRecording(false);
+        setRecordingDuration(0);
+
+        // Upload and send
+        await uploadAndSendAudio(audioBlob, duration);
+        resolve();
+      };
+
+      mediaRecorder.stop();
+    });
+  };
+
+  const cancelRecording = () => {
+    const mediaRecorder = mediaRecorderRef.current;
+    if (!mediaRecorder) return;
+
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+
+    if (recordingIntervalRef.current) {
+      clearInterval(recordingIntervalRef.current);
+      recordingIntervalRef.current = null;
+    }
+
+    setIsRecording(false);
+    setRecordingDuration(0);
+    audioChunksRef.current = [];
+  };
+
+  const uploadAndSendAudio = async (audioBlob: Blob, duration: number) => {
+    if (!activeConversation) return;
+
+    setIsUploadingAudio(true);
+    try {
+      const { chatService } = await import("@/services/chatService");
+      const { fileUrl } = await chatService.uploadAudio(audioBlob);
+
+      // Send audio message
+      sendMessage("Audio message", "audio", fileUrl, duration);
+    } catch (error) {
+      console.error("Error uploading audio:", error);
+      alert("Failed to upload audio message");
+    } finally {
+      setIsUploadingAudio(false);
+    }
+  };
+
+  const formatRecordingTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   const getOtherParticipant = (conv: Conversation | null) => {
     if (!conv || !profile) return null;
     return conv.participant1Id === profile.id ? conv.participant2 : conv.participant1;
@@ -323,6 +492,29 @@ const Chats = () => {
       alert(error?.response?.data?.message || t("unblockError"));
     } finally {
       setBlockLoading(false);
+    }
+  };
+
+  const handleDeleteConversation = async () => {
+    if (!activeConversation) return;
+
+    const confirmDelete = confirm(t("deleteConversationConfirm") || "Are you sure you want to delete all messages in this conversation? This action cannot be undone.");
+    if (!confirmDelete) return;
+
+    try {
+      const { chatService } = await import("@/services/chatService");
+      await chatService.deleteConversation(activeConversation.id);
+
+      // Refresh the conversation list (conversation stays but messages are cleared)
+      await refreshConversations();
+
+      alert(t("deleteConversationSuccess") || "All messages deleted successfully");
+
+      // Optionally reload messages to show empty state
+      window.location.reload();
+    } catch (error: any) {
+      console.error("Error deleting messages:", error);
+      alert(error?.response?.data?.message || t("deleteConversationError") || "Failed to delete messages");
     }
   };
 
@@ -429,7 +621,7 @@ const Chats = () => {
                           {t("mute")}
                         </div>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleDeleteConversation}>
                         <div className='flex items-center gap-3 w-full'>
                           <Trash2 size={22} color='#301B69' />
                           {t("deleteConversation")}
@@ -471,22 +663,48 @@ const Chats = () => {
                 {/* Input */}
                 {!isCurrentUserBlocked && (
                   <div className="p-4">
-                    <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
-                      <input
-                        value={messageText}
-                        onChange={handleTyping}
-                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                        onBlur={stopTyping}
-                        placeholder={t("messagePlaceholder")}
-                        className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
-                      />
-                      <button
-                        onClick={handleSendMessage}
-                        className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
-                      >
-                        {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
-                      </button>
-                    </div>
+                    {isRecording ? (
+                      <div className="flex items-center gap-2 rounded-4xl bg-[#FFE5E5] border border-[#FF6B6B] p-2">
+                        <div className="flex-1 flex items-center gap-3 px-3">
+                          <div className="size-2 rounded-full bg-red-500 animate-pulse" />
+                          <span className="text-sm font-medium text-[#2D1F55]">
+                            {t("recording")} {formatRecordingTime(recordingDuration)}
+                          </span>
+                        </div>
+                        <button
+                          onClick={cancelRecording}
+                          className="grid place-items-center size-10 rounded-full bg-gray-400 text-white"
+                          title={t("cancel")}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                        <button
+                          onClick={stopRecording}
+                          disabled={isUploadingAudio}
+                          className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white disabled:opacity-50"
+                          title={t("send")}
+                        >
+                          {isUploadingAudio ? <CircleEllipsis size={18} className="animate-spin" /> : <Send size={18} />}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
+                        <input
+                          value={messageText}
+                          onChange={handleTyping}
+                          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                          onBlur={stopTyping}
+                          placeholder={t("messagePlaceholder")}
+                          className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
+                        />
+                        <button
+                          onClick={messageText.trim() ? handleSendMessage : startRecording}
+                          className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+                        >
+                          {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
@@ -556,7 +774,7 @@ const Chats = () => {
                             {t("mute")}
                           </div>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleDeleteConversation}>
                           <div className='flex items-center gap-3 w-full'>
                             <Trash2 size={22} color='#301B69' />
                             {t("deleteConversation")}
@@ -598,22 +816,48 @@ const Chats = () => {
                   {/* Input (sticks to bottom) */}
                   {!isCurrentUserBlocked && (
                     <div className="p-4 border-t border-[#F0F2FA] shrink-0">
-                      <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
-                        <input
-                          value={messageText}
-                          onChange={handleTyping}
-                          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                          onBlur={stopTyping}
-                          placeholder={t("messagePlaceholder")}
-                          className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
-                        />
-                        <button
-                          onClick={handleSendMessage}
-                          className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
-                        >
-                          {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
-                        </button>
-                      </div>
+                      {isRecording ? (
+                        <div className="flex items-center gap-2 rounded-4xl bg-[#FFE5E5] border border-[#FF6B6B] p-2">
+                          <div className="flex-1 flex items-center gap-3 px-3">
+                            <div className="size-2 rounded-full bg-red-500 animate-pulse" />
+                            <span className="text-sm font-medium text-[#2D1F55]">
+                              {t("recording")} {formatRecordingTime(recordingDuration)}
+                            </span>
+                          </div>
+                          <button
+                            onClick={cancelRecording}
+                            className="grid place-items-center size-10 rounded-full bg-gray-400 text-white"
+                            title={t("cancel")}
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                          <button
+                            onClick={stopRecording}
+                            disabled={isUploadingAudio}
+                            className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white disabled:opacity-50"
+                            title={t("send")}
+                          >
+                            {isUploadingAudio ? <CircleEllipsis size={18} className="animate-spin" /> : <Send size={18} />}
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
+                          <input
+                            value={messageText}
+                            onChange={handleTyping}
+                            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                            onBlur={stopTyping}
+                            placeholder={t("messagePlaceholder")}
+                            className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
+                          />
+                          <button
+                            onClick={messageText.trim() ? handleSendMessage : startRecording}
+                            className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+                          >
+                            {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
