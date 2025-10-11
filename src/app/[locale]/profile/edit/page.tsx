@@ -516,8 +516,7 @@ export default function EditProfilePage() {
                     <Select
                       options={[
                         { value: "traditional", label: "تقليدي" },
-                        { value: "civil", label: "مسيار" },
-                        { value: "both", label: "الاثنان معا" },
+                        { value: "civil", label: "مسيار" }
                       ]}
                       value={formData.marriageType}
                       onChange={(e) => updateField("marriageType", e.target.value)}

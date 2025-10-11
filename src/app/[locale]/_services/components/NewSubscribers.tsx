@@ -25,9 +25,7 @@ const cityOptions = [
 
 const marriageTypeOptions = [
 	{ value: "normalMarriage", label: "زواج عادي" },
-	{ value: "misyarMarriage", label: "زواج مسيار" },
-	{ value: "religious", label: "زواج ديني" },
-	{ value: "temporaryMarriage", label: "زواج مؤقت" },
+	{ value: "misyarMarriage", label: "زواج مسيار" }
 ];
 
 const genderTabs = [
