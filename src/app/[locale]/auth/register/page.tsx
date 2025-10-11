@@ -72,23 +72,38 @@ export default function RegisterPage() {
   const [success, setSuccess] = React.useState<string | null>(null);
   const router = useRouter();
 
+  const noArabicRegex = /^[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]+$/;
+
   // Create Zod schema with translations
   const registerSchema = React.useMemo(
     () =>
       z
         .object({
-          fullName: z.string().min(2, t("validation.nameRequired")),
+          fullName: z
+            .string()
+            .min(2, t("validation.nameRequired"))
+            .regex(noArabicRegex, t("validation.noArabic")),
           gender: z.enum(["male", "female"], t("validation.genderRequired")),
-          email: z.string().email(t("validation.emailInvalid")),
-          phone: z.string().min(8, t("validation.phoneRequired")),
+          email: z
+            .string()
+            .email(t("validation.emailInvalid"))
+            .regex(noArabicRegex, t("validation.noArabic")),
+          phone: z
+            .string()
+            .min(8, t("validation.phoneRequired"))
+            .regex(noArabicRegex, t("validation.noArabic")),
           password: z
             .string()
             .min(6, t("validation.passwordRequired"))
             .regex(
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
               t("validation.passwordComplexity")
-            ),
-          confirmPassword: z.string().min(6, t("validation.confirmRequired")),
+            )
+            .regex(noArabicRegex, t("validation.noArabic")),
+          confirmPassword: z
+            .string()
+            .min(6, t("validation.confirmRequired"))
+            .regex(noArabicRegex, t("validation.noArabic")),
         })
         .refine((data) => data.password === data.confirmPassword, {
           message: t("validation.passwordMismatch"),
@@ -181,6 +196,7 @@ export default function RegisterPage() {
               <TextField
                 placeholder={t("usernameHint")}
                 value={form.fullName}
+                type="text"
                 onChange={(e) =>
                   setForm((s) => ({ ...s, fullName: e.target.value }))
                 }
@@ -209,6 +225,7 @@ export default function RegisterPage() {
                 placeholder={t("emailPlaceholder")}
                 startAdornment={MailIcon}
                 value={form.email}
+                type="email"
                 onChange={(e) =>
                   setForm((s) => ({ ...s, email: e.target.value }))
                 }
@@ -222,6 +239,7 @@ export default function RegisterPage() {
               <PhoneInput
                 placeholder={t("phonePlaceholder")}
                 value={form.phone}
+                type="tel"
                 onChange={(e) =>
                   setForm((s) => ({ ...s, phone: e.target.value }))
                 }

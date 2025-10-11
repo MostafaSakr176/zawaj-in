@@ -81,7 +81,8 @@
                 "confirmRequired": "Password confirmation is required",
                 "passwordMismatch": "Passwords do not match",
                 "passwordMinLength": "Password must be at least 8 characters",
-                "passwordComplexity": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+                "passwordComplexity": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+                "noArabic": "Don't write Arabic in this field"
             }
         },
         "forgot": {

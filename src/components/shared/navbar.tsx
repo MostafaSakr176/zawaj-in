@@ -52,7 +52,7 @@ const Navbar = () => {
     { href: "/profile", label: t('profile'), icon: <User strokeWidth={1.25} size={24} />, activeIcon: <User strokeWidth={2} size={24} color='#301B69' /> },
   ];
 
-    const mobileAuthLinks = [
+  const mobileAuthLinks = [
     { href: "/home", icon: <House strokeWidth={1.25} size={32} />, activeIcon: <House strokeWidth={2} size={32} color='#301B69' /> },
     { href: "/chats", icon: <MessageCircle strokeWidth={1.25} size={32} />, activeIcon: <MessageCircle strokeWidth={2} size={32} color='#301B69' /> },
     { href: "/favorites", icon: <Heart strokeWidth={1.25} size={32} />, activeIcon: <Heart strokeWidth={2} size={32} color='#301B69' /> },
@@ -73,7 +73,7 @@ const Navbar = () => {
           <nav className="hidden lg:block">
             <div className="flex items-center justify-around gap-6">
               {(isAuthenticated ? authLinks : guestLinks).map(link => {
-                const isActive = pathname.includes(link.href) || (link.href !== "/" && pathname.startsWith(link.href));
+                const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href);
 
                 return (
                   <Link
@@ -150,7 +150,7 @@ const Navbar = () => {
             <SheetContent>
               <div className="flex flex-col items-start justify-around gap-6">
                 {(isAuthenticated ? authLinks : guestLinks).map(link => {
-                  const isActive = pathname.includes(link.href) || (link.href !== "/" && pathname.startsWith(link.href));
+                  const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href);
                   return (
                     <Link
                       key={link.href}
@@ -186,7 +186,7 @@ const Navbar = () => {
       {isAuthenticated && !pathname.includes("/chats") && <div className="w-full fixed bottom-8 z-50 px-4 block md:hidden">
         <div className="flex items-center justify-center gap-6 rounded-4xl mx-auto px-6 py-3 bg-white shadow-lg">
           {mobileAuthLinks.map(link => {
-            const isActive = pathname.includes(link.href) || (link.href !== "/" && pathname.startsWith(link.href));
+            const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href);
 
             return (
               <Link
@@ -199,7 +199,7 @@ const Navbar = () => {
             );
           })}
         </div>
-      </div>} 
+      </div>}
     </>
   );
 };
