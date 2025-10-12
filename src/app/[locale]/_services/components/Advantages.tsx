@@ -93,7 +93,7 @@ const Advantages = React.memo(function Advantages() {
                       {t(f.titleKey)}
                     </p>
                   </div>
-                  <p className="text-[16px] font-semibold text-[#301B69C2]">
+                  <p className="text-[16px] font-normal md:font-semibold text-[#301B69C2]">
                     {t(f.descKey)}
                   </p>
                 </div>

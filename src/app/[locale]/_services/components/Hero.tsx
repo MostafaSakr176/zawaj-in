@@ -33,7 +33,7 @@ const Hero = React.memo(() => {
             >
               {t("welcomeText")}
             </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-[#301B69] mb-6 leading-normal">
+            <h1 className="text-3xl md:text-5xl font-bold text-[#301B69] mb-6 leading-normal">
               <span>{t("mainTitle")}</span>
               <br />
               <span>{t("subtitle")}</span>
