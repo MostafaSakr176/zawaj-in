@@ -8,7 +8,7 @@ import { FieldControl, useFieldProps } from "@/components/ui/form";
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, rows = 4, ...props }, ref) => {
+  ({ className, rows = 3, ...props }, ref) => {
     const fieldProps = useFieldProps();
     return (
       <FieldControl>

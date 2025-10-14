@@ -108,7 +108,6 @@ const NewSubscribers = React.memo(() => {
 
 	return (
 		<section
-			id="subscriptions"
 			className="max-w-7xl mx-auto px-4 md:px-8 py-10 lg:py-16 rounded-3xl md:rounded-[48px]"
 			style={{
 				background: "linear-gradient(229.14deg, #F2EFFF -7.04%, #FFF1FE 121.07%)",

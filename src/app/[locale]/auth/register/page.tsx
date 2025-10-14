@@ -81,8 +81,7 @@ export default function RegisterPage() {
         .object({
           fullName: z
             .string()
-            .min(2, t("validation.nameRequired"))
-            .regex(noArabicRegex, t("validation.noArabic")),
+            .min(2, t("validation.nameRequired")),
           gender: z.enum(["male", "female"], t("validation.genderRequired")),
           email: z
             .string()
@@ -90,20 +89,17 @@ export default function RegisterPage() {
             .regex(noArabicRegex, t("validation.noArabic")),
           phone: z
             .string()
-            .min(8, t("validation.phoneRequired"))
-            .regex(noArabicRegex, t("validation.noArabic")),
+            .min(8, t("validation.phoneRequired")),
           password: z
             .string()
             .min(6, t("validation.passwordRequired"))
             .regex(
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
               t("validation.passwordComplexity")
-            )
-            .regex(noArabicRegex, t("validation.noArabic")),
+            ),
           confirmPassword: z
             .string()
             .min(6, t("validation.confirmRequired"))
-            .regex(noArabicRegex, t("validation.noArabic")),
         })
         .refine((data) => data.password === data.confirmPassword, {
           message: t("validation.passwordMismatch"),
@@ -240,9 +236,12 @@ export default function RegisterPage() {
                 placeholder={t("phonePlaceholder")}
                 value={form.phone}
                 type="tel"
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, phone: e.target.value }))
-                }
+                pattern="[0-9]*"
+                onChange={(e) => {
+                  const onlyNumbers = e.target.value.replace(/\D/g, "");
+                  setForm((s) => ({ ...s, phone: onlyNumbers }));
+                }}
+                inputMode="numeric"
               />
             </FormField>
 

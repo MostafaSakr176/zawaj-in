@@ -1,13 +1,15 @@
+"use client";
 import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight, Star } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 const Footer = () => {
-
     const t = useTranslations("footerSection");
+    const { isAuthenticated } = useAuth();
     return (
         <footer className="w-full text-center mt-20"
             style={{
@@ -37,13 +39,13 @@ const Footer = () => {
                         </p>
                     </div>
                     {/* CTA Button */}
-                    <div>
+                    {!isAuthenticated && <Link href="/auth/register">
                         <Button>
                             {t("cta")}
                             <ArrowLeft size={16} className='rtl:inline-block ltr:hidden' />
                             <ArrowRight size={16} className='rtl:hidden ltr:inline-block' />
                         </Button>
-                    </div>
+                    </Link>}
                     {/* Social Icons */}
                     <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
                         <Link href="/" className="flex-shrink-0">

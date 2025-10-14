@@ -18,6 +18,7 @@ import Image from "next/image";
 import { Link, useRouter } from "@/i18n/navigation";
 import api from "@/lib/axiosClient";
 import Cookies from "js-cookie";
+import { useAuth } from "@/context/AuthContext";
 
 export default function OtpPage() {
   const t = useTranslations("auth.otp");
@@ -25,8 +26,9 @@ export default function OtpPage() {
   const [seconds, setSeconds] = React.useState(60);
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
-  const [resendLoading, setResendLoading] = React.useState(false);
   const router = useRouter();
+
+  const { refreshProfile } = useAuth();
 
   // Get email from localStorage
   const [email, setEmail] = React.useState("");
@@ -69,7 +71,6 @@ export default function OtpPage() {
         fcmToken: "", // Add your FCM token here if available
       }, { headers: { skipAuth: true } });
 
-      // Save tokens and user info in cookies
       if (res?.data?.data) {
         Cookies.set("access_token", res.data.data.access_token, {
           path: "/",
@@ -79,18 +80,7 @@ export default function OtpPage() {
           path: "/",
           expires: 30,
         });
-        Cookies.set("userId", res.data.data.userId, {
-          path: "/",
-          expires: 30,
-        });
-        Cookies.set("email", res.data.data.email, {
-          path: "/",
-          expires: 30,
-        });
-        Cookies.set("isVerified", String(res.data.data.isVerified), {
-          path: "/",
-          expires: 30,
-        });
+        await refreshProfile();
       }
 
       // Success: redirect or show message

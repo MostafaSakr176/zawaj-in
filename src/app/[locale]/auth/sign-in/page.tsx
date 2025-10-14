@@ -225,21 +225,21 @@ export default function SignInPage() {
               <div className="space-y-6 md:space-y-9 py-2 text-center text-sm">
                 <p>
                   {t("forgotLink")}{" "}
-                  <a
+                  <Link
                     className="font-bold text-[#301B69] underline-offset-2 hover:underline"
-                    href="/ar/auth/forgot-password"
+                    href="/auth/forgot-password"
                   >
                     {t("forgotLink")}
-                  </a>
+                  </Link>
                 </p>
                 <p>
                   {t("registerLink")}{" "}
-                  <a
+                  <Link
                     className="font-bold text-[#301B69] underline-offset-2 hover:underline"
-                    href="/ar/auth/register"
+                    href="/auth/register"
                   >
                     {t("registerLink")}
-                  </a>
+                  </Link>
                 </p>
               </div>
             </CardContent>

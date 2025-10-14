@@ -12,27 +12,27 @@ const features = [
 ];
 
 const ArframeImages = [
-  "/icons/advantages/frame-1.svg",
-  "/icons/advantages/frame-2.svg",
-  "/icons/advantages/frame-3.svg",
-  "/icons/advantages/frame-4.svg",
-  "/icons/advantages/frame-5.svg",
-  "/icons/advantages/frame-6.svg",
-  "/icons/advantages/frame-7.svg",
-  "/icons/advantages/frame-8.svg",
   "/icons/advantages/frame-9.svg",
+  "/icons/advantages/frame-8.svg",
+  "/icons/advantages/frame-7.svg",
+  "/icons/advantages/frame-6.svg",
+  "/icons/advantages/frame-5.svg",
+  "/icons/advantages/frame-4.svg",
+  "/icons/advantages/frame-3.svg",
+  "/icons/advantages/frame-2.svg",
+  "/icons/advantages/frame-1.svg",
 ];
 
 const EnframeImages = [
-  "/icons/advantages/en-frame-1.svg",
-  "/icons/advantages/en-frame-2.svg",
-  "/icons/advantages/en-frame-3.svg",
-  "/icons/advantages/en-frame-4.svg",
-  "/icons/advantages/en-frame-5.svg",
-  "/icons/advantages/en-frame-6.svg",
-  "/icons/advantages/en-frame-7.svg",
-  "/icons/advantages/en-frame-8.svg",
   "/icons/advantages/en-frame-9.svg",
+  "/icons/advantages/en-frame-8.svg",
+  "/icons/advantages/en-frame-7.svg",
+  "/icons/advantages/en-frame-6.svg",
+  "/icons/advantages/en-frame-5.svg",
+  "/icons/advantages/en-frame-4.svg",
+  "/icons/advantages/en-frame-3.svg",
+  "/icons/advantages/en-frame-2.svg",
+  "/icons/advantages/en-frame-1.svg",
 ];
 
 const Advantages = React.memo(function Advantages() {

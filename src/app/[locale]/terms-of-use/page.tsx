@@ -1,11 +1,14 @@
+"use client";
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React from 'react'
 import { useTranslations } from "next-intl";
+import { useAuth } from '@/context/AuthContext';
 
 
 const TermsAndConditions = () => {
     const t = useTranslations("terms");
+    const {isAuthenticated} = useAuth();
     return (
         <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
             style={{
@@ -48,7 +51,7 @@ const TermsAndConditions = () => {
                                 <p key={key} className="text-lg leading-relaxed">{value}</p>
                             ) : null;
                         })}
-                        <Button className='mt-8'>{t("agreeButton")}</Button>
+                        {isAuthenticated && <Button className='mt-8'>{t("agreeButton")}</Button>}
                     </div>
                 </div>
             </div>

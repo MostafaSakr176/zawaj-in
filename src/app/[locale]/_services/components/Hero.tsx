@@ -46,7 +46,7 @@ const Hero = React.memo(() => {
                   {t("registerButton")}
                 </Button>
               </Link>
-              <Link href="/">
+              <Link href="/auth/register">
                 <Button variant="secondary">{t("newRegisterButton")}</Button>
               </Link>
             </div>
