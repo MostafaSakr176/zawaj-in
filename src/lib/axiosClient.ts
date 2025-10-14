@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const api = axios.create({
-  baseURL: "http://85.31.238.136:8081",
+  baseURL:process.env.NEXT_PUBLIC_API_URL || "https://zwajin.com/api",
   headers: {
     "Content-Type": "application/json",
   },
