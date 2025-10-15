@@ -42,7 +42,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     }
 
     // Create socket connection
-    const newSocket = io("http://localhost:3000", {
+    // Use the domain directly for Socket.io (not /api/)
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "https://zwajin.com";
+    const newSocket = io(socketUrl, {
+      path: '/socket.io',
       auth: {
         token,
       },
