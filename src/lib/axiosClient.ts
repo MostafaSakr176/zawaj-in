@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const api = axios.create({
-  baseURL: "http://85.31.238.136:8081",
+  baseURL: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
   },

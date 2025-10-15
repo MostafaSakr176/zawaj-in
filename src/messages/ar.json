@@ -13,7 +13,7 @@
     "contactUs": "تواصل معنا",
     "userOpinion": "رأي المستخدم",
     "subscriptions": "الاشتراكات",
-    "whoAreWe": "من نحن",
+    "advantages": "المزايا",
     "mainPage": "الرئيسية",
     "usagePolicy": "سياسة الاستخدام",
     "favorits": "التفضيلات",
@@ -306,7 +306,10 @@
     "unblockError": "حدث خطأ أثناء إلغاء حظر المستخدم",
     "blockedTitle": "تم حظر هذا المستخدم",
     "blockedDesc": "لا يمكنك إرسال أو استقبال الرسائل",
-    "messagesLoading": "جاري تحميل الرسائل..."
+    "messagesLoading": "جاري تحميل الرسائل...",
+    "engagementRequestMessage": "هل تقبلين الخطوبة معي؟",
+    "engagementRequestSent": "تم إرسال طلب الخطوبة بنجاح.",
+    "engagementRequestError": "فشل في إرسال طلب الخطوبة."
   },
   "contact": {
     "title": "تواصل بنا",
@@ -360,6 +363,11 @@
     "hairType": "نوع الشعر",
     "sectionEducation": "الدراسة و العمل",
     "education": "المؤهل الدراسي",
+    "student": "طالب",
+    "highSchool": "ثانوية عامة",
+    "bachelor": "بكالوريوس",
+    "master": "ماجستير",
+    "doctorate": "دكتوراه",
     "job": "الوظيفة",
     "sectionReligion": "الديانة والممارسة",
     "sect": "المذهب",
@@ -387,6 +395,12 @@
     "single": "أعزب",
     "divorced": "مطلق",
     "widowed": "أرمل",
+    "married": "متزوج",
+    "student": "طالب",
+    "highSchool": "ثانوية عامة",
+    "bachelor": "بكالوريوس",
+    "master": "ماجستير",
+    "doctorate": "دكتوراه",
     "saudiArabia": "السعودية",
     "egypt": "مصر",
     "uae": "الإمارات",
@@ -412,7 +426,10 @@
     "both": "الاثنان معا",
     "yes": "نعم",
     "no": "لا",
-    "saving": "جاري الحفظ..."
+    "saving": "جاري الحفظ...",
+    "white": "أبيض",
+    "lightWheat": "حنطي فاتح",
+    "darkWheat": "حنطي غامق"
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسالية",

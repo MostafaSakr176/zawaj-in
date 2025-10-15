@@ -18,6 +18,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Conversation, Message } from "@/services/chatService";
 import api from "@/lib/axiosClient";
 import { useTranslations } from "next-intl";
+import { chatService } from "@/services/chatService";
 
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -546,6 +547,21 @@ const Chats = () => {
   // Check if current conversation is with a blocked user
   const isCurrentUserBlocked = otherParticipant ? blockedUsers.has(otherParticipant.id) : false;
 
+  // Engagement request handler
+  const handleSendEngagementRequest = async () => {
+    if (!activeConversation || !otherParticipant) return;
+    try {
+      await chatService.sendEngagementRequest(
+        otherParticipant.id,
+        activeConversation.id,
+        t("engagementRequestMessage") // You can add this to your translations
+      );
+      alert(t("engagementRequestSent")); // Add this to your translations
+    } catch (error: any) {
+      alert(error?.response?.data?.message || t("engagementRequestError")); // Add this to your translations
+    }
+  };
+
   return (
     <ProtectedRoute>
       <section className="relative pt-28 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
@@ -609,7 +625,7 @@ const Chats = () => {
                       <CircleEllipsis className="text-[#2D1F55]" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
-                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleSendEngagementRequest}>
                         <div className='flex items-center gap-3 w-full'>
                           <MessageSquareHeart size={22} color='#301B69' />
                           {t("engagementRequest")}
@@ -762,7 +778,7 @@ const Chats = () => {
                         <CircleEllipsis className="text-[#2D1F55]" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
-                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleSendEngagementRequest}>
                           <div className='flex items-center gap-3 w-full'>
                             <MessageSquareHeart size={22} color='#301B69' />
                             {t("engagementRequest")}

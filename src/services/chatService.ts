@@ -163,4 +163,18 @@ export const chatService = {
   async deleteConversation(conversationId: string): Promise<void> {
     await api.delete(`/chat/conversations/${conversationId}`);
   },
+
+  // Send engagement request
+  async sendEngagementRequest(
+    recipientId: string,
+    conversationId: string,
+    message: string = "Will you be engaged with me?"
+  ): Promise<{ success: boolean; requestId: string }> {
+    const response = await api.post("/chat/engagement-requests", {
+      recipientId,
+      conversationId,
+      message,
+    });
+    return response.data;
+  },
 };

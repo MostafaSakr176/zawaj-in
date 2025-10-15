@@ -6,7 +6,7 @@
         "contactUs": "Contact Us",
         "userOpinion": "User Opinion",
         "subscriptions": "Subscriptions",
-        "whoAreWe": "Who Are We",
+        "advantages": "Advantages",
         "mainPage": "Main Page",
         "usagePolicy": "Usage Policy",
         "favorits": "Favorites",
@@ -306,7 +306,10 @@
         "unblockError": "An error occurred while unblocking the user",
         "blockedTitle": "This user is blocked",
         "blockedDesc": "You cannot send or receive messages",
-        "messagesLoading": "Loading messages..."
+        "messagesLoading": "Loading messages...",
+        "engagementRequestMessage": "Will you be engaged with me?",
+        "engagementRequestSent": "Engagement request sent successfully.",
+        "engagementRequestError": "Failed to send engagement request."
     },
     "contact": {
         "title": "Contact Us",
@@ -360,6 +363,11 @@
         "hairType": "Hair type",
         "sectionEducation": "Education & Work",
         "education": "Education",
+        "student": "Student",
+        "highSchool": "High School",
+        "bachelor": "Bachelor",
+        "master": "Master",
+        "doctorate": "Doctorate",
         "job": "Job",
         "sectionReligion": "Religion & Practice",
         "sect": "Sect",
@@ -387,6 +395,12 @@
         "single": "Single",
         "divorced": "Divorced",
         "widowed": "Widowed",
+        "married": "Married",
+        "student": "Student",
+        "highSchool": "High School",
+        "bachelor": "Bachelor",
+        "master": "Master",
+        "doctorate": "Doctorate",
         "saudiArabia": "Saudi Arabia",
         "egypt": "Egypt",
         "uae": "UAE",
@@ -412,7 +426,10 @@
         "both": "Both",
         "yes": "Yes",
         "no": "No",
-        "saving": "Saving..."
+        "saving": "Saving...",
+        "white": "White",
+        "lightWheat": "Light Wheat",
+        "darkWheat": "Dark Wheat"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",

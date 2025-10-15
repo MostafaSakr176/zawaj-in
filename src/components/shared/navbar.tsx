@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,8 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, logout } = useAuth();
+  const [navKey, setNavKey] = useState(0);
+
 
   // Extract current locale from pathname
   const currentLocale = pathname.split("/")[1];
@@ -35,12 +37,30 @@ const Navbar = () => {
     router.push(newPath);
   };
 
+  const [hash, setHash] = useState<string>("");
+
+  useEffect(() => {
+
+  const updateHash = () => {
+      setHash(window.location.hash);
+  };
+
+  // Set initial hash with delay
+  updateHash();
+
+  // Listen for hash changes
+  window.addEventListener("hashchange", updateHash);
+
+  return () => window.removeEventListener("hashchange", updateHash);
+}, [pathname, navKey]);
+
+
   // Navigation links for guests and authenticated users
   const guestLinks = [
     { href: "/", label: t('mainPage'), icon: <House strokeWidth={1.75} size={24} />, bold: true },
-    { href: "#", label: t('whoAreWe'), icon: <BookUser strokeWidth={1.25} size={24} /> },
-    { href: "#subscriptions", label: t('subscriptions'), icon: <House strokeWidth={1.25} size={24} /> },
-    { href: "#userOpinion", label: t('userOpinion'), icon: <House strokeWidth={1.25} size={24} /> },
+    { href: "/#advantages", label: t('advantages'), icon: <BookUser strokeWidth={1.25} size={24} /> },
+    { href: "/#subscriptions", label: t('subscriptions'), icon: <House strokeWidth={1.25} size={24} /> },
+    { href: "/#userOpinion", label: t('userOpinion'), icon: <House strokeWidth={1.25} size={24} /> },
     { href: "/contact-us", label: t('contactUs'), icon: <House strokeWidth={1.25} size={24} /> },
     { href: "/terms-of-use", label: t('usagePolicy'), icon: <House strokeWidth={1.25} size={24} /> },
   ];
@@ -73,14 +93,21 @@ const Navbar = () => {
           <nav className="hidden lg:block">
             <div className="flex items-center justify-around gap-6">
               {(isAuthenticated ? authLinks : guestLinks).map(link => {
-                const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href);
-
+                const isActive =
+  link.href === "/" 
+    ? pathname.endsWith(currentLocale)
+    : link.href.startsWith("/#")
+      ? (pathname + hash) === link.href
+      : pathname.includes(link.href);
+                
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
+                    onClick={() => setNavKey(navKey + 1)}
                     className={`text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
                     ${isActive ? "border-b-2 border-[#301B69] font-bold" : "font-medium"}
+                    
                   `}
                   >
                     {link.label}
@@ -150,11 +177,12 @@ const Navbar = () => {
             <SheetContent>
               <div className="flex flex-col items-start justify-around gap-6">
                 {(isAuthenticated ? authLinks : guestLinks).map(link => {
-                  const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href);
+                  const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href) || (link.href.startsWith("#") && hash === link.href);
                   return (
                     <Link
                       key={link.href}
                       href={link.href}
+                      onClick={() => setNavKey(navKey + 1)}
                       className={`flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
                       ${isActive ? "font-bold" : "font-medium"}
                     `}
@@ -186,12 +214,13 @@ const Navbar = () => {
       {isAuthenticated && !pathname.includes("/chats") && <div className="w-full fixed bottom-8 z-50 px-4 block md:hidden">
         <div className="flex items-center justify-center gap-6 rounded-4xl mx-auto px-6 py-3 bg-white shadow-lg">
           {mobileAuthLinks.map(link => {
-            const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href);
+            const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href) || (link.href.startsWith("#") && hash === link.href);
 
             return (
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => setNavKey(navKey + 1)}
                 className={`text-[#BFC6CC] p-1 text-lg transition-colors`}
               >
                 {isActive ? link.activeIcon : link.icon}

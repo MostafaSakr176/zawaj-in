@@ -58,7 +58,7 @@ const Advantages = React.memo(function Advantages() {
   }, []);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 md:px-8 py-10 lg:py-16 rounded-3xl md:rounded-[48px] bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]">
+    <section id="advantages" className="max-w-7xl mx-auto px-4 md:px-8 py-10 lg:py-16 rounded-3xl md:rounded-[48px] bg-[linear-gradient(201.17deg,#F5E6FF_-4.98%,#FFF4EA_119.25%)]">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         {/* Text column */}
         <div className="flex flex-col justify-center items-start gap-4">

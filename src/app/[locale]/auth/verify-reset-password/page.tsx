@@ -73,7 +73,7 @@ export default function VerifyResetPasswordPage() {
 
       // Save verification data for reset password step
       localStorage.setItem("resetOtpVerified", res.data.data?.isVerified);
-      localStorage.setItem("resetToken", res.data.data?.resetToken || "verified");
+      localStorage.setItem("resetToken", res.data.data?.access_token);
 
       // Success: redirect to reset password page
       router.push("/auth/reset-password");

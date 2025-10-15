@@ -340,6 +340,7 @@ export default function EditProfilePage() {
                         { value: "single", label: tEdit("single") },
                         { value: "divorced", label: tEdit("divorced") },
                         { value: "widowed", label: tEdit("widowed") },
+                        { value: "married", label: tEdit("married") },
                       ]}
                       value={formData.maritalStatus}
                       onChange={(e) => updateField("maritalStatus", e.target.value)}
@@ -347,10 +348,17 @@ export default function EditProfilePage() {
                     />
                   </FormField>
                   <FormField label={<Label>{t("fields.education")}</Label>}>
-                    <TextField
+                  <Select
+                      options={[
+                        { value: "student", label: tEdit("student") },
+                        { value: "highSchool", label: tEdit("highSchool") },
+                        { value: "bachelor", label: tEdit("bachelor") },
+                        { value: "master", label: tEdit("master") },
+                        { value: "doctorate", label: tEdit("doctorate") },
+                      ]}
                       value={formData.profession}
                       onChange={(e) => updateField("profession", e.target.value)}
-                      placeholder={t("placeholders.write")}
+                      placeholder={t("placeholders.choose")}
                     />
                   </FormField>
                 </div>
@@ -377,9 +385,9 @@ export default function EditProfilePage() {
                   <FormField label={<Label>{t("fields.skin")}</Label>}>
                     <Select
                       options={[
-                        { value: "fair", label: tEdit("fair") },
-                        { value: "medium", label: tEdit("medium") },
-                        { value: "dark", label: tEdit("dark") },
+                        { value: "white", label: tEdit("white") },
+                        { value: "lightWheat", label: tEdit("lightWheat") },
+                        { value: "darkWheat", label: tEdit("darkWheat") },
                       ]}
                       value={formData.bodyColor}
                       onChange={(e) => updateField("bodyColor", e.target.value)}

@@ -42,7 +42,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     }
 
     // Create socket connection
-    const newSocket = io("http://85.31.238.136:8081", {
+    const newSocket = io("http://localhost:3000", {
       auth: {
         token,
       },

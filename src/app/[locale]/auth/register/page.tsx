@@ -236,6 +236,7 @@ export default function RegisterPage() {
                 placeholder={t("phonePlaceholder")}
                 value={form.phone}
                 type="tel"
+                maxLength={10}
                 pattern="[0-9]*"
                 onChange={(e) => {
                   const onlyNumbers = e.target.value.replace(/\D/g, "");

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import React from 'react'
 import { useTranslations } from "next-intl";
 import { useAuth } from '@/context/AuthContext';
+import { Link } from '@/i18n/navigation';
 
 
 const TermsAndConditions = () => {
@@ -51,7 +52,7 @@ const TermsAndConditions = () => {
                                 <p key={key} className="text-lg leading-relaxed">{value}</p>
                             ) : null;
                         })}
-                        {isAuthenticated && <Button className='mt-8'>{t("agreeButton")}</Button>}
+                        {isAuthenticated && <Link href="/home"><Button className='mt-8'>{t("agreeButton")}</Button></Link>}
                     </div>
                 </div>
             </div>

@@ -71,13 +71,13 @@ const NewSubscribers = React.memo(() => {
 		const token = Cookies.get("access_token"); // or whatever your key is
 
 		api
-			.get("/users", {
+			.get("/users/latest", {
 				params,
-				headers: token ? { Authorization: `Bearer ${token}` } : {},
+				headers: { skipAuth: true }
 			})
 			.then((res) => {
-				setUsers(res.data.data.users);
-				setPagination(res.data.data.pagination);
+				setUsers(res.data.data);
+				// setPagination(res.data.data.pagination);
 			})
 			.catch(() => {
 				setUsers([]);
