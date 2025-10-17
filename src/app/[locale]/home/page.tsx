@@ -67,7 +67,7 @@ const MyFavorites = () => {
     setLoading(true);
     try {
       const res = await api.get(
-        `/matching/recommendations?gender=${profile?.gender === "male" ? "female" : "male"}&page=${page}&limit=${pagination.limit}&minCompatibilityScore=30`
+        `/matching/recommendations?gender=${profile?.gender === "male" ? "female" : "male"}&page=${page}&limit=${pagination.limit}&minCompatibilityScore=10`
       );
       setRecommendations(res.data.data || []);
       setPagination(res.data.pagination || { page, limit: pagination.limit, total: 0, totalPages: 1 });

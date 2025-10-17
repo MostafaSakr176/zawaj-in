@@ -84,6 +84,13 @@ type FormData = {
   preferredMarriageType: string;
 };
 
+type CountryData = {
+  iso2: string;
+  iso3: string;
+  country: string;
+  cities: string[];
+};
+
 export default function EditProfilePage() {
   const t = useTranslations("request");
   const tEdit = useTranslations("profileEdit");
@@ -92,6 +99,13 @@ export default function EditProfilePage() {
   const [dir, setDir] = React.useState<"rtl" | "ltr">("ltr");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  
+  // Countries and cities state
+  const [countries, setCountries] = React.useState<CountryData[]>([]);
+  const [cities, setCities] = React.useState<string[]>([]);
+  const [loadingCountries, setLoadingCountries] = React.useState(false);
+
 
   const [formData, setFormData] = React.useState<FormData>({
     username: "",
@@ -220,6 +234,71 @@ export default function EditProfilePage() {
     const d = document?.documentElement?.getAttribute("dir");
     if (d === "rtl" || d === "ltr") setDir(d);
   }, []);
+
+    // Fetch countries on component mount
+  React.useEffect(() => {
+    const fetchCountries = async () => {
+      setLoadingCountries(true);
+      try {
+        const response = await fetch("https://countriesnow.space/api/v0.1/countries");
+        const result = await response.json();
+        if (!result.error) {
+          setCountries(result.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch countries:", error);
+      } finally {
+        setLoadingCountries(false);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
+    // Update cities when country changes
+  React.useEffect(() => {
+    if (formData.location.country) {
+      const selectedCountry = countries.find(
+        country => country.country === formData.location.country || country.iso2 === formData.location.country
+      );
+      if (selectedCountry) {
+        setCities(selectedCountry.cities);
+        // Clear city if it's not in the new country's cities
+        if (formData.location.city && !selectedCountry.cities.includes(formData.location.city)) {
+          updateNestedField("location", "city", "");
+        }
+      } else {
+        setCities([]);
+      }
+    } else {
+      setCities([]);
+    }
+  }, [formData.location.country, countries]);
+
+    // ... existing useEffects and functions ...
+
+  const handleCountryChange = (value: string) => {
+    updateNestedField("location", "country", value);
+    // Clear city when country changes
+    updateNestedField("location", "city", "");
+  };
+
+  // Convert countries to select options
+  const countryOptions = React.useMemo(() => 
+    countries.map(country => ({
+      value: country.country,
+      label: country.country
+    }))
+  , [countries]);
+
+  // Convert cities to select options
+  const cityOptions = React.useMemo(() => 
+    cities.map(city => ({
+      value: city,
+      label: city
+    }))
+  , [cities]);
+
 
   const steps = [
     {
@@ -411,26 +490,34 @@ export default function EditProfilePage() {
                       onChange={(e) => updateField("dateOfBirth", e.target.value)}
                     />
                   </FormField>
+                                    {/* Country Field */}
                   <FormField
                     label={<Label>{t("fields.nationality")}</Label>}
                     required
                   >
                     <Select
-                      options={[
-                        { value: "SA", label: tEdit("saudiArabia") },
-                        { value: "EG", label: tEdit("egypt") },
-                        { value: "UAE", label: tEdit("uae") },
-                      ]}
+                      options={countryOptions}
                       value={formData.location.country}
-                      onChange={(e) => updateNestedField("location", "country", e.target.value)}
-                      placeholder={t("placeholders.choose")}
+                      onChange={(e) => handleCountryChange(e.target.value)}
+                      placeholder={loadingCountries ? tEdit("loading") : t("placeholders.choose")}
+                      disabled={loadingCountries}
                     />
                   </FormField>
+                  
+                  {/* City Field - Dependent on Country */}
                   <FormField label={<Label>{t("fields.city")}</Label>}>
-                    <TextField
+                    <Select
+                      options={cityOptions}
                       value={formData.location.city}
                       onChange={(e) => updateNestedField("location", "city", e.target.value)}
-                      placeholder={tEdit("cityPlaceholder")}
+                      placeholder={
+                        !formData.location.country 
+                          ? tEdit("selectCountryFirst")
+                          : cities.length === 0 
+                            ? tEdit("noCitiesAvailable")
+                            : t("placeholders.choose")
+                      }
+                      disabled={!formData.location.country || cities.length === 0}
                     />
                   </FormField>
                   <FormField label={<Label>{t("fields.origin")}</Label>}>

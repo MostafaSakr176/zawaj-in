@@ -369,6 +369,9 @@
         "pageInfo": "Page {page} of {totalPages}"
     },
     "partnerProfile": {
+        "pleaseLoginToLike": "you must log in to like",
+        "pleaseLoginToSendMessage": "you must log in to send a message",
+        "completeProfileToSendMessage": "please complete your profile before sending a message",
         "loading": "Loading data...",
         "notFound": "User not found",
         "removeFavorite": "Remove from favorites",
@@ -411,7 +414,31 @@
         "partnerPreferencesTitle": "Partner Preferences",
         "partnerBio": "Partner bio",
         "cm": "cm",
-        "kg": "kg"
+        "kg": "kg",
+        "origin": "Origin",
+        "nationality": "Nationality",
+        "placeOfResidence": "Place of Residence",
+        "tribe": "Tribe",
+        "numberOfChildren": "Number of Children",
+        "beauty": "Beauty",
+        "financialStatus": "Financial Status",
+        "healthStatus": "Health Status",
+        "educationLevel": "Education Level",
+        "religiosityLevel": "Religiosity Level",
+        "polygamyStatus": "Polygamy Status",
+        "preferredNationality": "Preferred Nationality",
+        "preferredResidencePlace": "Preferred Residence Place",
+        "preferredEducationLevel": "Preferred Education Level",
+        "preferredWorkNature": "Preferred Work Nature",
+        "preferredMaritalStatus": "Preferred Marital Status",
+        "preferredFinancialStatus": "Preferred Financial Status",
+        "preferredHasHouse": "Preferred Has House",
+        "preferredHealthStatus": "Preferred Health Status",
+        "preferredBeauty": "Preferred Beauty",
+        "preferredSkinColor": "Preferred Skin Color",
+        "preferredReligiosityLevel": "Preferred Religiosity Level",
+        "preferredAcceptPolygamy": "Preferred Accept Polygamy",
+        "preferredMarriageType": "Preferred Marriage Type"
     },
     "profile": {
         "online": "Online",
@@ -476,7 +503,9 @@
         "no": "No",
         "unemployed": "Unemployed",
         "employed": "Employed",
-        "selfEmployed": "Self-employed"
+        "selfEmployed": "Self-employed",
+  "selectCountryFirst": "Select country first",
+  "noCitiesAvailable": "No cities available"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",

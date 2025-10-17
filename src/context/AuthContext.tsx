@@ -11,6 +11,7 @@ type Profile = {
   chartNumber: string;
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
+  termsAccepted: boolean;
   isActive: boolean;
   dateOfBirth: string | null;
   age: number | null;
@@ -82,6 +83,7 @@ type Profile = {
   isVerified: boolean;
   verifiedAt: string | null;
   verifiedBy: string | null;
+  isOnline: boolean;
   isDeleted: boolean;
   deletedAt: string | null;
   roleAssignedBy: string | null;

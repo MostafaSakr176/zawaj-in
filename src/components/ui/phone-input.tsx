@@ -1,43 +1,39 @@
 "use client";
 
 import * as React from "react";
+import PhoneInputLib from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
 
-import { cn } from "@/lib/utils";
-import {
-  FieldAdornment,
-  FieldControl,
-  useFieldProps,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-export type PhoneInputProps = React.ComponentProps<typeof Input> & {
-  dialCode?: string;
-  dialCodeSlot?: React.ReactNode;
+export type PhoneInputProps = {
+  value?: string;
+  onChange?: (value: string, data: any, event: React.ChangeEvent<HTMLInputElement>, formattedValue: string) => void;
+  country?: string;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  disabled?: boolean;
+  placeholder?: string;
+  className?: string;
 };
 
-export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ className, dialCode = "+966", dialCodeSlot, ...props }, ref) => {
-    const fieldProps = useFieldProps();
-    const slot = dialCodeSlot ?? (
-      <span className="h-full flex items-center justify-center rounded-[8px] border border-[#D0D5DD] bg-white px-3 py-2 text-sm text-foreground shadow-xs">
-        {dialCode}
-      </span>
-    );
 
+export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
+  ({ value, onChange, country = "sa", inputProps, disabled, placeholder, className }, ref) => {
     return (
-      <FieldControl className="flex ltr:flex-row rtl:flex-row-reverse items-end gap-2">
-        {/* <div className="pointer-events-none absolute inset-y-0 rtl:left-3 ltr:right-auto ltr:left-3 rtl:right-auto" /> */}
-        <div className="pointer-events-auto flex items-center justify-center h-11">
-          {slot}
-        </div>
-        <Input
-          ref={ref}
-          inputMode="tel"
-          className={cn("rtl:pr-[76px] ltr:pr-[76px] text-left bg-white", className)}
-          {...fieldProps}
-          {...props}
-        />
-      </FieldControl>
+      <PhoneInputLib
+        country={country}
+        value={value}
+        onChange={onChange}
+        inputProps={{
+          disabled,
+          placeholder,
+          ...inputProps,
+        }}
+        inputClass={"placeholder:text-[#AFAFAF] selection:bg-primary selection:text-primary-foreground dark:bg-input/30 h-11 w-full min-w-0 rounded-[8px] border border-[#D0D5DD] bg-white px-4 text-[1rem] shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 " + className }
+        containerClass="w-full"
+        buttonClass=""
+        enableSearch
+        disableDropdown={false}
+        masks={{ sa: '.. ... ....' }}
+      />
     );
   }
 );

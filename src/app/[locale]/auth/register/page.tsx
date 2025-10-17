@@ -231,19 +231,20 @@ export default function RegisterPage() {
             <FormField
               label={<Label>{t("phoneLabel")}</Label>}
               error={errors.phone}
+
             >
-              <PhoneInput
-                placeholder={t("phonePlaceholder")}
-                value={form.phone}
-                type="tel"
-                maxLength={10}
-                pattern="[0-9]*"
-                onChange={(e) => {
-                  const onlyNumbers = e.target.value.replace(/\D/g, "");
-                  setForm((s) => ({ ...s, phone: onlyNumbers }));
-                }}
-                inputMode="numeric"
-              />
+              <div dir="ltr" className="w-full">
+
+                <PhoneInput
+                  value={form.phone}
+                  country="sa"
+                  placeholder={t("phonePlaceholder") || "Enter your phone number"}
+                  onChange={(formattedValue: string) => {
+                    setForm((s) => ({ ...s, phone: formattedValue }));
+                  }}
+                />
+              </div>
+
             </FormField>
 
             <FormField

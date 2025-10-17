@@ -26,7 +26,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const { isAuthenticated, logout } = useAuth();
   const [navKey, setNavKey] = useState(0);
-
+  const [hash, setHash] = useState<string>("");
 
   // Extract current locale from pathname
   const currentLocale = pathname.split("/")[1];
@@ -37,23 +37,51 @@ const Navbar = () => {
     router.push(newPath);
   };
 
-  const [hash, setHash] = useState<string>("");
-
   useEffect(() => {
-
-  const updateHash = () => {
+    const updateHash = () => {
       setHash(window.location.hash);
+    };
+
+    // Set initial hash
+    updateHash();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", updateHash);
+    
+    // Listen for popstate (back/forward browser buttons)
+    window.addEventListener("popstate", updateHash);
+
+    return () => {
+      window.removeEventListener("hashchange", updateHash);
+      window.removeEventListener("popstate", updateHash);
+    };
+  }, [pathname]);
+
+  // Handle hash link clicks
+  const handleHashClick = (href: string) => {
+    if (href.startsWith("/#")) {
+      const hash = href.substring(1); // Remove the leading "/"
+      
+      // Check if we're already on the home page
+      const isOnHomePage = pathname === `/${currentLocale}` || pathname === `/${currentLocale}/`;
+      
+      if (isOnHomePage) {
+        // We're already on home page, just update hash and scroll
+        window.history.pushState(null, "", `${pathname}${hash}`);
+        setHash(hash);
+        
+        // Scroll to element if it exists
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // We're on a different page, navigate to home page with hash
+        router.push(`/${currentLocale}${hash}`);
+      }
+    }
+    setNavKey(navKey + 1);
   };
-
-  // Set initial hash with delay
-  updateHash();
-
-  // Listen for hash changes
-  window.addEventListener("hashchange", updateHash);
-
-  return () => window.removeEventListener("hashchange", updateHash);
-}, [pathname, navKey]);
-
 
   // Navigation links for guests and authenticated users
   const guestLinks = [
@@ -79,6 +107,18 @@ const Navbar = () => {
     { href: "/profile", icon: <User strokeWidth={1.25} size={32} />, activeIcon: <User strokeWidth={2} size={32} color='#301B69' /> },
   ];
 
+  // Check if link is active
+  const isLinkActive = (href: string) => {
+    if (href === "/") {
+      return pathname.endsWith(currentLocale) && (!hash || hash === "");
+    } else if (href.startsWith("/#")) {
+      const linkHash = href.substring(1); // Remove the leading "/"
+      return pathname.endsWith(currentLocale) && hash === linkHash;
+    } else {
+      return pathname.includes(href);
+    }
+  };
+
   return (
     <>
       <div className="w-full fixed top-4 md:top-8 z-50 px-4">
@@ -93,21 +133,22 @@ const Navbar = () => {
           <nav className="hidden lg:block">
             <div className="flex items-center justify-around gap-6">
               {(isAuthenticated ? authLinks : guestLinks).map(link => {
-                const isActive =
-  link.href === "/" 
-    ? pathname.endsWith(currentLocale)
-    : link.href.startsWith("/#")
-      ? (pathname + hash) === link.href
-      : pathname.includes(link.href);
+                const isActive = isLinkActive(link.href);
                 
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    onClick={() => setNavKey(navKey + 1)}
+                    onClick={(e) => {
+                      if (link.href.startsWith("/#")) {
+                        e.preventDefault();
+                        handleHashClick(link.href);
+                      } else {
+                        setNavKey(navKey + 1);
+                      }
+                    }}
                     className={`text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
                     ${isActive ? "border-b-2 border-[#301B69] font-bold" : "font-medium"}
-                    
                   `}
                   >
                     {link.label}
@@ -177,12 +218,19 @@ const Navbar = () => {
             <SheetContent>
               <div className="flex flex-col items-start justify-around gap-6">
                 {(isAuthenticated ? authLinks : guestLinks).map(link => {
-                  const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href) || (link.href.startsWith("#") && hash === link.href);
+                  const isActive = isLinkActive(link.href);
                   return (
                     <Link
                       key={link.href}
                       href={link.href}
-                      onClick={() => setNavKey(navKey + 1)}
+                      onClick={(e) => {
+                        if (link.href.startsWith("/#")) {
+                          e.preventDefault();
+                          handleHashClick(link.href);
+                        } else {
+                          setNavKey(navKey + 1);
+                        }
+                      }}
                       className={`flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
                       ${isActive ? "font-bold" : "font-medium"}
                     `}
@@ -214,7 +262,7 @@ const Navbar = () => {
       {isAuthenticated && !pathname.includes("/chats") && <div className="w-full fixed bottom-8 z-50 px-4 block md:hidden">
         <div className="flex items-center justify-center gap-6 rounded-4xl mx-auto px-6 py-3 bg-white shadow-lg">
           {mobileAuthLinks.map(link => {
-            const isActive = link.href === "/" ? pathname.endsWith(currentLocale) : pathname.includes(link.href) || (link.href.startsWith("#") && hash === link.href);
+            const isActive = isLinkActive(link.href);
 
             return (
               <Link

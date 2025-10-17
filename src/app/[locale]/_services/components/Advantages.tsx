@@ -19,8 +19,8 @@ const ArframeImages = [
   "/icons/advantages/frame-5.svg",
   "/icons/advantages/frame-4.svg",
   "/icons/advantages/frame-3.svg",
-  "/icons/advantages/frame-2.svg",
   "/icons/advantages/frame-1.svg",
+  "/icons/advantages/frame-2.svg",
 ];
 
 const EnframeImages = [
@@ -31,8 +31,8 @@ const EnframeImages = [
   "/icons/advantages/en-frame-5.svg",
   "/icons/advantages/en-frame-4.svg",
   "/icons/advantages/en-frame-3.svg",
-  "/icons/advantages/en-frame-2.svg",
   "/icons/advantages/en-frame-1.svg",
+  "/icons/advantages/en-frame-2.svg",
 ];
 
 const Advantages = React.memo(function Advantages() {

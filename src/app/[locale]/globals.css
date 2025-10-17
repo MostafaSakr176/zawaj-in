@@ -211,3 +211,29 @@ body[data-scroll-locked] {
     scale: 1.2;
   }
 }
+
+.react-tel-input {
+  width: 100% !important;
+  display: flex !important;
+}
+
+.react-tel-input .form-control{
+  padding: 0.4rem  1rem !important; /* Adjust padding to accommodate flag */
+  margin-left: 4.5rem !important; /* Adjust padding to accommodate flag */
+  height: 44px !important;
+  font-size: 1rem !important;
+  width: 100% !important;
+}
+.flag-dropdown {
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  border: 1px solid #D0D5DD !important;
+  background-color: white !important;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  color: var(--color-foreground) !important;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+}

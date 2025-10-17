@@ -8,7 +8,7 @@ import Navbar from "../../components/shared/navbar";
 import Footer from "@/components/shared/footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { SocketProvider } from "@/context/SocketContext";
-
+import { Toaster } from 'react-hot-toast';
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -59,6 +59,7 @@ export default async function RootLayout({
             <SocketProvider>
               <Navbar />
               {children}
+              <Toaster />
               <Footer />
             </SocketProvider>
           </AuthProvider>

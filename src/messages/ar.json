@@ -369,6 +369,9 @@
     "pageInfo": "صفحة {page} من {totalPages}"
   },
   "partnerProfile": {
+    "pleaseLoginToLike":"يرجى تسجيل الدخول للإعجاب",
+    "pleaseLoginToSendMessage":"يرجى تسجيل الدخول لإرسال رسالة",
+    "completeProfileToSendMessage": "يرجى إكمال ملفك الشخصي قبل إرسال رسالة",
     "loading": "جاري تحميل البيانات...",
     "notFound": "لم يتم العثور على المستخدم",
     "removeFavorite": "إزالة من المفضلة",
@@ -411,7 +414,31 @@
     "partnerPreferencesTitle": "مواصفات شريك حياتي",
     "partnerBio": "شريكة حياتي",
     "cm": "سم",
-    "kg": "كغ"
+    "kg": "كغ",
+    "origin": "الأصل",
+    "nationality": "الجنسية",
+    "placeOfResidence": "مكان الإقامة",
+    "tribe": "القبيلة",
+    "numberOfChildren": "عدد الأطفال",
+    "beauty": "الجمال",
+    "financialStatus": "الوضع المالي",
+    "healthStatus": "الحالة الصحية",
+    "educationLevel": "المستوى التعليمي",
+    "religiosityLevel": "مستوى التدين",
+    "polygamyStatus": "حالة التعدد",
+    "preferredNationality": "الجنسية المفضلة",
+    "preferredResidencePlace": "مكان الإقامة المفضل",
+    "preferredEducationLevel": "المستوى التعليمي المفضل",
+    "preferredWorkNature": "طبيعة العمل المفضلة",
+    "preferredMaritalStatus": "الحالة الاجتماعية المفضلة",
+    "preferredFinancialStatus": "الوضع المالي المفضل",
+    "preferredHasHouse": "توفر المنزل المفضل",
+    "preferredHealthStatus": "الحالة الصحية المفضلة",
+    "preferredBeauty": "الجمال المفضل",
+    "preferredSkinColor": "لون البشرة المفضل",
+    "preferredReligiosityLevel": "مستوى التدين المفضل",
+    "preferredAcceptPolygamy": "قبول التعدد المفضل",
+    "preferredMarriageType": "نوع الزواج المفضل"
   },
   "profile": {
     "online": "متصل",
@@ -420,7 +447,7 @@
   },
   "profileEdit": {
     "title": "تعديل الملف الشخصي",
-    "loading": "جاري تحميل البيانات...",
+    "loading": "جاري تحميل ...",
     "dateOfBirth": "تاريخ الميلاد",
     "cityPlaceholder": "المدينة",
     "single": "أعزب",
@@ -476,7 +503,9 @@
     "no": "لا",
     "unemployed": "عاطل",
     "employed": "موظف",
-    "selfEmployed": "عمل حر"
+    "selfEmployed": "عمل حر",
+  "selectCountryFirst": "اختر البلد أولاً",
+  "noCitiesAvailable": "لا توجد مدن متاحة"
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسالية",

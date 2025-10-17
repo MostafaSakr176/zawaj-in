@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import {
@@ -8,8 +8,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
+import axios from "axios";
+import api from "@/lib/axiosClient";
 
-// Memoize static data outside the component for performance
 const AVATARS = [
   { src: "/icons/boy-img.webp", alt: "@shadcn", fallback: "CN" },
   { src: "/photos/male-icon.webp", alt: "@evilrabbit", fallback: "ER" },
@@ -24,11 +25,11 @@ type Stat = {
   alt: string;
 };
 
-const STATS: Stat[] = [
-  { icon: "/icons/male.webp", alt: "male users", labelKey: "registered_males", value: 300 },
-  { icon: "/icons/female-icon.webp", alt: "female users", labelKey: "registered_females", value: 300 },
-  { icon: "/icons/male-o.webp", alt: "active males today", labelKey: "active_males", value: 100 },
-  { icon: "/icons/female-o.webp", alt: "active females today", labelKey: "active_females", value: 200 },
+const DEFAULT_STATS: Stat[] = [
+  { icon: "/icons/male.webp", alt: "male users", labelKey: "registered_males", value: 0 },
+  { icon: "/icons/female-icon.webp", alt: "female users", labelKey: "registered_females", value: 0 },
+  { icon: "/icons/male-o.webp", alt: "active males today", labelKey: "active_males", value: 0 },
+  { icon: "/icons/female-o.webp", alt: "active females today", labelKey: "active_females", value: 0 },
 ];
 
 const StatCard = React.memo(function StatCard({ icon, labelKey, value, alt }: Stat) {
@@ -47,8 +48,26 @@ const StatCard = React.memo(function StatCard({ icon, labelKey, value, alt }: St
 
 const PlatformStatistics = React.memo(function PlatformStatistics() {
   const t = useTranslations("stats");
+  const [stats, setStats] = useState(DEFAULT_STATS);
 
-  // Memoize avatar list for performance
+  useEffect(() => {
+    api.get("/users/statistics")
+      .then(res => {
+        const data = res.data?.data;
+        if (data) {
+          setStats([
+            { icon: "/icons/male.webp", alt: "male users", labelKey: "registered_males", value: data.totalMaleUsers },
+            { icon: "/icons/female-icon.webp", alt: "female users", labelKey: "registered_females", value: data.totalFemaleUsers },
+            { icon: "/icons/male-o.webp", alt: "active males today", labelKey: "active_males", value: data.onlineMaleUsersToday },
+            { icon: "/icons/female-o.webp", alt: "active females today", labelKey: "active_females", value: data.onlineFemaleUsersToday },
+          ]);
+        }
+      })
+      .catch(() => {
+        setStats(DEFAULT_STATS);
+      });
+  }, []);
+
   const avatarList = useMemo(
     () =>
       AVATARS.map(({ src, alt, fallback }) => (
@@ -60,10 +79,9 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
     []
   );
 
-  // Memoize stat cards for performance
   const statCards = useMemo(
-    () => STATS.map((stat) => <StatCard key={stat.labelKey} {...stat} />),
-    [t]
+    () => stats.map((stat) => <StatCard key={stat.labelKey} {...stat} />),
+    [stats, t]
   );
 
   return (

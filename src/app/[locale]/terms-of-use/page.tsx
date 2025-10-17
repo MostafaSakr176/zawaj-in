@@ -4,12 +4,25 @@ import Image from 'next/image'
 import React from 'react'
 import { useTranslations } from "next-intl";
 import { useAuth } from '@/context/AuthContext';
-import { Link } from '@/i18n/navigation';
-
+import { Link, useRouter } from '@/i18n/navigation';
+import api from "@/lib/axiosClient";
 
 const TermsAndConditions = () => {
     const t = useTranslations("terms");
-    const {isAuthenticated} = useAuth();
+    const { isAuthenticated, refreshProfile } = useAuth();
+    const router = useRouter();
+
+    const handleAcceptTerms = async () => {
+        try {
+            await api.post("/auth/accept-terms", { termsAccepted: true });
+            refreshProfile();
+            router.push("/home");
+            // Optionally, redirect or show a success message here
+        } catch (error) {
+            // Optionally, handle error
+        }
+    };
+
     return (
         <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
             style={{
@@ -41,18 +54,23 @@ const TermsAndConditions = () => {
                         }}>
                         <h3 className='text-2xl md:text-4xl font-semibold'>{t("title")}</h3>
                         <p className=' text-xl md:text-2xl leading-relaxed text-justify'>
-
                             {t("religiousIntro")}<br /> {t("introduction")}
-
                         </p>
-                        {Array.from({ length: 14 }).map((_, idx) => {
-                            const key = `content${idx + 1}`;
-                            const value = t(key);
-                            return value && value !== key ? (
-                                <p key={key} className="text-lg leading-relaxed">{value}</p>
-                            ) : null;
-                        })}
-                        {isAuthenticated && <Link href="/home"><Button className='mt-8'>{t("agreeButton")}</Button></Link>}
+                        <ul className='list-disc space-y-3 rtl:mr-4 ltr:ml-4'>
+                            {Array.from({ length: 14 }).map((_, idx) => {
+                                const key = `content${idx + 1}`;
+                                const value = t(key);
+                                return value && value !== key ? (
+                                    <li key={key} className="text-lg leading-relaxed">{value}</li>
+                                ) : null;
+                            })}
+                        </ul>
+
+                        {isAuthenticated && (
+                            <Button className='mt-8' onClick={handleAcceptTerms}>
+                                {t("agreeButton")}
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>
