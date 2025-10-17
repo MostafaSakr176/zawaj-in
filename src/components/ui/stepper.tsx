@@ -61,7 +61,7 @@ export function Stepper({
               }
               : {
                 left: `20px`,
-                right: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 25 : activeIndex === 2 ? 50 : activeIndex === 3 ? 75 : 75}%`,
+                width: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 25 : activeIndex === 2 ? 50 : activeIndex === 3 ? 75 : 75}%`,
                 background:
                   "linear-gradient(229.14deg, #C6B4F0 -7.04%, #8C5BD3 121.07%)",
               }

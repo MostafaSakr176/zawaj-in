@@ -23,36 +23,65 @@ import Image from "next/image";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 type FormData = {
+  username: string;
   dateOfBirth: string;
+  age: number | null;
   location: {
     city: string;
     country: string;
   };
   origin: string;
+  nationality: string;
+  placeOfResidence: string;
+  tribe: string;
   maritalStatus: string;
+  numberOfChildren: number | null;
   profession: string;
-  weight: number | null;
-  height: number | null;
+  educationLevel: string;
+  natureOfWork: string;
+  financialStatus: string;
+  healthStatus: string;
+  religiosityLevel: string;
+  weight: string | null;
+  height: string | null;
+  skinColor: string;
+  beauty: string;
   bodyColor: string;
   hairColor: string;
   hairType: string;
   eyeColor: string;
   houseAvailable: boolean | null;
-  natureOfWork: string;
   bio: string;
-  preferredMinWeight: number | null;
-  preferredMaxWeight: number | null;
-  preferredMinHeight: number | null;
-  preferredMaxHeight: number | null;
+  detailedProfile: string;
+  preferredMinWeight: string | null;
+  preferredMaxWeight: string | null;
+  preferredMinHeight: string | null;
+  preferredMaxHeight: string | null;
   preferredBodyColors: string[];
   preferredHairColors: string[];
   preferredEyeColors: string[];
   partnerPreferencesBio: string;
   marriageType: string;
   acceptPolygamy: boolean | null;
+  polygamyStatus: string;
   religiousPractice: string;
   sect: string;
   prayerLevel: string;
+  preferredAgeFrom: number | null;
+  preferredAgeTo: number | null;
+  preferredNationality: string;
+  preferredResidencePlace: string;
+  preferredEducationLevel: string;
+  preferredWorkNature: string;
+  preferredMaritalStatus: string;
+  preferredFinancialStatus: string;
+  preferredHasHouse: boolean | null;
+  preferredHealthStatus: string;
+  preferredBeauty: string;
+  preferredSkinColor: string;
+  preferredReligiosityLevel: string;
+  preferredAcceptPolygamy: string;
+  preferredMarriageType: string;
 };
 
 export default function EditProfilePage() {
@@ -63,22 +92,35 @@ export default function EditProfilePage() {
   const [dir, setDir] = React.useState<"rtl" | "ltr">("ltr");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  
+
   const [formData, setFormData] = React.useState<FormData>({
+    username: "",
     dateOfBirth: "",
+    age: null,
     location: { city: "", country: "" },
     origin: "",
+    nationality: "",
+    placeOfResidence: "",
+    tribe: "",
     maritalStatus: "",
+    numberOfChildren: null,
     profession: "",
+    educationLevel: "",
+    natureOfWork: "",
+    financialStatus: "",
+    healthStatus: "",
+    religiosityLevel: "",
     weight: null,
     height: null,
+    skinColor: "",
+    beauty: "",
     bodyColor: "",
     hairColor: "",
     hairType: "",
     eyeColor: "",
     houseAvailable: null,
-    natureOfWork: "",
     bio: "",
+    detailedProfile: "",
     preferredMinWeight: null,
     preferredMaxWeight: null,
     preferredMinHeight: null,
@@ -89,29 +131,58 @@ export default function EditProfilePage() {
     partnerPreferencesBio: "",
     marriageType: "",
     acceptPolygamy: null,
+    polygamyStatus: "",
     religiousPractice: "",
     sect: "",
     prayerLevel: "",
+    preferredAgeFrom: null,
+    preferredAgeTo: null,
+    preferredNationality: "",
+    preferredResidencePlace: "",
+    preferredEducationLevel: "",
+    preferredWorkNature: "",
+    preferredMaritalStatus: "",
+    preferredFinancialStatus: "",
+    preferredHasHouse: null,
+    preferredHealthStatus: "",
+    preferredBeauty: "",
+    preferredSkinColor: "",
+    preferredReligiosityLevel: "",
+    preferredAcceptPolygamy: "",
+    preferredMarriageType: "",
   });
 
   // Initialize form data with profile data
   React.useEffect(() => {
     if (profile) {
       setFormData({
+        username: profile.username || "",
         dateOfBirth: profile.dateOfBirth || "",
+        age: profile.age,
         location: profile.location || { city: "", country: "" },
         origin: profile.origin || "",
+        nationality: profile.nationality || "",
+        placeOfResidence: profile.placeOfResidence || "",
+        tribe: profile.tribe || "",
         maritalStatus: profile.maritalStatus || "",
+        numberOfChildren: profile.numberOfChildren,
         profession: profile.profession || "",
+        educationLevel: profile.educationLevel || "",
+        natureOfWork: profile.natureOfWork || "",
+        financialStatus: profile.financialStatus || "",
+        healthStatus: profile.healthStatus || "",
+        religiosityLevel: profile.religiosityLevel || "",
         weight: profile.weight,
         height: profile.height,
+        skinColor: profile.skinColor || "",
+        beauty: profile.beauty || "",
         bodyColor: profile.bodyColor || "",
         hairColor: profile.hairColor || "",
         hairType: profile.hairType || "",
         eyeColor: profile.eyeColor || "",
         houseAvailable: profile.houseAvailable,
-        natureOfWork: profile.natureOfWork || "",
         bio: profile.bio || "",
+        detailedProfile: profile.detailedProfile || "",
         preferredMinWeight: profile.preferredMinWeight,
         preferredMaxWeight: profile.preferredMaxWeight,
         preferredMinHeight: profile.preferredMinHeight,
@@ -122,9 +193,25 @@ export default function EditProfilePage() {
         partnerPreferencesBio: profile.partnerPreferencesBio || "",
         marriageType: profile.marriageType || "",
         acceptPolygamy: profile.acceptPolygamy,
+        polygamyStatus: profile.polygamyStatus || "",
         religiousPractice: profile.religiousPractice || "",
         sect: profile.sect || "",
         prayerLevel: profile.prayerLevel || "",
+        preferredAgeFrom: profile.preferredAgeFrom,
+        preferredAgeTo: profile.preferredAgeTo,
+        preferredNationality: profile.preferredNationality || "",
+        preferredResidencePlace: profile.preferredResidencePlace || "",
+        preferredEducationLevel: profile.preferredEducationLevel || "",
+        preferredWorkNature: profile.preferredWorkNature || "",
+        preferredMaritalStatus: profile.preferredMaritalStatus || "",
+        preferredFinancialStatus: profile.preferredFinancialStatus || "",
+        preferredHasHouse: profile.preferredHasHouse,
+        preferredHealthStatus: profile.preferredHealthStatus || "",
+        preferredBeauty: profile.preferredBeauty || "",
+        preferredSkinColor: profile.preferredSkinColor || "",
+        preferredReligiosityLevel: profile.preferredReligiosityLevel || "",
+        preferredAcceptPolygamy: profile.preferredAcceptPolygamy || "",
+        preferredMarriageType: profile.preferredMarriageType || "",
       });
     }
   }, [profile]);
@@ -174,16 +261,30 @@ export default function EditProfilePage() {
     }));
   };
 
+  const updateArrayField = (field: string, value: string) => {
+    setFormData(prev => {
+      const currentArray = prev[field as keyof FormData] as string[] || [];
+      const newArray = currentArray.includes(value)
+        ? currentArray.filter(item => item !== value)
+        : [...currentArray, value];
+      return {
+        ...prev,
+        [field]: newArray
+      };
+    });
+  };
+
   const saveCurrentStep = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       let dataToSend = {};
-      
+
       // Step 0: Basic info
       if (step === 0) {
         dataToSend = {
+          username: formData.username || null,
           dateOfBirth: formData.dateOfBirth || null,
           location: formData.location,
           origin: formData.origin || null,
@@ -191,7 +292,7 @@ export default function EditProfilePage() {
           profession: formData.profession || null,
         };
       }
-      
+
       // Step 1: Personal details
       if (step === 1) {
         dataToSend = {
@@ -206,7 +307,7 @@ export default function EditProfilePage() {
           bio: formData.bio || null,
         };
       }
-      
+
       // Step 2: Partner preferences
       if (step === 2) {
         dataToSend = {
@@ -220,7 +321,7 @@ export default function EditProfilePage() {
           partnerPreferencesBio: formData.partnerPreferencesBio || null,
         };
       }
-      
+
       // Step 3: Marriage preferences
       if (step === 3) {
         dataToSend = {
@@ -233,18 +334,18 @@ export default function EditProfilePage() {
       }
 
       await api.put("/users/profile", dataToSend);
-      
+
       if (refreshProfile) {
         await refreshProfile();
       }
-      
+
       return true;
-      
+
     } catch (err: any) {
       setError(
-        err?.response?.data?.message || 
-        err?.message || 
-        "حدث خطأ أثناء حفظ البيانات"
+        err?.response?.data?.message ||
+        err?.message ||
+        tEdit("saveErrorDefault")
       );
       return false;
     } finally {
@@ -256,7 +357,7 @@ export default function EditProfilePage() {
     const success = await saveCurrentStep();
     if (success) {
       if (step === steps.length - 1) {
-        
+
       } else {
         setStep(s => Math.min(steps.length - 1, s + 1));
       }
@@ -276,7 +377,7 @@ export default function EditProfilePage() {
   return (
     <ProtectedRoute>
       <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
-        <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
+        <Image src="/photos/terms-bg.webp" alt={tEdit("bgAlt")} width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
         <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
           <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
             <CardHeader className="py-8 pb-2 md:pb-6 md:pt-10">
@@ -293,28 +394,14 @@ export default function EditProfilePage() {
                 </div>
               )}
 
+              {/* Step 0: Basic Info */}
               {step === 0 && (
                 <div className="max-w-3xl grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <FormField
-                    label={<Label>{t("fields.nationality")}</Label>}
-                    required
-                  >
-                    <Select
-                      options={[
-                        { value: "SA", label: tEdit("saudiArabia") },
-                        { value: "EG", label: tEdit("egypt") },
-                        { value: "UAE", label: tEdit("uae") },
-                      ]} 
-                      value={formData.location.country}
-                      onChange={(e) => {updateNestedField("location", "country", e.target.value)}}
-                      placeholder={t("placeholders.choose")}
-                    />
-                  </FormField>
-                  <FormField label={<Label>{t("fields.city")}</Label>}>
+                  <FormField label={<Label>{t("fields.username")}</Label>}>
                     <TextField
-                      value={formData.location.city}
-                      onChange={(e) => updateNestedField("location", "city", e.target.value)}
-                      placeholder="المدينة"
+                      value={formData.username}
+                      onChange={(e) => updateField("username", e.target.value)}
+                      placeholder={t("placeholders.write")}
                     />
                   </FormField>
                   <FormField label={<Label>{tEdit("dateOfBirth")}</Label>}>
@@ -324,10 +411,53 @@ export default function EditProfilePage() {
                       onChange={(e) => updateField("dateOfBirth", e.target.value)}
                     />
                   </FormField>
+                  <FormField
+                    label={<Label>{t("fields.nationality")}</Label>}
+                    required
+                  >
+                    <Select
+                      options={[
+                        { value: "SA", label: tEdit("saudiArabia") },
+                        { value: "EG", label: tEdit("egypt") },
+                        { value: "UAE", label: tEdit("uae") },
+                      ]}
+                      value={formData.location.country}
+                      onChange={(e) => updateNestedField("location", "country", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.city")}</Label>}>
+                    <TextField
+                      value={formData.location.city}
+                      onChange={(e) => updateNestedField("location", "city", e.target.value)}
+                      placeholder={tEdit("cityPlaceholder")}
+                    />
+                  </FormField>
                   <FormField label={<Label>{t("fields.origin")}</Label>}>
                     <TextField
                       value={formData.origin}
                       onChange={(e) => updateField("origin", e.target.value)}
+                      placeholder={t("placeholders.write")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.nationality2")}</Label>}>
+                    <TextField
+                      value={formData.nationality}
+                      onChange={(e) => updateField("nationality", e.target.value)}
+                      placeholder={t("placeholders.write")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.residence")}</Label>}>
+                    <TextField
+                      value={formData.placeOfResidence}
+                      onChange={(e) => updateField("placeOfResidence", e.target.value)}
+                      placeholder={t("placeholders.write")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.tribe")}</Label>}>
+                    <TextField
+                      value={formData.tribe}
+                      onChange={(e) => updateField("tribe", e.target.value)}
                       placeholder={t("placeholders.write")}
                     />
                   </FormField>
@@ -347,8 +477,22 @@ export default function EditProfilePage() {
                       placeholder={t("placeholders.choose")}
                     />
                   </FormField>
+                  <FormField label={<Label>{t("fields.children")}</Label>}>
+                    <TextField
+                      type="number"
+                      value={formData.numberOfChildren || ""}
+                      onChange={(e) => updateField("numberOfChildren", e.target.value ? Number(e.target.value) : null)}
+                      placeholder="0"
+                    />
+                  </FormField>
+                </div>
+              )}
+
+              {/* Step 1: Personal Details */}
+              {step === 1 && (
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <FormField label={<Label>{t("fields.education")}</Label>}>
-                  <Select
+                    <Select
                       options={[
                         { value: "student", label: tEdit("student") },
                         { value: "highSchool", label: tEdit("highSchool") },
@@ -356,16 +500,66 @@ export default function EditProfilePage() {
                         { value: "master", label: tEdit("master") },
                         { value: "doctorate", label: tEdit("doctorate") },
                       ]}
-                      value={formData.profession}
-                      onChange={(e) => updateField("profession", e.target.value)}
+                      value={formData.educationLevel}
+                      onChange={(e) => updateField("educationLevel", e.target.value)}
                       placeholder={t("placeholders.choose")}
                     />
                   </FormField>
-                </div>
-              )}
-
-              {step === 1 && (
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <FormField label={<Label>{t("fields.profession")}</Label>}>
+                    <TextField
+                      value={formData.profession}
+                      onChange={(e) => updateField("profession", e.target.value)}
+                      placeholder={t("placeholders.write")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.job")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "unemployed", label: tEdit("unemployed") },
+                        { value: "employed", label: tEdit("employed") },
+                        { value: "self_employed", label: tEdit("selfEmployed") },
+                      ]}
+                      value={formData.natureOfWork}
+                      onChange={(e) => updateField("natureOfWork", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.financial")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "excellent", label: tEdit("excellent") },
+                        { value: "good", label: tEdit("good") },
+                        { value: "average", label: tEdit("average") },
+                      ]}
+                      value={formData.financialStatus}
+                      onChange={(e) => updateField("financialStatus", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.health")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "excellent", label: tEdit("excellent") },
+                        { value: "good", label: tEdit("good") },
+                        { value: "average", label: tEdit("average") },
+                      ]}
+                      value={formData.healthStatus}
+                      onChange={(e) => updateField("healthStatus", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.religiosity")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "committed", label: tEdit("practiceReligious") },
+                        { value: "moderate", label: tEdit("practiceModerate") },
+                        { value: "basic", label: tEdit("practiceBasic") },
+                      ]}
+                      value={formData.religiosityLevel}
+                      onChange={(e) => updateField("religiosityLevel", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
                   <FormField label={<Label>{t("fields.weight")}</Label>} required>
                     <TextField
                       type="number"
@@ -389,17 +583,29 @@ export default function EditProfilePage() {
                         { value: "lightWheat", label: tEdit("lightWheat") },
                         { value: "darkWheat", label: tEdit("darkWheat") },
                       ]}
-                      value={formData.bodyColor}
-                      onChange={(e) => updateField("bodyColor", e.target.value)}
+                      value={formData.skinColor}
+                      onChange={(e) => updateField("skinColor", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.beauty")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "handsome", label: tEdit("handsome") },
+                        { value: "average", label: tEdit("average") },
+                        { value: "good", label: tEdit("good") },
+                      ]}
+                      value={formData.beauty}
+                      onChange={(e) => updateField("beauty", e.target.value)}
                       placeholder={t("placeholders.choose")}
                     />
                   </FormField>
                   <FormField label={<Label>{t("fields.hair")}</Label>}>
                     <Select
                       options={[
-                        { value: "black", label: "أسود" },
-                        { value: "brown", label: "بني" },
-                        { value: "blonde", label: "أشقر" },
+                        { value: "black", label: tEdit("black") },
+                        { value: "brown", label: tEdit("brown") },
+                        { value: "blonde", label: tEdit("blonde") },
                       ]}
                       value={formData.hairColor}
                       onChange={(e) => updateField("hairColor", e.target.value)}
@@ -409,10 +615,10 @@ export default function EditProfilePage() {
                   <FormField label={<Label>{t("fields.eyes")}</Label>}>
                     <Select
                       options={[
-                        { value: "brown", label: "بني" },
-                        { value: "black", label: "أسود" },
-                        { value: "green", label: "أخضر" },
-                        { value: "blue", label: "أزرق" },
+                        { value: "brown", label: tEdit("brown") },
+                        { value: "black", label: tEdit("black") },
+                        { value: "green", label: tEdit("green") },
+                        { value: "blue", label: tEdit("blue") },
                       ]}
                       value={formData.eyeColor}
                       onChange={(e) => updateField("eyeColor", e.target.value)}
@@ -422,9 +628,9 @@ export default function EditProfilePage() {
                   <FormField label={<Label>{t("fields.hairType")}</Label>}>
                     <Select
                       options={[
-                        { value: "straight", label: "مستقيم" },
-                        { value: "wavy", label: "مموج" },
-                        { value: "curly", label: "مجعد" },
+                        { value: "straight", label: tEdit("straight") },
+                        { value: "wavy", label: tEdit("wavy") },
+                        { value: "curly", label: tEdit("curly") },
                       ]}
                       value={formData.hairType}
                       onChange={(e) => updateField("hairType", e.target.value)}
@@ -434,19 +640,12 @@ export default function EditProfilePage() {
                   <FormField label={<Label>{t("fields.home")}</Label>}>
                     <Select
                       options={[
-                        { value: "true", label: "متوفر" },
-                        { value: "false", label: "غير متوفر" },
+                        { value: "true", label: tEdit("available") },
+                        { value: "false", label: tEdit("notAvailable") },
                       ]}
                       value={formData.houseAvailable?.toString()}
                       onChange={(e) => updateField("houseAvailable", e.target.value === "true")}
                       placeholder={t("placeholders.choose")}
-                    />
-                  </FormField>
-                  <FormField label={<Label>{t("fields.job")}</Label>}>
-                    <TextField
-                      value={formData.natureOfWork}
-                      onChange={(e) => updateField("natureOfWork", e.target.value)}
-                      placeholder={t("placeholders.write")}
                     />
                   </FormField>
                   <div className="md:col-span-2">
@@ -458,16 +657,33 @@ export default function EditProfilePage() {
                         rows={5}
                         value={formData.bio}
                         onChange={(e) => updateField("bio", e.target.value)}
-                        placeholder="..."
+                        placeholder={t("placeholders.write")}
                       />
                     </FormField>
                   </div>
                 </div>
               )}
 
+              {/* Step 2: Partner Preferences */}
               {step === 2 && (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <FormField label={<Label>الوزن المفضل (من)</Label>} required>
+                  <FormField label={<Label>{t("fields.preferredAgeFrom")}</Label>}>
+                    <TextField
+                      type="number"
+                      value={formData.preferredAgeFrom || ""}
+                      onChange={(e) => updateField("preferredAgeFrom", e.target.value ? Number(e.target.value) : null)}
+                      placeholder={t("fields.preferredAgeFrom")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredAgeTo")}</Label>}>
+                    <TextField
+                      type="number"
+                      value={formData.preferredAgeTo || ""}
+                      onChange={(e) => updateField("preferredAgeTo", e.target.value ? Number(e.target.value) : null)}
+                      placeholder={t("fields.preferredAgeTo")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{tEdit("preferredWeightFrom")}</Label>}>
                     <TextField
                       type="number"
                       value={formData.preferredMinWeight || ""}
@@ -475,7 +691,7 @@ export default function EditProfilePage() {
                       placeholder={t("placeholders.weight")}
                     />
                   </FormField>
-                  <FormField label={<Label>الوزن المفضل (إلى)</Label>} required>
+                  <FormField label={<Label>{tEdit("preferredWeightTo")}</Label>}>
                     <TextField
                       type="number"
                       value={formData.preferredMaxWeight || ""}
@@ -483,7 +699,7 @@ export default function EditProfilePage() {
                       placeholder={t("placeholders.weight")}
                     />
                   </FormField>
-                  <FormField label={<Label>الطول المفضل (من)</Label>}>
+                  <FormField label={<Label>{tEdit("preferredHeightFrom")}</Label>}>
                     <TextField
                       type="number"
                       value={formData.preferredMinHeight || ""}
@@ -491,12 +707,135 @@ export default function EditProfilePage() {
                       placeholder={t("placeholders.height")}
                     />
                   </FormField>
-                  <FormField label={<Label>الطول المفضل (إلى)</Label>}>
+                  <FormField label={<Label>{tEdit("preferredHeightTo")}</Label>}>
                     <TextField
                       type="number"
                       value={formData.preferredMaxHeight || ""}
                       onChange={(e) => updateField("preferredMaxHeight", e.target.value ? Number(e.target.value) : null)}
                       placeholder={t("placeholders.height")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredNationality")}</Label>}>
+                    <TextField
+                      value={formData.preferredNationality}
+                      onChange={(e) => updateField("preferredNationality", e.target.value)}
+                      placeholder={t("placeholders.write")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredResidence")}</Label>}>
+                    <TextField
+                      value={formData.preferredResidencePlace}
+                      onChange={(e) => updateField("preferredResidencePlace", e.target.value)}
+                      placeholder={t("placeholders.write")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredEducation")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "student", label: tEdit("student") },
+                        { value: "highSchool", label: tEdit("highSchool") },
+                        { value: "bachelor", label: tEdit("bachelor") },
+                        { value: "master", label: tEdit("master") },
+                        { value: "doctorate", label: tEdit("doctorate") },
+                      ]}
+                      value={formData.preferredEducationLevel}
+                      onChange={(e) => updateField("preferredEducationLevel", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredWork")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "unemployed", label: tEdit("unemployed") },
+                        { value: "employed", label: tEdit("employed") },
+                        { value: "self_employed", label: tEdit("selfEmployed") },
+                      ]}
+                      value={formData.preferredWorkNature}
+                      onChange={(e) => updateField("preferredWorkNature", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredMarital")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "single", label: tEdit("single") },
+                        { value: "divorced", label: tEdit("divorced") },
+                        { value: "widowed", label: tEdit("widowed") },
+                      ]}
+                      value={formData.preferredMaritalStatus}
+                      onChange={(e) => updateField("preferredMaritalStatus", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredFinancial")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "excellent", label: tEdit("excellent") },
+                        { value: "good", label: tEdit("good") },
+                        { value: "average", label: tEdit("average") },
+                      ]}
+                      value={formData.preferredFinancialStatus}
+                      onChange={(e) => updateField("preferredFinancialStatus", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredHouse")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "true", label: tEdit("available") },
+                        { value: "false", label: tEdit("notAvailable") },
+                      ]}
+                      value={formData.preferredHasHouse?.toString()}
+                      onChange={(e) => updateField("preferredHasHouse", e.target.value === "true")}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredHealth")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "excellent", label: tEdit("excellent") },
+                        { value: "good", label: tEdit("good") },
+                        { value: "average", label: tEdit("average") },
+                      ]}
+                      value={formData.preferredHealthStatus}
+                      onChange={(e) => updateField("preferredHealthStatus", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredBeauty")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "handsome", label: tEdit("handsome") },
+                        { value: "average", label: tEdit("average") },
+                        { value: "good", label: tEdit("good") },
+                      ]}
+                      value={formData.preferredBeauty}
+                      onChange={(e) => updateField("preferredBeauty", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredSkin")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "white", label: tEdit("white") },
+                        { value: "lightWheat", label: tEdit("lightWheat") },
+                        { value: "darkWheat", label: tEdit("darkWheat") },
+                      ]}
+                      value={formData.preferredSkinColor}
+                      onChange={(e) => updateField("preferredSkinColor", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.preferredReligiosity")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "committed", label: "ملتزم" },
+                        { value: "moderate", label: "متوسط" },
+                        { value: "basic", label: "أساسي" },
+                      ]}
+                      value={formData.preferredReligiosityLevel}
+                      onChange={(e) => updateField("preferredReligiosityLevel", e.target.value)}
+                      placeholder={t("placeholders.choose")}
                     />
                   </FormField>
                   <div className="md:col-span-2">
@@ -508,13 +847,14 @@ export default function EditProfilePage() {
                         rows={5}
                         value={formData.partnerPreferencesBio}
                         onChange={(e) => updateField("partnerPreferencesBio", e.target.value)}
-                        placeholder="..."
+                        placeholder={t("placeholders.write")}
                       />
                     </FormField>
                   </div>
                 </div>
               )}
 
+              {/* Step 3: Religious & Marriage Preferences */}
               {step === 3 && (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <FormField
@@ -523,8 +863,8 @@ export default function EditProfilePage() {
                   >
                     <Select
                       options={[
-                        { value: "traditional", label: "تقليدي" },
-                        { value: "civil", label: "مسيار" }
+                        { value: "traditional", label: tEdit("traditional") },
+                        { value: "civil", label: tEdit("civil") }
                       ]}
                       value={formData.marriageType}
                       onChange={(e) => updateField("marriageType", e.target.value)}
@@ -534,17 +874,53 @@ export default function EditProfilePage() {
                   <FormField label={<Label>{t("fields.polygamyAgree")}</Label>}>
                     <Select
                       options={[
-                        { value: "true", label: "نعم" },
-                        { value: "false", label: "لا" },
+                        { value: "yes", label: tEdit("yes") },
+                        { value: "no", label: tEdit("no") },
                       ]}
                       value={formData.acceptPolygamy?.toString()}
                       onChange={(e) => updateField("acceptPolygamy", e.target.value === "true")}
                       placeholder={t("placeholders.choose")}
                     />
                   </FormField>
+                  <FormField label={<Label>{t("fields.religiousPractice")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "Religious", label: tEdit("practiceReligious") },
+                        { value: "Moderate", label: tEdit("practiceModerate") },
+                        { value: "Basic", label: tEdit("practiceBasic") },
+                      ]}
+                      value={formData.religiousPractice}
+                      onChange={(e) => updateField("religiousPractice", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.sect")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "Sunni", label: tEdit("sunni") },
+                        { value: "Shia", label: tEdit("shia") },
+                      ]}
+                      value={formData.sect}
+                      onChange={(e) => updateField("sect", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
+                  <FormField label={<Label>{t("fields.prayer")}</Label>}>
+                    <Select
+                      options={[
+                        { value: "Prays 5 times a day", label: tEdit("prays5") },
+                        { value: "Sometimes", label: tEdit("sometimes") },
+                        { value: "Rarely", label: tEdit("rarely") },
+                      ]}
+                      value={formData.prayerLevel}
+                      onChange={(e) => updateField("prayerLevel", e.target.value)}
+                      placeholder={t("placeholders.choose")}
+                    />
+                  </FormField>
                 </div>
               )}
             </CardContent>
+
             <CardFooter className="flex justify-start gap-3 px-10 pb-10">
               {step > 0 && (
                 <Button variant="secondary" onClick={prev} className="min-w-32">
@@ -555,8 +931,8 @@ export default function EditProfilePage() {
                 {loading
                   ? tEdit("saving")
                   : step === steps.length - 1
-                  ? t("buttons.submit")
-                  : t("buttons.next")}
+                    ? t("buttons.submit")
+                    : t("buttons.next")}
               </Button>
             </CardFooter>
           </Card>

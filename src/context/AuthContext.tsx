@@ -19,10 +19,21 @@ type Profile = {
     country: string;
   } | null;
   origin: string | null;
+  username: string | null;
+  nationality: string | null;
+  placeOfResidence: string | null;
+  tribe: string | null;
   maritalStatus: string | null;
+  numberOfChildren: number | null;
   profession: string | null;
-  weight: number | null;
-  height: number | null;
+  educationLevel: string | null;
+  financialStatus: string | null;
+  healthStatus: string | null;
+  religiosityLevel: string | null;
+  weight: string | null;
+  height: string | null;
+  skinColor: string | null;
+  beauty: string | null;
   bodyColor: string | null;
   hairColor: string | null;
   hairType: string | null;
@@ -30,16 +41,33 @@ type Profile = {
   houseAvailable: boolean | null;
   natureOfWork: string | null;
   bio: string | null;
-  preferredMinWeight: number | null;
-  preferredMaxWeight: number | null;
-  preferredMinHeight: number | null;
-  preferredMaxHeight: number | null;
+  preferredAgeFrom: number | null;
+  preferredAgeTo: number | null;
+  preferredMinWeight: string | null;
+  preferredMaxWeight: string | null;
+  preferredMinHeight: string | null;
+  preferredMaxHeight: string | null;
+  preferredNationality: string | null;
+  preferredResidencePlace: string | null;
+  preferredEducationLevel: string | null;
+  preferredWorkNature: string | null;
+  preferredMaritalStatus: string | null;
+  preferredFinancialStatus: string | null;
+  preferredHasHouse: boolean | null;
+  preferredHealthStatus: string | null;
+  preferredBeauty: string | null;
+  preferredSkinColor: string | null;
+  preferredReligiosityLevel: string | null;
+  preferredAcceptPolygamy: string | null;
+  preferredMarriageType: string | null;
   preferredBodyColors: string[] | null;
   preferredHairColors: string[] | null;
   preferredEyeColors: string[] | null;
   partnerPreferencesBio: string | null;
   marriageType: string | null;
   acceptPolygamy: boolean | null;
+  polygamyStatus: string | null;
+  detailedProfile: string | null;
   religiousPractice: string | null;
   sect: string | null;
   prayerLevel: string | null;
@@ -61,10 +89,10 @@ type Profile = {
   createdAt: string;
   updatedAt: string;
   profileCompletion: {
-    percentage: number,
-    completedFields: string[],
-    missingFields: string[]
-  }
+    percentage: number;
+    completedFields: string[];
+    missingFields: string[];
+  };
 };
 
 type AuthContextType = {
