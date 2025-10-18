@@ -167,7 +167,7 @@ const PartnerProfile = () => {
     };
 
     const handleSendMessage = async () => {
-        if(!isAuthenticated){
+        if (!isAuthenticated) {
             toast.error(t("pleaseLoginToSendMessage"))
             return
         }
@@ -210,22 +210,22 @@ const PartnerProfile = () => {
     if (loading) {
         return (
 
-<div className="w-screen h-screen bg-white text-center fixed top-0 left-0 z-[999999] flex items-center justify-center">
-            <div className='w-full h-full flex items-center justify-center'
-                style={{
-                    backgroundImage: "url('/photos/footer-bg.webp')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
-                }}>
-                <div className="w-0 h-[15rem] flex items-center justify-center transform rotate-30 overflow-hidden animate-[expand_2s_ease-out_forwards]">
-                    <div className="text-6xl font-bold transform -rotate-30 text-nowrap">
-                        <span className="text-[#301B69]">زواج</span>{" "}
-                        <span className="text-[#E30BCD]">إن</span>
+            <div className="w-screen h-screen bg-white text-center fixed top-0 left-0 z-[999999] flex items-center justify-center">
+                <div className='w-full h-full flex items-center justify-center'
+                    style={{
+                        backgroundImage: "url('/photos/footer-bg.webp')",
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
+                    }}>
+                    <div className="w-0 h-[15rem] flex items-center justify-center transform rotate-30 overflow-hidden animate-[expand_2s_ease-out_forwards]">
+                        <div className="text-6xl font-bold transform -rotate-30 text-nowrap">
+                            <span className="text-[#301B69]">زواج</span>{" "}
+                            <span className="text-[#E30BCD]">إن</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         );
     }
 
@@ -247,7 +247,7 @@ const PartnerProfile = () => {
 
             <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
                 {/* Header */}
-                <div className="flex items-center justify-between gap-4 px-3">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-0 md:px-3">
 
                     {/* Profile summary (right in RTL) */}
                     <div className="flex items-center gap-3">
@@ -259,19 +259,19 @@ const PartnerProfile = () => {
                                 height={72}
                                 className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
                             />
-                            {user.isActive && (
-                                <span className="absolute -top-1 -left-1 w-3.5 h-3.5 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                            {user.isOnline && (
+                                <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 md:w-4 md:h-4 rounded-full bg-[#28C76F] ring-2 ring-white" />
                             )}
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
                                 <div className="flex items-center justify-end gap-1">
-                                    <h4 className="text-2xl font-semibold text-[#301B69] leading-none">
+                                    <h4 className="text-lg md:text-2xl font-semibold text-[#301B69] leading-none">
                                         {user.fullName}
                                     </h4>
                                     {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                 </div>
-                                <div className="text-[#8A97AB] text-base mb-1">{t("lastSeen")}</div>
+                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{t("lastSeen")}</div>
                             </div>
                             <div className="text-[#8A97AB] text-base">{t("membershipNumber")} {user.chartNumber}</div>
                         </div>
@@ -302,7 +302,6 @@ const PartnerProfile = () => {
                 </div>
 
                 <hr className="border-[#ECEBFF]" />
-
                 {/* Bio Section */}
                 {user.bio && (
                     <>

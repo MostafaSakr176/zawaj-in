@@ -361,12 +361,27 @@
     "emptyInterested": "لا توجد بيانات حالياً."
   },
   "home": {
-    "welcome": "اهلا بك",
+    "welcome": "أهلاً بك",
     "loadingRecommendations": "جاري تحميل التوصيات...",
     "noRecommendations": "لا توجد توصيات حالياً.",
+    "filters": "الفلاتر",
+    "filterUsers": "تصفية المستخدمين",
+    "clearFilters": "مسح الفلاتر",
+    "applyFilters": "تطبيق الفلاتر",
     "prev": "السابق",
     "next": "التالي",
-    "pageInfo": "صفحة {page} من {totalPages}"
+    "pageInfo": "صفحة {page} من {totalPages}",
+    "ageRange": "المدى العمري",
+    "location": "الموقع",
+    "personalInfo": "المعلومات الشخصية",
+    "educationWork": "التعليم والعمل",
+    "physicalAttributes": "الصفات الجسدية",
+    "religiousMarriage": "الدين والزواج",
+    "all": "الكل",
+    "minHeight": "أقل طول",
+    "maxHeight": "أقصى طول",
+    "minWeight": "أقل وزن",
+    "maxWeight": "أقصى وزن"
   },
   "partnerProfile": {
     "pleaseLoginToLike":"يرجى تسجيل الدخول للإعجاب",

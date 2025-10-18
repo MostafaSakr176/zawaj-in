@@ -204,8 +204,9 @@
             "preferredMarriageType": "Marriage Type"
         },
         "placeholders": {
-            "choose": "Choose",
-            "write": "Write",
+            "choose": "Choose...",
+            "write": "Write...",
+            "all": "All",
             "weight": "60 kg",
             "height": "160 cm"
         },
@@ -216,6 +217,13 @@
         },
         "hints": {
             "serious": "Please write seriously; contact info is not allowed"
+        },
+        "sections": {
+            "location": "Location",
+            "personal": "Personal Info",
+            "education": "Education & Work",
+            "physical": "Physical Attributes",
+            "religious": "Religious & Marriage"
         }
     },
     "advantages": {
@@ -360,14 +368,29 @@
         "emptyFavorites": "No favorites currently.",
         "emptyInterested": "No data currently."
     },
-    "home": {
-        "welcome": "Welcome",
-        "loadingRecommendations": "Loading recommendations...",
-        "noRecommendations": "No recommendations currently.",
-        "prev": "Prev",
-        "next": "Next",
-        "pageInfo": "Page {page} of {totalPages}"
-    },
+      "home": {
+    "welcome": "Welcome",
+    "loadingRecommendations": "Loading recommendations...",
+    "noRecommendations": "No recommendations currently.",
+    "filters": "Filters",
+    "filterUsers": "Filter Users",
+    "clearFilters": "Clear Filters",
+    "applyFilters": "Apply Filters",
+    "prev": "Previous",
+    "next": "Next",
+    "pageInfo": "Page {page} of {totalPages}",
+    "ageRange": "Age Range",
+    "location": "Location",
+    "personalInfo": "Personal Info",
+    "educationWork": "Education & Work",
+    "physicalAttributes": "Physical Attributes",
+    "religiousMarriage": "Religious & Marriage",
+    "all": "All",
+    "minHeight": "Min Height",
+    "maxHeight": "Max Height",
+    "minWeight": "Min Weight",
+    "maxWeight": "Max Weight"
+  },
     "partnerProfile": {
         "pleaseLoginToLike": "you must log in to like",
         "pleaseLoginToSendMessage": "you must log in to send a message",
@@ -504,8 +527,8 @@
         "unemployed": "Unemployed",
         "employed": "Employed",
         "selfEmployed": "Self-employed",
-  "selectCountryFirst": "Select country first",
-  "noCitiesAvailable": "No cities available"
+        "selectCountryFirst": "Select country first",
+        "noCitiesAvailable": "No cities available"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",

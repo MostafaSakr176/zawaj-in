@@ -6,41 +6,54 @@ import React, { useEffect, useState } from 'react';
 import api from '@/lib/axiosClient';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { FormField } from "@/components/ui/form";
+import Label from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import { TextField } from "@/components/ui/text-field";
 
-type Recommendation = {
-  userId: string;
+type User = {
+  id: string;
   fullName: string;
   age: number;
   gender: string;
   location: { city: string; country: string };
   origin: string | null;
-  bio: string;
-  religiousPractice: string;
-  sect: string;
-  prayerLevel: string;
+  nationality: string | null;
+  placeOfResidence: string | null;
+  tribe: string | null;
   maritalStatus: string;
-  profession: string;
-  weight: number | null;
-  height: number | null;
+  numberOfChildren: number | null;
+  profession: string | null;
+  educationLevel: string | null;
+  natureOfWork: string | null;
+  financialStatus: string | null;
+  healthStatus: string | null;
+  religiosityLevel: string | null;
+  weight: string | null;
+  height: string | null;
+  skinColor: string | null;
+  beauty: string | null;
   bodyColor: string | null;
   hairColor: string | null;
   hairType: string | null;
   eyeColor: string | null;
   houseAvailable: boolean | null;
-  natureOfWork: string | null;
+  bio: string | null;
   marriageType: string | null;
   acceptPolygamy: boolean | null;
-  compatibilityScore: number;
-  scoreBreakdown: {
-    ageScore: number;
-    locationScore: number;
-    religiousScore: number;
-    maritalStatusScore: number;
-    professionScore: number;
-    physicalAttributesScore: number;
-    marriageTypeScore: number;
-  };
-  hasLiked: boolean;
+  religiousPractice: string | null;
+  sect: string | null;
+  prayerLevel: string | null;
+  hasLiked?: boolean;
 };
 
 type Pagination = {
@@ -50,8 +63,37 @@ type Pagination = {
   totalPages: number;
 };
 
+type FilterData = {
+  minAge: number | null;
+  maxAge: number | null;
+  city: string;
+  country: string;
+  maritalStatus: string;
+  skinColor: string;
+  beauty: string;
+  religiousPractice: string;
+  sect: string;
+  prayerLevel: string;
+  minHeight: number | null;
+  maxHeight: number | null;
+  minWeight: number | null;
+  maxWeight: number | null;
+  bodyColor: string;
+  hairColor: string;
+  hairType: string;
+  eyeColor: string;
+  marriageType: string;
+  houseAvailable: boolean | null;
+  acceptPolygamy: boolean | null;
+  natureOfWork: string;
+  educationLevel: string;
+  financialStatus: string;
+  healthStatus: string;
+  religiosityLevel: string;
+};
+
 const MyFavorites = () => {
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
@@ -60,28 +102,87 @@ const MyFavorites = () => {
     totalPages: 1,
   });
 
-  const {profile} = useAuth();
+  const { profile } = useAuth();
   const t = useTranslations("home");
+  const tEdit = useTranslations("profileEdit");
+  const tRequest = useTranslations("request");
 
-  const fetchRecommendations = async (page = 1) => {
+  // Filter state
+  const [filters, setFilters] = useState<FilterData>({
+    minAge: null,
+    maxAge: null,
+    city: "",
+    country: "",
+    maritalStatus: "",
+    skinColor: "",
+    beauty: "",
+    religiousPractice: "",
+    sect: "",
+    prayerLevel: "",
+    minHeight: null,
+    maxHeight: null,
+    minWeight: null,
+    maxWeight: null,
+    bodyColor: "",
+    hairColor: "",
+    hairType: "",
+    eyeColor: "",
+    marriageType: "",
+    houseAvailable: null,
+    acceptPolygamy: null,
+    natureOfWork: "",
+    educationLevel: "",
+    financialStatus: "",
+    healthStatus: "",
+    religiosityLevel: "",
+  });
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const updateFilter = (field: string, value: any) => {
+    setFilters(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Build query parameters from filters
+  const buildQueryParams = () => {
+    const params = new URLSearchParams();
+    
+    // Required params
+    params.append('limit', pagination.limit.toString());
+    params.append('page', pagination.page.toString());
+    params.append('gender', profile?.gender === "male" ? "female" : "male");
+
+    // Optional filters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== null && value !== "" && value !== undefined) {
+        params.append(key, value.toString());
+      }
+    });
+
+    return params.toString();
+  };
+
+  const fetchUsers = async (page = 1) => {
     setLoading(true);
     try {
-      const res = await api.get(
-        `/matching/recommendations?gender=${profile?.gender === "male" ? "female" : "male"}&page=${page}&limit=${pagination.limit}&minCompatibilityScore=10`
-      );
-      setRecommendations(res.data.data || []);
-      setPagination(res.data.pagination || { page, limit: pagination.limit, total: 0, totalPages: 1 });
+      const queryParams = buildQueryParams();
+      const res = await api.get(`/users?${queryParams}`);
+      setUsers(res.data.data.users || []);
+      setPagination(res.data.data.pagination || { page, limit: pagination.limit, total: 0, totalPages: 1 });
     } catch {
-      setRecommendations([]);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRecommendations(pagination.page);
+    fetchUsers(pagination.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.page ,profile]);
+  }, [pagination.page, profile]);
 
   const handlePrev = () => {
     if (pagination.page > 1) {
@@ -93,6 +194,43 @@ const MyFavorites = () => {
     if (pagination.page < pagination.totalPages) {
       setPagination((prev) => ({ ...prev, page: prev.page + 1 }));
     }
+  };
+
+  const applyFilters = () => {
+    setPagination(prev => ({ ...prev, page: 1 })); // Reset to first page
+    fetchUsers(1);
+    setIsSheetOpen(false);
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      minAge: null,
+      maxAge: null,
+      city: "",
+      country: "",
+      maritalStatus: "",
+      skinColor: "",
+      beauty: "",
+      religiousPractice: "",
+      sect: "",
+      prayerLevel: "",
+      minHeight: null,
+      maxHeight: null,
+      minWeight: null,
+      maxWeight: null,
+      bodyColor: "",
+      hairColor: "",
+      hairType: "",
+      eyeColor: "",
+      marriageType: "",
+      houseAvailable: null,
+      acceptPolygamy: null,
+      natureOfWork: "",
+      educationLevel: "",
+      financialStatus: "",
+      healthStatus: "",
+      religiosityLevel: "",
+    });
   };
 
   return (
@@ -122,54 +260,404 @@ const MyFavorites = () => {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <Image
-                  src={"/photos/male-icon.webp"}
+                  src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
                   alt={"avatar"}
                   width={80}
                   height={80}
-                  className="rounded-full"
+                  className="rounded-full w-14 h-14 md:w-20 md:h-20 object-cover"
                 />
                 {true && (
-                  <span className="absolute top-1 left-1 w-4 h-4 rounded-full bg-[#2DC653] ring-3 ring-white" />
+                  <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 rounded-full bg-[#2DC653] ring-3 ring-white" />
                 )}
               </div>
               <div>
-                <div className="text-[#301B69] text-2xl">{t("welcome")}</div>
+                <div className="text-[#301B69] text-lg md:text-2xl">{t("welcome")}</div>
                 <div className="flex items-center justify-end gap-1">
-                  <h4 className="text-3xl font-semibold text-[#301B69] leading-none">
+                  <h4 className="text-xl md:text-3xl font-semibold text-[#301B69] leading-none">
                     {profile?.fullName || "User"}
                   </h4>
-                  {true && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
+                  {profile?.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                 </div>
               </div>
             </div>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+              <SheetTrigger asChild>
+                <Button className="flex items-center gap-2">
+                  <Filter size={20} />
+                  {t("filters")}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side='left' className="w-full md:w-[500px] flex flex-col h-full">
+                <SheetHeader className="flex-shrink-0 px-6 pt-6 pb-4">
+                  <SheetTitle>{t("filterUsers")}</SheetTitle>
+                </SheetHeader>
+                
+                {/* Scrollable Form Fields */}
+                <div className="flex-1 overflow-y-auto px-6 pb-4">
+                  <div className="space-y-4">
+                    {/* Age Range */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-[#301B69]">{t("ageRange")}</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField label={<Label>{tRequest("fields.preferredAgeFrom")}</Label>}>
+                          <TextField
+                            type="number"
+                            value={filters.minAge || ""}
+                            onChange={(e) => updateFilter("minAge", e.target.value ? Number(e.target.value) : null)}
+                            placeholder="18"
+                          />
+                        </FormField>
+                        <FormField label={<Label>{tRequest("fields.preferredAgeTo")}</Label>}>
+                          <TextField
+                            type="number"
+                            value={filters.maxAge || ""}
+                            onChange={(e) => updateFilter("maxAge", e.target.value ? Number(e.target.value) : null)}
+                            placeholder="65"
+                          />
+                        </FormField>
+                      </div>
+                    </div>
+
+                    {/* Location */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-[#301B69]">{t("location")}</h3>
+                      <FormField label={<Label>{tRequest("fields.city")}</Label>}>
+                        <TextField
+                          value={filters.city}
+                          onChange={(e) => updateFilter("city", e.target.value)}
+                          placeholder={tRequest("placeholders.write")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
+                        <TextField
+                          value={filters.country}
+                          onChange={(e) => updateFilter("country", e.target.value)}
+                          placeholder={tRequest("placeholders.write")}
+                        />
+                      </FormField>
+                    </div>
+
+                    {/* Personal Info */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-[#301B69]">{t("personalInfo")}</h3>
+                      <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "single", label: tEdit("single") },
+                            { value: "divorced", label: tEdit("divorced") },
+                            { value: "widowed", label: tEdit("widowed") },
+                          ]}
+                          value={filters.maritalStatus}
+                          onChange={(e) => updateFilter("maritalStatus", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                    </div>
+
+                    {/* Education & Work */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-[#301B69]">{t("educationWork")}</h3>
+                      <FormField label={<Label>{tRequest("fields.education")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "student", label: tEdit("student") },
+                            { value: "highSchool", label: tEdit("highSchool") },
+                            { value: "bachelor", label: tEdit("bachelor") },
+                            { value: "master", label: tEdit("master") },
+                            { value: "doctorate", label: tEdit("doctorate") },
+                          ]}
+                          value={filters.educationLevel}
+                          onChange={(e) => updateFilter("educationLevel", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.job")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "unemployed", label: tEdit("unemployed") },
+                            { value: "employed", label: tEdit("employed") },
+                            { value: "self_employed", label: tEdit("selfEmployed") },
+                          ]}
+                          value={filters.natureOfWork}
+                          onChange={(e) => updateFilter("natureOfWork", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.financial")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "excellent", label: tEdit("excellent") },
+                            { value: "good", label: tEdit("good") },
+                            { value: "average", label: tEdit("average") },
+                          ]}
+                          value={filters.financialStatus}
+                          onChange={(e) => updateFilter("financialStatus", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.health")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "excellent", label: tEdit("excellent") },
+                            { value: "good", label: tEdit("good") },
+                            { value: "average", label: tEdit("average") },
+                          ]}
+                          value={filters.healthStatus}
+                          onChange={(e) => updateFilter("healthStatus", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                    </div>
+
+                    {/* Physical Attributes */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-[#301B69]">{t("physicalAttributes")}</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField label={<Label>{t("minHeight")}</Label>}>
+                          <TextField
+                            type="number"
+                            value={filters.minHeight || ""}
+                            onChange={(e) => updateFilter("minHeight", e.target.value ? Number(e.target.value) : null)}
+                            placeholder="150"
+                          />
+                        </FormField>
+                        <FormField label={<Label>{t("maxHeight")}</Label>}>
+                          <TextField
+                            type="number"
+                            value={filters.maxHeight || ""}
+                            onChange={(e) => updateFilter("maxHeight", e.target.value ? Number(e.target.value) : null)}
+                            placeholder="200"
+                          />
+                        </FormField>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField label={<Label>{t("minWeight")}</Label>}>
+                          <TextField
+                            type="number"
+                            value={filters.minWeight || ""}
+                            onChange={(e) => updateFilter("minWeight", e.target.value ? Number(e.target.value) : null)}
+                            placeholder="40"
+                          />
+                        </FormField>
+                        <FormField label={<Label>{t("maxWeight")}</Label>}>
+                          <TextField
+                            type="number"
+                            value={filters.maxWeight || ""}
+                            onChange={(e) => updateFilter("maxWeight", e.target.value ? Number(e.target.value) : null)}
+                            placeholder="120"
+                          />
+                        </FormField>
+                      </div>
+                      <FormField label={<Label>{tRequest("fields.skin")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "white", label: tEdit("white") },
+                            { value: "lightWheat", label: tEdit("lightWheat") },
+                            { value: "darkWheat", label: tEdit("darkWheat") },
+                          ]}
+                          value={filters.skinColor}
+                          onChange={(e) => updateFilter("skinColor", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.beauty")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "handsome", label: tEdit("handsome") },
+                            { value: "average", label: tEdit("average") },
+                            { value: "good", label: tEdit("good") },
+                          ]}
+                          value={filters.beauty}
+                          onChange={(e) => updateFilter("beauty", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.hair")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "black", label: tEdit("black") },
+                            { value: "brown", label: tEdit("brown") },
+                            { value: "blonde", label: tEdit("blonde") },
+                          ]}
+                          value={filters.hairColor}
+                          onChange={(e) => updateFilter("hairColor", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.hairType")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "straight", label: tEdit("straight") },
+                            { value: "wavy", label: tEdit("wavy") },
+                            { value: "curly", label: tEdit("curly") },
+                          ]}
+                          value={filters.hairType}
+                          onChange={(e) => updateFilter("hairType", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.eyes")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "brown", label: tEdit("brown") },
+                            { value: "black", label: tEdit("black") },
+                            { value: "green", label: tEdit("green") },
+                            { value: "blue", label: tEdit("blue") },
+                          ]}
+                          value={filters.eyeColor}
+                          onChange={(e) => updateFilter("eyeColor", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                    </div>
+
+                    {/* Religious & Marriage */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-[#301B69]">{t("religiousMarriage")}</h3>
+                      <FormField label={<Label>{tRequest("fields.religiousPractice")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "Religious", label: tEdit("practiceReligious") },
+                            { value: "Moderate", label: tEdit("practiceModerate") },
+                            { value: "Basic", label: tEdit("practiceBasic") },
+                          ]}
+                          value={filters.religiousPractice}
+                          onChange={(e) => updateFilter("religiousPractice", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.sect")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "Sunni", label: tEdit("sunni") },
+                            { value: "Shia", label: tEdit("shia") },
+                          ]}
+                          value={filters.sect}
+                          onChange={(e) => updateFilter("sect", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.prayer")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "Prays 5 times a day", label: tEdit("prays5") },
+                            { value: "Sometimes", label: tEdit("sometimes") },
+                            { value: "Rarely", label: tEdit("rarely") },
+                          ]}
+                          value={filters.prayerLevel}
+                          onChange={(e) => updateFilter("prayerLevel", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.marriageType")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "traditional", label: tEdit("traditional") },
+                            { value: "civil", label: tEdit("civil") }
+                          ]}
+                          value={filters.marriageType}
+                          onChange={(e) => updateFilter("marriageType", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.home")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "true", label: tEdit("available") },
+                            { value: "false", label: tEdit("notAvailable") },
+                          ]}
+                          value={filters.houseAvailable?.toString() || ""}
+                          onChange={(e) => updateFilter("houseAvailable", e.target.value === "" ? null : e.target.value === "true")}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.polygamyAgree")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "true", label: tEdit("yes") },
+                            { value: "false", label: tEdit("no") },
+                          ]}
+                          value={filters.acceptPolygamy?.toString() || ""}
+                          onChange={(e) => updateFilter("acceptPolygamy", e.target.value === "" ? null : e.target.value === "true")}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{tRequest("fields.religiosity")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            { value: "committed", label: tEdit("practiceReligious") },
+                            { value: "moderate", label: tEdit("practiceModerate") },
+                            { value: "basic", label: tEdit("practiceBasic") },
+                          ]}
+                          value={filters.religiosityLevel}
+                          onChange={(e) => updateFilter("religiosityLevel", e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                        />
+                      </FormField>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Static Action Buttons at Bottom */}
+                <div className="flex-shrink-0 px-6 pb-6 pt-4 border-t bg-white">
+                  <div className="flex gap-3">
+                    <Button onClick={clearFilters} variant="secondary" className="flex-1">
+                      {t("clearFilters")}
+                    </Button>
+                    <Button onClick={applyFilters} className="flex-1">
+                      {t("applyFilters")}
+                    </Button>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
+          
           {loading ? (
             <div className="text-center py-12 text-lg text-[#301B69]">{t("loadingRecommendations")}</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {recommendations.length === 0 ? (
+              {users.length === 0 ? (
                 <div className="col-span-full text-center text-[#301B69] py-8">
                   {t("noRecommendations")}
                 </div>
               ) : (
-                recommendations.map((rec) => (
+                users.map((user) => (
                   <IdCard
-                    key={rec.userId}
-                    id={rec.userId}
-                    isFav={rec?.hasLiked}
-                    name={rec.fullName || "User"}
-                    avatar={rec.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
-                    age={rec.age}
-                    city={rec?.location?.city}
-                    job={rec?.natureOfWork}
-                    marriageType={rec?.marriageType}
-                    skinColor={rec?.bodyColor}
-                    status={rec?.maritalStatus}
+                    key={user.id}
+                    id={user.id}
+                    isFav={user?.hasLiked}
+                    name={user.fullName || "User"}
+                    avatar={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                    age={user.age}
+                    city={user?.location?.city}
+                    job={user?.natureOfWork}
+                    marriageType={user?.marriageType}
+                    skinColor={user?.bodyColor}
+                    status={user?.maritalStatus}
                   />
                 ))
               )}
             </div>
           )}
+          
           <div className="flex items-center justify-between gap-4 mt-6">
             <div className="flex items-center gap-2">
               <button

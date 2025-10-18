@@ -753,11 +753,11 @@ const Chats = () => {
                 }`}
             >
               {activeConversation && otherParticipant && (
-                <div className="h-full rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
+                <div className="h-[68vh] rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
                   {/* Header (fixed height) */}
                   <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
                     <div className="flex items-center gap-3">
-                    <button onClick={() => setActiveConversation(null)}>
+                    <button onClick={() => {setActiveConversation(null); setIsOpen(false);}}>
                       <ArrowRight className="text-[#2D1F55]" />
                     </button>
                     <div className="relative">
