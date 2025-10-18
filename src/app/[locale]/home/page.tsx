@@ -92,6 +92,19 @@ type FilterData = {
   religiosityLevel: string;
 };
 
+type CountryData = {
+  iso2: string;
+  iso3: string;
+  country: string;
+  cities: string[];
+};
+
+type CountriesResponse = {
+  error: boolean;
+  msg: string;
+  data: CountryData[];
+};
+
 const MyFavorites = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -101,6 +114,11 @@ const MyFavorites = () => {
     total: 0,
     totalPages: 1,
   });
+
+  // Countries and cities state
+  const [countries, setCountries] = useState<CountryData[]>([]);
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const [loadingCountries, setLoadingCountries] = useState(false);
 
   const { profile } = useAuth();
   const t = useTranslations("home");
@@ -139,11 +157,60 @@ const MyFavorites = () => {
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+  // Fetch countries and cities data
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setLoadingCountries(true);
+      try {
+        const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+        const data: CountriesResponse = await response.json();
+        
+        if (!data.error) {
+          setCountries(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      } finally {
+        setLoadingCountries(false);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
+  // Update cities when country changes
+  useEffect(() => {
+    if (filters.country) {
+      const selectedCountry = countries.find(
+        country => country.country.toLowerCase() === filters.country.toLowerCase()
+      );
+      
+      if (selectedCountry) {
+        setAvailableCities(selectedCountry.cities);
+      } else {
+        setAvailableCities([]);
+      }
+    } else {
+      setAvailableCities([]);
+      // Clear city when country is cleared
+      if (filters.city) {
+        updateFilter("city", "");
+      }
+    }
+  }, [filters.country, countries]);
+
   const updateFilter = (field: string, value: any) => {
     setFilters(prev => ({
       ...prev,
       [field]: value
     }));
+  };
+
+  // Handle country selection
+  const handleCountryChange = (value: string) => {
+    updateFilter("country", value);
+    // Clear city selection when country changes
+    updateFilter("city", "");
   };
 
   // Build query parameters from filters
@@ -287,13 +354,12 @@ const MyFavorites = () => {
                   {t("filters")}
                 </Button>
               </SheetTrigger>
-              <SheetContent  side='left'>
-                <SheetHeader className="flex-shrink-0">
+              <SheetContent side='left' className="w-full md:w-[500px] flex flex-col h-full">
+                <SheetHeader className="flex-shrink-0 px-6 pt-6 pb-4">
                   <SheetTitle>{t("filterUsers")}</SheetTitle>
                 </SheetHeader>
                 
                 {/* Scrollable Form Fields */}
-
                 <div className="flex-1 overflow-y-auto px-6 pb-4">
                   <div className="space-y-4">
                     {/* Age Range */}
@@ -322,18 +388,44 @@ const MyFavorites = () => {
                     {/* Location */}
                     <div className="space-y-4">
                       <h3 className="font-semibold text-[#301B69]">{t("location")}</h3>
-                      <FormField label={<Label>{tRequest("fields.city")}</Label>}>
-                        <TextField
-                          value={filters.city}
-                          onChange={(e) => updateFilter("city", e.target.value)}
-                          placeholder={tRequest("placeholders.write")}
+                      
+                      {/* Country Select */}
+                      <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            ...countries.map(country => ({
+                              value: country.country,
+                              label: country.country
+                            }))
+                          ]}
+                          value={filters.country}
+                          onChange={(e) => handleCountryChange(e.target.value)}
+                          placeholder={tRequest("placeholders.choose")}
+                          disabled={loadingCountries}
                         />
                       </FormField>
-                      <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
-                        <TextField
-                          value={filters.country}
-                          onChange={(e) => updateFilter("country", e.target.value)}
-                          placeholder={tRequest("placeholders.write")}
+
+                      {/* City Select - dependent on country */}
+                      <FormField label={<Label>{tRequest("fields.city")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "", label: t("all") },
+                            ...availableCities.map(city => ({
+                              value: city,
+                              label: city
+                            }))
+                          ]}
+                          value={filters.city}
+                          onChange={(e) => updateFilter("city", e.target.value)}
+                          placeholder={
+                            !filters.country 
+                              ? tRequest("selectCountryFirst") 
+                              : availableCities.length === 0 
+                                ? tRequest("noCitiesAvailable")
+                                : tRequest("placeholders.choose")
+                          }
+                          disabled={!filters.country || availableCities.length === 0}
                         />
                       </FormField>
                     </div>

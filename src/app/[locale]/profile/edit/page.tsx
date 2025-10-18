@@ -100,7 +100,7 @@ export default function EditProfilePage() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  
+
   // Countries and cities state
   const [countries, setCountries] = React.useState<CountryData[]>([]);
   const [cities, setCities] = React.useState<string[]>([]);
@@ -235,7 +235,7 @@ export default function EditProfilePage() {
     if (d === "rtl" || d === "ltr") setDir(d);
   }, []);
 
-    // Fetch countries on component mount
+  // Fetch countries on component mount
   React.useEffect(() => {
     const fetchCountries = async () => {
       setLoadingCountries(true);
@@ -255,7 +255,7 @@ export default function EditProfilePage() {
     fetchCountries();
   }, []);
 
-    // Update cities when country changes
+  // Update cities when country changes
   React.useEffect(() => {
     if (formData.location.country) {
       const selectedCountry = countries.find(
@@ -275,7 +275,7 @@ export default function EditProfilePage() {
     }
   }, [formData.location.country, countries]);
 
-    // ... existing useEffects and functions ...
+  // ... existing useEffects and functions ...
 
   const handleCountryChange = (value: string) => {
     updateNestedField("location", "country", value);
@@ -284,20 +284,20 @@ export default function EditProfilePage() {
   };
 
   // Convert countries to select options
-  const countryOptions = React.useMemo(() => 
+  const countryOptions = React.useMemo(() =>
     countries.map(country => ({
       value: country.country,
       label: country.country
     }))
-  , [countries]);
+    , [countries]);
 
   // Convert cities to select options
-  const cityOptions = React.useMemo(() => 
+  const cityOptions = React.useMemo(() =>
     cities.map(city => ({
       value: city,
       label: city
     }))
-  , [cities]);
+    , [cities]);
 
 
   const steps = [
@@ -490,9 +490,9 @@ export default function EditProfilePage() {
                       onChange={(e) => updateField("dateOfBirth", e.target.value)}
                     />
                   </FormField>
-                                    {/* Country Field */}
+                  {/* Country Field */}
                   <FormField
-                    label={<Label>{t("fields.nationality")}</Label>}
+                    label={<Label>{t("fields.country")}</Label>}
                     required
                   >
                     <Select
@@ -503,7 +503,7 @@ export default function EditProfilePage() {
                       disabled={loadingCountries}
                     />
                   </FormField>
-                  
+
                   {/* City Field - Dependent on Country */}
                   <FormField label={<Label>{t("fields.city")}</Label>}>
                     <Select
@@ -511,9 +511,9 @@ export default function EditProfilePage() {
                       value={formData.location.city}
                       onChange={(e) => updateNestedField("location", "city", e.target.value)}
                       placeholder={
-                        !formData.location.country 
+                        !formData.location.country
                           ? tEdit("selectCountryFirst")
-                          : cities.length === 0 
+                          : cities.length === 0
                             ? tEdit("noCitiesAvailable")
                             : t("placeholders.choose")
                       }
@@ -527,11 +527,16 @@ export default function EditProfilePage() {
                       placeholder={t("placeholders.write")}
                     />
                   </FormField>
-                  <FormField label={<Label>{t("fields.nationality2")}</Label>}>
-                    <TextField
+                  {/* Nationality Field - Independent Select */}
+                  <FormField label={<Label>{t("fields.nationality2")}</Label>}
+                    required>
+                    <Select
+                      options={countryOptions}
                       value={formData.nationality}
                       onChange={(e) => updateField("nationality", e.target.value)}
-                      placeholder={t("placeholders.write")}
+                      placeholder={loadingCountries ? tEdit("loading") : t("placeholders.choose")}
+                      disabled={loadingCountries}
+
                     />
                   </FormField>
                   <FormField label={<Label>{t("fields.residence")}</Label>}>

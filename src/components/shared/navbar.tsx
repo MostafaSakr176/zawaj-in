@@ -83,6 +83,25 @@ const Navbar = () => {
     setNavKey(navKey + 1);
   };
 
+  // Handle main page click - removes hash
+  const handleMainPageClick = (href: string) => {
+    if (href === "/") {
+      const isOnHomePage = pathname === `/${currentLocale}` || pathname === `/${currentLocale}/`;
+      
+      if (isOnHomePage && hash) {
+        // We're on home page with a hash, remove the hash
+        window.history.pushState(null, "", `/${currentLocale}`);
+        setHash("");
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (!isOnHomePage) {
+        // We're on a different page, navigate to home page
+        router.push(`/${currentLocale}`);
+      }
+    }
+    setNavKey(navKey + 1);
+  };
+
   // Navigation links for guests and authenticated users
   const guestLinks = [
     { href: "/", label: t('mainPage'), icon: <House strokeWidth={1.75} size={24} />, bold: true },
@@ -124,7 +143,7 @@ const Navbar = () => {
       <div className="w-full fixed top-4 md:top-8 z-50 px-4">
         <div className="flex items-center justify-between max-w-7xl rounded-2xl md:rounded-[24px] mx-auto px-5 py-3 bg-white/80 backdrop-blur-lg shadow-lg">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          <Link href={isAuthenticated ? "/home" : "/"} className="flex-shrink-0">
             <Image src="/photos/logo-ar.webp" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
             <Image src="/photos/logo-en.webp" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
           </Link>
@@ -140,12 +159,16 @@ const Navbar = () => {
                     key={link.href}
                     href={link.href}
                     onClick={(e) => {
-                      if (link.href.startsWith("/#")) {
+                      if (link.href === "/") {
+                        e.preventDefault();
+                        handleMainPageClick(link.href);
+                      } else if (link.href.startsWith("/#")) {
                         e.preventDefault();
                         handleHashClick(link.href);
-                      } else {
-                        setNavKey(navKey + 1);
                       }
+                      // For other links like "/contact-us", "/terms-of-use", etc., let the Link component handle the navigation normally
+                      // Don't prevent default - let the localized Link component work
+                      setNavKey(navKey + 1);
                     }}
                     className={`text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
                     ${isActive ? "border-b-2 border-[#301B69] font-bold" : "font-medium"}
@@ -224,12 +247,15 @@ const Navbar = () => {
                       key={link.href}
                       href={link.href}
                       onClick={(e) => {
-                        if (link.href.startsWith("/#")) {
+                        if (link.href === "/") {
+                          e.preventDefault();
+                          handleMainPageClick(link.href);
+                        } else if (link.href.startsWith("/#")) {
                           e.preventDefault();
                           handleHashClick(link.href);
-                        } else {
-                          setNavKey(navKey + 1);
                         }
+                        // For other links, let the Link component handle navigation
+                        setNavKey(navKey + 1);
                       }}
                       className={`flex items-center gap-3 text-[#301B69] hover:text-[#301B69] p-1 text-lg transition-colors
                       ${isActive ? "font-bold" : "font-medium"}

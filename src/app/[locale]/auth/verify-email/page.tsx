@@ -136,7 +136,7 @@ export default function OtpPage() {
                 {t("title")}
               </CardTitle>
               <p className='px-4 md:px-8 text-center text-base text-foreground/70'>
-                {t("desc")}
+                {t("desc" , {email})}
               </p>
             </CardHeader>
             <CardContent className='py-4 px-4 md:px-12 md:pb-10'>

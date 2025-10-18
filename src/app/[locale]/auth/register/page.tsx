@@ -94,7 +94,7 @@ export default function RegisterPage() {
             .string()
             .min(6, t("validation.passwordRequired"))
             .regex(
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/,
               t("validation.passwordComplexity")
             ),
           confirmPassword: z

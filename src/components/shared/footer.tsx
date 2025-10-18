@@ -48,7 +48,7 @@ const Footer = () => {
                     </Link>}
                     {/* Social Icons */}
                     <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
-                        <Link href="/" className="flex-shrink-0">
+                        <Link href={isAuthenticated ? "/home" : "/"} className="flex-shrink-0">
                             <Image src="/photos/logo-ar.webp" alt="" width={113} height={40} className='rtl:block ltr:hidden' />
                             <Image src="/photos/logo-en.webp" alt="" width={113} height={40} className="rtl:hidden ltr:block" />
                         </Link>
