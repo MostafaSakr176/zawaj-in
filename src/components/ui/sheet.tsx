@@ -62,7 +62,7 @@ function SheetContent({
           side === "right" &&
           "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
           side === "left" &&
-          "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
+          "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-2 bottom-0 top-4 h-full rounded-tr-2xl md:rounded-none rounded-tl-2xl md:data-[state=closed]:slide-out-to-bottom-0 md:data-[state=open]:slide-in-from-bottom-0 md:data-[state=closed]:slide-out-to-left md:data-[state=open]:slide-in-from-left md:inset-y-0 left-2 md:left-0 md:right-auto md:h-full md:w-3/4 md:border-r sm:max-w-sm pt-8",
           side === "top" &&
           "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
           side === "bottom" &&
@@ -71,7 +71,7 @@ function SheetContent({
         )}
         {...props}
       >
-        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-10 h-1 rounded-2xl bg-[#7F7F7F66]"></div>
+        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-10 h-1 rounded-2xl bg-[#7F7F7F66] md:hidden"></div>
         {children}
         <SheetPrimitive.Close className=" absolute top-4 rtl:left-4 ltr:right-4 flex items-center justify-center w-8 h-8 rounded-full bg-[#7F7F7F66] transition-opacity hover:opacity-100 disabled:pointer-events-none">
           <XIcon className="size-5 text-[#3D3D3D]" strokeWidth={2} />

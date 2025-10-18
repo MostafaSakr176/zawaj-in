@@ -287,12 +287,13 @@ const MyFavorites = () => {
                   {t("filters")}
                 </Button>
               </SheetTrigger>
-              <SheetContent side='left' className="w-full md:w-[500px] flex flex-col h-full">
-                <SheetHeader className="flex-shrink-0 px-6 pt-6 pb-4">
+              <SheetContent  side='left'>
+                <SheetHeader className="flex-shrink-0">
                   <SheetTitle>{t("filterUsers")}</SheetTitle>
                 </SheetHeader>
                 
                 {/* Scrollable Form Fields */}
+
                 <div className="flex-1 overflow-y-auto px-6 pb-4">
                   <div className="space-y-4">
                     {/* Age Range */}

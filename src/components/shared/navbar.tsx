@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { BookUser, ChevronDown, FileText, Headset, Heart, House, Menu, MessageCircle, Package, Power, RefreshCcw, User } from 'lucide-react';
+import { BookUser, ChevronDown, Contact, FileText, Headset, Heart, House, Menu, MessageCircle, NotebookText, Package, Podcast, Power, RefreshCcw, Siren, User } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -47,7 +47,7 @@ const Navbar = () => {
 
     // Listen for hash changes
     window.addEventListener("hashchange", updateHash);
-    
+
     // Listen for popstate (back/forward browser buttons)
     window.addEventListener("popstate", updateHash);
 
@@ -61,15 +61,15 @@ const Navbar = () => {
   const handleHashClick = (href: string) => {
     if (href.startsWith("/#")) {
       const hash = href.substring(1); // Remove the leading "/"
-      
+
       // Check if we're already on the home page
       const isOnHomePage = pathname === `/${currentLocale}` || pathname === `/${currentLocale}/`;
-      
+
       if (isOnHomePage) {
         // We're already on home page, just update hash and scroll
         window.history.pushState(null, "", `${pathname}${hash}`);
         setHash(hash);
-        
+
         // Scroll to element if it exists
         const element = document.querySelector(hash);
         if (element) {
@@ -87,10 +87,10 @@ const Navbar = () => {
   const guestLinks = [
     { href: "/", label: t('mainPage'), icon: <House strokeWidth={1.75} size={24} />, bold: true },
     { href: "/#advantages", label: t('advantages'), icon: <BookUser strokeWidth={1.25} size={24} /> },
-    { href: "/#subscriptions", label: t('subscriptions'), icon: <House strokeWidth={1.25} size={24} /> },
-    { href: "/#userOpinion", label: t('userOpinion'), icon: <House strokeWidth={1.25} size={24} /> },
-    { href: "/contact-us", label: t('contactUs'), icon: <House strokeWidth={1.25} size={24} /> },
-    { href: "/terms-of-use", label: t('usagePolicy'), icon: <House strokeWidth={1.25} size={24} /> },
+    { href: "/#subscriptions", label: t('subscriptions'), icon: <Podcast strokeWidth={1.25} size={24} /> },
+    { href: "/#userOpinion", label: t('userOpinion'), icon: <NotebookText strokeWidth={1.25} size={24} /> },
+    { href: "/contact-us", label: t('contactUs'), icon: <Contact strokeWidth={1.25} size={24} /> },
+    { href: "/terms-of-use", label: t('usagePolicy'), icon: <Siren strokeWidth={1.25} size={24} /> },
   ];
 
   const authLinks = [
@@ -134,7 +134,7 @@ const Navbar = () => {
             <div className="flex items-center justify-around gap-6">
               {(isAuthenticated ? authLinks : guestLinks).map(link => {
                 const isActive = isLinkActive(link.href);
-                
+
                 return (
                   <Link
                     key={link.href}
@@ -244,7 +244,7 @@ const Navbar = () => {
                   <RefreshCcw size={24} />
                   {t('languageToggle')}
                 </Button>
-                {!isAuthenticated && (
+                {!isAuthenticated ? (
                   <Link href="/auth/sign-in" className='w-full'>
                     <Button className='w-full block md:hidden rounded-[50px]'
                       style={{
@@ -253,6 +253,12 @@ const Navbar = () => {
                       {t('loginButton')}
                     </Button>
                   </Link>
+                ) : (
+                  <Button className='w-full block md:hidden rounded-[50px] bg-red-600 hover:bg-red-700'
+                    onClick={logout}
+                  >
+                    {t("accountMenu.logout")}
+                  </Button>
                 )}
               </div>
             </SheetContent>
