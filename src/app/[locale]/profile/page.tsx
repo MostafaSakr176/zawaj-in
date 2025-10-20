@@ -82,7 +82,7 @@ const Profile = () => {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Image
-                    src={profile.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                    src={profile.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                     alt="avatar"
                     width={72}
                     height={72}

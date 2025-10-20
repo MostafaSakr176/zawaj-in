@@ -143,7 +143,7 @@ const MyFavorites = () => {
                         id={like?.likedUser?.id}
                         isFav={true}
                         name={like?.likedUser?.fullName}
-                        avatar={like?.likedUser?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                        avatar={like?.likedUser?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                         age={like?.likedUser?.age}
                         city={like?.likedUser?.location?.city}
                         job={like?.likedUser?.natureOfWork}
@@ -172,7 +172,7 @@ const MyFavorites = () => {
                         id={like?.user?.id}
                         isFav={true}
                         name={like?.user?.fullName}
-                        avatar={like?.user?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                        avatar={like?.user?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                         age={like?.user?.age}
                         city={like?.user?.location?.city}
                         job={like?.user?.natureOfWork}

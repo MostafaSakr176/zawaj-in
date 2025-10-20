@@ -208,7 +208,9 @@
       "choose": "فضلاً اختر",
       "write": "اكتب",
       "weight": "60 كجم",
-      "height": "160 سم"
+      "height": "160 سم",
+      "selectCountryFirst": "اختر البلد أولاً",
+      "noCitiesAvailable": "لا توجد مدن متاحة"
     },
     "buttons": {
       "next": "التالي",
@@ -385,8 +387,8 @@
     "maxWeight": "أقصى وزن"
   },
   "partnerProfile": {
-    "pleaseLoginToLike":"يرجى تسجيل الدخول للإعجاب",
-    "pleaseLoginToSendMessage":"يرجى تسجيل الدخول لإرسال رسالة",
+    "pleaseLoginToLike": "يرجى تسجيل الدخول للإعجاب",
+    "pleaseLoginToSendMessage": "يرجى تسجيل الدخول لإرسال رسالة",
     "completeProfileToSendMessage": "يرجى إكمال ملفك الشخصي قبل إرسال رسالة",
     "loading": "جاري تحميل البيانات...",
     "notFound": "لم يتم العثور على المستخدم",
@@ -520,8 +522,10 @@
     "unemployed": "عاطل",
     "employed": "موظف",
     "selfEmployed": "عمل حر",
-  "selectCountryFirst": "اختر البلد أولاً",
-  "noCitiesAvailable": "لا توجد مدن متاحة"
+    "selectCountryFirst": "اختر البلد أولاً",
+    "noCitiesAvailable": "لا توجد مدن متاحة",
+    "tribal": "قبلي",
+    "non_tribal": "غير قبلي"
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسالية",

@@ -253,7 +253,7 @@ const PartnerProfile = () => {
                     <div className="flex items-center gap-3">
                         <div className="relative">
                             <Image
-                                src={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                                src={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                                 alt="avatar"
                                 width={72}
                                 height={72}

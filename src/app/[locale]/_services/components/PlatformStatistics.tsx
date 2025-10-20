@@ -13,7 +13,7 @@ import api from "@/lib/axiosClient";
 
 const AVATARS = [
   { src: "/icons/boy-img.webp", alt: "@shadcn", fallback: "CN" },
-  { src: "/photos/male-icon.webp", alt: "@evilrabbit", fallback: "ER" },
+  { src: "/photos/male-icon.png", alt: "@evilrabbit", fallback: "ER" },
   { src: "/icons/female-img.webp", alt: "@evilrabbit", fallback: "ER" },
   { src: "/icons/girl-img.webp", alt: "@leerob", fallback: "LR" },
 ];
@@ -27,7 +27,7 @@ type Stat = {
 
 const DEFAULT_STATS: Stat[] = [
   { icon: "/icons/male.webp", alt: "male users", labelKey: "registered_males", value: 0 },
-  { icon: "/icons/female-icon.webp", alt: "female users", labelKey: "registered_females", value: 0 },
+  { icon: "/icons/female-icon.png", alt: "female users", labelKey: "registered_females", value: 0 },
   { icon: "/icons/male-o.webp", alt: "active males today", labelKey: "active_males", value: 0 },
   { icon: "/icons/female-o.webp", alt: "active females today", labelKey: "active_females", value: 0 },
 ];
@@ -57,7 +57,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
         if (data) {
           setStats([
             { icon: "/icons/male.webp", alt: "male users", labelKey: "registered_males", value: data.totalMaleUsers },
-            { icon: "/icons/female-icon.webp", alt: "female users", labelKey: "registered_females", value: data.totalFemaleUsers },
+            { icon: "/icons/female-icon.png", alt: "female users", labelKey: "registered_females", value: data.totalFemaleUsers },
             { icon: "/icons/male-o.webp", alt: "active males today", labelKey: "active_males", value: data.onlineMaleUsersToday },
             { icon: "/icons/female-o.webp", alt: "active females today", labelKey: "active_females", value: data.onlineFemaleUsersToday },
           ]);

@@ -209,7 +209,9 @@
             "write": "Write...",
             "all": "All",
             "weight": "60 kg",
-            "height": "160 cm"
+            "height": "160 cm",
+            "selectCountryFirst": "choose country first",
+            "noCitiesAvailable": "no cities available"
         },
         "buttons": {
             "next": "Next",
@@ -529,7 +531,9 @@
         "employed": "Employed",
         "selfEmployed": "Self-employed",
         "selectCountryFirst": "Select country first",
-        "noCitiesAvailable": "No cities available"
+        "noCitiesAvailable": "No cities available",
+            "tribal": "Tribal",
+    "non_tribal": "Non-tribal"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",

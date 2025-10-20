@@ -327,7 +327,7 @@ const MyFavorites = () => {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <Image
-                  src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                  src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                   alt={"avatar"}
                   width={80}
                   height={80}
@@ -419,10 +419,10 @@ const MyFavorites = () => {
                           value={filters.city}
                           onChange={(e) => updateFilter("city", e.target.value)}
                           placeholder={
-                            !filters.country 
-                              ? tRequest("selectCountryFirst") 
-                              : availableCities.length === 0 
-                                ? tRequest("noCitiesAvailable")
+                            !filters.country
+                              ? tRequest("placeholders.selectCountryFirst")
+                              : availableCities.length === 0
+                                ? tRequest("placeholders.noCitiesAvailable")
                                 : tRequest("placeholders.choose")
                           }
                           disabled={!filters.country || availableCities.length === 0}
@@ -738,7 +738,7 @@ const MyFavorites = () => {
                     id={user.id}
                     isFav={user?.hasLiked}
                     name={user.fullName || "User"}
-                    avatar={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.webp"}
+                    avatar={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                     age={user.age}
                     city={user?.location?.city}
                     job={user?.natureOfWork}

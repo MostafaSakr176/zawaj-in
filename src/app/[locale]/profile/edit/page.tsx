@@ -21,6 +21,7 @@ import { TextField } from "@/components/ui/text-field";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import { useRouter } from "@/i18n/navigation";
 
 type FormData = {
   username: string;
@@ -99,7 +100,7 @@ export default function EditProfilePage() {
   const [dir, setDir] = React.useState<"rtl" | "ltr">("ltr");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
+  const router = useRouter();
 
   // Countries and cities state
   const [countries, setCountries] = React.useState<CountryData[]>([]);
@@ -367,7 +368,11 @@ export default function EditProfilePage() {
           dateOfBirth: formData.dateOfBirth || null,
           location: formData.location,
           origin: formData.origin || null,
+          nationality: formData.nationality || null,
+          placeOfResidence: formData.placeOfResidence || null,
+          tribe: formData.tribe || null,
           maritalStatus: formData.maritalStatus || null,
+          numberOfChildren: formData.numberOfChildren,
           profession: formData.profession || null,
         };
       }
@@ -375,14 +380,20 @@ export default function EditProfilePage() {
       // Step 1: Personal details
       if (step === 1) {
         dataToSend = {
+          educationLevel: formData.educationLevel || null,
+          natureOfWork: formData.natureOfWork || null,
+          financialStatus: formData.financialStatus || null,
+          healthStatus: formData.healthStatus || null,
+          religiosityLevel: formData.religiosityLevel || null,
           weight: formData.weight,
           height: formData.height,
+          skinColor: formData.skinColor || null,
+          beauty: formData.beauty || null,
           bodyColor: formData.bodyColor || null,
           hairColor: formData.hairColor || null,
           hairType: formData.hairType || null,
           eyeColor: formData.eyeColor || null,
           houseAvailable: formData.houseAvailable,
-          natureOfWork: formData.natureOfWork || null,
           bio: formData.bio || null,
         };
       }
@@ -390,10 +401,23 @@ export default function EditProfilePage() {
       // Step 2: Partner preferences
       if (step === 2) {
         dataToSend = {
+          preferredAgeFrom: formData.preferredAgeFrom,
+          preferredAgeTo: formData.preferredAgeTo,
           preferredMinWeight: formData.preferredMinWeight,
           preferredMaxWeight: formData.preferredMaxWeight,
           preferredMinHeight: formData.preferredMinHeight,
           preferredMaxHeight: formData.preferredMaxHeight,
+          preferredNationality: formData.preferredNationality || null,
+          preferredResidencePlace: formData.preferredResidencePlace || null,
+          preferredEducationLevel: formData.preferredEducationLevel || null,
+          preferredWorkNature: formData.preferredWorkNature || null,
+          preferredMaritalStatus: formData.preferredMaritalStatus || null,
+          preferredFinancialStatus: formData.preferredFinancialStatus || null,
+          preferredHasHouse: formData.preferredHasHouse,
+          preferredHealthStatus: formData.preferredHealthStatus || null,
+          preferredBeauty: formData.preferredBeauty || null,
+          preferredSkinColor: formData.preferredSkinColor || null,
+          preferredReligiosityLevel: formData.preferredReligiosityLevel || null,
           preferredBodyColors: formData.preferredBodyColors.length > 0 ? formData.preferredBodyColors : null,
           preferredHairColors: formData.preferredHairColors.length > 0 ? formData.preferredHairColors : null,
           preferredEyeColors: formData.preferredEyeColors.length > 0 ? formData.preferredEyeColors : null,
@@ -406,11 +430,16 @@ export default function EditProfilePage() {
         dataToSend = {
           marriageType: formData.marriageType || null,
           acceptPolygamy: formData.acceptPolygamy,
+          polygamyStatus: formData.polygamyStatus || null,
           religiousPractice: formData.religiousPractice || null,
           sect: formData.sect || null,
           prayerLevel: formData.prayerLevel || null,
+          preferredAcceptPolygamy: formData.preferredAcceptPolygamy || null,
+          preferredMarriageType: formData.preferredMarriageType || null,
         };
       }
+
+      console.log('Data to send:', dataToSend); // Debug log to see what's being sent
 
       await api.put("/users/profile", dataToSend);
 
@@ -436,7 +465,7 @@ export default function EditProfilePage() {
     const success = await saveCurrentStep();
     if (success) {
       if (step === steps.length - 1) {
-
+        router.push("/home");
       } else {
         setStep(s => Math.min(steps.length - 1, s + 1));
       }
@@ -465,7 +494,7 @@ export default function EditProfilePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-10 px-4 md:px-10 pb-10">
-              <Stepper steps={steps} activeIndex={step} direction={dir} />
+              <Stepper steps={steps} activeIndex={step} direction={dir} clickableSteps={true} onStepClick={(step)=>setStep(step)} />
 
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
@@ -547,10 +576,14 @@ export default function EditProfilePage() {
                     />
                   </FormField>
                   <FormField label={<Label>{t("fields.tribe")}</Label>}>
-                    <TextField
+                    <Select
+                      options={[
+                        { value: "tribal", label: tEdit("tribal") },
+                        { value: "non_tribal", label: tEdit("non_tribal") },
+                      ]}
                       value={formData.tribe}
                       onChange={(e) => updateField("tribe", e.target.value)}
-                      placeholder={t("placeholders.write")}
+                      placeholder={t("placeholders.choose")}
                     />
                   </FormField>
                   <FormField

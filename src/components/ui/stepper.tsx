@@ -14,6 +14,8 @@ export type StepperProps = {
   activeIndex: number; // zero-based
   className?: string;
   direction?: "rtl" | "ltr";
+  onStepClick?: (index: number) => void; // New prop for handling step clicks
+  clickableSteps?: boolean; // New prop to enable/disable clicking
 };
 
 export function Stepper({
@@ -21,8 +23,20 @@ export function Stepper({
   activeIndex,
   className,
   direction = "ltr",
+  onStepClick,
+  clickableSteps = false,
 }: StepperProps) {
   const n = steps.length;
+
+  const handleStepClick = (index: number) => {
+    // Only allow clicking on completed steps or current step
+    const isClickableStep = index <= activeIndex;
+    
+    if (clickableSteps && onStepClick && isClickableStep) {
+      onStepClick(index);
+    }
+  };
+
   return (
     <div className={cn("w-full", className)}>
       <div className="relative mx-auto flex max-w-6xl items-start">
@@ -41,7 +55,7 @@ export function Stepper({
               }
               : {
                 left: `0px`,
-                right: `${activeIndex === 0 ? 25 : activeIndex === 1 ? 50 : activeIndex === 2 ? 75 : activeIndex === 3 ? 100 : 100}%`,
+                width: `${activeIndex === 0 ? 25 : activeIndex === 1 ? 50 : activeIndex === 2 ? 75 : activeIndex === 3 ? 100 : 100}%`,
                 background:
                   "#E30BCD",
               }
@@ -77,19 +91,31 @@ export function Stepper({
                   : "upcoming";
             const isActive = state === "active";
             const isCompleted = state === "completed";
+            const isUpcoming = state === "upcoming";
+            
+            // Only allow clicking on completed steps and current step
+            const isClickableStep = clickableSteps && onStepClick && (isCompleted || isActive);
+            
             return (
               <li
                 key={s.id}
-                className="flex flex-col items-start gap-2"
+                className={cn(
+                  "flex flex-col items-start gap-2",
+                  isClickableStep && "cursor-pointer",
+                  isUpcoming && "cursor-not-allowed opacity-60"
+                )}
+                onClick={() => handleStepClick(idx)}
               >
                 <div
                   className={cn(
-                    "relative flex size-10 items-center justify-center rounded-full border-3 bg-[#F9F5FF]",
+                    "relative flex size-10 items-center justify-center rounded-full border-3 bg-[#F9F5FF] transition-all duration-200",
                     isActive
                       ? "border-[#8C5BD3] ring-[4px] ring-[#F4EBFF]"
                       : isCompleted
                         ? "border-[#8C5BD3]"
-                        : "border-[#E5DDF7]"
+                        : "border-[#E5DDF7]",
+                    isClickableStep && "hover:border-[#8C5BD3] hover:ring-[2px] hover:ring-[#F4EBFF]",
+                    isUpcoming && "hover:border-[#E5DDF7] hover:ring-0" // Remove hover effects for upcoming steps
                   )}
                 >
                   {isCompleted ? (
@@ -97,22 +123,20 @@ export function Stepper({
                   ) : (
                     <span
                       className={cn(
-                        "w-3 h-3 rounded-full",
+                        "w-3 h-3 rounded-full transition-colors duration-200",
                         isActive ? "bg-[#7F56D9]" : "bg-[#E4E7EC]"
                       )}
                     >
                     </span>
                   )}
-                  {/* {isActive && (
-                    <span className="absolute -inset-1 rounded-full" />
-                  )} */}
                 </div>
                 <div
                   className={cn(
-                    "text-sm font-semibold",
+                    "text-sm font-semibold transition-colors duration-200",
                     isActive || isCompleted
                       ? "text-[#301B69]"
-                      : "text-foreground/70"
+                      : "text-foreground/70",
+                    isClickableStep && "hover:text-[#301B69]"
                   )}
                 >
                   {s.label}
