@@ -39,9 +39,9 @@ export function Stepper({
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="relative mx-auto flex max-w-6xl items-start">
+      <div className="relative mx-auto flex max-w-7xl items-start">
         <div
-          className="absolute top-4 h-1 rounded-full bg-[#E5DDF7] w-full md:w-3/4  ltr:left-0 rtl:right-0 ltr:right-auto ltr:md:left-6 rtl:left-auto rtl:md:right-6"
+          className="absolute top-4 h-1 rounded-full bg-[#E5DDF7] w-full md:w-[67%]  ltr:left-0 rtl:right-0 ltr:right-auto ltr:md:left-6 rtl:left-auto rtl:md:right-6"
         />
         <div
           className="absolute top-4 h-1 rounded-full block md:hidden"
@@ -49,13 +49,13 @@ export function Stepper({
             direction === "rtl"
               ? {
                 right: `0px`,
-                width: `${activeIndex === 0 ? 25 : activeIndex === 1 ? 50 : activeIndex === 2 ? 75 : activeIndex === 3 ? 100 : 100}%`,
+                width: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 33.333 : activeIndex === 2 ? 66.666 : 66.666}%`,
                 background:
                   "#E30BCD",
               }
               : {
                 left: `0px`,
-                width: `${activeIndex === 0 ? 25 : activeIndex === 1 ? 50 : activeIndex === 2 ? 75 : activeIndex === 3 ? 100 : 100}%`,
+                width: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 33.333 : activeIndex === 2 ? 66.666 : 66.666}%`,
                 background:
                   "#E30BCD",
               }
@@ -69,19 +69,19 @@ export function Stepper({
             direction === "rtl"
               ? {
                 right: `20px`,
-                width: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 25 : activeIndex === 2 ? 50 : activeIndex === 3 ? 75 : 75}%`,
+                width: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 33.33 : activeIndex === 2 ? 66.66 : 66.66}%`,
                 background:
                   "linear-gradient(229.14deg, #C6B4F0 -7.04%, #8C5BD3 121.07%)",
               }
               : {
                 left: `20px`,
-                width: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 25 : activeIndex === 2 ? 50 : activeIndex === 3 ? 75 : 75}%`,
+                width: `${activeIndex === 0 ? 0 : activeIndex === 1 ? 33.33 : activeIndex === 2 ? 66.66 : 66.66}%`,
                 background:
                   "linear-gradient(229.14deg, #C6B4F0 -7.04%, #8C5BD3 121.07%)",
               }
           }
         />
-        <ol className="relative z-10 hidden md:grid w-full grid-cols-4 items-start gap-4">
+        <ol className="relative z-10 hidden md:grid w-full grid-cols-3 items-start gap-4">
           {steps.map((s, idx) => {
             const state =
               idx < activeIndex

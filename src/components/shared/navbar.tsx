@@ -147,7 +147,7 @@ const Navbar = () => {
           <Link href={isAuthenticated ? "/home" : "/"} className="flex-shrink-0">
             <div className='rtl:block ltr:hidden' >
               <svg width="114" height="41" viewBox="0 0 114 41" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_10506_1244)">
+                <g clipPath="url(#clip0_10506_1244)">
                   <path d="M105.618 38.558C103.546 38.558 102.034 38.068 101.082 37.088C100.102 36.136 99.6115 35.002 99.6115 33.686C99.6115 33.322 99.6255 33.056 99.6535 32.888C100.158 33.308 100.844 33.686 101.712 34.022C102.58 34.358 103.434 34.526 104.274 34.526C105.17 34.526 105.94 34.316 106.584 33.896C107.256 33.504 107.592 32.86 107.592 31.964V11.384C107.592 10.6 107.844 9.96995 108.348 9.49395C108.852 9.01795 109.51 8.77995 110.322 8.77995C111.134 8.77995 111.792 9.01795 112.296 9.49395C112.8 9.96995 113.052 10.628 113.052 11.468V30.956C113.052 32.804 112.52 34.526 111.456 36.122C110.42 37.746 108.474 38.558 105.618 38.558ZM110.364 6.04995C109.496 6.04995 108.754 5.75595 108.138 5.16795C107.55 4.55195 107.256 3.83795 107.256 3.02595C107.256 2.18595 107.55 1.47195 108.138 0.883952C108.754 0.295953 109.496 0.00195312 110.364 0.00195312C111.176 0.00195312 111.876 0.295953 112.464 0.883952C113.08 1.47195 113.388 2.18595 113.388 3.02595C113.388 3.83795 113.08 4.55195 112.464 5.16795C111.876 5.75595 111.176 6.04995 110.364 6.04995Z" fill="url(#paint0_linear_10506_1244)" />
                   <path d="M92.5138 8.77995C94.4738 8.77995 95.9998 9.04595 97.0919 9.57795C98.2119 10.11 99.0518 11.132 99.6118 12.644C100.172 14.156 100.452 16.354 100.452 19.238V30.956C100.452 32.804 99.9199 34.526 98.8559 36.122C97.8198 37.746 95.8738 38.558 93.0178 38.558C90.9458 38.558 89.4199 38.068 88.4398 37.088C87.4878 36.136 87.0118 35.002 87.0118 33.686C87.0118 33.322 87.0258 33.056 87.0538 32.888C87.6138 33.308 88.3138 33.686 89.1538 34.022C89.9939 34.358 90.8338 34.526 91.6738 34.526C92.5698 34.526 93.3399 34.316 93.9838 33.896C94.6558 33.504 94.9918 32.86 94.9918 31.964V28.94L91.0858 29.024C85.7938 29.024 83.1479 25.692 83.1479 19.028C83.1479 16.144 83.6098 13.946 84.5338 12.434C85.4578 10.922 86.5778 9.94195 87.8938 9.49395C89.2378 9.01795 90.7778 8.77995 92.5138 8.77995ZM88.6078 18.776C88.6078 20.428 88.7758 21.8 89.1118 22.892C89.4758 23.956 90.1618 24.488 91.1698 24.488H94.9918V15.71C94.9918 14.842 94.6838 14.212 94.0678 13.82C93.4799 13.428 92.7798 13.232 91.9678 13.232C90.7078 13.232 89.8258 13.694 89.3218 14.618C88.8458 15.542 88.6078 16.928 88.6078 18.776Z" fill="url(#paint1_linear_10506_1244)" />
                   <path d="M77.2524 28.94C76.3004 28.94 75.6004 28.66 75.1524 28.1C74.7324 27.54 74.5224 26.868 74.5224 26.084V7.39395C74.5224 6.27395 74.3544 5.48995 74.0184 5.04195C73.6824 4.59395 73.3744 4.31395 73.0944 4.20195C72.8144 4.08995 72.6464 4.01995 72.5904 3.99195C72.5904 3.71195 72.7024 3.34795 72.9264 2.89995C73.1784 2.45195 73.5564 2.05995 74.0604 1.72395C74.5644 1.38795 75.1944 1.21995 75.9504 1.21995C77.1544 1.21995 78.1204 1.69595 78.8484 2.64795C79.6044 3.59995 79.9824 4.80395 79.9824 6.25995V26.168C79.9824 26.924 79.7584 27.582 79.3104 28.142C78.8904 28.674 78.2044 28.94 77.2524 28.94Z" fill="url(#paint2_linear_10506_1244)" />
@@ -157,20 +157,20 @@ const Navbar = () => {
                 </g>
                 <defs>
                   <linearGradient id="paint0_linear_10506_1244" x1="47.4949" y1="14.5369" x2="47.1223" y2="40.5801" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#271850" />
-                    <stop offset="1" stop-color="#301B69" />
+                    <stop stopColor="#271850" />
+                    <stop offset="1" stopColor="#301B69" />
                   </linearGradient>
                   <linearGradient id="paint1_linear_10506_1244" x1="47.4949" y1="14.5369" x2="47.1223" y2="40.5801" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#271850" />
-                    <stop offset="1" stop-color="#301B69" />
+                    <stop stopColor="#271850" />
+                    <stop offset="1" stopColor="#301B69" />
                   </linearGradient>
                   <linearGradient id="paint2_linear_10506_1244" x1="47.4949" y1="14.5369" x2="47.1223" y2="40.5801" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#271850" />
-                    <stop offset="1" stop-color="#301B69" />
+                    <stop stopColor="#271850" />
+                    <stop offset="1" stopColor="#301B69" />
                   </linearGradient>
                   <linearGradient id="paint3_linear_10506_1244" x1="47.4949" y1="14.5369" x2="47.1223" y2="40.5801" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#271850" />
-                    <stop offset="1" stop-color="#301B69" />
+                    <stop stopColor="#271850" />
+                    <stop offset="1" stopColor="#301B69" />
                   </linearGradient>
                   <clipPath id="clip0_10506_1244">
                     <rect width="113.387" height="40.8248" fill="white" />
@@ -228,7 +228,10 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {/* Language Toggle */}
             <Button onClick={toggleLanguage} variant={"ghost"} className='font-sans hover:decoration-0 text-2xl flex items-center gap-2 font-bold p-1'>
-              <RefreshCcw size={24} />
+              <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 1L19 5M19 5L15 9M19 5H5C3.93913 5 2.92172 5.42143 2.17157 6.17157C1.42143 6.92172 1 7.93913 1 9V11M5 23L1 19M1 19L5 15M1 19H15C16.0609 19 17.0783 18.5786 17.8284 17.8284C18.5786 17.0783 19 16.0609 19 15V13" stroke="#090909" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+
               {t('languageToggle')}
             </Button>
             {/* Auth Buttons */}
@@ -250,14 +253,14 @@ const Navbar = () => {
                       {t("accountMenu.profile")}
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                  {/* <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                     <FileText size={22} color='#301B69' />
                     {t("accountMenu.invoices")}
                   </DropdownMenuItem>
                   <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                     <Package size={22} color='#301B69' />
                     {t("accountMenu.subscriptions")}
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuItem
                     className='text-[#FF3B30] font-medium text-lg'
                     onClick={logout}

@@ -110,7 +110,8 @@
             "codeRequired": "Verification code is required",
             "invalidCode": "Invalid verification code",
             "invalidEmail": "Invalid email address",
-            "codeLabel": "Verification code"
+            "codeLabel": "Verification code",
+            "verifyResetTitle": "Verify Password Reset"
         },
         "reset": {
             "title": "Reset new password",
@@ -351,7 +352,9 @@
         "messagesLoading": "Loading messages...",
         "engagementRequestMessage": "Will you be engaged with me?",
         "engagementRequestSent": "Engagement request sent successfully.",
-        "engagementRequestError": "Failed to send engagement request."
+        "engagementRequestError": "Failed to send engagement request.",
+        "muteSounds": "Mute Sounds",
+        "enableSounds": "Enable Sounds"
     },
     "contact": {
         "title": "Contact Us",
@@ -423,11 +426,10 @@
         "hairType": "Hair type",
         "sectionEducation": "Education & Work",
         "education": "Education",
-        "student": "Student",
-        "highSchool": "High School",
-        "bachelor": "Bachelor",
-        "master": "Master",
-        "doctorate": "Doctorate",
+        "secondary": "Secondary",
+        "diploma": "Diploma",
+        "university": "University",
+        "higher_education": "Higher Education",
         "job": "Job",
         "sectionReligion": "Religion & Practice",
         "sect": "Sect",
@@ -480,11 +482,10 @@
         "divorced": "Divorced",
         "widowed": "Widowed",
         "married": "Married",
-        "student": "Student",
-        "highSchool": "High School",
-        "bachelor": "Bachelor",
-        "master": "Master",
-        "doctorate": "Doctorate",
+        "secondary": "Secondary",
+        "diploma": "Diploma",
+        "university": "University",
+        "higher_education": "Higher Education",
         "saudiArabia": "Saudi Arabia",
         "egypt": "Egypt",
         "uae": "UAE",
@@ -532,8 +533,15 @@
         "selfEmployed": "Self-employed",
         "selectCountryFirst": "Select country first",
         "noCitiesAvailable": "No cities available",
-            "tribal": "Tribal",
-    "non_tribal": "Non-tribal"
+        "tribal": "Tribal",
+        "non_tribal": "Non-tribal",
+        "healthy": "Healthy",
+        "chronically_ill": "Chronically Ill",
+        "disabled": "Disabled",
+        "normal": "Normal",
+        "conservative": "Conservative",
+        "committed": "Committed",
+        "saveSuccess": "Your profile has been updated successfully"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",

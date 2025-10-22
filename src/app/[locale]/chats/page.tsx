@@ -19,6 +19,7 @@ import { Conversation, Message } from "@/services/chatService";
 import api from "@/lib/axiosClient";
 import { useTranslations } from "next-intl";
 import { chatService } from "@/services/chatService";
+import { enableAudioContext, requestNotificationPermission } from "@/utils/notificationUtils";
 
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -164,7 +165,7 @@ function ChatListItem({
           height={40}
           className="rounded-full ring-2 ring-white"
         />
-        <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white" />
+        {/* <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white" /> */}
       </div>
       <div className="flex-1">
         <div className="flex items-center justify-between">
@@ -284,6 +285,18 @@ const Chats = () => {
     stopTyping,
     loadMoreMessages,
   } = useChat(activeConversation?.id || null);
+
+    useEffect(() => {
+    // Enable audio context to handle autoplay restrictions
+    enableAudioContext();
+    
+    // Request notification permission
+    requestNotificationPermission().then((granted) => {
+      if (granted) {
+        console.log('Notification permission granted');
+      }
+    });
+  }, []);
 
   // Handle conversation ID from URL parameter or set first chat as default
   useEffect(() => {

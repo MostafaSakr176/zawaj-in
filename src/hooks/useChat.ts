@@ -2,10 +2,81 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useSocket } from "@/context/SocketContext";
 import { chatService, Message, Conversation } from "@/services/chatService";
 import { useAuth } from "@/context/AuthContext";
+import { useAudioNotification } from './useAudioNotification';
+
+
+
+export function useConversations() {
+  const { socket } = useSocket();
+  const { profile } = useAuth();
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load conversations
+  useEffect(() => {
+    const loadConversations = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await chatService.getConversations(1, 50);
+        setConversations(response.data);
+      } catch (err: any) {
+        setError(err.response?.data?.message || "Failed to load conversations");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadConversations();
+  }, []);
+
+  // Listen for new messages to update conversation list
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleMessageReceived = (data: { message: Message; conversationId: string }) => {
+      setConversations((prev) =>
+        prev.map((conv) =>
+          conv.id === data.conversationId
+            ? {
+                ...conv,
+                lastMessage: data.message.content,
+                lastMessageAt: data.message.createdAt,
+              }
+            : conv
+        )
+      );
+    };
+
+    socket.on("message_received", handleMessageReceived);
+
+    return () => {
+      socket.off("message_received", handleMessageReceived);
+    };
+  }, [socket]);
+
+  const refreshConversations = useCallback(async () => {
+    try {
+      const response = await chatService.getConversations(1, 50);
+      setConversations(response.data);
+    } catch (err: any) {
+    }
+  }, []);
+
+  return {
+    conversations,
+    loading,
+    error,
+    refreshConversations,
+  };
+}
+
 
 export function useChat(conversationId: string | null) {
   const { socket, isConnected } = useSocket();
   const { profile } = useAuth();
+  const { playNotificationSound } = useAudioNotification();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +85,7 @@ export function useChat(conversationId: string | null) {
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const { refreshConversations } = useConversations();
   // Load initial messages and conversation details
   useEffect(() => {
     if (!conversationId) {
@@ -154,12 +225,27 @@ export function useChat(conversationId: string | null) {
       }
     };
 
+    const handleNewMessage = (message: Message) => {
+      // Only play sound for messages from other users
+      if (message.senderId !== profile?.id) {
+        playNotificationSound();
+      }
+      
+      setMessages(prev => [...prev, message]);
+      
+      // Update last message in conversations list
+      if (refreshConversations) {
+        refreshConversations();
+      }
+    };
+
     socket.on("message_received", handleMessageReceived);
     socket.on("message_delivered", handleMessageDelivered);
     socket.on("message_read", handleMessageRead);
     socket.on("user_typing", handleUserTyping);
     socket.on("user_online", handleUserOnline);
     socket.on("user_offline", handleUserOffline);
+    socket.on("newMessage", handleNewMessage);
 
     return () => {
       socket.off("message_received", handleMessageReceived);
@@ -168,8 +254,9 @@ export function useChat(conversationId: string | null) {
       socket.off("user_typing", handleUserTyping);
       socket.off("user_online", handleUserOnline);
       socket.off("user_offline", handleUserOffline);
+      socket.off("newMessage", handleNewMessage);
     };
-  }, [socket, conversationId, profile?.id]);
+  }, [socket, conversationId, profile?.id, playNotificationSound, refreshConversations]);
 
   // Send message via socket
   const sendMessage = useCallback(
@@ -306,68 +393,3 @@ export function useChat(conversationId: string | null) {
   };
 }
 
-export function useConversations() {
-  const { socket } = useSocket();
-  const { profile } = useAuth();
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Load conversations
-  useEffect(() => {
-    const loadConversations = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await chatService.getConversations(1, 50);
-        setConversations(response.data);
-      } catch (err: any) {
-        setError(err.response?.data?.message || "Failed to load conversations");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadConversations();
-  }, []);
-
-  // Listen for new messages to update conversation list
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleMessageReceived = (data: { message: Message; conversationId: string }) => {
-      setConversations((prev) =>
-        prev.map((conv) =>
-          conv.id === data.conversationId
-            ? {
-                ...conv,
-                lastMessage: data.message.content,
-                lastMessageAt: data.message.createdAt,
-              }
-            : conv
-        )
-      );
-    };
-
-    socket.on("message_received", handleMessageReceived);
-
-    return () => {
-      socket.off("message_received", handleMessageReceived);
-    };
-  }, [socket]);
-
-  const refreshConversations = useCallback(async () => {
-    try {
-      const response = await chatService.getConversations(1, 50);
-      setConversations(response.data);
-    } catch (err: any) {
-    }
-  }, []);
-
-  return {
-    conversations,
-    loading,
-    error,
-    refreshConversations,
-  };
-}

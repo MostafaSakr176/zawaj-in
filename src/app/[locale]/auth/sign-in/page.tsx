@@ -141,6 +141,11 @@ export default function SignInPage() {
         await refreshProfile();
       }
 
+      if (res.data.data?.termsAccepted) {
+        router.push("/home"); 
+        return;
+      }
+
       router.push("/terms-of-use");
     } catch (err: any) {
       setError(

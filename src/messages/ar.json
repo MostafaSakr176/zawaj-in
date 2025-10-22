@@ -110,7 +110,8 @@
       "codeRequired": "رمز التحقق مطلوب",
       "invalidCode": "رمز التحقق غير صحيح",
       "invalidEmail": "البريد الإلكتروني غير صحيح",
-      "codeLabel": "رمز التحقق"
+      "codeLabel": "رمز التحقق",
+      "verifyResetTitle": "تحقق من إعادة تعيين كلمة المرور"
     },
     "reset": {
       "title": "اعادة كلمة المرور الجديدة",
@@ -343,7 +344,9 @@
     "messagesLoading": "جاري تحميل الرسائل...",
     "engagementRequestMessage": "هل تقبلين الخطوبة معي؟",
     "engagementRequestSent": "تم إرسال طلب الخطوبة بنجاح.",
-    "engagementRequestError": "فشل في إرسال طلب الخطوبة."
+    "engagementRequestError": "فشل في إرسال طلب الخطوبة.",
+    "muteSounds": "كتم الأصوات",
+    "enableSounds": "تفعيل الأصوات"
   },
   "contact": {
     "title": "تواصل بنا",
@@ -415,11 +418,10 @@
     "hairType": "نوع الشعر",
     "sectionEducation": "الدراسة و العمل",
     "education": "المؤهل الدراسي",
-    "student": "طالب",
-    "highSchool": "ثانوية عامة",
-    "bachelor": "بكالوريوس",
-    "master": "ماجستير",
-    "doctorate": "دكتوراه",
+    "secondary": "ثانوية",
+    "diploma": "دبلوم",
+    "university": "جامعة",
+    "higher_education": "تعليم عال",
     "job": "الوظيفة",
     "sectionReligion": "الديانة والممارسة",
     "sect": "المذهب",
@@ -472,11 +474,10 @@
     "divorced": "مطلق",
     "widowed": "أرمل",
     "married": "متزوج",
-    "student": "طالب",
-    "highSchool": "ثانوية عامة",
-    "bachelor": "بكالوريوس",
-    "master": "ماجستير",
-    "doctorate": "دكتوراه",
+    "secondary": "ثانوية",
+    "diploma": "دبلوم",
+    "university": "جامعة",
+    "higher_education": "تعليم عال",
     "saudiArabia": "السعودية",
     "egypt": "مصر",
     "uae": "الإمارات",
@@ -525,7 +526,14 @@
     "selectCountryFirst": "اختر البلد أولاً",
     "noCitiesAvailable": "لا توجد مدن متاحة",
     "tribal": "قبلي",
-    "non_tribal": "غير قبلي"
+    "non_tribal": "غير قبلي",
+    "healthy": "سليم",
+    "chronically_ill": "مريض مزمن",
+    "disabled": "معاق",
+    "normal": "عادي",
+    "conservative": "محافظ",
+    "committed": "ملتزم",
+    "saveSuccess": "تم تحديث ملفك الشخصي بنجاح"
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسالية",

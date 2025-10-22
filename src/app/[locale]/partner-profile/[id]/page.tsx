@@ -447,7 +447,7 @@ const PartnerProfile = () => {
                     </div>
                 </div>
             </div>
-            <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
+            {/* <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
                 <h3 className='font-semibold text-3xl text-[#301B69]'>{t("partnerPreferencesTitle")}</h3>
 
                 <div className="px-2 md:px-4">
@@ -459,7 +459,6 @@ const PartnerProfile = () => {
                 </div>
 
 
-                {/* Section: الدراسة و العمل */}
                 <div className="px-2 md:px-4">
                     <div className="flex items-center justify-between mb-4">
                         <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionAppearance")}</h4>
@@ -482,7 +481,6 @@ const PartnerProfile = () => {
                         </div>
                     </div>
                 </div>
-                {/* Partner Preferences Section - Add missed fields */}
                 <div className="px-2 md:px-4">
                     <div className="flex items-center justify-between mb-4">
                         <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionEducation")}</h4>
@@ -529,7 +527,7 @@ const PartnerProfile = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
 
     )
