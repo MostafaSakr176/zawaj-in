@@ -66,7 +66,7 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
             {t(`${plan.key}.price`)} <SaudiRiyal size={30} />
           </div>
           <div className="text-xl font-bold text-[#1b6925] mb-4 flex items-center justify-center md:justify-start gap-1">
-            {t(`freeForlimitedTime`)} 
+            {t(`freeForlimitedTime`)}
           </div>
         </div>
 
@@ -110,9 +110,11 @@ const Subscriptions = React.memo(function Subscriptions() {
       <h2 className="text-4xl lg:text-5xl font-bold text-[#301B69] leading-normal text-center">
         {t("title")}
       </h2>
+      
       <p className="text-base md:text-lg font-medium text-[#301B69] text-center mb-10">
         {t("subtitle")}
       </p>
+
       {/* Mobile Swiper */}
       {/* <div className="flex md:hidden subscriptions-swiper">
         <Swiper

@@ -19,6 +19,21 @@ const Field = ({ label, value }: FieldProps) => (
     </div>
 );
 
+/**
+ * Simple date formatter for ISO strings; returns localized date/time or an empty string when input is falsy.
+ * Adjust formatting as needed for your locale or presentation requirements.
+ */
+const formatDate = (iso?: string | null) => {
+    if (!iso) return '';
+    try {
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return d.toLocaleString(); // change to toLocaleDateString/toLocaleTimeString or custom formatting if needed
+    } catch {
+        return iso;
+    }
+};
+
 type UserDetails = {
     id: string;
     fullName: string;
@@ -109,6 +124,7 @@ type UserDetails = {
     likedme: boolean;
     isliked: boolean;
     matching: boolean;
+    lastSeenAt: string;
 };
 
 const PartnerProfile = () => {
@@ -271,7 +287,7 @@ const PartnerProfile = () => {
                                     </h4>
                                     {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                 </div>
-                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{tPartner("lastSeen")}</div>
+                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{tPartner("lastSeen")}: {formatDate(user.lastSeenAt)}</div>
                             </div>
                             <div className="text-[#8A97AB] text-base">{tPartner("membershipNumber")} {user.chartNumber}</div>
                         </div>
@@ -303,96 +319,96 @@ const PartnerProfile = () => {
 
                 <hr className="border-[#ECEBFF]" />
                 {/* Bio Section */}
-{user.bio && (
-            <>
-              <div className="px-2 md:px-4">
-                <h4 className="text-[#2D1F55] font-semibold text-base mb-4">{tPartner("bioTitle")}</h4>
-                <p className="text-[#301B69] leading-relaxed">{user.bio}</p>
-              </div>
-              <hr className="border-[#ECEBFF]" />
-            </>
-          )}
+                {user.bio && (
+                    <>
+                        <div className="px-2 md:px-4">
+                            <h4 className="text-[#2D1F55] font-semibold text-base mb-4">{tPartner("bioTitle")}</h4>
+                            <p className="text-[#301B69] leading-relaxed">{user.bio}</p>
+                        </div>
+                        <hr className="border-[#ECEBFF]" />
+                    </>
+                )}
 
-          {/* Section: السكن و الحالة الإجتماعية */}
-          <div className="px-2 md:px-4">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionResidence")}</h4>
-            </div>
-            <div className="flex items-center flex-wrap gap-4">
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("nationality")} value={user?.location?.country} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("placeOfResidence")} value={user?.location?.city} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("age")} value={`${user.age} ${tPartner("years")}`} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("tribe")} value={user.tribe} />
-              </div>
-              <div>
-                <Field label={tPartner("maritalStatus")} value={user.maritalStatus} />
-              </div>
-              <div>
-                <Field label={tPartner("home")} value={user.houseAvailable ? tPartner("yes") : tPartner("no")} />
-              </div>
-            </div>
-          </div>
+                {/* Section: السكن و الحالة الإجتماعية */}
+                <div className="px-2 md:px-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionResidence")}</h4>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-4">
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("nationality")} value={user?.location?.country} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("placeOfResidence")} value={user?.location?.city} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("age")} value={`${user.age} ${tPartner("years")}`} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("tribe")} value={user.tribe} />
+                        </div>
+                        <div>
+                            <Field label={tPartner("maritalStatus")} value={user.maritalStatus} />
+                        </div>
+                        <div>
+                            <Field label={tPartner("home")} value={user.houseAvailable ? tPartner("yes") : tPartner("no")} />
+                        </div>
+                    </div>
+                </div>
 
-          <hr className="border-[#ECEBFF]" />
+                <hr className="border-[#ECEBFF]" />
 
-          <div className="px-2 md:px-4">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionAppearance")}</h4>
-            </div>
-            <div className="flex items-center flex-wrap gap-4">
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("height")} value={user?.height} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("weight")} value={user?.weight} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("skinColor")} value={user.skinColor} />
-              </div>
-              <div >
-                <Field label={tPartner("beauty")} value={user.beauty} />
-              </div>
-            </div>
-          </div>
+                <div className="px-2 md:px-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionAppearance")}</h4>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-4">
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("height")} value={user?.height} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("weight")} value={user?.weight} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("skinColor")} value={user.skinColor} />
+                        </div>
+                        <div >
+                            <Field label={tPartner("beauty")} value={user.beauty} />
+                        </div>
+                    </div>
+                </div>
 
-          <hr className="border-[#ECEBFF]" />
+                <hr className="border-[#ECEBFF]" />
 
-          {/* Section: الدراسة و العمل */}
-          <div className="px-2 md:px-4">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionEducation")}</h4>
-            </div>
-            <div className="flex items-center flex-wrap gap-4">
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("job")} value={user.natureOfWork} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("educationLevel")} value={user.educationLevel} />
-              </div>
-            </div>
-          </div>
+                {/* Section: الدراسة و العمل */}
+                <div className="px-2 md:px-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionEducation")}</h4>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-4">
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("job")} value={user.natureOfWork} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("educationLevel")} value={user.educationLevel} />
+                        </div>
+                    </div>
+                </div>
 
-          <hr className="border-[#ECEBFF]" />
+                <hr className="border-[#ECEBFF]" />
 
-          {/* Section: الديانة والممارسة */}
-          <div className="px-2 md:px-4">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionReligion")}</h4>
+                {/* Section: الديانة والممارسة */}
+                <div className="px-2 md:px-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionReligion")}</h4>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-4">
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("marriageType")} value={user.marriageType} />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="flex items-center flex-wrap gap-4">
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("marriageType")} value={user.marriageType} />
-              </div>
-            </div>
-          </div>
-        </div>
 
             {/* <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
                 <h3 className='font-semibold text-3xl text-[#301B69]'>{t("partnerPreferencesTitle")}</h3>
