@@ -164,7 +164,7 @@ const MyFavorites = () => {
       try {
         const response = await fetch('https://countriesnow.space/api/v0.1/countries');
         const data: CountriesResponse = await response.json();
-        
+
         if (!data.error) {
           setCountries(data.data);
         }
@@ -184,7 +184,7 @@ const MyFavorites = () => {
       const selectedCountry = countries.find(
         country => country.country.toLowerCase() === filters.country.toLowerCase()
       );
-      
+
       if (selectedCountry) {
         setAvailableCities(selectedCountry.cities);
       } else {
@@ -216,7 +216,7 @@ const MyFavorites = () => {
   // Build query parameters from filters
   const buildQueryParams = () => {
     const params = new URLSearchParams();
-    
+
     // Required params
     params.append('limit', pagination.limit.toString());
     params.append('page', pagination.page.toString());
@@ -355,16 +355,14 @@ const MyFavorites = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side='left' className="w-full md:w-[500px] flex flex-col h-full">
-                <SheetHeader className="flex-shrink-0 px-6 pt-6 pb-4">
+                <SheetHeader className="flex-shrink-0 px-6 pb-4">
                   <SheetTitle>{t("filterUsers")}</SheetTitle>
                 </SheetHeader>
-                
+
                 {/* Scrollable Form Fields */}
                 <div className="flex-1 overflow-y-auto px-6 pb-4">
-                  <div className="space-y-4">
                     {/* Age Range */}
                     <div className="space-y-4">
-                      <h3 className="font-semibold text-[#301B69]">{t("ageRange")}</h3>
                       <div className="grid grid-cols-2 gap-4">
                         <FormField label={<Label>{tRequest("fields.preferredAgeFrom")}</Label>}>
                           <TextField
@@ -383,13 +381,6 @@ const MyFavorites = () => {
                           />
                         </FormField>
                       </div>
-                    </div>
-
-                    {/* Location */}
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-[#301B69]">{t("location")}</h3>
-                      
-                      {/* Country Select */}
                       <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
                         <Select
                           options={[
@@ -428,11 +419,6 @@ const MyFavorites = () => {
                           disabled={!filters.country || availableCities.length === 0}
                         />
                       </FormField>
-                    </div>
-
-                    {/* Personal Info */}
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-[#301B69]">{t("personalInfo")}</h3>
                       <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
                         <Select
                           options={[
@@ -446,20 +432,14 @@ const MyFavorites = () => {
                           placeholder={tRequest("placeholders.choose")}
                         />
                       </FormField>
-                    </div>
-
-                    {/* Education & Work */}
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-[#301B69]">{t("educationWork")}</h3>
                       <FormField label={<Label>{tRequest("fields.education")}</Label>}>
                         <Select
                           options={[
                             { value: "", label: t("all") },
-                            { value: "student", label: tEdit("student") },
-                            { value: "highSchool", label: tEdit("highSchool") },
-                            { value: "bachelor", label: tEdit("bachelor") },
-                            { value: "master", label: tEdit("master") },
-                            { value: "doctorate", label: tEdit("doctorate") },
+                            { value: "secondary", label: tEdit("secondary") },
+                            { value: "diploma", label: tEdit("diploma") },
+                            { value: "university", label: tEdit("university") },
+                            { value: "higher_education", label: tEdit("higher_education") },
                           ]}
                           value={filters.educationLevel}
                           onChange={(e) => updateFilter("educationLevel", e.target.value)}
@@ -479,37 +459,7 @@ const MyFavorites = () => {
                           placeholder={tRequest("placeholders.choose")}
                         />
                       </FormField>
-                      <FormField label={<Label>{tRequest("fields.financial")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "excellent", label: tEdit("excellent") },
-                            { value: "good", label: tEdit("good") },
-                            { value: "average", label: tEdit("average") },
-                          ]}
-                          value={filters.financialStatus}
-                          onChange={(e) => updateFilter("financialStatus", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.health")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "excellent", label: tEdit("excellent") },
-                            { value: "good", label: tEdit("good") },
-                            { value: "average", label: tEdit("average") },
-                          ]}
-                          value={filters.healthStatus}
-                          onChange={(e) => updateFilter("healthStatus", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                    </div>
 
-                    {/* Physical Attributes */}
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-[#301B69]">{t("physicalAttributes")}</h3>
                       <div className="grid grid-cols-2 gap-4">
                         <FormField label={<Label>{t("minHeight")}</Label>}>
                           <TextField
@@ -572,89 +522,6 @@ const MyFavorites = () => {
                           placeholder={tRequest("placeholders.choose")}
                         />
                       </FormField>
-                      <FormField label={<Label>{tRequest("fields.hair")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "black", label: tEdit("black") },
-                            { value: "brown", label: tEdit("brown") },
-                            { value: "blonde", label: tEdit("blonde") },
-                          ]}
-                          value={filters.hairColor}
-                          onChange={(e) => updateFilter("hairColor", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.hairType")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "straight", label: tEdit("straight") },
-                            { value: "wavy", label: tEdit("wavy") },
-                            { value: "curly", label: tEdit("curly") },
-                          ]}
-                          value={filters.hairType}
-                          onChange={(e) => updateFilter("hairType", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.eyes")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "brown", label: tEdit("brown") },
-                            { value: "black", label: tEdit("black") },
-                            { value: "green", label: tEdit("green") },
-                            { value: "blue", label: tEdit("blue") },
-                          ]}
-                          value={filters.eyeColor}
-                          onChange={(e) => updateFilter("eyeColor", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                    </div>
-
-                    {/* Religious & Marriage */}
-                    <div className="space-y-4">
-                      <h3 className="font-semibold text-[#301B69]">{t("religiousMarriage")}</h3>
-                      <FormField label={<Label>{tRequest("fields.religiousPractice")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "Religious", label: tEdit("practiceReligious") },
-                            { value: "Moderate", label: tEdit("practiceModerate") },
-                            { value: "Basic", label: tEdit("practiceBasic") },
-                          ]}
-                          value={filters.religiousPractice}
-                          onChange={(e) => updateFilter("religiousPractice", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.sect")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "Sunni", label: tEdit("sunni") },
-                            { value: "Shia", label: tEdit("shia") },
-                          ]}
-                          value={filters.sect}
-                          onChange={(e) => updateFilter("sect", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.prayer")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "Prays 5 times a day", label: tEdit("prays5") },
-                            { value: "Sometimes", label: tEdit("sometimes") },
-                            { value: "Rarely", label: tEdit("rarely") },
-                          ]}
-                          value={filters.prayerLevel}
-                          onChange={(e) => updateFilter("prayerLevel", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
                       <FormField label={<Label>{tRequest("fields.marriageType")}</Label>}>
                         <Select
                           options={[
@@ -679,33 +546,7 @@ const MyFavorites = () => {
                           placeholder={tRequest("placeholders.choose")}
                         />
                       </FormField>
-                      <FormField label={<Label>{tRequest("fields.polygamyAgree")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "true", label: tEdit("yes") },
-                            { value: "false", label: tEdit("no") },
-                          ]}
-                          value={filters.acceptPolygamy?.toString() || ""}
-                          onChange={(e) => updateFilter("acceptPolygamy", e.target.value === "" ? null : e.target.value === "true")}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.religiosity")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "committed", label: tEdit("practiceReligious") },
-                            { value: "moderate", label: tEdit("practiceModerate") },
-                            { value: "basic", label: tEdit("practiceBasic") },
-                          ]}
-                          value={filters.religiosityLevel}
-                          onChange={(e) => updateFilter("religiosityLevel", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
                     </div>
-                  </div>
                 </div>
 
                 {/* Static Action Buttons at Bottom */}
@@ -722,7 +563,7 @@ const MyFavorites = () => {
               </SheetContent>
             </Sheet>
           </div>
-          
+
           {loading ? (
             <div className="text-center py-12 text-lg text-[#301B69]">{t("loadingRecommendations")}</div>
           ) : (
@@ -750,7 +591,7 @@ const MyFavorites = () => {
               )}
             </div>
           )}
-          
+
           <div className="flex items-center justify-between gap-4 mt-6">
             <div className="flex items-center gap-2">
               <button

@@ -22,9 +22,9 @@ type Plan = {
 };
 
 const plans: Plan[] = [
-  { key: "silver", bg: "bg-white", border: "border border-[#F3EFFE]", button: "bg-white text-[#301B69]" },
+  // { key: "silver", bg: "bg-white", border: "border border-[#F3EFFE]", button: "bg-white text-[#301B69]" },
   { key: "gold", bg: "bg-white", border: "border-2 border-[#8b5cf6]", button: "bg-[#301B69] text-white shadow-lg", badge: true, highlight: true },
-  { key: "match", bg: "bg-white", border: "border border-[#F3EFFE]", button: "bg-white text-[#301B69]" }
+  // { key: "match", bg: "bg-white", border: "border border-[#F3EFFE]", button: "bg-white text-[#301B69]" }
 ];
 
 const planFeatures: Record<string, string[]> = {
@@ -52,7 +52,7 @@ const Badge = React.memo(({ t }: { t: (key: string) => string }) => (
 const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key: string) => string }) {
   const glass = plan.key !== "gold" ? "bg-white/60 backdrop-blur-md" : "";
   return (
-    <div className={`my-4 relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] py-8 px-6 flex flex-col justify-between shadow-sm ${glass}`}>
+    <div className={`my-4 relative ${plan.bg} border-x border-[#301B6929] rounded-[24px] max-w-md py-8 px-6 flex flex-col justify-between shadow-sm ${glass}`}>
       {plan.badge && <Badge t={t} />}
       <div className="mb-20">
         <h3 className="text-3xl font-bold text-[#301B69] text-center md:text-start mb-2">
@@ -61,9 +61,15 @@ const PlanCard = React.memo(function PlanCard({ plan, t }: { plan: Plan; t: (key
         <div className="text-lg font-medium text-[#301B69] text-center md:text-start mb-2">
           {t(`${plan.key}.duration`)}
         </div>
-        <div className="text-3xl font-bold text-[#301B69] mb-4 flex items-center justify-center md:justify-start gap-1">
-          {t(`${plan.key}.price`)} <SaudiRiyal size={30} />
+        <div className="flex items-center justify-center md:justify-start gap-2">
+          <div className="text-3xl line-through font-bold text-[#4e4e4eae] mb-4 flex items-center justify-center md:justify-start gap-1">
+            {t(`${plan.key}.price`)} <SaudiRiyal size={30} />
+          </div>
+          <div className="text-xl font-bold text-[#1b6925] mb-4 flex items-center justify-center md:justify-start gap-1">
+            {t(`freeForlimitedTime`)} 
+          </div>
         </div>
+
         <hr className="my-4 border-[#F3EFFE]" />
         <div className="text-[#301B69] text-right mb-4 font-semibold">
           {t(`${plan.key}.featuresTitle`)}
@@ -108,7 +114,7 @@ const Subscriptions = React.memo(function Subscriptions() {
         {t("subtitle")}
       </p>
       {/* Mobile Swiper */}
-      <div className="flex md:hidden subscriptions-swiper">
+      {/* <div className="flex md:hidden subscriptions-swiper">
         <Swiper
           slidesPerView={1}
           breakpoints={{
@@ -133,9 +139,9 @@ const Subscriptions = React.memo(function Subscriptions() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+      </div> */}
       {/* Desktop Grid */}
-      <div className="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="flex justify-center gap-8">
         {planCards}
       </div>
     </section>

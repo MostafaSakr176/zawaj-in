@@ -59,6 +59,7 @@
             "title": "Create a new account",
             "usernameLabel": "Username",
             "usernameHint": "Shown to others in the platform",
+            "phoneHint": "Will not be shown to other users",
             "genderLabel": "Gender",
             "emailLabel": "Email",
             "emailPlaceholder": "Enter your email (hidden from users)",
@@ -169,7 +170,7 @@
             "hairType": "Hair type",
             "home": "Home available",
             "job": "Job nature",
-            "about": "Details (talk about yourself)",
+            "about": "Additional information about you or your partner",
             "partnerAbout": "Partner details",
             "marriageType": "Marriage type",
             "polygamyAgree": "Agree to polygamy",
@@ -223,11 +224,9 @@
             "serious": "Please write seriously; contact info is not allowed"
         },
         "sections": {
-            "location": "Location",
-            "personal": "Personal Info",
-            "education": "Education & Work",
-            "physical": "Physical Attributes",
-            "religious": "Religious & Marriage"
+            "basicInfo": "Basic Information",
+            "personalDetails": "Personal Details",
+            "religiousMarriage": "Religious & Marriage Preferences"
         }
     },
     "advantages": {
@@ -248,6 +247,7 @@
         "title": "Subscriptions",
         "subtitle": "Get unlimited tools with an annual subscription, and enjoy exclusive discounts.",
         "mostPopular": "Most Popular",
+        "freeForlimitedTime": "Free for a limited time",
         "silver": {
             "title": "Silver Package",
             "duration": "Duration: 30 days",
@@ -466,7 +466,8 @@
         "preferredSkinColor": "Preferred Skin Color",
         "preferredReligiosityLevel": "Preferred Religiosity Level",
         "preferredAcceptPolygamy": "Preferred Accept Polygamy",
-        "preferredMarriageType": "Preferred Marriage Type"
+        "preferredMarriageType": "Preferred Marriage Type",
+        "home":"Home available"
     },
     "profile": {
         "online": "Online",
@@ -515,7 +516,6 @@
         "practiceBasic": "Basic",
         "sunni": "Sunni",
         "shia": "Shia",
-        "prays5": "Prays 5 times a day",
         "sometimes": "Sometimes",
         "rarely": "Rarely",
         "preferredWeightFrom": "Preferred weight (from)",
@@ -541,7 +541,9 @@
         "normal": "Normal",
         "conservative": "Conservative",
         "committed": "Committed",
-        "saveSuccess": "Your profile has been updated successfully"
+        "saveSuccess": "Your profile has been updated successfully",
+        "socialContactError": "Social media contacts, phone numbers, and external links are not allowed in this field.",
+        "aboutHint": "Write about your personality, hobbies, and what makes you unique."
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",

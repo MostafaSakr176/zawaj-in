@@ -121,7 +121,7 @@ const PartnerProfile = () => {
     const [isLiked, setIsLiked] = useState(false);
     const [likeLoading, setLikeLoading] = useState(false);
     const [chatLoading, setChatLoading] = useState(false);
-    const t = useTranslations("partnerProfile");
+    const tPartner = useTranslations("partnerProfile");
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -147,7 +147,7 @@ const PartnerProfile = () => {
 
     const handleLikeToggle = async () => {
         if (!isAuthenticated) {
-            toast.error(t("pleaseLoginToLike"));
+            toast.error(tPartner("pleaseLoginToLike"));
             return;
         }
         if (likeLoading || !userId) return;
@@ -168,11 +168,11 @@ const PartnerProfile = () => {
 
     const handleSendMessage = async () => {
         if (!isAuthenticated) {
-            toast.error(t("pleaseLoginToSendMessage"))
+            toast.error(tPartner("pleaseLoginToSendMessage"))
             return
         }
         if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 80) {
-            toast.error(t("completeProfileToSendMessage"));
+            toast.error(tPartner("completeProfileToSendMessage"));
             router.push('/profile/edit');
             return;
         }
@@ -232,7 +232,7 @@ const PartnerProfile = () => {
     if (!user) {
         return (
 
-            <div className="text-center py-12 text-lg text-[#301B69]">{t("notFound")}</div>
+            <div className="text-center py-12 text-lg text-[#301B69]">{tPartner("notFound")}</div>
 
         );
     }
@@ -271,9 +271,9 @@ const PartnerProfile = () => {
                                     </h4>
                                     {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                 </div>
-                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{t("lastSeen")}</div>
+                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{tPartner("lastSeen")}</div>
                             </div>
-                            <div className="text-[#8A97AB] text-base">{t("membershipNumber")} {user.chartNumber}</div>
+                            <div className="text-[#8A97AB] text-base">{tPartner("membershipNumber")} {user.chartNumber}</div>
                         </div>
                     </div>
                     {/* Actions (left in RTL) */}
@@ -286,7 +286,7 @@ const PartnerProfile = () => {
                                 : 'border-[#E9E6FF] bg-[#301B6914] text-[#2D1F55] hover:bg-white'
                                 }`}
                         >
-                            {isLiked ? t("removeFavorite") : t("addFavorite")}
+                            {isLiked ? tPartner("removeFavorite") : tPartner("addFavorite")}
                             <Heart className={`w-5 h-5 ${isLiked ? 'text-red-600 fill-red-600' : 'text-[#2D1F55]'}`} />
                         </button>
                         <button
@@ -295,7 +295,7 @@ const PartnerProfile = () => {
                             className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                             title={profile && profile.profileCompletion && profile.profileCompletion.percentage < 80 ? "You need to complete your profile first" : ""}
                         >
-                            {chatLoading ? t("loadingAction") : t("sendMessage")}
+                            {chatLoading ? tPartner("loadingAction") : tPartner("sendMessage")}
                             <MessageCircle className="w-5 h-5 text-[#2D1F55]" />
                         </button>
                     </div>
@@ -303,150 +303,97 @@ const PartnerProfile = () => {
 
                 <hr className="border-[#ECEBFF]" />
                 {/* Bio Section */}
-                {user.bio && (
-                    <>
-                        <div className="px-2 md:px-4">
-                            <h4 className="text-[#2D1F55] font-semibold text-base mb-4">{t("bioTitle")}</h4>
-                            <p className="text-[#301B69] leading-relaxed">{user.bio}</p>
-                        </div>
-                        <hr className="border-[#ECEBFF]" />
-                    </>
-                )}
+{user.bio && (
+            <>
+              <div className="px-2 md:px-4">
+                <h4 className="text-[#2D1F55] font-semibold text-base mb-4">{tPartner("bioTitle")}</h4>
+                <p className="text-[#301B69] leading-relaxed">{user.bio}</p>
+              </div>
+              <hr className="border-[#ECEBFF]" />
+            </>
+          )}
 
-                {/* Section: السكن و الحالة الإجتماعية */}
-                <div className="px-2 md:px-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionResidence")}</h4>
-                    </div>
-                    <div className="flex items-center flex-wrap gap-4">
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("country")} value={user?.location?.country} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("city")} value={user?.location?.city} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("age")} value={`${user?.age} ${t("years")}`} />
-                        </div>
-                        <div>
-                            <Field label={t("maritalStatus")} value={user?.maritalStatus} />
-                        </div>
-                        {/* Residence & Social Section - Add missed fields */}
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("origin")} value={user?.origin} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("nationality")} value={user?.nationality} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("placeOfResidence")} value={user?.placeOfResidence} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("tribe")} value={user?.tribe} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("numberOfChildren")} value={user?.numberOfChildren} />
-                        </div>
-                    </div>
-                </div>
-
-                <hr className="border-[#ECEBFF]" />
-
-                {/* Section: الدراسة و العمل */}
-                <div className="px-2 md:px-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionAppearance")}</h4>
-                    </div>
-                    <div className="flex items-center flex-wrap gap-4">
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("skinColor")} value={user?.bodyColor} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("height")} value={user?.height} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("weight")} value={user?.weight} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("hairColor")} value={user?.hairColor} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("eyeColor")} value={user?.eyeColor} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("hairType")} value={user?.hairType} />
-                        </div>
-                        {/* Appearance Section - Add missed fields */}
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("skinColor")} value={user?.skinColor} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("beauty")} value={user?.beauty} />
-                        </div>
-                    </div>
-                </div>
-
-                <hr className="border-[#ECEBFF]" />
-
-                {/* Section: الدراسة و العمل */}
-                <div className="px-2 md:px-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionEducation")}</h4>
-                    </div>
-                    <div className="flex items-center flex-wrap gap-4">
-
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("education")} value={user.profession} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("job")} value={user.natureOfWork} />
-                        </div>
-                        {/* Education & Work Section - Add missed fields */}
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("educationLevel")} value={user?.educationLevel} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("financialStatus")} value={user?.financialStatus} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("healthStatus")} value={user?.healthStatus} />
-                        </div>
-                    </div>
-                </div>
-
-                <hr className="border-[#ECEBFF]" />
-
-                {/* Section: الديانة والممارسة */}
-                <div className="px-2 md:px-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-[#2D1F55] font-semibold text-base">{t("sectionReligion")}</h4>
-                    </div>
-                    <div className="flex items-center flex-wrap gap-4">
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("sect")} value={user.sect} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("religiousPractice")} value={user.religiousPractice} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("prayerLevel")} value={user.prayerLevel} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("marriageType")} value={user.marriageType} />
-                        </div>
-                        <div>
-                            <Field label={t("acceptPolygamy")} value={user.acceptPolygamy ? t("yes") : t("no")} />
-                        </div>
-                        {/* Religion Section - Add missed fields */}
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("religiosityLevel")} value={user?.religiosityLevel} />
-                        </div>
-                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={t("polygamyStatus")} value={user?.polygamyStatus} />
-                        </div>
-                    </div>
-                </div>
+          {/* Section: السكن و الحالة الإجتماعية */}
+          <div className="px-2 md:px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionResidence")}</h4>
             </div>
+            <div className="flex items-center flex-wrap gap-4">
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("nationality")} value={user?.location?.country} />
+              </div>
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("placeOfResidence")} value={user?.location?.city} />
+              </div>
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("age")} value={`${user.age} ${tPartner("years")}`} />
+              </div>
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("tribe")} value={user.tribe} />
+              </div>
+              <div>
+                <Field label={tPartner("maritalStatus")} value={user.maritalStatus} />
+              </div>
+              <div>
+                <Field label={tPartner("home")} value={user.houseAvailable ? tPartner("yes") : tPartner("no")} />
+              </div>
+            </div>
+          </div>
+
+          <hr className="border-[#ECEBFF]" />
+
+          <div className="px-2 md:px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionAppearance")}</h4>
+            </div>
+            <div className="flex items-center flex-wrap gap-4">
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("height")} value={user?.height} />
+              </div>
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("weight")} value={user?.weight} />
+              </div>
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("skinColor")} value={user.skinColor} />
+              </div>
+              <div >
+                <Field label={tPartner("beauty")} value={user.beauty} />
+              </div>
+            </div>
+          </div>
+
+          <hr className="border-[#ECEBFF]" />
+
+          {/* Section: الدراسة و العمل */}
+          <div className="px-2 md:px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionEducation")}</h4>
+            </div>
+            <div className="flex items-center flex-wrap gap-4">
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("job")} value={user.natureOfWork} />
+              </div>
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("educationLevel")} value={user.educationLevel} />
+              </div>
+            </div>
+          </div>
+
+          <hr className="border-[#ECEBFF]" />
+
+          {/* Section: الديانة والممارسة */}
+          <div className="px-2 md:px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("sectionReligion")}</h4>
+            </div>
+            <div className="flex items-center flex-wrap gap-4">
+              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                <Field label={tPartner("marriageType")} value={user.marriageType} />
+              </div>
+            </div>
+          </div>
+        </div>
+
             {/* <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
                 <h3 className='font-semibold text-3xl text-[#301B69]'>{t("partnerPreferencesTitle")}</h3>
 

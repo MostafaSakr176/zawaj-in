@@ -132,6 +132,7 @@ export const chatService = {
     const response = await api.get(`/chat/users/${userId}/presence`);
     return response.data;
   },
+  
 
   // Upload audio file
   async uploadAudio(audioBlob: Blob): Promise<{ fileUrl: string; fileName: string }> {

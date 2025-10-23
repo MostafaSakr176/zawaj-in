@@ -59,6 +59,7 @@
       "title": "تسجيل حساب جديد",
       "usernameLabel": "اسم المستخدم",
       "usernameHint": "يظهر للأخرين داخل المنصة",
+      "phoneHint": " لن يظهر للمستخدمين الآخرين",
       "genderLabel": "الجنس",
       "emailLabel": "البريد الإلكتروني",
       "emailPlaceholder": "ادخل البريد الإلكتروني لا يظهر للمستخدمين",
@@ -169,7 +170,7 @@
       "hairType": "نوع الشعر",
       "home": "متوفر المنزل",
       "job": "طبيعة العمل",
-      "about": "بياناتك بالتفصيل (تحدث عن نفسك)",
+      "about": "معلومات اضافية عنك او الشريك",
       "partnerAbout": "مواصفات الطرف الآخر",
       "marriageType": "نوع الزواج",
       "polygamyAgree": "أوافق على التعدد",
@@ -220,6 +221,11 @@
     },
     "hints": {
       "serious": "يرجى الكتابة بطريقة جادة، ويمنع كتابة أي وسيلة تواصل"
+    },
+    "sections": {
+      "basicInfo": "المعلومات الأساسية",
+      "personalDetails": "التفاصيل الشخصية",
+      "religiousMarriage": "التفضيلات الدينية والزواجية"
     }
   },
   "advantages": {
@@ -240,6 +246,7 @@
     "title": "الاشتراكات",
     "subtitle": "احصل على أداة غير محدودة عند الاشتراك سنوياً، واستفد من خصومات حصرية.",
     "mostPopular": "الأكثر شهرة",
+    "freeForlimitedTime": "مجانا لفترة محدودة",
     "silver": {
       "title": "الباقة الفضية",
       "duration": "المدة: 30 يوم",
@@ -458,7 +465,8 @@
     "preferredSkinColor": "لون البشرة المفضل",
     "preferredReligiosityLevel": "مستوى التدين المفضل",
     "preferredAcceptPolygamy": "قبول التعدد المفضل",
-    "preferredMarriageType": "نوع الزواج المفضل"
+    "preferredMarriageType": "نوع الزواج المفضل",
+    "home":"توفر المسكن"
   },
   "profile": {
     "online": "متصل",
@@ -507,7 +515,6 @@
     "practiceBasic": "أساسي",
     "sunni": "سني",
     "shia": "شيعي",
-    "prays5": "يصلي 5 مرات يومياً",
     "sometimes": "أحياناً",
     "rarely": "نادراً",
     "preferredWeightFrom": "الوزن المفضل (من)",
@@ -533,7 +540,9 @@
     "normal": "عادي",
     "conservative": "محافظ",
     "committed": "ملتزم",
-    "saveSuccess": "تم تحديث ملفك الشخصي بنجاح"
+    "saveSuccess": "تم تحديث ملفك الشخصي بنجاح",
+    "saveProfile": "حفظ الملف الشخصي",
+    "socialContactError": "لا يُسمح بكتابة معلومات التواصل الاجتماعي، أرقام الهواتف، أو الروابط الخارجية في هذا الحقل."
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسالية",

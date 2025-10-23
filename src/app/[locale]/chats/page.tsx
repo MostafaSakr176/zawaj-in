@@ -19,13 +19,13 @@ import { Conversation, Message } from "@/services/chatService";
 import api from "@/lib/axiosClient";
 import { useTranslations } from "next-intl";
 import { chatService } from "@/services/chatService";
-import { enableAudioContext, requestNotificationPermission } from "@/utils/notificationUtils";
 
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [audioDuration, setAudioDuration] = useState(duration || 0);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const {profile} = useAuth();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -94,13 +94,15 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
 
 function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string }) {
   const fromMe = m.senderId === currentUserId;
+  const {profile} = useAuth();
+
 
   if (m.messageType === "audio" && m.fileUrl) {
     return (
       <div className={`flex items-end gap-3 ${fromMe ? 'justify-end' : 'justify-start'}`}>
-        {!fromMe && <Image src="/photos/male-icon.png" alt="" width={36} height={36} className="rounded-full" />}
+        {!fromMe && <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />}
         <AudioPlayer audioUrl={m.fileUrl} duration={m.audioDuration || undefined} fromMe={fromMe} />
-        {fromMe && <Image src="/photos/male-icon.png" alt="" width={36} height={36} className="rounded-full" />}
+        {fromMe && <Image src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />}
       </div>
     );
   }
@@ -113,11 +115,11 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
         {m.content}
         {m.status === "sent" ? (<Check color="#8A97AB" size={16} />) : m.status === "delivered" ? (<CheckCheck color="#8A97AB" size={16} />) : m.status === "read" ? (<CheckCheck color="#3B0C46" size={16} />) : null}
       </div>
-      <Image src="/photos/male-icon.png" alt="" width={36} height={36} className="rounded-full" />
+      <Image src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />
     </div>
   ) : (
     <div className="flex items-end justify-start gap-2">
-      <Image src="/photos/male-icon.png" alt="" width={36} height={36} className="rounded-full" />
+      <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />
       <div className={`${common} bg-[#EDF3FF] text-[#2D1F55] rounded-br-none`}>
         {m.content}
       </div>
@@ -137,6 +139,7 @@ function ChatListItem({
   isActive?: boolean;
 }) {
   // Determine the other participant
+  const {profile} = useAuth();
   const otherParticipant = c.participant1Id === currentUserId ? c.participant2 : c.participant1;
 
   const formatTime = (date: Date | null | string) => {
@@ -159,7 +162,7 @@ function ChatListItem({
     >
       <div className="relative">
         <Image
-          src="/photos/male-icon.png"
+          src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
           alt={otherParticipant?.fullName || "User"}
           width={40}
           height={40}
@@ -285,18 +288,6 @@ const Chats = () => {
     stopTyping,
     loadMoreMessages,
   } = useChat(activeConversation?.id || null);
-
-    useEffect(() => {
-    // Enable audio context to handle autoplay restrictions
-    enableAudioContext();
-    
-    // Request notification permission
-    requestNotificationPermission().then((granted) => {
-      if (granted) {
-        console.log('Notification permission granted');
-      }
-    });
-  }, []);
 
   // Handle conversation ID from URL parameter or set first chat as default
   useEffect(() => {
@@ -618,7 +609,7 @@ const Chats = () => {
                 <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA]">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <Image src="/photos/male-icon.png" alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                      <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
                       {isOtherUserOnline && !isCurrentUserBlocked && (
                         <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                       )}
@@ -771,7 +762,7 @@ const Chats = () => {
                       <ArrowRight className="text-[#2D1F55]" />
                     </button>
                     <div className="relative">
-                      <Image src="/photos/male-icon.png" alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                      <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
                       {isOtherUserOnline && !isCurrentUserBlocked && (
                         <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                       )}

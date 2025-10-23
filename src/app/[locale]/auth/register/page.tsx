@@ -231,6 +231,7 @@ export default function RegisterPage() {
             <FormField
               label={<Label>{t("phoneLabel")}</Label>}
               error={errors.phone}
+              hint={t("phoneHint")}
 
             >
               <div dir="ltr" className="w-full">

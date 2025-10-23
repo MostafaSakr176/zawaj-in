@@ -2,7 +2,6 @@
 import ProtectedRoute from '@/components/shared/ProtectedRoute';
 import Label from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { BadgeCheck, Heart, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -64,7 +63,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-        </div>      
+        </div>
       </ProtectedRoute>
     );
   }
@@ -162,31 +161,22 @@ const Profile = () => {
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("country")} value={profile?.location?.country} />
+                <Field label={tPartner("nationality")} value={profile?.location?.country} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("city")} value={profile?.location?.city} />
+                <Field label={tPartner("placeOfResidence")} value={profile?.location?.city} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("age")} value={`${profile.age} ${tPartner("years")}`} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("origin")} value={profile.origin} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("nationality")} value={profile.nationality} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("placeOfResidence")} value={profile.placeOfResidence} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("tribe")} value={profile.tribe} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("numberOfChildren")} value={profile.numberOfChildren} />
               </div>
               <div>
                 <Field label={tPartner("maritalStatus")} value={profile.maritalStatus} />
+              </div>
+              <div>
+                <Field label={tPartner("home")} value={profile.houseAvailable ? tPartner("yes") : tPartner("no")} />
               </div>
             </div>
           </div>
@@ -199,22 +189,10 @@ const Profile = () => {
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("skinColor")} value={profile?.bodyColor} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("height")} value={profile?.height} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("weight")} value={profile?.weight} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("hairColor")} value={profile?.hairColor} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("eyeColor")} value={profile?.eyeColor} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("hairType")} value={profile?.hairType} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("skinColor")} value={profile.skinColor} />
@@ -234,19 +212,10 @@ const Profile = () => {
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("education")} value={profile.profession} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("job")} value={profile.natureOfWork} />
               </div>
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("educationLevel")} value={profile.educationLevel} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("financialStatus")} value={profile.financialStatus} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("healthStatus")} value={profile.healthStatus} />
               </div>
             </div>
           </div>
@@ -260,28 +229,13 @@ const Profile = () => {
             </div>
             <div className="flex items-center flex-wrap gap-4">
               <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("sect")} value={profile.sect} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("religiousPractice")} value={profile.religiousPractice} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("prayerLevel")} value={profile.prayerLevel} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                 <Field label={tPartner("marriageType")} value={profile.marriageType} />
-              </div>
-              <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                <Field label={tPartner("religiosityLevel")} value={profile.religiosityLevel} />
-              </div>
-              <div>
-                <Field label={tPartner("acceptPolygamy")} value={profile.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
               </div>
             </div>
           </div>
         </div>
 
-        
+
         {/* <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
           <h3 className='font-semibold text-3xl text-[#301B69]'>{tPartner("partnerPreferencesTitle")}</h3>
 
