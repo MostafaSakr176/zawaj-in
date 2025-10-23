@@ -353,7 +353,8 @@
     "engagementRequestSent": "تم إرسال طلب الخطوبة بنجاح.",
     "engagementRequestError": "فشل في إرسال طلب الخطوبة.",
     "muteSounds": "كتم الأصوات",
-    "enableSounds": "تفعيل الأصوات"
+    "enableSounds": "تفعيل الأصوات",
+    "recording": "جاري التسجيل..."
   },
   "contact": {
     "title": "تواصل بنا",

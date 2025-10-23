@@ -80,7 +80,7 @@ const IdCard = ({
                             className="rounded-full"
                         />
                         {online && (
-                            <span className="absolute top-1 left-1 w-2 h-2 rounded-full bg-[#2DC653] ring-3 ring-white" />
+                            <span className="absolute top-0 left-0 w-2 h-2 rounded-full bg-[#2DC653] ring-3 ring-white" />
                         )}
                     </div>
                     <div>
@@ -141,8 +141,8 @@ const IdCard = ({
                         <path d="M11.2811 4.61475C10.9544 2.04167 9.16182 0.875 6.9994 0.875C4.81773 0.875 3.01232 2.06208 2.70898 4.68533" stroke="#E30BCD" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M8.94922 10.4915C9.82977 9.74004 10.4521 8.73104 10.7284 7.6069C10.845 7.70423 10.9913 7.75878 11.1431 7.76148C11.3841 7.72636 11.602 7.59897 11.7508 7.40621C11.8996 7.21344 11.9676 6.9704 11.9406 6.7284C11.9676 6.48604 11.8992 6.24269 11.7499 6.04987C11.6007 5.85704 11.3822 5.72988 11.1408 5.69531C11.094 5.69604 11.0474 5.70211 11.002 5.7134" stroke="#E30BCD" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M2.99442 5.71573C2.94983 5.70383 2.90404 5.69698 2.85792 5.69531C2.61696 5.73043 2.39907 5.85782 2.25028 6.05058C2.10149 6.24335 2.03344 6.4864 2.0605 6.7284C2.03344 6.9704 2.10149 7.21344 2.25028 7.40621C2.39907 7.59897 2.61696 7.72636 2.85792 7.76148C3.00987 7.75885 3.1563 7.70406 3.27267 7.60631C3.55149 8.74573 4.18712 9.76622 5.08684 10.5189" stroke="#E30BCD" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M5.54102 6.125V6.70833" stroke="#E30BCD" stroke-miterlimit="10" strokeLinecap="round" />
-                        <path d="M8.45898 6.125V6.70833" stroke="#E30BCD" stroke-miterlimit="10" strokeLinecap="round" />
+                        <path d="M5.54102 6.125V6.70833" stroke="#E30BCD" strokeMiterlimit="10" strokeLinecap="round" />
+                        <path d="M8.45898 6.125V6.70833" stroke="#E30BCD" strokeMiterlimit="10" strokeLinecap="round" />
                     </g>
                     <defs>
                         <clipPath id="clip0_10532_440">

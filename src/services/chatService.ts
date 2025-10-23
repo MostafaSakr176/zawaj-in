@@ -37,11 +37,13 @@ export interface Conversation {
     id: string;
     fullName: string;
     chartNumber: string;
+    isOnline: boolean;
   };
   participant2?: {
     id: string;
     fullName: string;
     chartNumber: string;
+    isOnline: boolean;
   };
   unreadCount?: number;
 }

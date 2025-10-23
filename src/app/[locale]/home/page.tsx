@@ -54,6 +54,7 @@ type User = {
   sect: string | null;
   prayerLevel: string | null;
   hasLiked?: boolean;
+  isOnline?: boolean;
 };
 
 type Pagination = {
@@ -586,6 +587,7 @@ const MyFavorites = () => {
                     marriageType={user?.marriageType}
                     skinColor={user?.bodyColor}
                     status={user?.maritalStatus}
+                    online={user?.isOnline}
                   />
                 ))
               )}

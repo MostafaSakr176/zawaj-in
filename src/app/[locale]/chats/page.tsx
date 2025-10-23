@@ -168,7 +168,7 @@ function ChatListItem({
           height={40}
           className="rounded-full ring-2 ring-white"
         />
-        {/* <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white" /> */}
+        {otherParticipant?.isOnline && <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white" />}
       </div>
       <div className="flex-1">
         <div className="flex items-center justify-between">

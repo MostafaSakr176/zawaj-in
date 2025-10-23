@@ -354,7 +354,8 @@
         "engagementRequestSent": "Engagement request sent successfully.",
         "engagementRequestError": "Failed to send engagement request.",
         "muteSounds": "Mute Sounds",
-        "enableSounds": "Enable Sounds"
+        "enableSounds": "Enable Sounds",
+        "recording": "Recording..."
     },
     "contact": {
         "title": "Contact Us",
