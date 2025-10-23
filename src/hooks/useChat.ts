@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useSocket } from "@/context/SocketContext";
 import { chatService, Message, Conversation } from "@/services/chatService";
 import { useAuth } from "@/context/AuthContext";
-import { useAudioNotification } from './useAudioNotification';
 
 
 
@@ -76,7 +75,6 @@ export function useConversations() {
 export function useChat(conversationId: string | null) {
   const { socket, isConnected } = useSocket();
   const { profile } = useAuth();
-  const { playNotificationSound } = useAudioNotification();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -225,12 +223,7 @@ export function useChat(conversationId: string | null) {
       }
     };
 
-    const handleNewMessage = (message: Message) => {
-      // Only play sound for messages from other users
-      if (message.senderId !== profile?.id) {
-        playNotificationSound();
-      }
-      
+    const handleNewMessage = (message: Message) => {      
       setMessages(prev => [...prev, message]);
       
       // Update last message in conversations list
@@ -256,7 +249,7 @@ export function useChat(conversationId: string | null) {
       socket.off("user_offline", handleUserOffline);
       socket.off("newMessage", handleNewMessage);
     };
-  }, [socket, conversationId, profile?.id, playNotificationSound, refreshConversations]);
+  }, [socket, conversationId, profile?.id, refreshConversations]);
 
   // Send message via socket
   const sendMessage = useCallback(
