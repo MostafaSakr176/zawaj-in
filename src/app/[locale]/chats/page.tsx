@@ -25,7 +25,7 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
   const [currentTime, setCurrentTime] = useState(0);
   const [audioDuration, setAudioDuration] = useState(duration || 0);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const {profile} = useAuth();
+  const { profile } = useAuth();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -45,7 +45,7 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
       audio.removeEventListener('ended', handleEnded);
     };
   }, []);
-
+  // test github actions
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -94,7 +94,7 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
 
 function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string }) {
   const fromMe = m.senderId === currentUserId;
-  const {profile} = useAuth();
+  const { profile } = useAuth();
 
 
   if (m.messageType === "audio" && m.fileUrl) {
@@ -139,7 +139,7 @@ function ChatListItem({
   isActive?: boolean;
 }) {
   // Determine the other participant
-  const {profile} = useAuth();
+  const { profile } = useAuth();
   const otherParticipant = c.participant1Id === currentUserId ? c.participant2 : c.participant1;
 
   const formatTime = (date: Date | null | string) => {
@@ -758,22 +758,22 @@ const Chats = () => {
                   {/* Header (fixed height) */}
                   <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
                     <div className="flex items-center gap-3">
-                    <button onClick={() => {setActiveConversation(null); setIsOpen(false);}}>
-                      <ArrowRight className="text-[#2D1F55]" />
-                    </button>
-                    <div className="relative">
-                      <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
-                      {isOtherUserOnline && !isCurrentUserBlocked && (
-                        <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
-                      )}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
-                      <div className="text-xs text-[#8A97AB]">
-                        {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
+                      <button onClick={() => { setActiveConversation(null); setIsOpen(false); }}>
+                        <ArrowRight className="text-[#2D1F55]" />
+                      </button>
+                      <div className="relative">
+                        <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                        {isOtherUserOnline && !isCurrentUserBlocked && (
+                          <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
+                        <div className="text-xs text-[#8A97AB]">
+                          {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
+                        </div>
                       </div>
                     </div>
-                  </div>
                     <DropdownMenu dir={locale === "ar" ? 'rtl' : 'ltr'}>
                       <DropdownMenuTrigger disabled={blockLoading}>
                         <CircleEllipsis className="text-[#2D1F55]" />
