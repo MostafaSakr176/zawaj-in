@@ -359,7 +359,7 @@ const MyFavorites = () => {
                   alt={"avatar"}
                   width={80}
                   height={80}
-                  className="rounded-full w-14 h-14 md:w-20 md:h-20 object-cover"
+                  className="rounded-full w-12 h-12 md:w-20 md:h-20 object-cover"
                 />
                 {true && (
                   <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 rounded-full bg-[#2DC653] ring-3 ring-white" />
@@ -368,7 +368,7 @@ const MyFavorites = () => {
               <div>
                 <div className="text-[#301B69] text-lg md:text-2xl">{t("welcome")}</div>
                 <div className="flex items-center justify-end gap-1">
-                  <h4 className="text-xl md:text-3xl font-semibold text-[#301B69] leading-none">
+                  <h4 className="text-lg md:text-3xl font-semibold text-[#301B69] leading-none">
                     {profile?.fullName || "User"}
                   </h4>
                   {profile?.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}

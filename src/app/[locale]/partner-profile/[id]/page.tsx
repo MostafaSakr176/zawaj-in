@@ -271,13 +271,13 @@ const PartnerProfile = () => {
                                 alt="avatar"
                                 width={72}
                                 height={72}
-                                className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
+                                className="w-12 h-12 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
                             />
                             {user.isOnline && (
                                 <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 md:w-4 md:h-4 rounded-full bg-[#28C76F] ring-2 ring-white" />
                             )}
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-1 md:space-y-2">
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center justify-end gap-1">
                                     <h4 className="text-lg md:text-2xl font-semibold text-[#301B69] leading-none">
@@ -285,7 +285,7 @@ const PartnerProfile = () => {
                                     </h4>
                                     {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                 </div>
-                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{user.lastSeenAt ? `${tPartner("lastSeen")}: ${formatDate(user.lastSeenAt)}` : null}</div>
+                                <div className="text-[#8A97AB] text-xs md:text-base mb-1">{user.lastSeenAt ? `${tPartner("lastSeen")}: ${formatDate(user.lastSeenAt)}` : null}</div>
                             </div>
                             <div className="text-[#8A97AB] text-base">{tPartner("membershipNumber")} {user.chartNumber}</div>
                         </div>

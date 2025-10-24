@@ -91,16 +91,16 @@ const Profile = () => {
                     alt="avatar"
                     width={72}
                     height={72}
-                    className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
+                    className="w-12 h-12 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
                   />
                   {isOnline && (
-                    <span className="absolute top-1 left-1 w-3.5 h-3.5 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                    <span className="absolute top-1 left-1 w-3 h-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                   )}
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center justify-end gap-1">
-                      <h4 className="text-xl md:text-2xl font-semibold text-[#301B69] leading-none">
+                      <h4 className="text-lg md:text-2xl font-semibold text-[#301B69] leading-none">
                         {profile.fullName}
                       </h4>
                       {profile.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
@@ -131,7 +131,7 @@ const Profile = () => {
                 />
                 <Label htmlFor="airplane-mode" className='mb-0'>{tProfile("online")}</Label>
               </div>
-              <button onClick={() => setShowVisitores(true)} className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-4 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
+              <button onClick={() => setShowVisitores(true)} className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] text-sm md:text-base px-3 py-2 md:px-4 md:py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g clipPath="url(#clip0_9524_16921)">
                     <path d="M13.9117 18.0055C15.2063 18.4488 16.3494 18.7312 17.9919 19.2359C17.3609 27.2088 9.8217 24.0425 13.9117 18.0055ZM20.643 10.6814C20.558 8.28749 20.1363 5.14721 16.7777 5.63927C15.2033 6.05016 14.0399 7.77928 13.4928 10.7626C13.1923 12.4028 13.3671 14.7052 13.7215 16.0854C14.0452 17.058 13.9351 16.9982 14.2829 17.1829C15.6293 17.4862 16.9621 17.8219 18.3194 18.1643C19.6983 17.1906 20.8307 12.0211 20.643 10.6814ZM10.278 10.4977C10.6322 9.11734 10.8069 6.81497 10.5066 5.17487C9.95985 2.19146 8.79639 0.462061 7.22167 0.0514438C3.86302 -0.440608 3.44137 2.69962 3.35635 5.09367C3.16867 6.43312 4.30125 11.6029 5.68023 12.5765C7.03743 12.2341 8.37008 11.8986 9.71685 11.5951C10.0643 11.4105 9.95421 11.4703 10.278 10.4977ZM6.00732 13.6484C6.63808 21.6211 14.1773 18.4549 10.0874 12.4179C8.79281 12.8613 7.64974 13.1437 6.00732 13.6484Z" fill="black" />
@@ -148,7 +148,7 @@ const Profile = () => {
                 </span>
               </button>
               <Link href="/profile/edit">
-                <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-4 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
+                <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] text-sm md:text-base px-3 py-2 md:px-4 md:py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 15C14.0711 15 15.75 13.3211 15.75 11.25C15.75 9.17893 14.0711 7.5 12 7.5C9.92893 7.5 8.25 9.17893 8.25 11.25C8.25 13.3211 9.92893 15 12 15Z" stroke="#301B69" strokeWidth="1.5" stroke-miterlimit="10" />
                     <path d="M5.98145 18.6913C6.54639 17.5806 7.40768 16.6478 8.46997 15.9963C9.53226 15.3448 10.7541 15 12.0003 15C13.2464 15 14.4683 15.3448 15.5306 15.9963C16.5929 16.6478 17.4542 17.5806 18.0191 18.6913" stroke="#301B69" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
