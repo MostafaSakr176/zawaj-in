@@ -337,7 +337,8 @@ const Navbar = () => {
           </Sheet>
         </div>
       </div>
-      {isAuthenticated && <div className="w-full fixed bottom-6 z-50 px-4 block md:hidden">
+
+      {isAuthenticated && !pathname.includes("chats") && <div className="w-full fixed bottom-6 z-50 px-4 block md:hidden">
         <div className="flex items-center justify-center gap-6 rounded-4xl mx-auto px-6 py-3 bg-white shadow-lg">
           {mobileAuthLinks.map(link => {
             const isActive = isLinkActive(link.href);
