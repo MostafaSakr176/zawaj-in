@@ -19,6 +19,7 @@ import { Conversation, Message } from "@/services/chatService";
 import api from "@/lib/axiosClient";
 import { useTranslations } from "next-intl";
 import { chatService } from "@/services/chatService";
+import { useSocket } from "@/context/SocketContext";
 
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -127,6 +128,72 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
   );
 }
 
+// function ChatListItem({
+//   c,
+//   onOpen,
+//   currentUserId,
+//   isActive = false
+// }: {
+//   c: Conversation;
+//   onOpen: (c: Conversation) => void;
+//   currentUserId: string;
+//   isActive?: boolean;
+// }) {
+//   // Determine the other participant
+//   const { profile } = useAuth();
+//   const otherParticipant = c.participant1Id === currentUserId ? c.participant2 : c.participant1;
+
+//   const formatTime = (date: Date | null | string) => {
+//     if (!date) return "";
+//     const d = typeof date === 'string' ? new Date(date) : new Date(date);
+//     return d.toLocaleTimeString(undefined, {
+//       hour: "2-digit",
+//       minute: "2-digit",
+//       hour12: true
+//     });
+//   };
+
+//   return (
+//     <button
+//       onClick={() => onOpen(c)}
+//       className={`w-full text-right px-3 py-3 transition flex items-center gap-3 ${isActive
+//         ? 'bg-[#4B164C]/5'
+//         : 'hover:bg-white/60'
+//         }`}
+//     >
+//       <div className="relative">
+//         <Image
+//           src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+//           alt={otherParticipant?.fullName || "User"}
+//           width={40}
+//           height={40}
+//           className="rounded-full ring-2 ring-white"
+//         />
+//         {otherParticipant?.isOnline && <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white" />}
+//       </div>
+//       <div className="flex-1">
+//         <div className="flex items-center justify-between">
+//           <span className={`font-semibold ${isActive ? 'text-[#3B0C46]' : 'text-[#2D1F55]'}`}>
+//             {otherParticipant?.fullName || "مستخدم"}
+//           </span>
+//           <span className="text-xs text-[#8A97AB]">{formatTime(c.lastMessageAt)}</span>
+//         </div>
+//         <p className="text-xs text-[#8A97AB] line-clamp-1">
+//           {c.lastMessagePreview || "ابدأ المحادثة"}
+//         </p>
+//       </div>
+//       {c.unreadCount && c.unreadCount > 0 ? (
+//         <span className="grid place-items-center min-w-6 h-6 rounded-full bg-[#3B0C46] text-white text-xs">
+//           {c.unreadCount}
+//         </span>
+//       ) : (
+//         <Check size={16} className="text-[#B9C0CF]" />
+//       )}
+//     </button>
+//   );
+// }
+
+// src/app/[locale]/chats/page.tsx - Update the ChatListItem component
 function ChatListItem({
   c,
   onOpen,
@@ -138,9 +205,14 @@ function ChatListItem({
   currentUserId: string;
   isActive?: boolean;
 }) {
-  // Determine the other participant
   const { profile } = useAuth();
+  const { isUserOnline } = useSocket(); // Add this hook
+  
+  // Determine the other participant
   const otherParticipant = c.participant1Id === currentUserId ? c.participant2 : c.participant1;
+  
+  // Check if the other participant is online in real-time
+  const isOnline = isUserOnline(otherParticipant?.id || '');
 
   const formatTime = (date: Date | null | string) => {
     if (!date) return "";
@@ -168,7 +240,10 @@ function ChatListItem({
           height={40}
           className="rounded-full ring-2 ring-white"
         />
-        {otherParticipant?.isOnline && <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white" />}
+        {/* Real-time online indicator */}
+        {isOnline && (
+          <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white animate-pulse" />
+        )}
       </div>
       <div className="flex-1">
         <div className="flex items-center justify-between">
@@ -177,9 +252,17 @@ function ChatListItem({
           </span>
           <span className="text-xs text-[#8A97AB]">{formatTime(c.lastMessageAt)}</span>
         </div>
-        <p className="text-xs text-[#8A97AB] line-clamp-1">
-          {c.lastMessagePreview || "ابدأ المحادثة"}
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-[#8A97AB] line-clamp-1">
+            {c.lastMessagePreview || "ابدأ المحادثة"}
+          </p>
+          {/* Online status text */}
+          {isOnline && (
+            <span className="text-xs text-[#28C76F] font-medium">
+              Online
+            </span>
+          )}
+        </div>
       </div>
       {c.unreadCount && c.unreadCount > 0 ? (
         <span className="grid place-items-center min-w-6 h-6 rounded-full bg-[#3B0C46] text-white text-xs">
@@ -272,6 +355,8 @@ const Chats = () => {
   const conversationId = searchParams.get('conversation');
   const locale = useLocale();
   const t = useTranslations("chats");
+    const { isUserOnline } = useSocket(); // Add this
+
 
   // Load conversations list
   const { conversations, loading: conversationsLoading, refreshConversations } = useConversations();
@@ -570,317 +655,352 @@ const Chats = () => {
     <ProtectedRoute>
       <section className="relative pt-28 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
         <Image src="/photos/terms-bg.webp" alt="Terms Background" width={100} height={100} className="absolute w-full inset-x-0 top-0 z-1" />
-        <div className="max-w-7xl mx-auto px-4 md:px-0 grid grid-cols-1 lg:grid-cols-12 gap-4 relative z-2">
-          {/* Right: Conversations list */}
-          <aside className="lg:col-span-4 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl p-3">
-            {/* Search */}
-            <div className="relative mb-3">
-              <input
-                className="w-full ps-10 pe-3 py-2 rounded-xl border border-[#E3EBFF] bg-white/70 outline-none placeholder:text-[#8A97AB] text-sm"
-                placeholder={t("searchPlaceholder")}
-              />
-              <Search size={16} className="absolute top-1/2 -translate-y-1/2 rtl:left-3 ltr:right-3 text-[#8A97AB]" />
-            </div>
+        <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
 
-            <div className="space-y-1 max-h-[70vh] overflow-auto pr-1">
-              {conversationsLoading ? (
-                <div className="text-center py-8 text-[#8A97AB]">{t("loading")}</div>
-              ) : conversations.length === 0 ? (
-                <div className="text-center py-8 text-[#8A97AB]">{t("noConversations")}</div>
-              ) : (
-                conversations.map((c) => (
-                  <ChatListItem
-                    key={c.id}
-                    c={c}
-                    onOpen={openChat}
-                    currentUserId={profile?.id || ""}
-                    isActive={activeConversation?.id === c.id}
+          {conversations.length === 0 ? (
+            <div className="flex flex-col items-center justify-center w-full">
+              <svg width="207" height="207" viewBox="0 0 207 207" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M82.5194 45.0781C80.1938 45.0834 77.9221 45.7787 75.9921 47.0762C74.062 48.3736 72.5605 50.2147 71.6778 52.3662C70.7929 50.2127 69.2885 48.3703 67.3553 47.0728C65.4221 45.7753 63.1471 45.0811 60.8189 45.0781C57.5912 45.3545 54.5877 46.8421 52.4118 49.2421C50.2359 51.642 49.0487 54.7764 49.0889 58.0156C49.0889 72.1951 68.6676 83.7354 71.6778 83.7354C74.6879 83.7354 94.2666 72.1951 94.2666 58.0156C94.3064 54.7737 93.1169 51.6369 90.9374 49.2366C88.7579 46.8362 85.7501 45.3504 82.5194 45.0781Z" stroke="url(#paint0_linear_9524_17660)" strokeWidth="8.625" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M139.646 103.5L121.576 126.089H148.685L130.615 148.678" stroke="url(#paint1_linear_9524_17660)" strokeWidth="8.625" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M134.722 61.7284C131.16 36.9315 104.363 17.6719 71.8721 17.6719C36.9409 17.6719 8.625 39.9157 8.625 67.3691C8.8307 74.3672 10.6625 81.2213 13.9754 87.3889C17.2882 93.5566 21.9912 98.8685 27.7121 102.904L29.2474 130.401L53.2594 114.876C54.9154 115.272 56.5915 115.62 58.2877 115.919" stroke="url(#paint2_linear_9524_17660)" strokeWidth="8.625" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M135.119 76.6133C170.05 76.6133 198.366 98.8572 198.366 126.311C198.16 133.309 196.329 140.163 193.016 146.33C189.703 152.498 185 157.81 179.279 161.846L177.744 189.342L153.732 173.817C147.636 175.284 141.388 176.022 135.119 176.016C100.188 176.016 71.8633 153.764 71.8633 126.319C71.8633 98.8744 100.188 76.6133 135.119 76.6133Z" stroke="url(#paint3_linear_9524_17660)" strokeWidth="8.625" stroke-linecap="round" stroke-linejoin="round" />
+                <defs>
+                  <linearGradient id="paint0_linear_9524_17660" x1="68.0122" y1="58.8416" x2="67.1745" y2="83.4792" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#301B69" />
+                    <stop offset="1" stopColor="#B07CD1" />
+                  </linearGradient>
+                  <linearGradient id="paint1_linear_9524_17660" x1="132.931" y1="119.585" x2="131.03" y2="148.286" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#301B69" />
+                    <stop offset="1" stopColor="#B07CD1" />
+                  </linearGradient>
+                  <linearGradient id="paint2_linear_9524_17660" x1="61.4431" y1="57.8078" x2="58.8911" y2="129.646" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#301B69" />
+                    <stop offset="1" stopColor="#B07CD1" />
+                  </linearGradient>
+                  <linearGradient id="paint3_linear_9524_17660" x1="124.851" y1="116.749" x2="122.307" y2="188.588" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#301B69" />
+                    <stop offset="1" stopColor="#B07CD1" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <h6 className="text-[#301B69] text-4xl font-bold mb-3 mt-6">
+                {t("noConversations")}
+              </h6>
+              <p className="text-[#301B69C2] text-lg font-normal max-w-lg">{t("noConversationsMessage")}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+              {/* Right: Conversations list */}
+              <aside className="lg:col-span-4 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl p-3">
+                {/* Search */}
+                <div className="relative mb-3">
+                  <input
+                    className="w-full ps-10 pe-3 py-2 rounded-xl border border-[#E3EBFF] bg-white/70 outline-none placeholder:text-[#8A97AB] text-sm"
+                    placeholder={t("searchPlaceholder")}
                   />
-                ))
-              )}
-            </div>
-          </aside>
-
-          {/* Left: Chat window (desktop only) */}
-          <div className={`hidden lg:block lg:col-span-8 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl overflow-hidden`}>
-            {activeConversation && otherParticipant ? (
-              <>
-                {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA]">
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
-                      {isOtherUserOnline && !isCurrentUserBlocked && (
-                        <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
-                      )}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
-                      <div className="text-xs text-[#8A97AB]">
-                        {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
-                      </div>
-                    </div>
-                  </div>
-                  <DropdownMenu dir={locale === "ar" ? 'rtl' : 'ltr'}>
-                    <DropdownMenuTrigger disabled={blockLoading}>
-                      <CircleEllipsis className="text-[#2D1F55]" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
-                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleSendEngagementRequest}>
-                        <div className='flex items-center gap-3 w-full'>
-                          <MessageSquareHeart size={22} color='#301B69' />
-                          {t("engagementRequest")}
-                        </div>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                        <div className='flex items-center gap-3 w-full'>
-                          <Volume2 size={22} color='#301B69' />
-                          {t("mute")}
-                        </div>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleDeleteConversation}>
-                        <div className='flex items-center gap-3 w-full'>
-                          <Trash2 size={22} color='#301B69' />
-                          {t("deleteConversation")}
-                        </div>
-                      </DropdownMenuItem>
-                      <BlockMenuItem userId={otherParticipant.id} />
-                      <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                        <div className='flex items-center gap-3 w-full'>
-                          <Flag size={22} color='#301B69' />
-                          {t("report")}
-                        </div>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Search size={16} className="absolute top-1/2 -translate-y-1/2 rtl:left-3 ltr:right-3 text-[#8A97AB]" />
                 </div>
 
-                {/* Messages */}
-                {isCurrentUserBlocked ? (
-                  <div className="flex items-center justify-center h-[60vh] text-center text-[#8A97AB]">
-                    <div>
-                      <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
-                      <p className="text-lg font-semibold">{t("blockedTitle")}</p>
-                      <p className="text-sm">{t("blockedDesc")}</p>
-                    </div>
-                  </div>
-                ) : messagesLoading ? (
-                  <div className="flex items-center justify-center h-[60vh]">
-                    <div className="text-[#8A97AB]">{t("messagesLoading")}</div>
-                  </div>
-                ) : (
-                  <MessagesList
-                    messages={messages}
-                    className="max-h-[60vh] overflow-y-auto p-3 md:p-6"
-                    onReachTop={loadMoreMessages}
-                    currentUserId={profile?.id || ""}
-                  />
-                )}
+                <div className="space-y-1 max-h-[70vh] overflow-auto pr-1">
+                  {conversationsLoading ? (
+                    <div className="text-center py-8 text-[#8A97AB]">{t("loading")}</div>
+                  ) : conversations.length === 0 ? (
+                    <div className="text-center py-8 text-[#8A97AB]">{t("noConversations")}</div>
+                  ) : (
+                    conversations.map((c) => (
+                      <ChatListItem
+                        key={c.id}
+                        c={c}
+                        onOpen={openChat}
+                        currentUserId={profile?.id || ""}
+                        isActive={activeConversation?.id === c.id}
+                      />
+                    ))
+                  )}
+                </div>
+              </aside>
 
-                {/* Input */}
-                {!isCurrentUserBlocked && (
-                  <div className="p-4">
-                    {isRecording ? (
-                      <div className="flex items-center gap-2 rounded-4xl bg-[#FFE5E5] border border-[#FF6B6B] p-2">
-                        <div className="flex-1 flex items-center gap-3 px-3">
-                          <div className="size-2 rounded-full bg-red-500 animate-pulse" />
-                          <span className="text-sm font-medium text-[#2D1F55]">
-                            {t("recording")} {formatRecordingTime(recordingDuration)}
-                          </span>
+              {/* Left: Chat window (desktop only) */}
+              <div className={`hidden lg:block lg:col-span-8 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl overflow-hidden`}>
+                {activeConversation && otherParticipant ? (
+                  <>
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA]">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                          {isOtherUserOnline && !isCurrentUserBlocked && (
+                            <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                          )}
                         </div>
-                        <button
-                          onClick={cancelRecording}
-                          className="grid place-items-center size-10 rounded-full bg-gray-400 text-white"
-                          title={t("cancel")}
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                        <button
-                          onClick={stopRecording}
-                          disabled={isUploadingAudio}
-                          className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white disabled:opacity-50"
-                          title={t("send")}
-                        >
-                          {isUploadingAudio ? <CircleEllipsis size={18} className="animate-spin" /> : <Send size={18} />}
-                        </button>
+                        <div>
+                          <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
+                          <div className="text-xs text-[#8A97AB]">
+                            {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
+                          </div>
+                        </div>
+                      </div>
+                      <DropdownMenu dir={locale === "ar" ? 'rtl' : 'ltr'}>
+                        <DropdownMenuTrigger disabled={blockLoading}>
+                          <CircleEllipsis className="text-[#2D1F55]" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
+                          <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleSendEngagementRequest}>
+                            <div className='flex items-center gap-3 w-full'>
+                              <MessageSquareHeart size={22} color='#301B69' />
+                              {t("engagementRequest")}
+                            </div>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                            <div className='flex items-center gap-3 w-full'>
+                              <Volume2 size={22} color='#301B69' />
+                              {t("mute")}
+                            </div>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleDeleteConversation}>
+                            <div className='flex items-center gap-3 w-full'>
+                              <Trash2 size={22} color='#301B69' />
+                              {t("deleteConversation")}
+                            </div>
+                          </DropdownMenuItem>
+                          <BlockMenuItem userId={otherParticipant.id} />
+                          <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                            <div className='flex items-center gap-3 w-full'>
+                              <Flag size={22} color='#301B69' />
+                              {t("report")}
+                            </div>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+
+                    {/* Messages */}
+                    {isCurrentUserBlocked ? (
+                      <div className="flex items-center justify-center h-[50vh] text-center text-[#8A97AB]">
+                        <div>
+                          <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
+                          <p className="text-lg font-semibold">{t("blockedTitle")}</p>
+                          <p className="text-sm">{t("blockedDesc")}</p>
+                        </div>
+                      </div>
+                    ) : messagesLoading ? (
+                      <div className="flex items-center justify-center h-[50vh]">
+                        <div className="text-[#8A97AB]">{t("messagesLoading")}</div>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
-                        <input
-                          value={messageText}
-                          onChange={handleTyping}
-                          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                          onBlur={stopTyping}
-                          placeholder={t("messagePlaceholder")}
-                          className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
-                        />
-                        <button
-                          onClick={messageText.trim() ? handleSendMessage : startRecording}
-                          className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
-                        >
-                          {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
-                        </button>
+                      <MessagesList
+                        messages={messages}
+                        className="h-[50vh] overflow-y-auto p-3 md:p-6"
+                        onReachTop={loadMoreMessages}
+                        currentUserId={profile?.id || ""}
+                      />
+                    )}
+
+                    {/* Input */}
+                    {!isCurrentUserBlocked && (
+                      <div className="p-4">
+                        {isRecording ? (
+                          <div className="flex items-center gap-2 rounded-4xl bg-[#FFE5E5] border border-[#FF6B6B] p-2">
+                            <div className="flex-1 flex items-center gap-3 px-3">
+                              <div className="size-2 rounded-full bg-red-500 animate-pulse" />
+                              <span className="text-sm font-medium text-[#2D1F55]">
+                                {t("recording")} {formatRecordingTime(recordingDuration)}
+                              </span>
+                            </div>
+                            <button
+                              onClick={cancelRecording}
+                              className="grid place-items-center size-10 rounded-full bg-gray-400 text-white"
+                              title={t("cancel")}
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                            <button
+                              onClick={stopRecording}
+                              disabled={isUploadingAudio}
+                              className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white disabled:opacity-50"
+                              title={t("send")}
+                            >
+                              {isUploadingAudio ? <CircleEllipsis size={18} className="animate-spin" /> : <Send size={18} />}
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
+                            <input
+                              value={messageText}
+                              onChange={handleTyping}
+                              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                              onBlur={stopTyping}
+                              placeholder={t("messagePlaceholder")}
+                              className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
+                            />
+                            <button
+                              onClick={messageText.trim() ? handleSendMessage : startRecording}
+                              className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+                            >
+                              {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center text-[#8A97AB]">
+                      {conversationsLoading ? (
+                        <p className="text-lg">{t("loading")}</p>
+                      ) : (
+                        <p className="text-lg">{t("startChat")}</p>
+                      )}
+                    </div>
                   </div>
                 )}
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center text-[#8A97AB]">
-                  {conversationsLoading ? (
-                    <p className="text-lg">{t("loading")}</p>
-                  ) : conversations.length === 0 ? (
-                    <p className="text-lg">{t("noConversations")}</p>
-                  ) : (
-                    <p className="text-lg">{t("startChat")}</p>
+              </div>
+
+              {/* Mobile slide-in chat window */}
+              <div className="lg:hidden">
+                {/* Overlay */}
+                <div
+                  onClick={() => setIsOpen(false)}
+                  className={`fixed inset-0 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                    }`}
+                />
+                {/* Panel */}
+                <div
+                  className={`fixed inset-y-0 right-0 z-50 p-4 pt-28 bg-gradient-to-b from-[#E0DAFF] to-[#fff] w-full transform transition-transform duration-300 ease-out ${isOpen ? "translate-x-0" : "translate-x-full"
+                    }`}
+                >
+                  {activeConversation && otherParticipant && (
+                    <div className="h-[68vh] rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
+                      {/* Header (fixed height) */}
+                      <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
+                        <div className="flex items-center gap-3">
+                          <button onClick={() => { setActiveConversation(null); setIsOpen(false); }}>
+                            <ArrowRight className="text-[#2D1F55]" />
+                          </button>
+                          <div className="relative">
+                            <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                            {isOtherUserOnline && !isCurrentUserBlocked && (
+                              <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
+                            <div className="text-xs text-[#8A97AB]">
+                              {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
+                            </div>
+                          </div>
+                        </div>
+                        <DropdownMenu dir={locale === "ar" ? 'rtl' : 'ltr'}>
+                          <DropdownMenuTrigger disabled={blockLoading}>
+                            <CircleEllipsis className="text-[#2D1F55]" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
+                            <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleSendEngagementRequest}>
+                              <div className='flex items-center gap-3 w-full'>
+                                <MessageSquareHeart size={22} color='#301B69' />
+                                {t("engagementRequest")}
+                              </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                              <div className='flex items-center gap-3 w-full'>
+                                <Volume2 size={22} color='#301B69' />
+                                {t("mute")}
+                              </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleDeleteConversation}>
+                              <div className='flex items-center gap-3 w-full'>
+                                <Trash2 size={22} color='#301B69' />
+                                {t("deleteConversation")}
+                              </div>
+                            </DropdownMenuItem>
+                            <BlockMenuItem userId={otherParticipant.id} />
+                            <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                              <div className='flex items-center gap-3 w-full'>
+                                <Flag size={22} color='#301B69' />
+                                {t("report")}
+                              </div>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+
+                      {/* Messages (take available height and scroll) */}
+                      {isCurrentUserBlocked ? (
+                        <div className="flex-1 flex items-center justify-center text-center text-[#8A97AB]">
+                          <div>
+                            <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
+                            <p className="text-lg font-semibold">{t("blockedTitle")}</p>
+                            <p className="text-sm">{t("blockedDesc")}</p>
+                          </div>
+                        </div>
+                      ) : messagesLoading ? (
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="text-[#8A97AB]">{t("messagesLoading")}</div>
+                        </div>
+                      ) : (
+                        <MessagesList
+                          messages={messages}
+                          className="flex-1 overflow-y-auto p-3 md:p-6 min-h-0"
+                          onReachTop={loadMoreMessages}
+                          currentUserId={profile?.id || ""}
+                        />
+                      )}
+
+                      {/* Input (sticks to bottom) */}
+                      {!isCurrentUserBlocked && (
+                        <div className="p-4 border-t border-[#F0F2FA] shrink-0">
+                          {isRecording ? (
+                            <div className="flex items-center gap-2 rounded-4xl bg-[#FFE5E5] border border-[#FF6B6B] p-2">
+                              <div className="flex-1 flex items-center gap-3 px-3">
+                                <div className="size-2 rounded-full bg-red-500 animate-pulse" />
+                                <span className="text-sm font-medium text-[#2D1F55]">
+                                  {t("recording")} {formatRecordingTime(recordingDuration)}
+                                </span>
+                              </div>
+                              <button
+                                onClick={cancelRecording}
+                                className="grid place-items-center size-10 rounded-full bg-gray-400 text-white"
+                                title={t("cancel")}
+                              >
+                                <Trash2 size={18} />
+                              </button>
+                              <button
+                                onClick={stopRecording}
+                                disabled={isUploadingAudio}
+                                className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white disabled:opacity-50"
+                                title={t("send")}
+                              >
+                                {isUploadingAudio ? <CircleEllipsis size={18} className="animate-spin" /> : <Send size={18} />}
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
+                              <input
+                                value={messageText}
+                                onChange={handleTyping}
+                                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                                onBlur={stopTyping}
+                                placeholder={t("messagePlaceholder")}
+                                className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
+                              />
+                              <button
+                                onClick={messageText.trim() ? handleSendMessage : startRecording}
+                                className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+                              >
+                                {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
-            )}
-          </div>
-
-          {/* Mobile slide-in chat window */}
-          <div className="lg:hidden">
-            {/* Overlay */}
-            <div
-              onClick={() => setIsOpen(false)}
-              className={`fixed inset-0 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-                }`}
-            />
-            {/* Panel */}
-            <div
-              className={`fixed inset-y-0 right-0 z-50 p-4 pt-28 bg-gradient-to-b from-[#E0DAFF] to-[#fff] w-full transform transition-transform duration-300 ease-out ${isOpen ? "translate-x-0" : "translate-x-full"
-                }`}
-            >
-              {activeConversation && otherParticipant && (
-                <div className="h-[68vh] rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
-                  {/* Header (fixed height) */}
-                  <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
-                    <div className="flex items-center gap-3">
-                      <button onClick={() => { setActiveConversation(null); setIsOpen(false); }}>
-                        <ArrowRight className="text-[#2D1F55]" />
-                      </button>
-                      <div className="relative">
-                        <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
-                        {isOtherUserOnline && !isCurrentUserBlocked && (
-                          <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-[#2D1F55]">{otherParticipant.fullName}</div>
-                        <div className="text-xs text-[#8A97AB]">
-                          {isCurrentUserBlocked ? t("statusBlocked") : isTyping ? t("statusTyping") : isOtherUserOnline ? t("statusOnline") : t("statusOffline")}
-                        </div>
-                      </div>
-                    </div>
-                    <DropdownMenu dir={locale === "ar" ? 'rtl' : 'ltr'}>
-                      <DropdownMenuTrigger disabled={blockLoading}>
-                        <CircleEllipsis className="text-[#2D1F55]" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent side='bottom' className='transform rtl:translate-x-[5rem] ltr:-translate-x-[5rem] min-w-48'>
-                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleSendEngagementRequest}>
-                          <div className='flex items-center gap-3 w-full'>
-                            <MessageSquareHeart size={22} color='#301B69' />
-                            {t("engagementRequest")}
-                          </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                          <div className='flex items-center gap-3 w-full'>
-                            <Volume2 size={22} color='#301B69' />
-                            {t("mute")}
-                          </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleDeleteConversation}>
-                          <div className='flex items-center gap-3 w-full'>
-                            <Trash2 size={22} color='#301B69' />
-                            {t("deleteConversation")}
-                          </div>
-                        </DropdownMenuItem>
-                        <BlockMenuItem userId={otherParticipant.id} />
-                        <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                          <div className='flex items-center gap-3 w-full'>
-                            <Flag size={22} color='#301B69' />
-                            {t("report")}
-                          </div>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-
-                  {/* Messages (take available height and scroll) */}
-                  {isCurrentUserBlocked ? (
-                    <div className="flex-1 flex items-center justify-center text-center text-[#8A97AB]">
-                      <div>
-                        <Ban size={48} className="mx-auto mb-4 text-[#FF6B6B]" />
-                        <p className="text-lg font-semibold">{t("blockedTitle")}</p>
-                        <p className="text-sm">{t("blockedDesc")}</p>
-                      </div>
-                    </div>
-                  ) : messagesLoading ? (
-                    <div className="flex-1 flex items-center justify-center">
-                      <div className="text-[#8A97AB]">{t("messagesLoading")}</div>
-                    </div>
-                  ) : (
-                    <MessagesList
-                      messages={messages}
-                      className="flex-1 overflow-y-auto p-3 md:p-6 min-h-0"
-                      onReachTop={loadMoreMessages}
-                      currentUserId={profile?.id || ""}
-                    />
-                  )}
-
-                  {/* Input (sticks to bottom) */}
-                  {!isCurrentUserBlocked && (
-                    <div className="p-4 border-t border-[#F0F2FA] shrink-0">
-                      {isRecording ? (
-                        <div className="flex items-center gap-2 rounded-4xl bg-[#FFE5E5] border border-[#FF6B6B] p-2">
-                          <div className="flex-1 flex items-center gap-3 px-3">
-                            <div className="size-2 rounded-full bg-red-500 animate-pulse" />
-                            <span className="text-sm font-medium text-[#2D1F55]">
-                              {t("recording")} {formatRecordingTime(recordingDuration)}
-                            </span>
-                          </div>
-                          <button
-                            onClick={cancelRecording}
-                            className="grid place-items-center size-10 rounded-full bg-gray-400 text-white"
-                            title={t("cancel")}
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                          <button
-                            onClick={stopRecording}
-                            disabled={isUploadingAudio}
-                            className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white disabled:opacity-50"
-                            title={t("send")}
-                          >
-                            {isUploadingAudio ? <CircleEllipsis size={18} className="animate-spin" /> : <Send size={18} />}
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2 rounded-4xl bg-[#F6F8FE] border border-[#E3E7EC] p-2">
-                          <input
-                            value={messageText}
-                            onChange={handleTyping}
-                            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                            onBlur={stopTyping}
-                            placeholder={t("messagePlaceholder")}
-                            className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
-                          />
-                          <button
-                            onClick={messageText.trim() ? handleSendMessage : startRecording}
-                            className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
-                          >
-                            {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
-          </div>
+          )}
+
           {/* End mobile panel */}
         </div>
       </section>

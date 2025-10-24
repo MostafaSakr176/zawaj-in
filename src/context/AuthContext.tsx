@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import api from "@/lib/axiosClient";
 import { useLocale } from "next-intl";
-
+import Cookies from "js-cookie";
 type Profile = {
   id: string;
   fullName: string;
@@ -103,6 +103,7 @@ type AuthContextType = {
   profile: Profile | null;
   loading: boolean;
   refreshProfile: () => Promise<void>;
+  accessToken: string | null;
   logout: () => void;
 };
 
@@ -110,6 +111,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   profile: null,
   loading: true,
+  accessToken: null,
   refreshProfile: async () => { },
   logout: () => { },
 });
@@ -118,6 +120,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const Locale = useLocale()
 
@@ -145,6 +148,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    const token = Cookies.get("access_token");
+    setAccessToken(token ? token : null);
     refreshProfile();
     // Optionally, listen to storage events for multi-tab logout
     // window.addEventListener("storage", refreshProfile);
@@ -157,6 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        accessToken,
         profile,
         loading,
         refreshProfile,

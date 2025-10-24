@@ -187,11 +187,11 @@ const PartnerProfile = () => {
             toast.error(tPartner("pleaseLoginToSendMessage"))
             return
         }
-        if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 80) {
-            toast.error(tPartner("completeProfileToSendMessage"));
+        // if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 80) {
+            // toast.error(tPartner("completeProfileToSendMessage"));
             router.push('/profile/edit');
-            return;
-        }
+        //     return;
+        // }
         if (!userId || chatLoading) return;
 
         setChatLoading(true);

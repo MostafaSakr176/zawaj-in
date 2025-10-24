@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/axiosClient';
 import { useAuth } from '@/context/AuthContext';
+import { useSocket } from '@/context/SocketContext'; // Add this import
 import { useTranslations } from 'next-intl';
 import {
   Sheet,
@@ -122,6 +123,7 @@ const MyFavorites = () => {
   const [loadingCountries, setLoadingCountries] = useState(false);
 
   const { profile } = useAuth();
+  const { isConnected, onlineUsers } = useSocket(); // Add this line
   const t = useTranslations("home");
   const tEdit = useTranslations("profileEdit");
   const tRequest = useTranslations("request");
@@ -301,6 +303,18 @@ const MyFavorites = () => {
     });
   };
 
+  // Function to check if user is online
+  const isUserOnline = (userId: string) => {
+    const user = onlineUsers.get(userId);
+    return user?.isOnline || false;
+  };
+
+  // Update users with online status
+  const usersWithOnlineStatus = users.filter(user => user.gender !== profile?.gender).map(user => ({
+    ...user,
+    isOnline: isUserOnline(user.id)
+  }));
+
   return (
     <ProtectedRoute>
       <div className="relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
@@ -319,6 +333,19 @@ const MyFavorites = () => {
               'linear-gradient(180deg, rgba(255, 255, 255, 0.54) 0%, rgba(255, 255, 255, 0.256) 100%)',
           }}
         >
+          {/* Add connection status indicator */}
+          {/* <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+              <span className="text-sm text-muted-foreground">
+                {isConnected ? 'Connected' : 'Disconnected'}
+              </span>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              {Array.from(onlineUsers.values()).filter(u => u.isOnline).length} users online
+            </div>
+          </div> */}
+
           <div
             className="p-2 mb-4 flex items-center justify-between rounded-3xl border border-[#EAECF0]"
             style={{
@@ -569,12 +596,12 @@ const MyFavorites = () => {
             <div className="text-center py-12 text-lg text-[#301B69]">{t("loadingRecommendations")}</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {users.length === 0 ? (
+              {usersWithOnlineStatus.length === 0 ? (
                 <div className="col-span-full text-center text-[#301B69] py-8">
                   {t("noRecommendations")}
                 </div>
               ) : (
-                users.map((user) => (
+                usersWithOnlineStatus.map((user) => (
                   <IdCard
                     key={user.id}
                     id={user.id}
@@ -587,7 +614,7 @@ const MyFavorites = () => {
                     marriageType={user?.marriageType}
                     skinColor={user?.bodyColor}
                     status={user?.maritalStatus}
-                    online={user?.isOnline}
+                    online={user?.isOnline} // This will now show real-time status
                   />
                 ))
               )}

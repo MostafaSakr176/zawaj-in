@@ -20,7 +20,8 @@ import { TextField } from "@/components/ui/text-field";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type FormData = {
   username: string;
@@ -350,7 +351,10 @@ export default function EditProfilePage() {
                 </svg>
                 <div className="text-center text-4xl text-[#111111]">{tEdit("saveSuccess")}</div>
               </div> : <>
-                <CardHeader className="py-8 pb-2 md:pb-6 md:pt-10">
+                <CardHeader className="flex items-center gap-4 py-8 pb-2 md:pb-6 md:pt-10">
+                  <Link href="/profile">
+                  <ArrowRight size={30} className='ltr:hidden' /> <ArrowLeft size={30} className='rtl:hidden' />
+                  </Link>
                   <CardTitle className="text-start text-xl md:text-3xl font-extrabold text-[#1D1B23]">
                     {tEdit("title")}
                   </CardTitle>
@@ -510,18 +514,20 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.beauty")}</Label>} required>
+                        <FormField label={<Label>{t("fields.beauty")}</Label>} required>
                         <Select
                           options={[
-                            { value: "handsome", label: tEdit("handsome") },
-                            { value: "average", label: tEdit("average") },
-                            { value: "good", label: tEdit("good") },
+                          { value: "acceptable", label: tEdit("acceptable") },
+                          { value: "average", label: tEdit("average") },
+                          { value: "handsome", label: tEdit("handsome") },
+                          { value: "beautiful", label: tEdit("beautiful") },
+                          { value: "very_beautiful", label: tEdit("very_beautiful") }
                           ]}
                           value={formData.beauty}
                           onChange={(e) => updateField("beauty", e.target.value)}
                           placeholder={t("placeholders.choose")}
                         />
-                      </FormField>
+                        </FormField>
 
                       <FormField label={<Label>{t("fields.home")}</Label>} required>
                         <Select

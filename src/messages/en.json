@@ -329,6 +329,7 @@
         "searchPlaceholder": "Search for a message...",
         "loading": "Loading...",
         "noConversations": "No conversations",
+        "noConversationsMessage": "Once you match with someone interested, your conversation will appear here. Start exploring profiles and send the first message to begin your journey.",
         "startChat": "Select a conversation to start chatting",
         "startConversation": "Start the conversation",
         "messagePlaceholder": "Message",
@@ -468,12 +469,13 @@
         "preferredReligiosityLevel": "Preferred Religiosity Level",
         "preferredAcceptPolygamy": "Preferred Accept Polygamy",
         "preferredMarriageType": "Preferred Marriage Type",
-        "home":"Home available"
+        "home": "Home available"
     },
     "profile": {
         "online": "Online",
         "whoVisitedMe": "Who visited me",
-        "editProfile": "Edit my data"
+        "editProfile": "Edit my data",
+        "noVisitores": "No Visitores Today"
     },
     "profileEdit": {
         "title": "Edit profile",
@@ -544,7 +546,10 @@
         "committed": "Committed",
         "saveSuccess": "Your profile has been updated successfully",
         "socialContactError": "Social media contacts, phone numbers, and external links are not allowed in this field.",
-        "aboutHint": "Write about your personality, hobbies, and what makes you unique."
+        "aboutHint": "Write about your personality, hobbies, and what makes you unique.",
+        "acceptable": "Acceptable",
+        "beautiful": "Beautiful",
+        "very_beautiful": "Very Beautiful"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",
