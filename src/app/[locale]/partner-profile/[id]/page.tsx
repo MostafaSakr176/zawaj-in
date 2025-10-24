@@ -247,9 +247,7 @@ const PartnerProfile = () => {
 
     if (!user) {
         return (
-
             <div className="text-center py-12 text-lg text-[#301B69]">{tPartner("notFound")}</div>
-
         );
     }
 
@@ -287,7 +285,7 @@ const PartnerProfile = () => {
                                     </h4>
                                     {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                 </div>
-                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{tPartner("lastSeen")}: {formatDate(user.lastSeenAt)}</div>
+                                <div className="text-[#8A97AB] text-sm md:text-base mb-1">{user.lastSeenAt ? `${tPartner("lastSeen")}: ${formatDate(user.lastSeenAt)}` : null}</div>
                             </div>
                             <div className="text-[#8A97AB] text-base">{tPartner("membershipNumber")} {user.chartNumber}</div>
                         </div>
