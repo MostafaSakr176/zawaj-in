@@ -369,7 +369,7 @@ const MyFavorites = () => {
                 )}
               </div>
               <div>
-                <div className="text-[#301B69] text-lg md:text-2xl">{t("welcome")}</div>
+                <div className="text-[#301B69] text-base md:text-2xl">{t("welcome")}</div>
                 <div className="flex items-center justify-end gap-1">
                   <h4 className="text-lg md:text-3xl font-semibold text-[#301B69] leading-none">
                     {profile?.fullName || "User"}
