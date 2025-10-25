@@ -253,7 +253,7 @@ const PartnerProfile = () => {
 
     return (
 
-        <div className='relative pt-26 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'
+        <div className='relative pt-24 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'
             style={{
                 // background: 'linear-gradient(224.16deg, #E0DAFF -2.22%, #FECDFB 112.2%)',
             }}>

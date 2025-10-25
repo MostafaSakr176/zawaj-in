@@ -652,12 +652,12 @@ const Chats = () => {
 
   return (
     <ProtectedRoute>
-      <section className="relative pt-26 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
+      <section className="relative pt-24 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
         <Image src="/photos/terms-bg.webp" alt="Terms Background" width={100} height={100} className="absolute w-full inset-x-0 top-0 z-1" />
         <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
 
           {conversationsLoading ? 
-            <div className='w-[full] h-[75vh] flex items-center justify-center overflow-hidden'>
+            <div className='w-[full] h-[70vh] flex items-center justify-center overflow-hidden'>
                 <div className="w-0 h-[15rem] flex items-center justify-center transform rotate-30 overflow-hidden animate-[expand_2s_ease-out_forwards]">
                     <div className="text-6xl font-bold transform -rotate-30 text-nowrap">
                         <span className="text-[#301B69]">زواج</span>{" "}

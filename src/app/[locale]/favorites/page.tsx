@@ -118,7 +118,7 @@ const MyFavorites = () => {
 
   return (
     <ProtectedRoute>
-      <div className='relative pt-26 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
+      <div className='relative pt-24 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
         <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
 
         <div className='max-w-7xl mx-auto px-4 md:px-0 relative z-2'>
