@@ -75,7 +75,7 @@ const Profile = () => {
 
   return (
     <ProtectedRoute>
-      <div className='relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'>
+      <div className='relative pt-26 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'>
         <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
 
         <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>

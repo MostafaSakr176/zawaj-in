@@ -355,7 +355,6 @@ const Chats = () => {
   const conversationId = searchParams.get('conversation');
   const locale = useLocale();
   const t = useTranslations("chats");
-    const { isUserOnline } = useSocket(); // Add this
 
 
   // Load conversations list
@@ -653,11 +652,22 @@ const Chats = () => {
 
   return (
     <ProtectedRoute>
-      <section className="relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
+      <section className="relative pt-26 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
         <Image src="/photos/terms-bg.webp" alt="Terms Background" width={100} height={100} className="absolute w-full inset-x-0 top-0 z-1" />
         <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
 
-          {conversations.length === 0 ? (
+          {conversationsLoading ? 
+          <>
+            <div className='w-[full] h-[75vh] flex items-center justify-center'>
+                <div className="w-0 h-[15rem] flex items-center justify-center transform rotate-30 overflow-hidden animate-[expand_2s_ease-out_forwards]">
+                    <div className="text-6xl font-bold transform -rotate-30 text-nowrap">
+                        <span className="text-[#301B69]">زواج</span>{" "}
+                        <span className="text-[#E30BCD]">إن</span>
+                    </div>
+                </div>
+            </div>
+          </>
+          : conversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center w-full">
               <svg width="207" height="207" viewBox="0 0 207 207" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M82.5194 45.0781C80.1938 45.0834 77.9221 45.7787 75.9921 47.0762C74.062 48.3736 72.5605 50.2147 71.6778 52.3662C70.7929 50.2127 69.2885 48.3703 67.3553 47.0728C65.4221 45.7753 63.1471 45.0811 60.8189 45.0781C57.5912 45.3545 54.5877 46.8421 52.4118 49.2421C50.2359 51.642 49.0487 54.7764 49.0889 58.0156C49.0889 72.1951 68.6676 83.7354 71.6778 83.7354C74.6879 83.7354 94.2666 72.1951 94.2666 58.0156C94.3064 54.7737 93.1169 51.6369 90.9374 49.2366C88.7579 46.8362 85.7501 45.3504 82.5194 45.0781Z" stroke="url(#paint0_linear_9524_17660)" strokeWidth="8.625" strokeLinecap="round" stroke-linejoin="round" />

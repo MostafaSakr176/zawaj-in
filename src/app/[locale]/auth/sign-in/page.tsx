@@ -163,7 +163,7 @@ export default function SignInPage() {
       : undefined;
 
   return (
-    <section className="relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
+    <section className="relative pt-26 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
       <Image
         src="/photos/terms-bg.webp"
         alt="Terms Background"
