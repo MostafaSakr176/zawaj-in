@@ -657,8 +657,7 @@ const Chats = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
 
           {conversationsLoading ? 
-          <>
-            <div className='w-[full] h-[75vh] flex items-center justify-center'>
+            <div className='w-[full] h-[75vh] flex items-center justify-center overflow-hidden'>
                 <div className="w-0 h-[15rem] flex items-center justify-center transform rotate-30 overflow-hidden animate-[expand_2s_ease-out_forwards]">
                     <div className="text-6xl font-bold transform -rotate-30 text-nowrap">
                         <span className="text-[#301B69]">زواج</span>{" "}
@@ -666,7 +665,6 @@ const Chats = () => {
                     </div>
                 </div>
             </div>
-          </>
           : conversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center w-full">
               <svg width="207" height="207" viewBox="0 0 207 207" fill="none" xmlns="http://www.w3.org/2000/svg">
