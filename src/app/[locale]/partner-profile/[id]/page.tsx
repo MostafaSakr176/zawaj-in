@@ -374,7 +374,7 @@ const PartnerProfile = () => {
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                     <Field label={tPartner("educationLevel")} value={profile?.educationLevel} />
                   </div>
-                  <div>
+                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                     <Field label={tPartner("home")} value={profile?.houseAvailable ? tPartner("yes") : tPartner("no")} />
                   </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
