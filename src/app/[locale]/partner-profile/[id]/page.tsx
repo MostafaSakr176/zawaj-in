@@ -187,11 +187,11 @@ const PartnerProfile = () => {
             toast.error(tPartner("pleaseLoginToSendMessage"))
             return
         }
-        // if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 80) {
-            // toast.error(tPartner("completeProfileToSendMessage"));
+        if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 25) {
+            toast.error(tPartner("completeProfileToSendMessage"));
             router.push('/profile/edit');
-        //     return;
-        // }
+            return;
+        }
         if (!userId || chatLoading) return;
 
         setChatLoading(true);
@@ -305,9 +305,9 @@ const PartnerProfile = () => {
                         </button>
                         <button
                             onClick={handleSendMessage}
-                            // disabled={profile && profile.profileCompletion && profile.profileCompletion.percentage < 80 || chatLoading}
+                            // disabled={profile && profile.profileCompletion && profile.profileCompletion.percentage < 25 || chatLoading}
                             className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                            // title={profile && profile.profileCompletion && profile.profileCompletion.percentage < 80 ? "You need to complete your profile first" : ""}
+                            title={profile && profile.profileCompletion && profile.profileCompletion.percentage < 25 ? "You need to complete your profile first" : ""}
                         >
                             {chatLoading ? tPartner("loadingAction") : tPartner("sendMessage")}
                             <MessageCircle className="w-5 h-5 text-[#2D1F55]" />
