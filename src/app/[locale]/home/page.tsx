@@ -301,6 +301,9 @@ const MyFavorites = () => {
       healthStatus: "",
       religiosityLevel: "",
     });
+    fetchUsers(1);
+    setPagination(prev => ({ ...prev, page: 1 })); // Reset to first page
+    setIsSheetOpen(false);
   };
 
   // Function to check if user is online
