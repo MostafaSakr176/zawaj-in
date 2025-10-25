@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,7 @@ const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
   const [navKey, setNavKey] = useState(0);
   const [hash, setHash] = useState<string>("");
+  const [activeSection, setActiveSection] = useState<string>(""); // New state for scroll-based active section
 
   // Extract current locale from pathname
   const currentLocale = pathname.split("/")[1];
@@ -36,6 +37,34 @@ const Navbar = () => {
     const newPath = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
     router.push(newPath);
   };
+
+  // Scroll spy function to detect which section is in view
+  const handleScroll = useCallback(() => {
+    const sections = ['advantages', 'subscriptions', 'userOpinion']; // Add your section IDs here
+    const scrollPosition = window.scrollY + 200; // Offset for better detection
+
+    // Check if we're at the top of the page (main page)
+    if (window.scrollY < 100) {
+      setActiveSection("");
+      return;
+    }
+
+    // Find which section is currently in view
+    for (const sectionId of sections) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const elementTop = element.offsetTop;
+        const elementBottom = elementTop + element.offsetHeight;
+
+        if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
+          setActiveSection(`#${sectionId}`);
+          return;
+        }
+      }
+    }
+
+    // If no section is found, keep the current active section
+  }, []);
 
   useEffect(() => {
     const updateHash = () => {
@@ -47,20 +76,28 @@ const Navbar = () => {
 
     // Listen for hash changes
     window.addEventListener("hashchange", updateHash);
-
+    
     // Listen for popstate (back/forward browser buttons)
     window.addEventListener("popstate", updateHash);
+
+    // Add scroll listener for scroll spy
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Initial scroll position check
+    handleScroll();
 
     return () => {
       window.removeEventListener("hashchange", updateHash);
       window.removeEventListener("popstate", updateHash);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, [pathname]);
+  }, [pathname, handleScroll]);
 
   // Handle hash link clicks
   const handleHashClick = (href: string) => {
     if (href.startsWith("/#")) {
       const hash = href.substring(1); // Remove the leading "/"
+      const sectionId = hash.substring(1); // Remove the "#" to get the ID
 
       // Check if we're already on the home page
       const isOnHomePage = pathname === `/${currentLocale}` || pathname === `/${currentLocale}/`;
@@ -69,9 +106,10 @@ const Navbar = () => {
         // We're already on home page, just update hash and scroll
         window.history.pushState(null, "", `${pathname}${hash}`);
         setHash(hash);
+        setActiveSection(hash); // Update active section immediately
 
         // Scroll to element if it exists
-        const element = document.querySelector(hash);
+        const element = document.getElementById(sectionId);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
@@ -88,10 +126,11 @@ const Navbar = () => {
     if (href === "/") {
       const isOnHomePage = pathname === `/${currentLocale}` || pathname === `/${currentLocale}/`;
 
-      if (isOnHomePage && hash) {
-        // We're on home page with a hash, remove the hash
+      if (isOnHomePage && (hash || activeSection)) {
+        // We're on home page with a hash or active section, remove both
         window.history.pushState(null, "", `/${currentLocale}`);
         setHash("");
+        setActiveSection(""); // Clear active section
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (!isOnHomePage) {
@@ -126,21 +165,27 @@ const Navbar = () => {
     { href: "/profile", icon: <User strokeWidth={1.25} size={32} />, activeIcon: <User strokeWidth={2} size={32} color='#301B69' /> },
   ];
 
-  // Check if link is active
+  // Updated function to check if link is active
   const isLinkActive = (href: string) => {
     if (href === "/") {
-      return pathname.endsWith(currentLocale) && (!hash || hash === "");
+      // Main page is active if we're on the home page with no hash or active section
+      return pathname.endsWith(currentLocale) && (!hash || hash === "") && (!activeSection || activeSection === "");
     } else if (href.startsWith("/#")) {
       const linkHash = href.substring(1); // Remove the leading "/"
-      return pathname.endsWith(currentLocale) && hash === linkHash;
+      const isOnHomePage = pathname.endsWith(currentLocale);
+      
+      // Link is active if:
+      // 1. We're on home page AND hash matches the link hash, OR
+      // 2. We're on home page AND activeSection matches the link hash (from scroll spy)
+      return isOnHomePage && (hash === linkHash || activeSection === linkHash);
     } else {
+      // For non-hash links, use the original logic
       return pathname.includes(href);
     }
   };
 
   return (
     <>
-
       <div className="w-full fixed top-4 md:top-8 z-50 px-4">
         <div className="flex items-center justify-between max-w-7xl rounded-2xl md:rounded-[24px] mx-auto px-5 py-3 bg-white/80 backdrop-blur-lg shadow-lg">
           {/* Logo */}
@@ -187,7 +232,6 @@ const Navbar = () => {
                 <path d="M24.3692 26.9678L18.7785 10.5705L22.0267 10.5392L26.0246 22.8138L25.3062 22.7514L29.6476 13.1628H31.5841L35.9567 22.7826L35.1134 22.8451L39.1425 10.5705H42.3907L36.8625 26.9678H34.6449L30.0849 16.536L30.8032 16.6297L26.5555 26.9678H24.3692Z" fill="#301B69" />
                 <path d="M0 26.9681V24.5007L12.462 7.82223L12.9305 8.35319H0.812061V5.10495H16.6472V7.54113L4.2477 24.2508L3.74797 23.7199H16.9908V26.9681H0Z" fill="#301B69" />
               </svg>
-
             </div>
           </Link>
 
@@ -253,14 +297,6 @@ const Navbar = () => {
                       {t("accountMenu.profile")}
                     </Link>
                   </DropdownMenuItem>
-                  {/* <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                    <FileText size={22} color='#301B69' />
-                    {t("accountMenu.invoices")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
-                    <Package size={22} color='#301B69' />
-                    {t("accountMenu.subscriptions")}
-                  </DropdownMenuItem> */}
                   <DropdownMenuItem
                     className='text-[#FF3B30] font-medium text-lg'
                     onClick={logout}

@@ -356,7 +356,17 @@
         "engagementRequestError": "Failed to send engagement request.",
         "muteSounds": "Mute Sounds",
         "enableSounds": "Enable Sounds",
-        "recording": "Recording..."
+        "recording": "Recording...",
+        "microphonePermissionDenied": "Microphone permission denied. Please enable microphone access in your browser settings.",
+        "microphoneNotFound": "No microphone found. Please connect a microphone and try again.",
+        "recordingError": "Could not start recording. Please try again.",
+        "recordingProcessError": "Failed to process recording",
+        "audioUploadError": "Failed to upload audio message",
+        "audioNotSupported": "Audio recording not supported on this device",
+        "iosRecordingNote": "iOS Recording",
+        "iosAudioNotSupported": "Audio recording may not be available in this browser. Try using Safari.",
+        "recordAudio": "Record Audio",
+        "send": "Send"
     },
     "contact": {
         "title": "Contact Us",

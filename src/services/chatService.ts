@@ -134,17 +134,30 @@ export const chatService = {
     const response = await api.get(`/chat/users/${userId}/presence`);
     return response.data;
   },
-  
 
   // Upload audio file
   async uploadAudio(audioBlob: Blob): Promise<{ fileUrl: string; fileName: string }> {
     const formData = new FormData();
-    formData.append("file", audioBlob, "audio.webm");
+    
+    // Determine file extension based on blob type
+    let fileName = "audio.webm";
+    if (audioBlob.type.includes("mp4")) {
+      fileName = "audio.mp4";
+    } else if (audioBlob.type.includes("aac")) {
+      fileName = "audio.aac";
+    } else if (audioBlob.type.includes("mpeg")) {
+      fileName = "audio.mp3";
+    } else if (audioBlob.type.includes("wav")) {
+      fileName = "audio.wav";
+    }
+    
+    formData.append("file", audioBlob, fileName);
 
     const response = await api.post("/chat/upload/audio", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      timeout: 30000, // Increase timeout for mobile uploads
     });
     return response.data;
   },
