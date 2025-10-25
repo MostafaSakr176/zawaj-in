@@ -691,7 +691,7 @@ const Chats = () => {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
               {/* Right: Conversations list */}
-              <aside className="h-[80vh] md:h-auto lg:col-span-4 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl p-3">
+              <aside className="h-[75vh] md:h-auto lg:col-span-4 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl p-3">
                 {/* Search */}
                 <div className="relative mb-3">
                   <input
@@ -871,7 +871,7 @@ const Chats = () => {
                     }`}
                 >
                   {activeConversation && otherParticipant && (
-                    <div className="h-[80vh] rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
+                    <div className="h-[75vh] rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
                       {/* Header (fixed height) */}
                       <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
                         <div className="flex items-center gap-3">
