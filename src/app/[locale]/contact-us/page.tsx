@@ -27,7 +27,7 @@ export default function ContactUs() {
     const t = useTranslations("contact");
 
     return (
-        <section className='relative pt-28 md:pt-32 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
+        <section className='relative pt-24 md:pt-32 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'
             style={{
             }}>
             <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />

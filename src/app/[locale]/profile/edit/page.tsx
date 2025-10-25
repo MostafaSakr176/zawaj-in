@@ -318,7 +318,7 @@ export default function EditProfilePage() {
 
   return (
     <ProtectedRoute>
-      <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
+      <section className='relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
         <Image src="/photos/terms-bg.webp" alt={tEdit("bgAlt")} width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
         <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
           <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
@@ -335,7 +335,7 @@ export default function EditProfilePage() {
                   </g>
                   <defs>
                     <filter id="filter0_d_10532_13380">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                      <feFlood floodOpacity="0" result="BackgroundImageFix" />
                       <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                       <feOffset dy="4" />
                       <feGaussianBlur stdDeviation="10" />

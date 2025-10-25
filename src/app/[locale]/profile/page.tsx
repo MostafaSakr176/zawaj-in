@@ -75,15 +75,15 @@ const Profile = () => {
 
   return (
     <ProtectedRoute>
-      <div className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'>
+      <div className='relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'>
         <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
 
         <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
           {/* Header */}
           <div className="flex items-center justify-between gap-4 md:px-3 flex-col md:flex-row">
             {/* Profile summary (right in RTL) */}
-            <div className='w-full md:w-auto flex items-center justify-between gap-6'>
-              <div className="flex items-center gap-3">
+            <div className='w-full md:w-auto flex items-center justify-between gap-3 md:gap-6'>
+              <div className="flex items-center gap-2 md:gap-3">
                 {showVisitores && <> <ArrowRight size={30} onClick={() => setShowVisitores(false)} className='ltr:hidden' /> <ArrowLeft size={30} onClick={() => setShowVisitores(false)} className='rtl:hidden' />  </>}
                 <div className="relative">
                   <Image
@@ -94,7 +94,7 @@ const Profile = () => {
                     className="w-12 h-12 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
                   />
                   {isOnline && (
-                    <span className="absolute top-1 left-1 w-3 h-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                    <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                   )}
                 </div>
                 <div className="space-y-1">
@@ -150,7 +150,7 @@ const Profile = () => {
               <Link href="/profile/edit">
                 <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] text-sm md:text-base px-3 py-2 md:px-4 md:py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 15C14.0711 15 15.75 13.3211 15.75 11.25C15.75 9.17893 14.0711 7.5 12 7.5C9.92893 7.5 8.25 9.17893 8.25 11.25C8.25 13.3211 9.92893 15 12 15Z" stroke="#301B69" strokeWidth="1.5" stroke-miterlimit="10" />
+                    <path d="M12 15C14.0711 15 15.75 13.3211 15.75 11.25C15.75 9.17893 14.0711 7.5 12 7.5C9.92893 7.5 8.25 9.17893 8.25 11.25C8.25 13.3211 9.92893 15 12 15Z" stroke="#301B69" strokeWidth="1.5" strokeMiterlimit="10" />
                     <path d="M5.98145 18.6913C6.54639 17.5806 7.40768 16.6478 8.46997 15.9963C9.53226 15.3448 10.7541 15 12.0003 15C13.2464 15 14.4683 15.3448 15.5306 15.9963C16.5929 16.6478 17.4542 17.5806 18.0191 18.6913" stroke="#301B69" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M18.75 6.75C19.5784 6.75 20.25 6.07843 20.25 5.25C20.25 4.42157 19.5784 3.75 18.75 3.75C17.9216 3.75 17.25 4.42157 17.25 5.25C17.25 6.07843 17.9216 6.75 18.75 6.75Z" stroke="#301B69" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M18.75 3.75V2.625" stroke="#301B69" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

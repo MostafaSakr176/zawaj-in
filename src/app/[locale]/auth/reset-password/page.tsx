@@ -112,7 +112,7 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
+      <section className='relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
         <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
         <div className="mx-auto max-w-2xl px-4 relative z-2">
           <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">
@@ -144,7 +144,7 @@ export default function ResetPasswordPage() {
                   <path d="M190.283 27.9297C194.093 25.0044 203 19.8673 213.273 25.2986" stroke="#85C0F9" strokeWidth="4" strokeLinecap="round" />
                   <defs>
                     <filter id="filter0_d_9524_22198" x="0" y="0" width="280" height="280" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                      <feFlood floodOpacity="0" result="BackgroundImageFix" />
                       <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                       <feOffset dy="4" />
                       <feGaussianBlur stdDeviation="10" />
@@ -173,7 +173,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <section className='relative pt-32 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
+    <section className='relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]'>
       <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
       <div className="mx-auto max-w-2xl px-4 relative z-2">
         <Card className="rounded-[32px] border-[#EEE9FA]/90 shadow-[0_20px_60px_rgba(80,40,160,0.15)]">

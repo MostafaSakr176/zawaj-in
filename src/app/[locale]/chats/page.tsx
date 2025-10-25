@@ -653,7 +653,7 @@ const Chats = () => {
 
   return (
     <ProtectedRoute>
-      <section className="relative pt-28 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
+      <section className="relative pt-24 md:pt-40 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
         <Image src="/photos/terms-bg.webp" alt="Terms Background" width={100} height={100} className="absolute w-full inset-x-0 top-0 z-1" />
         <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
 
@@ -691,7 +691,7 @@ const Chats = () => {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
               {/* Right: Conversations list */}
-              <aside className="lg:col-span-4 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl p-3">
+              <aside className="h-[80vh] md:h-auto lg:col-span-4 rounded-2xl bg-white/70 backdrop-blur-md border border-[#E3EBFF] shadow-xl p-3">
                 {/* Search */}
                 <div className="relative mb-3">
                   <input
@@ -867,11 +867,11 @@ const Chats = () => {
                 />
                 {/* Panel */}
                 <div
-                  className={`fixed inset-y-0 right-0 z-50 p-4 pt-28 bg-gradient-to-b from-[#E0DAFF] to-[#fff] w-full transform transition-transform duration-300 ease-out ${isOpen ? "translate-x-0" : "translate-x-full"
+                  className={`fixed inset-y-0 right-0 z-50 p-4 pt-24 bg-gradient-to-b from-[#E0DAFF] to-[#fff] w-full transform transition-transform duration-300 ease-out ${isOpen ? "translate-x-0" : "translate-x-full"
                     }`}
                 >
                   {activeConversation && otherParticipant && (
-                    <div className="h-[68vh] rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
+                    <div className="h-[80vh] rounded-2xl bg-white/80 backdrop-blur-md border-l border-[#E3EBFF] shadow-xl overflow-hidden flex flex-col min-h-0">
                       {/* Header (fixed height) */}
                       <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
                         <div className="flex items-center gap-3">
