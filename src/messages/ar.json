@@ -328,7 +328,7 @@
     "searchPlaceholder": "ابحث عن رسالة...",
     "loading": "جاري التحميل...",
     "noConversations": "لا توجد محادثات",
-    "noConversationsMessage":"بمجرد أن تتطابق مع شخص مهتم، ستظهر محادثتك هنا. ابدأ في استكشاف الملفات الشخصية وأرسل الرسالة الأولى لبدء رحلتك.",
+    "noConversationsMessage": "بمجرد أن تتطابق مع شخص مهتم، ستظهر محادثتك هنا. ابدأ في استكشاف الملفات الشخصية وأرسل الرسالة الأولى لبدء رحلتك.",
     "startChat": "اختر محادثة لبدء الدردشة",
     "startConversation": "ابدأ المحادثة",
     "messagePlaceholder": "رسالة",
@@ -355,7 +355,17 @@
     "engagementRequestError": "فشل في إرسال طلب الخطوبة.",
     "muteSounds": "كتم الأصوات",
     "enableSounds": "تفعيل الأصوات",
-    "recording": "جاري التسجيل..."
+    "recording": "جاري التسجيل...",
+    "microphonePermissionDenied": "تم رفض إذن الميكروفون. يرجى تمكين الوصول إلى الميكروفون في إعدادات المتصفح.",
+    "microphoneNotFound": "لم يتم العثور على ميكروفون. يرجى توصيل ميكروفون والمحاولة مرة أخرى.",
+    "recordingError": "تعذر بدء التسجيل. يرجى المحاولة مرة أخرى.",
+    "recordingProcessError": "فشل في معالجة التسجيل",
+    "audioUploadError": "فشل في تحميل رسالة الصوت",
+    "audioNotSupported": "تسجيل الصوت غير مدعوم على هذا الجهاز",
+    "iosRecordingNote": "تسجيل iOS",
+    "iosAudioNotSupported": "قد لا يكون تسجيل الصوت متاحًا في هذا المتصفح. حاول استخدام Safari.",
+    "recordAudio": "تسجيل الصوت",
+    "send": "إرسال"
   },
   "contact": {
     "title": "تواصل بنا",
@@ -468,13 +478,16 @@
     "preferredReligiosityLevel": "مستوى التدين المفضل",
     "preferredAcceptPolygamy": "قبول التعدد المفضل",
     "preferredMarriageType": "نوع الزواج المفضل",
-    "home":"توفر المسكن"
+    "home": "توفر المسكن",
+    "basicInfo": "المعلومات الأساسية",
+    "personalDetails": "التفاصيل الشخصية",
+    "about": "معلومات اضافية عنك او الشريك"
   },
   "profile": {
     "online": "متصل",
     "whoVisitedMe": "من زار بياناتي",
     "editProfile": "تعديل بياناتي",
-    "noVisitores":"لا يوجد زوار اليوم"
+    "noVisitores": "لا يوجد زوار اليوم"
   },
   "profileEdit": {
     "title": "تعديل الملف الشخصي",
@@ -546,9 +559,9 @@
     "saveSuccess": "تم تحديث ملفك الشخصي بنجاح",
     "saveProfile": "حفظ الملف الشخصي",
     "socialContactError": "لا يُسمح بكتابة معلومات التواصل الاجتماعي، أرقام الهواتف، أو الروابط الخارجية في هذا الحقل.",
-    "acceptable":"مقبول",
-    "beautiful":"جميل",
-    "very_beautiful":"جميل/ة جدا"
+    "acceptable": "مقبول",
+    "beautiful": "جميل",
+    "very_beautiful": "جميل/ة جدا"
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسالية",

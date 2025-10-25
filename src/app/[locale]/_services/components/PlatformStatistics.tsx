@@ -8,7 +8,6 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
-import axios from "axios";
 import api from "@/lib/axiosClient";
 
 const AVATARS = [
@@ -98,6 +97,20 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
         if (data) {
           setStats([
             {
+              icon:
+                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M24.9688 36.6949C26.4835 37.2985 28.1497 37.4106 29.7317 37.0154C31.3137 36.6201 32.7313 35.7374 33.7841 34.4922" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M33.3034 44.8242L27.9997 46.9242L22.6961 44.8242C21.4034 44.8242 21.4034 52.5009 22.6961 52.5009L27.9997 50.4009L33.3034 52.5009C34.5961 52.5009 34.5961 44.8242 33.3034 44.8242Z" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M44.2889 19.0036C39.7185 20.2653 34.8821 20.1884 30.3542 18.7821C25.8263 17.3758 21.7973 14.6992 18.7459 11.0703C18.7459 11.0703 19.8355 18.1986 15.5469 18.81" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M45.1243 18.459C43.8176 8.16667 36.6473 3.5 27.9976 3.5C19.2709 3.5 12.0493 8.24833 10.8359 18.7413" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M35.8008 41.9698C39.323 38.9641 41.8123 34.9281 42.9174 30.4315C43.3837 30.8208 43.9691 31.039 44.5764 31.0498C45.5403 30.9094 46.4118 30.3998 47.007 29.6287C47.6022 28.8577 47.8744 27.8855 47.7661 26.9175C47.8742 25.9481 47.6007 24.9747 47.0036 24.2034C46.4065 23.4321 45.5327 22.9234 44.5671 22.7852C44.3799 22.7881 44.1935 22.8124 44.0118 22.8575" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M11.9777 22.8668C11.7993 22.8192 11.6162 22.7918 11.4317 22.7852C10.4678 22.9256 9.59629 23.4352 9.00113 24.2062C8.40597 24.9773 8.13377 25.9495 8.24202 26.9175C8.13377 27.8855 8.40597 28.8577 9.00113 29.6287C9.59629 30.3998 10.4678 30.9094 11.4317 31.0498C12.0395 31.0393 12.6252 30.8202 13.0907 30.4292C14.2059 34.9868 16.7485 39.0688 20.3474 42.0795" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M22.1641 24.5V26.8333" stroke="#301B69" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+                  <path d="M33.8359 24.5V26.8333" stroke="#301B69" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+                </svg>
+              , alt: "male users", labelKey: "registered_males", value: data.totalMaleUsers
+            },
+            {
               icon: <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.0625 15.6062C17.0625 15.6062 28.0012 12.9182 28.0012 7.54688" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M38.9363 15.6062C38.9363 15.6062 28 12.9182 28 7.54688" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -111,20 +124,6 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
                 <path d="M44.6084 30.4517C42.5722 30.6493 40.5072 30.7488 38.4134 30.7504C20.3301 30.7504 19.1984 23.1367 19.1984 23.1367C19.1984 23.1367 19.5788 29.1824 15.3438 29.1824" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M22.1641 33.832V36.1654" stroke="#301B69" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
                 <path d="M33.8359 33.832V36.1654" stroke="#301B69" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
-              </svg>
-
-              , alt: "male users", labelKey: "registered_males", value: data.totalMaleUsers
-            },
-            {
-              icon: <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M24.9688 36.6949C26.4835 37.2985 28.1497 37.4106 29.7317 37.0154C31.3137 36.6201 32.7313 35.7374 33.7841 34.4922" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M33.3034 44.8242L27.9997 46.9242L22.6961 44.8242C21.4034 44.8242 21.4034 52.5009 22.6961 52.5009L27.9997 50.4009L33.3034 52.5009C34.5961 52.5009 34.5961 44.8242 33.3034 44.8242Z" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M44.2889 19.0036C39.7185 20.2653 34.8821 20.1884 30.3542 18.7821C25.8263 17.3758 21.7973 14.6992 18.7459 11.0703C18.7459 11.0703 19.8355 18.1986 15.5469 18.81" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M45.1243 18.459C43.8176 8.16667 36.6473 3.5 27.9976 3.5C19.2709 3.5 12.0493 8.24833 10.8359 18.7413" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M35.8008 41.9698C39.323 38.9641 41.8123 34.9281 42.9174 30.4315C43.3837 30.8208 43.9691 31.039 44.5764 31.0498C45.5403 30.9094 46.4118 30.3998 47.007 29.6287C47.6022 28.8577 47.8744 27.8855 47.7661 26.9175C47.8742 25.9481 47.6007 24.9747 47.0036 24.2034C46.4065 23.4321 45.5327 22.9234 44.5671 22.7852C44.3799 22.7881 44.1935 22.8124 44.0118 22.8575" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M11.9777 22.8668C11.7993 22.8192 11.6162 22.7918 11.4317 22.7852C10.4678 22.9256 9.59629 23.4352 9.00113 24.2062C8.40597 24.9773 8.13377 25.9495 8.24202 26.9175C8.13377 27.8855 8.40597 28.8577 9.00113 29.6287C9.59629 30.3998 10.4678 30.9094 11.4317 31.0498C12.0395 31.0393 12.6252 30.8202 13.0907 30.4292C14.2059 34.9868 16.7485 39.0688 20.3474 42.0795" stroke="#301B69" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M22.1641 24.5V26.8333" stroke="#301B69" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
-                <path d="M33.8359 24.5V26.8333" stroke="#301B69" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
               </svg>
               , alt: "female users", labelKey: "registered_females", value: data.totalFemaleUsers
             },
