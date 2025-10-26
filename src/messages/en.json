@@ -326,7 +326,7 @@
         "pageInfo": "Page {page} of {totalPages}"
     },
     "chats": {
-        "searchPlaceholder": "Search for a message...",
+        "searchPlaceholder": "Search for a conversation...",
         "loading": "Loading...",
         "noConversations": "No conversations",
         "noConversationsMessage": "Once you match with someone interested, your conversation will appear here. Start exploring profiles and send the first message to begin your journey.",

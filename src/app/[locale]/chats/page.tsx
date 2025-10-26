@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send, CheckCheck, CircleEllipsis, MessageSquareHeart } from "lucide-react";
+import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send, CheckCheck, CircleEllipsis, MessageSquareHeart, ArrowLeft } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -884,7 +884,8 @@ const Chats = () => {
                       <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
                         <div className="flex items-center gap-3">
                           <button onClick={() => {setIsOpen(false);}}>
-                            <ArrowRight className="text-[#2D1F55]" />
+                            <ArrowRight className="text-[#2D1F55] ltr:hidden" />
+                            <ArrowLeft className="text-[#2D1F55] rtl:hidden" />
                           </button>
                           <div className="relative">
                             <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
