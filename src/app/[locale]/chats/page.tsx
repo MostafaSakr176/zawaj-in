@@ -883,7 +883,7 @@ const Chats = () => {
                       {/* Header (fixed height) */}
                       <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
                         <div className="flex items-center gap-3">
-                          <button onClick={() => { setActiveConversation(null); setIsOpen(false); }}>
+                          <button onClick={() => {setIsOpen(false);}}>
                             <ArrowRight className="text-[#2D1F55]" />
                           </button>
                           <div className="relative">
