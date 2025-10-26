@@ -88,7 +88,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const connect = useCallback(() => {
     if (!accessToken || !profile || socket?.connected) return;
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081';
+    const apiUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:8081';
 
     const newSocket = io(apiUrl, {
       path: '/socket.io',
