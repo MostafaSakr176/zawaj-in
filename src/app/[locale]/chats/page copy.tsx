@@ -24,29 +24,32 @@ import { useSocket } from "@/context/SocketContext";
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [audioDuration, setAudioDuration] = useState(duration || 0);
+  const [displayDuration, setDisplayDuration] = useState(duration || 0); // <-- use state for displayDuration
   const audioRef = useRef<HTMLAudioElement>(null);
-  const { profile } = useAuth();
+
+  // Update displayDuration when prop changes
+  useEffect(() => {
+    if (typeof duration === "number" && isFinite(duration) && duration > 0) {
+      setDisplayDuration(duration);
+    }
+  }, [duration]);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setAudioDuration(audio.duration);
     const handleEnded = () => setIsPlaying(false);
 
     audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('durationchange', updateDuration);
     audio.addEventListener('ended', handleEnded);
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('durationchange', updateDuration);
       audio.removeEventListener('ended', handleEnded);
     };
   }, []);
-  // test github actions
+
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -60,12 +63,13 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
   };
 
   const formatTime = (seconds: number) => {
+    if (!isFinite(seconds) || isNaN(seconds) || seconds <= 0) return "0:00";
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0;
+  const progress = displayDuration > 0 ? (currentTime / displayDuration) * 100 : 0;
 
   return (
     <div className={`rounded-full ${fromMe ? 'rounded-bl-none bg-[#3B0C46]' : 'rounded-br-none bg-white border border-[#0000001A]'} px-3 py-2 flex items-center gap-3`}>
@@ -87,7 +91,7 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
         <div className="h-full bg-[#B9C0CF] transition-all" style={{ width: `${progress}%` }} />
       </div>
       <span className={`text-xs ${fromMe ? 'text-white/70' : 'text-[#8A97AB]'}`}>
-        {formatTime(isPlaying ? currentTime : audioDuration)}
+        {formatTime(isPlaying ? currentTime : displayDuration)}
       </span>
     </div>
   );
@@ -559,6 +563,75 @@ const Chats = () => {
     setRecordingDuration(0);
   };
 
+  // helper: get accurate duration from a Blob
+  async function getAudioDuration(blob: Blob, timeout = 5000): Promise<number> {
+    // try using an <audio> element first
+    return new Promise<number>((resolve) => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio();
+      let resolved = false;
+      const cleanup = () => {
+        try { audio.src = ""; } catch { }
+        URL.revokeObjectURL(url);
+      };
+
+      const onLoaded = () => {
+        if (!resolved) {
+          const d = audio.duration;
+          resolved = true;
+          cleanup();
+          // ensure finite non-NaN
+          resolve(isFinite(d) && d > 0 ? d : 0);
+        }
+      };
+
+      const onError = async () => {
+        if (resolved) return;
+        // fallback to AudioContext decodeAudioData
+        try {
+          const arrayBuffer = await blob.arrayBuffer();
+          const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+          ctx.decodeAudioData(arrayBuffer, (buffer) => {
+            if (!resolved) {
+              resolved = true;
+              const d = buffer.duration || 0;
+              cleanup();
+              resolve(isFinite(d) && d > 0 ? d : 0);
+            }
+            try { ctx.close(); } catch { }
+          }, () => {
+            if (!resolved) {
+              resolved = true;
+              cleanup();
+              resolve(0);
+            }
+            try { ctx.close(); } catch { }
+          });
+        } catch (err) {
+          if (!resolved) {
+            resolved = true;
+            cleanup();
+            resolve(0);
+          }
+        }
+      };
+
+      audio.preload = "metadata";
+      audio.src = url;
+      audio.addEventListener("loadedmetadata", onLoaded, { once: true });
+      audio.addEventListener("error", onError, { once: true });
+
+      // safety timeout
+      setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          cleanup();
+          resolve(0);
+        }
+      }, timeout);
+    });
+  }
+
   const stopRecording = async () => {
     const mediaRecorder = mediaRecorderRef.current;
     if (!mediaRecorder || mediaRecorder.state === "inactive") return;
@@ -569,14 +642,24 @@ const Chats = () => {
 
         try {
           // Create audio blob with proper MIME type
-          const mimeType = isIOS ? 'audio/mp4' : 'audio/webm';
+          const mimeType = isIOS ? "audio/mp4" : "audio/webm";
           const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-          const duration = recordingDuration;
+
+          // compute accurate duration from blob (prevents Infinity/NaN)
+          let duration = 0;
+          try {
+            duration = await getAudioDuration(audioBlob);
+            // round to whole seconds (or keep decimals if desired)
+            duration = Math.round(duration);
+          } catch (err) {
+            console.warn("Failed to compute audio duration, falling back to timer", err);
+            duration = recordingDuration || 0;
+          }
 
           // Upload and send
           await uploadAndSendAudio(audioBlob, duration);
         } catch (error) {
-          console.error('Error processing recording:', error);
+          console.error("Error processing recording:", error);
           alert(t("recordingProcessError") || "Failed to process recording");
         }
 
@@ -773,6 +856,7 @@ const Chats = () => {
       </button>
     );
   };
+
 
 
   return (
