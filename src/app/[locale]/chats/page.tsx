@@ -20,8 +20,6 @@ import api from "@/lib/axiosClient";
 import { useTranslations } from "next-intl";
 import { chatService } from "@/services/chatService";
 import { useSocket } from "@/context/SocketContext";
-import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
-import { URL } from 'url';
 
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -284,8 +282,8 @@ const Chats = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [isUploadingAudio, setIsUploadingAudio] = useState(false);
-  const recordRTCRef = useRef<RecordRTC | null>(null);
-  const recordingStreamRef = useRef<MediaStream | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { profile } = useAuth();
   const searchParams = useSearchParams();
@@ -371,83 +369,80 @@ const Chats = () => {
     }
   };
 
-const startRecording = async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    recordingStreamRef.current = stream;
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
 
-    const recorder = new RecordRTC(stream, {
-      type: "audio",
-      mimeType: "audio/wav",
-      recorderType: StereoAudioRecorder,
-      numberOfAudioChannels: 1,
-      desiredSampRate: 16000, // or 44100 for higher quality
-    });
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
 
-    recordRTCRef.current = recorder;
-    recorder.startRecording();
-
-    setIsRecording(true);
-    setRecordingDuration(0);
-
-    recordingIntervalRef.current = setInterval(() => {
-      setRecordingDuration((prev) => prev + 1);
-    }, 1000);
-  } catch (error) {
-    console.error("Error starting recording:", error);
-    alert("Could not access microphone. Please check permissions.");
-  }
-};
-
-// Replace stopRecording:
-const stopRecording = async () => {
-  const recorder = recordRTCRef.current;
-  if (!recorder) return;
-
-  return new Promise<void>((resolve) => {
-    recorder.stopRecording(async () => {
-      if (recordingIntervalRef.current) {
-        clearInterval(recordingIntervalRef.current);
-        recordingIntervalRef.current = null;
-      }
-      setIsRecording(false);
+      mediaRecorder.start();
+      setIsRecording(true);
       setRecordingDuration(0);
 
-      const audioBlob: Blob = recorder.getBlob();
-      // Stop all tracks
-      if (recordingStreamRef.current) {
-        recordingStreamRef.current.getTracks().forEach((track) => track.stop());
-        recordingStreamRef.current = null;
-      }
-      recordRTCRef.current = null;
+      // Update duration every second
+      recordingIntervalRef.current = setInterval(() => {
+        setRecordingDuration((prev) => prev + 1);
+      }, 1000);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      alert("Could not access microphone. Please check permissions.");
+    }
+  };
 
-      // Upload and send
-      await uploadAndSendAudio(audioBlob, recordingDuration);
-      resolve();
+  const stopRecording = async () => {
+    const mediaRecorder = mediaRecorderRef.current;
+    if (!mediaRecorder || mediaRecorder.state === "inactive") return;
+
+    return new Promise<void>((resolve) => {
+      mediaRecorder.onstop = async () => {
+        // Stop all tracks
+        mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+
+        // Clear interval
+        if (recordingIntervalRef.current) {
+          clearInterval(recordingIntervalRef.current);
+          recordingIntervalRef.current = null;
+        }
+
+        // Create audio blob
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        const duration = recordingDuration;
+
+        setIsRecording(false);
+        setRecordingDuration(0);
+
+        // Upload and send
+        await uploadAndSendAudio(audioBlob, duration);
+        resolve();
+      };
+
+      mediaRecorder.stop();
     });
-  });
-};
+  };
 
-// Replace cancelRecording:
-const cancelRecording = () => {
-  const recorder = recordRTCRef.current;
-  if (recorder) {
-    recorder.stopRecording(() => {
-      if (recordingStreamRef.current) {
-        recordingStreamRef.current.getTracks().forEach((track) => track.stop());
-        recordingStreamRef.current = null;
-      }
-      recordRTCRef.current = null;
-    });
-  }
-  if (recordingIntervalRef.current) {
-    clearInterval(recordingIntervalRef.current);
-    recordingIntervalRef.current = null;
-  }
-  setIsRecording(false);
-  setRecordingDuration(0);
-};
+  const cancelRecording = () => {
+    const mediaRecorder = mediaRecorderRef.current;
+    if (!mediaRecorder) return;
 
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+
+    if (recordingIntervalRef.current) {
+      clearInterval(recordingIntervalRef.current);
+      recordingIntervalRef.current = null;
+    }
+
+    setIsRecording(false);
+    setRecordingDuration(0);
+    audioChunksRef.current = [];
+  };
 
   const uploadAndSendAudio = async (audioBlob: Blob, duration: number) => {
     if (!activeConversation) return;
