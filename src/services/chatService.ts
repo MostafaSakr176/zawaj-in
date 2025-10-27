@@ -140,13 +140,13 @@ export const chatService = {
     const formData = new FormData();
     
     // Determine file extension based on blob type
-    let fileName = "audio.webm";
+    let fileName = "audio.wav";
     if (audioBlob.type.includes("mp4")) {
       fileName = "audio.mp4";
     } else if (audioBlob.type.includes("aac")) {
       fileName = "audio.aac";
     } else if (audioBlob.type.includes("mpeg")) {
-      fileName = "audio.mp3";
+      fileName = "audio.wav";
     } else if (audioBlob.type.includes("wav")) {
       fileName = "audio.wav";
     }

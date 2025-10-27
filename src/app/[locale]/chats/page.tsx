@@ -1,8 +1,7 @@
-
 "use client";
 
 import Image from "next/image";
-import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send, CheckCheck, CircleEllipsis, MessageSquareHeart } from "lucide-react";
+import { Ellipsis, ArrowRight, Mic, Search, Check, Play, Send, CheckCheck, CircleEllipsis, MessageSquareHeart, ArrowLeft } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,32 +24,29 @@ import { useSocket } from "@/context/SocketContext";
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [displayDuration, setDisplayDuration] = useState(duration || 0); // <-- use state for displayDuration
+  const [audioDuration, setAudioDuration] = useState(duration || 0);
   const audioRef = useRef<HTMLAudioElement>(null);
-
-  // Update displayDuration when prop changes
-  useEffect(() => {
-    if (typeof duration === "number" && isFinite(duration) && duration > 0) {
-      setDisplayDuration(duration);
-    }
-  }, [duration]);
+  const { profile } = useAuth();
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setAudioDuration(audio.duration);
     const handleEnded = () => setIsPlaying(false);
 
     audio.addEventListener('timeupdate', updateTime);
+    audio.addEventListener('durationchange', updateDuration);
     audio.addEventListener('ended', handleEnded);
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
+      audio.removeEventListener('durationchange', updateDuration);
       audio.removeEventListener('ended', handleEnded);
     };
   }, []);
-
+  // test github actions
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -64,13 +60,12 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
   };
 
   const formatTime = (seconds: number) => {
-    if (!isFinite(seconds) || isNaN(seconds) || seconds <= 0) return "0:00";
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const progress = displayDuration > 0 ? (currentTime / displayDuration) * 100 : 0;
+  const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0;
 
   return (
     <div className={`rounded-full ${fromMe ? 'rounded-bl-none bg-[#3B0C46]' : 'rounded-br-none bg-white border border-[#0000001A]'} px-3 py-2 flex items-center gap-3`}>
@@ -92,7 +87,7 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
         <div className="h-full bg-[#B9C0CF] transition-all" style={{ width: `${progress}%` }} />
       </div>
       <span className={`text-xs ${fromMe ? 'text-white/70' : 'text-[#8A97AB]'}`}>
-        {formatTime(isPlaying ? currentTime : displayDuration)}
+        {formatTime(isPlaying ? currentTime : audioDuration)}
       </span>
     </div>
   );
@@ -132,71 +127,6 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
     </div>
   );
 }
-
-// function ChatListItem({
-//   c,
-//   onOpen,
-//   currentUserId,
-//   isActive = false
-// }: {
-//   c: Conversation;
-//   onOpen: (c: Conversation) => void;
-//   currentUserId: string;
-//   isActive?: boolean;
-// }) {
-//   // Determine the other participant
-//   const { profile } = useAuth();
-//   const otherParticipant = c.participant1Id === currentUserId ? c.participant2 : c.participant1;
-
-//   const formatTime = (date: Date | null | string) => {
-//     if (!date) return "";
-//     const d = typeof date === 'string' ? new Date(date) : new Date(date);
-//     return d.toLocaleTimeString(undefined, {
-//       hour: "2-digit",
-//       minute: "2-digit",
-//       hour12: true
-//     });
-//   };
-
-//   return (
-//     <button
-//       onClick={() => onOpen(c)}
-//       className={`w-full text-right px-3 py-3 transition flex items-center gap-3 ${isActive
-//         ? 'bg-[#4B164C]/5'
-//         : 'hover:bg-white/60'
-//         }`}
-//     >
-//       <div className="relative">
-//         <Image
-//           src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
-//           alt={otherParticipant?.fullName || "User"}
-//           width={40}
-//           height={40}
-//           className="rounded-full ring-2 ring-white"
-//         />
-//         {otherParticipant?.isOnline && <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-[#28C76F] ring-2 ring-white" />}
-//       </div>
-//       <div className="flex-1">
-//         <div className="flex items-center justify-between">
-//           <span className={`font-semibold ${isActive ? 'text-[#3B0C46]' : 'text-[#2D1F55]'}`}>
-//             {otherParticipant?.fullName || "مستخدم"}
-//           </span>
-//           <span className="text-xs text-[#8A97AB]">{formatTime(c.lastMessageAt)}</span>
-//         </div>
-//         <p className="text-xs text-[#8A97AB] line-clamp-1">
-//           {c.lastMessagePreview || "ابدأ المحادثة"}
-//         </p>
-//       </div>
-//       {c.unreadCount && c.unreadCount > 0 ? (
-//         <span className="grid place-items-center min-w-6 h-6 rounded-full bg-[#3B0C46] text-white text-xs">
-//           {c.unreadCount}
-//         </span>
-//       ) : (
-//         <Check size={16} className="text-[#B9C0CF]" />
-//       )}
-//     </button>
-//   );
-// }
 
 // src/app/[locale]/chats/page.tsx - Update the ChatListItem component
 function ChatListItem({
@@ -378,40 +308,6 @@ const Chats = () => {
     loadMoreMessages,
   } = useChat(activeConversation?.id || null);
 
-  const [audioSupported, setAudioSupported] = useState<any>(false);
-  const [isIOS, setIsIOS] = useState<any>(false);
-
-  // Check iOS and audio support
-  useEffect(() => {
-    const checkIOSAndAudioSupport = () => {
-      const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      setIsIOS(iOS);
-
-      // Check MediaRecorder support
-      const hasMediaRecorder = typeof MediaRecorder !== 'undefined';
-      const hasGetUserMedia = navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
-
-      setAudioSupported(hasMediaRecorder && hasGetUserMedia);
-
-      if (iOS && hasMediaRecorder) {
-        // Check if iOS supports the required audio formats
-        const supportedTypes = [
-          'audio/mp4',
-          'audio/aac',
-          'audio/mpeg',
-          'audio/wav'
-        ];
-
-        const supportedType = supportedTypes.find(type => MediaRecorder.isTypeSupported(type));
-        if (!supportedType) {
-          setAudioSupported(false);
-        }
-      }
-    };
-
-    checkIOSAndAudioSupport();
-  }, []);
-
   // Handle conversation ID from URL parameter or set first chat as default
   useEffect(() => {
     if (conversationsLoading || conversations.length === 0) return;
@@ -475,37 +371,8 @@ const Chats = () => {
 
   const startRecording = async () => {
     try {
-      // Request microphone permission with iOS-specific constraints
-      const constraints = {
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-          ...(isIOS && {
-            sampleRate: 44100,
-            channelCount: 1,
-          })
-        }
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-      // Determine the best audio format for the platform
-      let mimeType = 'audio/webm';
-      if (isIOS) {
-        const iosFormats = ['audio/mp4', 'audio/aac', 'audio/mpeg'];
-        const supportedFormat = iosFormats.find(format => MediaRecorder.isTypeSupported(format));
-        if (supportedFormat) {
-          mimeType = supportedFormat;
-        } else {
-          throw new Error('No supported audio format found for iOS');
-        }
-      }
-
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported(mimeType) ? mimeType : undefined
-      });
-
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -515,16 +382,7 @@ const Chats = () => {
         }
       };
 
-      mediaRecorder.onerror = (event) => {
-        console.error('MediaRecorder error:', event);
-        alert('Recording failed. Please try again.');
-        stopRecordingCleanup();
-      };
-
-      // For iOS, use smaller time slices
-      const timeSlice = isIOS ? 100 : 1000;
-      mediaRecorder.start(timeSlice);
-
+      mediaRecorder.start();
       setIsRecording(true);
       setRecordingDuration(0);
 
@@ -532,106 +390,11 @@ const Chats = () => {
       recordingIntervalRef.current = setInterval(() => {
         setRecordingDuration((prev) => prev + 1);
       }, 1000);
-
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error starting recording:", error);
-
-      if (error.name === 'NotAllowedError') {
-        alert(t("microphonePermissionDenied") || "Microphone permission denied. Please enable microphone access in your browser settings.");
-      } else if (error.name === 'NotFoundError') {
-        alert(t("microphoneNotFound") || "No microphone found. Please connect a microphone and try again.");
-      } else {
-        alert(t("recordingError") || "Could not start recording. Please try again.");
-      }
-
-      stopRecordingCleanup();
+      alert("Could not access microphone. Please check permissions.");
     }
   };
-
-  const stopRecordingCleanup = () => {
-    // Stop all tracks
-    if (mediaRecorderRef.current?.stream) {
-      mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
-    }
-
-    // Clear interval
-    if (recordingIntervalRef.current) {
-      clearInterval(recordingIntervalRef.current);
-      recordingIntervalRef.current = null;
-    }
-
-    setIsRecording(false);
-    setRecordingDuration(0);
-  };
-
-  // helper: get accurate duration from a Blob
-  async function getAudioDuration(blob: Blob, timeout = 5000): Promise<number> {
-    // try using an <audio> element first
-    return new Promise<number>((resolve) => {
-      const url = URL.createObjectURL(blob);
-      const audio = new Audio();
-      let resolved = false;
-      const cleanup = () => {
-        try { audio.src = ""; } catch { }
-        URL.revokeObjectURL(url);
-      };
-
-      const onLoaded = () => {
-        if (!resolved) {
-          const d = audio.duration;
-          resolved = true;
-          cleanup();
-          // ensure finite non-NaN
-          resolve(isFinite(d) && d > 0 ? d : 0);
-        }
-      };
-
-      const onError = async () => {
-        if (resolved) return;
-        // fallback to AudioContext decodeAudioData
-        try {
-          const arrayBuffer = await blob.arrayBuffer();
-          const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-          ctx.decodeAudioData(arrayBuffer, (buffer) => {
-            if (!resolved) {
-              resolved = true;
-              const d = buffer.duration || 0;
-              cleanup();
-              resolve(isFinite(d) && d > 0 ? d : 0);
-            }
-            try { ctx.close(); } catch { }
-          }, () => {
-            if (!resolved) {
-              resolved = true;
-              cleanup();
-              resolve(0);
-            }
-            try { ctx.close(); } catch { }
-          });
-        } catch (err) {
-          if (!resolved) {
-            resolved = true;
-            cleanup();
-            resolve(0);
-          }
-        }
-      };
-
-      audio.preload = "metadata";
-      audio.src = url;
-      audio.addEventListener("loadedmetadata", onLoaded, { once: true });
-      audio.addEventListener("error", onError, { once: true });
-
-      // safety timeout
-      setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          cleanup();
-          resolve(0);
-        }
-      }, timeout);
-    });
-  }
 
   const stopRecording = async () => {
     const mediaRecorder = mediaRecorderRef.current;
@@ -639,31 +402,26 @@ const Chats = () => {
 
     return new Promise<void>((resolve) => {
       mediaRecorder.onstop = async () => {
-        stopRecordingCleanup();
+        // Stop all tracks
+        mediaRecorder.stream.getTracks().forEach((track) => track.stop());
 
-        try {
-          // Create audio blob with proper MIME type
-          const mimeType = isIOS ? "audio/mp4" : "audio/webm";
-          const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-
-          // compute accurate duration from blob (prevents Infinity/NaN)
-          let duration = 0;
-          try {
-            duration = await getAudioDuration(audioBlob);
-            // round to whole seconds (or keep decimals if desired)
-            duration = Math.round(duration);
-          } catch (err) {
-            console.warn("Failed to compute audio duration, falling back to timer", err);
-            duration = recordingDuration || 0;
-          }
-
-          // Upload and send
-          await uploadAndSendAudio(audioBlob, duration);
-        } catch (error) {
-          console.error("Error processing recording:", error);
-          alert(t("recordingProcessError") || "Failed to process recording");
+        // Clear interval
+        if (recordingIntervalRef.current) {
+          clearInterval(recordingIntervalRef.current);
+          recordingIntervalRef.current = null;
         }
 
+        // Create audio blob
+        const mimeType = MediaRecorder.isTypeSupported("audio/webm")
+          ? "audio/webm"
+          : "audio/wav";
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType }); const duration = recordingDuration;
+
+        setIsRecording(false);
+        setRecordingDuration(0);
+
+        // Upload and send
+        await uploadAndSendAudio(audioBlob, duration);
         resolve();
       };
 
@@ -675,11 +433,16 @@ const Chats = () => {
     const mediaRecorder = mediaRecorderRef.current;
     if (!mediaRecorder) return;
 
-    if (mediaRecorder.state !== "inactive") {
-      mediaRecorder.stop();
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+
+    if (recordingIntervalRef.current) {
+      clearInterval(recordingIntervalRef.current);
+      recordingIntervalRef.current = null;
     }
 
-    stopRecordingCleanup();
+    setIsRecording(false);
+    setRecordingDuration(0);
     audioChunksRef.current = [];
   };
 
@@ -688,22 +451,14 @@ const Chats = () => {
 
     setIsUploadingAudio(true);
     try {
-      // For iOS, convert to a more compatible format if needed
-      let processedBlob = audioBlob;
-
-      if (isIOS && audioBlob.type.includes('webm')) {
-        // Convert webm to mp4/aac for better iOS compatibility
-        processedBlob = new Blob([audioBlob], { type: 'audio/mp4' });
-      }
-
       const { chatService } = await import("@/services/chatService");
-      const { fileUrl } = await chatService.uploadAudio(processedBlob);
+      const { fileUrl } = await chatService.uploadAudio(audioBlob);
 
       // Send audio message
-      sendMessage("🎵 Audio message", "audio", fileUrl, duration);
+      sendMessage("Audio message", "audio", fileUrl, duration);
     } catch (error) {
       console.error("Error uploading audio:", error);
-      alert(t("audioUploadError") || "Failed to upload audio message");
+      alert("Failed to upload audio message");
     } finally {
       setIsUploadingAudio(false);
     }
@@ -832,42 +587,14 @@ const Chats = () => {
     }
   };
 
-
-  // Update the input section to show different UI for unsupported devices
-  const renderAudioButton = () => {
-    if (!audioSupported) {
-      return (
-        <button
-          disabled
-          className="grid place-items-center size-10 rounded-full bg-gray-400 text-white opacity-50"
-          title={t("audioNotSupported") || "Audio recording not supported on this device"}
-        >
-          <Mic size={18} />
-        </button>
-      );
-    }
-
-    return (
-      <button
-        onClick={messageText.trim() ? handleSendMessage : startRecording}
-        className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
-        title={messageText.trim() ? t("send") : t("recordAudio")}
-      >
-        {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
-      </button>
-    );
-  };
-
-
-
   return (
     <ProtectedRoute>
-      <section className="relative pt-24 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
+      <section className="relative pt-26 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff]">
         <Image src="/photos/terms-bg.webp" alt="Terms Background" width={100} height={100} className="absolute w-full inset-x-0 top-0 z-1" />
         <div className="max-w-7xl mx-auto px-4 md:px-0 relative z-2">
 
           {conversationsLoading ?
-            <div className='w-[full] h-[70vh] flex items-center justify-center overflow-hidden'>
+            <div className='w-[full] h-[75vh] flex items-center justify-center overflow-hidden'>
               <div className="w-0 h-[15rem] flex items-center justify-center transform rotate-30 overflow-hidden animate-[expand_2s_ease-out_forwards]">
                 <div className="text-6xl font-bold transform -rotate-30 text-nowrap">
                   <span className="text-[#301B69]">زواج</span>{" "}
@@ -1051,7 +778,12 @@ const Chats = () => {
                                 placeholder={t("messagePlaceholder")}
                                 className="flex-1 bg-transparent px-3 outline-none placeholder:text-[#8A97AB] text-[#2D1F55]"
                               />
-                              {renderAudioButton()}
+                              <button
+                                onClick={messageText.trim() ? handleSendMessage : startRecording}
+                                className="grid place-items-center size-10 rounded-full bg-[#3B0C46] text-white"
+                              >
+                                {messageText.trim() ? <Send size={18} /> : <Mic size={18} />}
+                              </button>
                             </div>
                           )}
                         </div>
@@ -1088,8 +820,9 @@ const Chats = () => {
                         {/* Header (fixed height) */}
                         <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA] shrink-0">
                           <div className="flex items-center gap-3">
-                            <button onClick={() => { setActiveConversation(null); setIsOpen(false); }}>
-                              <ArrowRight className="text-[#2D1F55]" />
+                            <button onClick={() => { setIsOpen(false); }}>
+                              <ArrowRight className="text-[#2D1F55] ltr:hidden" />
+                              <ArrowLeft className="text-[#2D1F55] rtl:hidden" />
                             </button>
                             <div className="relative">
                               <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
