@@ -412,7 +412,7 @@ const Chats = () => {
         }
 
         // Create audio blob
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/mp3" });
         const duration = recordingDuration;
 
         setIsRecording(false);
