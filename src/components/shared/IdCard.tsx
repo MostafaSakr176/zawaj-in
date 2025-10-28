@@ -5,6 +5,7 @@ import { Heart, BadgeCheck, MapPin, Palette, HeartHandshake } from "lucide-react
 import { Link } from "@/i18n/navigation";
 import { useState } from "react";
 import api from "@/lib/axiosClient";
+import { useTranslations } from "next-intl";
 
 type IdCardProps = {
     id: string;
@@ -20,13 +21,6 @@ type IdCardProps = {
     online?: boolean;
     isFav?: boolean;
 };
-
-const InfoItem = ({ icon, text }: { icon: React.ReactNode; text: string | null }) => (
-    <div className="flex items-center justify-start gap-1">
-        <span className="text-[#E30BCD]">{icon}</span>
-        <span className="text-sm text-[#8A97AB]">{text || "غير محدد"}</span>
-    </div>
-);
 
 const IdCard = ({
     id,
@@ -44,6 +38,14 @@ const IdCard = ({
 }: IdCardProps) => {
     const [Fav, setIsFav] = useState(isFav);
     const [loading, setLoading] = useState(false);
+    const tPartner = useTranslations("partnerProfile");
+
+    const InfoItem = ({ icon, text }: { icon: React.ReactNode; text: string | null }) => (
+    <div className="flex items-center justify-start gap-1">
+        <span className="text-[#E30BCD]">{icon}</span>
+        <span className="text-sm text-[#8A97AB]">{text || tPartner('notSpecified')}</span>
+    </div>
+);
 
     const handleLikeToggle = async (e: React.MouseEvent) => {
         e.stopPropagation();

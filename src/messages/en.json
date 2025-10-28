@@ -7,7 +7,7 @@
         "userOpinion": "User Opinion",
         "subscriptions": "Subscriptions",
         "advantages": "Advantages",
-        "mainPage": "Main Page",
+        "mainPage": "Home",
         "usagePolicy": "Usage Policy",
         "favorits": "Favorites",
         "chats": "Chats",
@@ -23,8 +23,8 @@
     },
     "hero": {
         "successRate": "90%",
-        "successRateLabel": "Marriage Rate",
-        "welcomeText": "Welcome to Zawag In Community",
+        "successRateLabel": "Satisfaction rate",
+        "welcomeText": "Welcome to Zwajin Community",
         "mainTitle": "Electronic Marriage Platform...",
         "subtitle": "With Human Spirit and Moral Values",
         "registerButton": "Login",
@@ -245,7 +245,7 @@
     },
     "subscriptions": {
         "title": "Subscriptions",
-        "subtitle": "Get unlimited tools with an annual subscription, and enjoy exclusive discounts.",
+        "subtitle": "Get unlimited tools with an annual subscription, and enjoy exclusive discounts.    ",
         "mostPopular": "Most Popular",
         "freeForlimitedTime": "Free for a limited time",
         "silver": {
@@ -279,15 +279,15 @@
     },
     "userOpinionSection": {
         "badge": "Success Stories from Our Users",
-        "title": "Opinions from Those Who Found Love Through Zawag Inn",
-        "subtitle": "Zawag Inn brings hearts together with the intention of marriage, here are testimonials from people who found their partner with us"
+        "title": "Opinions from Those Who Found Love Through zwajin",
+        "subtitle": "zwajin brings hearts together with the intention of marriage, here are testimonials from people who found their partner with us"
     },
     "footerSection": {
         "badge": "Start Your Journey in Marriage Now",
         "title": "Are You Ready to Find Your Life Partner?",
         "subtitle": "Discover a safe and caring marriage experience on our platform designed specifically for Muslims serious about marriage. Register today to be the first to start a stable and happy life story.",
         "cta": "Start Now",
-        "copyright": "© Zawag Inn 2025 All Rights Reserved"
+        "copyright": "© zwajin 2025 All Rights Reserved"
     },
     "idCard": {
         "years": "years old",
@@ -567,7 +567,7 @@
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",
         "title": "Terms of Use",
-        "religiousIntro": "In the name of Allah, the Most Gracious, the Most Merciful\nAllah Almighty said: \"And fulfill the covenant Allah when you have taken it, and do not break oaths after their confirmation while you have made Allah, over you, a witness.\" — Quran",
+        "religiousIntro": "بسم الله الرحمن الرحيم\nقال الله تعالى: \"وَأَوْفُوا بِعَهْدِ اللَّهِ إِذَا عَاهَدتُّمْ وَلَا تَنقُضُوا الْأَيْمَانَ بَعْدَ تَوْكِيدِهَا وَقَدْ جَعَلْتُمُ اللَّهَ عَلَيْكُمْ كَفِيلًا ۚ إِنَّ اللَّهَ يَعْلَمُ مَا تَفْعَلُونَ\" صدق الله العظيم",
         "introduction": "By using this website, you agree to the following:",
         "content1": "The site is available for adults 18 years and older. It may not be used by children or teenagers. Users are responsible for entering truthful and accurate data. The site is not responsible for use by those outside the permitted age group.",
         "content2": "You pledge the credibility and accuracy of the data you enter and bear all legal, ethical, and religious consequences if you violate this. The site is not responsible for any breach of this pledge and does not guarantee marriage results.",
@@ -578,7 +578,7 @@
         "content7": "You pledge not to register more than one account for yourself on the site.",
         "content8": "It is strictly forbidden to include any contact information in the registration request (email, phone number, mobile number, P.O. box, or any means leading to communication outside the site).",
         "content9": "Mobile number and email appear only to site management and never to members.",
-        "content10": "Users pay a subscription fee (if any) to use Zawag Inn services. Payment is immediate and electronic. After payment, users cannot request a refund for any reason. Deleting your account ends your subscription immediately with no refund, regardless of remaining time. You cannot access the site again except by subscribing and paying anew.",
+        "content10": "Users pay a subscription fee (if any) to use zwajin services. Payment is immediate and electronic. After payment, users cannot request a refund for any reason. Deleting your account ends your subscription immediately with no refund, regardless of remaining time. You cannot access the site again except by subscribing and paying anew.",
         "content11": "The site is not responsible for any content or violations by users. The site may delete or disable any account or content, temporarily or permanently, if it violates the terms or for any reason deemed necessary, without user consent. The site may correct incorrect information entered by users or modify violating content with or without user request. The site does not guarantee any content, operation, user compatibility, or marriage.",
         "content12": "Site management may suspend any account if seriousness cannot be confirmed. No paid amounts will be refunded.",
         "content13": "The site cares deeply about user privacy. No human has access to private conversations. Despite efforts to ensure privacy and security, the site cannot guarantee against misuse of login information, device sharing, technical errors, or hacking. The site may use email, calls, SMS, or WhatsApp as primary means of communication or advertising.",

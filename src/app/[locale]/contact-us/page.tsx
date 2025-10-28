@@ -46,11 +46,11 @@ export default function ContactUs() {
 
                 <div className="flex items-center justify-center flex-col md:flex-row gap-4 md:gap-8 mb-4">
                     <div className="flex items-center gap-2">
-                        <a href="https://wa.me/1234567890" className="text-[#301B69] underline text-lg">+1 (555) 000-0000</a>
+                        <a href="https://wa.me/0508229060 " className="text-[#301B69] underline text-lg">0508229060</a>
                         <Image src="/icons/whatsapp.webp" alt="" width={24} height={24} />
                     </div>
                     <div className="flex items-center gap-2">
-                        <a href="mailto:email@example.com" className="text-[#301B69] underline text-lg">email@example.com</a>
+                        <a href="mailto:info@zwajin.com" className="text-[#301B69] underline text-lg">info@zwajin.com</a>
                         <Image src="/icons/mail.webp" alt="" width={24} height={24} />
                     </div>
                 </div>

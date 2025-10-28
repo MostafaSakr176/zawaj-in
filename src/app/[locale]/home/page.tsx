@@ -167,7 +167,6 @@ const MyFavorites = () => {
       try {
         const response = await fetch('https://countriesnow.space/api/v0.1/countries');
         const data: CountriesResponse = await response.json();
-
         if (!data.error) {
           setCountries(data.data);
         }
@@ -392,192 +391,192 @@ const MyFavorites = () => {
 
                 {/* Scrollable Form Fields */}
                 <div className="flex-1 overflow-y-auto px-6 pb-4">
-                    {/* Age Range */}
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <FormField label={<Label>{tRequest("fields.preferredAgeFrom")}</Label>}>
-                          <TextField
-                            type="number"
-                            value={filters.minAge || ""}
-                            onChange={(e) => updateFilter("minAge", e.target.value ? Number(e.target.value) : null)}
-                            placeholder="18"
-                          />
-                        </FormField>
-                        <FormField label={<Label>{tRequest("fields.preferredAgeTo")}</Label>}>
-                          <TextField
-                            type="number"
-                            value={filters.maxAge || ""}
-                            onChange={(e) => updateFilter("maxAge", e.target.value ? Number(e.target.value) : null)}
-                            placeholder="65"
-                          />
-                        </FormField>
-                      </div>
-                      <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            ...countries.map(country => ({
-                              value: country.country,
-                              label: country.country
-                            }))
-                          ]}
-                          value={filters.country}
-                          onChange={(e) => handleCountryChange(e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                          disabled={loadingCountries}
+                  {/* Age Range */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField label={<Label>{tRequest("fields.preferredAgeFrom")}</Label>}>
+                        <TextField
+                          type="number"
+                          value={filters.minAge || ""}
+                          onChange={(e) => updateFilter("minAge", e.target.value ? Number(e.target.value) : null)}
+                          placeholder="18"
                         />
                       </FormField>
-
-                      {/* City Select - dependent on country */}
-                      <FormField label={<Label>{tRequest("fields.city")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            ...availableCities.map(city => ({
-                              value: city,
-                              label: city
-                            }))
-                          ]}
-                          value={filters.city}
-                          onChange={(e) => updateFilter("city", e.target.value)}
-                          placeholder={
-                            !filters.country
-                              ? tRequest("placeholders.selectCountryFirst")
-                              : availableCities.length === 0
-                                ? tRequest("placeholders.noCitiesAvailable")
-                                : tRequest("placeholders.choose")
-                          }
-                          disabled={!filters.country || availableCities.length === 0}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "single", label: tEdit("single") },
-                            { value: "divorced", label: tEdit("divorced") },
-                            { value: "widowed", label: tEdit("widowed") },
-                          ]}
-                          value={filters.maritalStatus}
-                          onChange={(e) => updateFilter("maritalStatus", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.education")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "secondary", label: tEdit("secondary") },
-                            { value: "diploma", label: tEdit("diploma") },
-                            { value: "university", label: tEdit("university") },
-                            { value: "higher_education", label: tEdit("higher_education") },
-                          ]}
-                          value={filters.educationLevel}
-                          onChange={(e) => updateFilter("educationLevel", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.job")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "unemployed", label: tEdit("unemployed") },
-                            { value: "employed", label: tEdit("employed") },
-                            { value: "self_employed", label: tEdit("selfEmployed") },
-                          ]}
-                          value={filters.natureOfWork}
-                          onChange={(e) => updateFilter("natureOfWork", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <FormField label={<Label>{t("minHeight")}</Label>}>
-                          <TextField
-                            type="number"
-                            value={filters.minHeight || ""}
-                            onChange={(e) => updateFilter("minHeight", e.target.value ? Number(e.target.value) : null)}
-                            placeholder="150"
-                          />
-                        </FormField>
-                        <FormField label={<Label>{t("maxHeight")}</Label>}>
-                          <TextField
-                            type="number"
-                            value={filters.maxHeight || ""}
-                            onChange={(e) => updateFilter("maxHeight", e.target.value ? Number(e.target.value) : null)}
-                            placeholder="200"
-                          />
-                        </FormField>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <FormField label={<Label>{t("minWeight")}</Label>}>
-                          <TextField
-                            type="number"
-                            value={filters.minWeight || ""}
-                            onChange={(e) => updateFilter("minWeight", e.target.value ? Number(e.target.value) : null)}
-                            placeholder="40"
-                          />
-                        </FormField>
-                        <FormField label={<Label>{t("maxWeight")}</Label>}>
-                          <TextField
-                            type="number"
-                            value={filters.maxWeight || ""}
-                            onChange={(e) => updateFilter("maxWeight", e.target.value ? Number(e.target.value) : null)}
-                            placeholder="120"
-                          />
-                        </FormField>
-                      </div>
-                      <FormField label={<Label>{tRequest("fields.skin")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "white", label: tEdit("white") },
-                            { value: "lightWheat", label: tEdit("lightWheat") },
-                            { value: "darkWheat", label: tEdit("darkWheat") },
-                          ]}
-                          value={filters.skinColor}
-                          onChange={(e) => updateFilter("skinColor", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.beauty")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "handsome", label: tEdit("handsome") },
-                            { value: "average", label: tEdit("average") },
-                            { value: "good", label: tEdit("good") },
-                          ]}
-                          value={filters.beauty}
-                          onChange={(e) => updateFilter("beauty", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.marriageType")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "traditional", label: tEdit("traditional") },
-                            { value: "civil", label: tEdit("civil") }
-                          ]}
-                          value={filters.marriageType}
-                          onChange={(e) => updateFilter("marriageType", e.target.value)}
-                          placeholder={tRequest("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField label={<Label>{tRequest("fields.home")}</Label>}>
-                        <Select
-                          options={[
-                            { value: "", label: t("all") },
-                            { value: "true", label: tEdit("available") },
-                            { value: "false", label: tEdit("notAvailable") },
-                          ]}
-                          value={filters.houseAvailable?.toString() || ""}
-                          onChange={(e) => updateFilter("houseAvailable", e.target.value === "" ? null : e.target.value === "true")}
-                          placeholder={tRequest("placeholders.choose")}
+                      <FormField label={<Label>{tRequest("fields.preferredAgeTo")}</Label>}>
+                        <TextField
+                          type="number"
+                          value={filters.maxAge || ""}
+                          onChange={(e) => updateFilter("maxAge", e.target.value ? Number(e.target.value) : null)}
+                          placeholder="65"
                         />
                       </FormField>
                     </div>
+                    <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          ...countries.map(country => ({
+                            value: country.country,
+                            label: country.country
+                          }))
+                        ]}
+                        value={filters.country}
+                        onChange={(e) => handleCountryChange(e.target.value)}
+                        placeholder={tRequest("placeholders.choose")}
+                        disabled={loadingCountries}
+                      />
+                    </FormField>
+
+                    {/* City Select - dependent on country */}
+                    <FormField label={<Label>{tRequest("fields.residence")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          ...availableCities.map(city => ({
+                            value: city,
+                            label: city
+                          }))
+                        ]}
+                        value={filters.city}
+                        onChange={(e) => updateFilter("city", e.target.value)}
+                        placeholder={
+                          !filters.country
+                            ? tRequest("placeholders.selectCountryFirst")
+                            : availableCities.length === 0
+                              ? tRequest("placeholders.noCitiesAvailable")
+                              : tRequest("placeholders.choose")
+                        }
+                        disabled={!filters.country || availableCities.length === 0}
+                      />
+                    </FormField>
+                    <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          { value: "single", label: tEdit("single") },
+                          { value: "divorced", label: tEdit("divorced") },
+                          { value: "widowed", label: tEdit("widowed") },
+                        ]}
+                        value={filters.maritalStatus}
+                        onChange={(e) => updateFilter("maritalStatus", e.target.value)}
+                        placeholder={tRequest("placeholders.choose")}
+                      />
+                    </FormField>
+                    <FormField label={<Label>{tRequest("fields.education")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          { value: "secondary", label: tEdit("secondary") },
+                          { value: "diploma", label: tEdit("diploma") },
+                          { value: "university", label: tEdit("university") },
+                          { value: "higher_education", label: tEdit("higher_education") },
+                        ]}
+                        value={filters.educationLevel}
+                        onChange={(e) => updateFilter("educationLevel", e.target.value)}
+                        placeholder={tRequest("placeholders.choose")}
+                      />
+                    </FormField>
+                    <FormField label={<Label>{tRequest("fields.job")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          { value: "unemployed", label: tEdit("unemployed") },
+                          { value: "employed", label: tEdit("employed") },
+                          { value: "self_employed", label: tEdit("selfEmployed") },
+                        ]}
+                        value={filters.natureOfWork}
+                        onChange={(e) => updateFilter("natureOfWork", e.target.value)}
+                        placeholder={tRequest("placeholders.choose")}
+                      />
+                    </FormField>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField label={<Label>{t("minHeight")}</Label>}>
+                        <TextField
+                          type="number"
+                          value={filters.minHeight || ""}
+                          onChange={(e) => updateFilter("minHeight", e.target.value ? Number(e.target.value) : null)}
+                          placeholder="150"
+                        />
+                      </FormField>
+                      <FormField label={<Label>{t("maxHeight")}</Label>}>
+                        <TextField
+                          type="number"
+                          value={filters.maxHeight || ""}
+                          onChange={(e) => updateFilter("maxHeight", e.target.value ? Number(e.target.value) : null)}
+                          placeholder="200"
+                        />
+                      </FormField>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField label={<Label>{t("minWeight")}</Label>}>
+                        <TextField
+                          type="number"
+                          value={filters.minWeight || ""}
+                          onChange={(e) => updateFilter("minWeight", e.target.value ? Number(e.target.value) : null)}
+                          placeholder="40"
+                        />
+                      </FormField>
+                      <FormField label={<Label>{t("maxWeight")}</Label>}>
+                        <TextField
+                          type="number"
+                          value={filters.maxWeight || ""}
+                          onChange={(e) => updateFilter("maxWeight", e.target.value ? Number(e.target.value) : null)}
+                          placeholder="120"
+                        />
+                      </FormField>
+                    </div>
+                    <FormField label={<Label>{tRequest("fields.skin")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          { value: "white", label: tEdit("white") },
+                          { value: "lightWheat", label: tEdit("lightWheat") },
+                          { value: "darkWheat", label: tEdit("darkWheat") },
+                        ]}
+                        value={filters.skinColor}
+                        onChange={(e) => updateFilter("skinColor", e.target.value)}
+                        placeholder={tRequest("placeholders.choose")}
+                      />
+                    </FormField>
+                    <FormField label={<Label>{tRequest("fields.beauty")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          { value: "handsome", label: tEdit("handsome") },
+                          { value: "average", label: tEdit("average") },
+                          { value: "good", label: tEdit("good") },
+                        ]}
+                        value={filters.beauty}
+                        onChange={(e) => updateFilter("beauty", e.target.value)}
+                        placeholder={tRequest("placeholders.choose")}
+                      />
+                    </FormField>
+                    <FormField label={<Label>{tRequest("fields.marriageType")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          { value: "traditional", label: tEdit("traditional") },
+                          { value: "civil", label: tEdit("civil") }
+                        ]}
+                        value={filters.marriageType}
+                        onChange={(e) => updateFilter("marriageType", e.target.value)}
+                        placeholder={tRequest("placeholders.choose")}
+                      />
+                    </FormField>
+                    <FormField label={<Label>{tRequest("fields.home")}</Label>}>
+                      <Select
+                        options={[
+                          { value: "", label: t("all") },
+                          { value: "true", label: tEdit("available") },
+                          { value: "false", label: tEdit("notAvailable") },
+                        ]}
+                        value={filters.houseAvailable?.toString() || ""}
+                        onChange={(e) => updateFilter("houseAvailable", e.target.value === "" ? null : e.target.value === "true")}
+                        placeholder={tRequest("placeholders.choose")}
+                      />
+                    </FormField>
+                  </div>
                 </div>
 
                 {/* Static Action Buttons at Bottom */}

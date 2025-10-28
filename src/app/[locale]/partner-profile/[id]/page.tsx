@@ -12,12 +12,6 @@ import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-hot-toast';
 
 type FieldProps = { label: string; value: string | number | null | undefined };
-const Field = ({ label, value }: FieldProps) => (
-    <div className="flex flex-col gap-1 px-3">
-        <span className="text-base text-[#727272]">{label}</span>
-        <span className="text-[#301B69]">{value !== null && value !== undefined ? value : 'غير محدد'}</span>
-    </div>
-);
 
 /**
  * Simple date formatter for ISO strings; returns localized date/time or an empty string when input is falsy.
@@ -139,6 +133,12 @@ const PartnerProfile = () => {
     const [chatLoading, setChatLoading] = useState(false);
     const tPartner = useTranslations("partnerProfile");
 
+    const Field = ({ label, value }: FieldProps) => (
+    <div className="flex flex-col gap-1 px-3">
+        <span className="text-base text-[#727272]">{label}</span>
+        <span className="text-[#301B69]">{value !== null && value !== undefined ? value : tPartner('notSpecified')}</span>
+    </div>
+);
     useEffect(() => {
         const fetchUserDetails = async () => {
             if (!userId) return;
