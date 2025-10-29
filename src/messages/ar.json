@@ -136,24 +136,6 @@
   },
   "request": {
     "title": "تسجيل بيانات طلب جديد",
-    "steps": {
-      "nationality": {
-        "label": "الجنسية و الإقامة",
-        "desc": "يرجى تحديد جنسيتك ومكان إقامتك الحالي"
-      },
-      "you": {
-        "label": "مواصفاتك",
-        "desc": "شارك بعض المعلومات عنك مثل عمرك، حالتك الاجتماعية، مستواك التعليمي"
-      },
-      "partner": {
-        "label": "مواصفات الطرف الآخر",
-        "desc": "حدد الصفات التي تبحث عنها في شريك الحياة"
-      },
-      "types": {
-        "label": "زواج التعدد والمسيار",
-        "desc": "اختر أنواع الزواج التي تناسبك"
-      }
-    },
     "fields": {
       "nationality": "الجنسية",
       "country": "الدولة",
@@ -180,7 +162,7 @@
       "tribe": "القبيلة",
       "children": "عدد الأطفال",
       "profession": "المهنة",
-      "financial": "الوضع المالي",
+      "financial": "الحالة المادية",
       "health": "الحالة الصحية",
       "religiosity": "مستوى التدين",
       "bodyColor": "لون الجسم",
@@ -199,12 +181,13 @@
       "preferredBeauty": "الجمال",
       "preferredSkin": "لون البشرة",
       "preferredReligiosity": "مستوى التدين",
-      "polygamyStatus": "حالة التعدد",
+      "polygamyStatus": "معدد؟",
       "religiousPractice": "الممارسة الدينية",
       "sect": "المذهب",
       "prayer": "مستوى الصلاة",
       "preferredPolygamy": "قبول التعدد",
-      "preferredMarriageType": "نوع الزواج"
+      "preferredMarriageType": "نوع الزواج",
+    "acceptPolygamy": "تقبلين التعدد؟"
     },
     "placeholders": {
       "choose": "فضلاً اختر",
@@ -508,8 +491,8 @@
     "fair": "فاتح",
     "medium": "متوسط",
     "dark": "غامق",
-    "black": "أسود",
-    "brown": "بني",
+    "black": "أسمر",
+    "brown": "حنطي",
     "blonde": "أشقر",
     "green": "أخضر",
     "blue": "أزرق",
@@ -520,9 +503,9 @@
     "notAvailable": "غير متوفر",
     "bgAlt": "خلفية",
     "saveErrorDefault": "حدث خطأ أثناء حفظ البيانات",
-    "excellent": "ممتاز",
-    "good": "جيد",
-    "average": "متوسط",
+    "excellent": "ممتازة",
+    "good": "جيدة",
+    "average": "متوسطة",
     "handsome": "وسيم",
     "traditional": "تقليدي",
     "civil": "مسيار",
@@ -551,7 +534,7 @@
     "tribal": "قبلي",
     "non_tribal": "غير قبلي",
     "healthy": "سليم",
-    "chronically_ill": "مريض مزمن",
+    "chronically_ill": "مرض مزمن",
     "disabled": "معاق",
     "normal": "عادي",
     "conservative": "محافظ",
@@ -561,7 +544,9 @@
     "socialContactError": "لا يُسمح بكتابة معلومات التواصل الاجتماعي، أرقام الهواتف، أو الروابط الخارجية في هذا الحقل.",
     "acceptable": "مقبول",
     "beautiful": "جميل",
-    "very_beautiful": "جميل/ة جدا"
+    "very_beautiful": "جميل جدا",
+    "polygamyStatus": "معدد",
+    "needToThink": "يحتاج الموضوع لتفكير"
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسلية",

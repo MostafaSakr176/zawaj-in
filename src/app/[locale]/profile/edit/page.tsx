@@ -285,6 +285,8 @@ export default function EditProfilePage() {
         maritalStatus: formData.maritalStatus || null,
         educationLevel: formData.educationLevel || null,
         natureOfWork: formData.natureOfWork || null,
+        financialStatus: formData.financialStatus || null,
+        healthStatus: formData.healthStatus || null,
         weight: formData.weight,
         height: formData.height,
         skinColor: formData.skinColor || null,
@@ -292,6 +294,10 @@ export default function EditProfilePage() {
         houseAvailable: formData.houseAvailable,
         bio: formData.bio || null,
         marriageType: formData.marriageType || null,
+        polygamyStatus: formData.polygamyStatus || null,
+        acceptPolygamy: formData.acceptPolygamy || null,
+        numberOfChildren: formData.numberOfChildren || null,
+        religiosityLevel: formData.religiosityLevel || null
       };
 
       await api.put("/users/profile", profileData);
@@ -353,7 +359,7 @@ export default function EditProfilePage() {
               </div> : <>
                 <CardHeader className="flex items-center gap-4 py-8 pb-2 md:pb-6 md:pt-10">
                   <Link href="/profile">
-                  <ArrowRight size={30} className='ltr:hidden' /> <ArrowLeft size={30} className='rtl:hidden' />
+                    <ArrowRight size={30} className='ltr:hidden' /> <ArrowLeft size={30} className='rtl:hidden' />
                   </Link>
                   <CardTitle className="text-start text-xl md:text-3xl font-extrabold text-[#1D1B23]">
                     {tEdit("title")}
@@ -378,6 +384,7 @@ export default function EditProfilePage() {
                           value={formData.username}
                           onChange={(e) => updateField("username", e.target.value)}
                           placeholder={t("placeholders.write")}
+                          disabled={!!profile?.username}
                         />
                       </FormField>
                       <FormField label={<Label>{tEdit("dateOfBirth")}</Label>} required>
@@ -456,6 +463,42 @@ export default function EditProfilePage() {
                       {t("sections.personalDetails")}
                     </h3>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                      <FormField label={<Label>{t("fields.health")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "healthy", label: tEdit("healthy") },
+                            { value: "chronically ill", label: tEdit("chronically_ill") },
+                            { value: "disabled", label: tEdit("disabled") },
+                          ]}
+                          value={formData.healthStatus}
+                          onChange={(e) => updateField("healthStatus", e.target.value)}
+                          placeholder={t("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{t("fields.financial")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "excellent", label: tEdit("excellent") },
+                            { value: "good", label: tEdit("good") },
+                            { value: "average", label: tEdit("average") },
+                          ]}
+                          value={formData.financialStatus ?? undefined}
+                          onChange={(e) => updateField("financialStatus", e.target.value)}
+                          placeholder={t("placeholders.choose")}
+                        />
+                      </FormField>
+                      <FormField label={<Label>{t("fields.religiosity")}</Label>}>
+                        <Select
+                          options={[
+                            { value: "normal", label: tEdit("normal") },
+                            { value: "conservative", label: tEdit("conservative") },
+                            { value: "committed", label: tEdit("committed") },
+                          ]}
+                          value={formData.religiosityLevel ?? undefined}
+                          onChange={(e) => updateField("religiosityLevel", e.target.value)}
+                          placeholder={t("placeholders.choose")}
+                        />
+                      </FormField>
                       <FormField label={<Label>{t("fields.education")}</Label>}>
                         <Select
                           options={[
@@ -514,20 +557,20 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                        <FormField label={<Label>{t("fields.beauty")}</Label>} required>
+                      <FormField label={<Label>{t("fields.beauty")}</Label>} required>
                         <Select
                           options={[
-                          { value: "acceptable", label: tEdit("acceptable") },
-                          { value: "average", label: tEdit("average") },
-                          { value: "handsome", label: tEdit("handsome") },
-                          { value: "beautiful", label: tEdit("beautiful") },
-                          { value: "very_beautiful", label: tEdit("very_beautiful") }
+                            { value: "acceptable", label: tEdit("acceptable") },
+                            { value: "average", label: tEdit("average") },
+                            { value: "handsome", label: tEdit("handsome") },
+                            { value: "beautiful", label: tEdit("beautiful") },
+                            { value: "very_beautiful", label: tEdit("very_beautiful") }
                           ]}
                           value={formData.beauty}
                           onChange={(e) => updateField("beauty", e.target.value)}
                           placeholder={t("placeholders.choose")}
                         />
-                        </FormField>
+                      </FormField>
 
                       <FormField label={<Label>{t("fields.home")}</Label>} required>
                         <Select
@@ -553,6 +596,44 @@ export default function EditProfilePage() {
                           value={formData.marriageType}
                           onChange={(e) => updateField("marriageType", e.target.value)}
                           placeholder={t("placeholders.choose")}
+                        />
+                      </FormField>
+
+                      {profile?.gender === "male" && <FormField
+                        label={<Label>{t("fields.polygamyStatus")}</Label>}
+                        required
+                      >
+                        <Select
+                          options={[
+                            { value: "Yes", label: tEdit("yes") },
+                            { value: "No", label: tEdit("no") },
+                          ]}
+                          value={formData.polygamyStatus?.toString()}
+                          onChange={(e) => updateField("polygamyStatus", e.target.value === "true")}
+                          placeholder={t("placeholders.choose")}
+                        />
+                      </FormField>}
+                      {profile?.gender === "female" && <FormField
+                        label={<Label>{t("fields.acceptPolygamy")}</Label>}
+                        required
+                      >
+                        <Select
+                          options={[
+                            { value: "Yes", label: tEdit("yes") },
+                            { value: "No", label: tEdit("no") },
+                            { value: "need to think", label: tEdit("needToThink") },
+                          ]}
+                          value={formData.acceptPolygamy?.toString()}
+                          onChange={(e) => updateField("acceptPolygamy", e.target.value === "true")}
+                          placeholder={t("placeholders.choose")}
+                        />
+                      </FormField>}
+                      <FormField label={<Label>{t("fields.children")}</Label>} >
+                        <TextField
+                          type="number"
+                          value={formData.numberOfChildren || ""}
+                          onChange={(e) => updateField("numberOfChildren", e.target.value ? Number(e.target.value) : null)}
+                          placeholder={t("placeholders.children")}
                         />
                       </FormField>
                     </div>

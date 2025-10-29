@@ -199,12 +199,13 @@
             "preferredBeauty": "Beauty",
             "preferredSkin": "Skin Color",
             "preferredReligiosity": "Religiosity Level",
-            "polygamyStatus": "Polygamy Status",
+            "polygamyStatus": "Polygamy Status?",
             "religiousPractice": "Religious Practice",
             "sect": "Sect",
             "prayer": "Prayer Level",
             "preferredPolygamy": "Accept Polygamy",
-            "preferredMarriageType": "Marriage Type"
+            "preferredMarriageType": "Marriage Type",
+            "acceptPolygamy": "Accepts Polygamy?"
         },
         "placeholders": {
             "choose": "Choose...",
@@ -558,11 +559,14 @@
         "conservative": "Conservative",
         "committed": "Committed",
         "saveSuccess": "Your profile has been updated successfully",
+        "saveProfile": "Save Profile",
         "socialContactError": "Social media contacts, phone numbers, and external links are not allowed in this field.",
         "aboutHint": "Write about your personality, hobbies, and what makes you unique.",
         "acceptable": "Acceptable",
         "beautiful": "Beautiful",
-        "very_beautiful": "Very Beautiful"
+        "very_beautiful": "Very Beautiful",
+        "polygamyStatus": "Polygamy Status?",
+        "needToThink": "Needs More Thought"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",
