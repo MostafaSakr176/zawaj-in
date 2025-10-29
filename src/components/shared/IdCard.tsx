@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 type IdCardProps = {
     id: string;
     name: string;
-    age: number | string;
+    age: number ;
     city: string;
     status: string;
     job: string | null;
@@ -92,7 +92,7 @@ const IdCard = ({
                             </h4>
                             {verified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                         </div>
-                        <div className="text-[#301B69] text-sm font-semibold mt-1">{age} سنة</div>
+                        <div className="text-[#301B69] text-sm font-semibold mt-1">{ (age || 0)} {tPartner("years")}</div>
                     </div>
                 </div>
                 {/* Favorite */}

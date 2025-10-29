@@ -431,6 +431,7 @@ export default function EditProfilePage() {
                           options={[
                             { value: "tribal", label: tEdit("tribal") },
                             { value: "non_tribal", label: tEdit("non_tribal") },
+                            { value: "other", label: tEdit("other") },
                           ]}
                           value={formData.tribe}
                           onChange={(e) => updateField("tribe", e.target.value)}
@@ -443,7 +444,11 @@ export default function EditProfilePage() {
                         required
                       >
                         <Select
-                          options={[
+                          options={ profile?.gender === "female" ? [
+                            { value: "single", label: tEdit("f_single") },
+                            { value: "divorced", label: tEdit("f_divorced") },
+                            { value: "widowed", label: tEdit("f_widowed") },
+                          ] : [
                             { value: "single", label: tEdit("single") },
                             { value: "divorced", label: tEdit("divorced") },
                             { value: "widowed", label: tEdit("widowed") },
@@ -465,7 +470,11 @@ export default function EditProfilePage() {
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       <FormField label={<Label>{t("fields.health")}</Label>}>
                         <Select
-                          options={[
+                          options={ profile?.gender === "female" ? [
+                            { value: "healthy", label: tEdit("f_healthy") },
+                            { value: "chronically ill", label: tEdit("f_chronically_ill") },
+                            { value: "disabled", label: tEdit("f_disabled") },
+                          ] : [
                             { value: "healthy", label: tEdit("healthy") },
                             { value: "chronically ill", label: tEdit("chronically_ill") },
                             { value: "disabled", label: tEdit("disabled") },
@@ -489,7 +498,11 @@ export default function EditProfilePage() {
                       </FormField>
                       <FormField label={<Label>{t("fields.religiosity")}</Label>}>
                         <Select
-                          options={[
+                          options={profile?.gender === "female" ? [
+                            { value: "normal", label: tEdit("f_normal") },
+                            { value: "conservative", label: tEdit("f_conservative") },
+                            { value: "committed", label: tEdit("f_committed") },
+                          ] : [
                             { value: "normal", label: tEdit("normal") },
                             { value: "conservative", label: tEdit("conservative") },
                             { value: "committed", label: tEdit("committed") },
@@ -515,14 +528,18 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.job")}</Label>} required>
                         <Select
-                          options={[
+                          options={profile?.gender === "female" ? [
+                            { value: "unemployed", label: tEdit("f_unemployed") },
+                            { value: "employed", label: tEdit("f_employed") },
+                            { value: "self_employed", label: tEdit("selfEmployed") },
+                          ] : [
                             { value: "unemployed", label: tEdit("unemployed") },
                             { value: "employed", label: tEdit("employed") },
                             { value: "self_employed", label: tEdit("selfEmployed") },
                           ]}
                           value={formData.natureOfWork}
                           onChange={(e) => updateField("natureOfWork", e.target.value)}
-                          placeholder={t("placeholders.choose")}
+                          placeholder={t("placeholders.choose")} 
                         />
                       </FormField>
 
@@ -546,10 +563,10 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.skin")}</Label>} required>
                         <Select
-                          options={[
+                          options={ [
                             { value: "white", label: tEdit("white") },
                             { value: "brown", label: tEdit("brown") },
-                            { value: "black", label: tEdit("black") },
+                            { value: "dark", label: tEdit("dark") },
                           ]}
                           value={formData.skinColor}
                           onChange={(e) => updateField("skinColor", e.target.value)}
@@ -559,12 +576,15 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.beauty")}</Label>} required>
                         <Select
-                          options={[
+                          options={profile?.gender === "female" ? [
+                            { value: "acceptable", label: tEdit("f_acceptable") },
+                            { value: "average", label: tEdit("f_average") },
+                            { value: "beautiful", label: tEdit("f_beautiful") },
+                            { value: "very_beautiful", label: tEdit("f_very_beautiful") }
+                          ] : [
                             { value: "acceptable", label: tEdit("acceptable") },
                             { value: "average", label: tEdit("average") },
-                            { value: "handsome", label: tEdit("handsome") },
-                            { value: "beautiful", label: tEdit("beautiful") },
-                            { value: "very_beautiful", label: tEdit("very_beautiful") }
+                            { value: "handsome", label: tEdit("handsome") }
                           ]}
                           value={formData.beauty}
                           onChange={(e) => updateField("beauty", e.target.value)}

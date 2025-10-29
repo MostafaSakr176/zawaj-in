@@ -694,12 +694,12 @@ const Chats = () => {
                                 {t("engagementRequest")}
                               </div>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                            {/* <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                               <div className='flex items-center gap-3 w-full'>
                                 <Volume2 size={22} color='#301B69' />
                                 {t("mute")}
                               </div>
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                             <DropdownMenuItem className='text-[#301B69] font-medium text-lg' onClick={handleDeleteConversation}>
                               <div className='flex items-center gap-3 w-full'>
                                 <Trash2 size={22} color='#301B69' />
@@ -707,12 +707,12 @@ const Chats = () => {
                               </div>
                             </DropdownMenuItem>
                             <BlockMenuItem userId={otherParticipant.id} />
-                            <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
+                            {/* <DropdownMenuItem className='text-[#301B69] font-medium text-lg'>
                               <div className='flex items-center gap-3 w-full'>
                                 <Flag size={22} color='#301B69' />
                                 {t("report")}
                               </div>
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>

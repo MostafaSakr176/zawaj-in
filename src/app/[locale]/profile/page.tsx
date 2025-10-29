@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import api from "@/lib/axiosClient";
 import IdCard from '@/components/shared/IdCard';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Visitores from './visitores';
 
 type FieldProps = { label: string; value: string | number | null | undefined };
 
@@ -19,7 +20,6 @@ const Profile = () => {
   const tProfile = useTranslations("profile");
   const tPartner = useTranslations("partnerProfile");
   const [totalVisits, setTotalVisits] = useState<number>(0);
-  const [visitores, setVisitores] = useState([])
   const [showVisitores, setShowVisitores] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(!!profile?.isActive);
 
@@ -27,8 +27,7 @@ const Profile = () => {
     api.get("/users/profile/visitors")
       .then(res => {
         if (res.data?.success && res.data?.data?.total !== undefined) {
-          setTotalVisits(res.data.data.total);
-          setVisitores(res.data.data.visitors)
+          setTotalVisits(res.data.data.unseenVisits);
         }
       });
   }, []);
@@ -143,9 +142,9 @@ const Profile = () => {
                   </defs>
                 </svg>
                 {tProfile("whoVisitedMe")}
-                <span className='text-lg w-5 h-5 rounded-full bg-[#FF3B30] text-white flex items-center justify-center leading-1'>
+                {totalVisits > 0 && <span className='text-lg w-5 h-5 rounded-full bg-[#FF3B30] text-white flex items-center justify-center leading-1'>
                   {totalVisits}
-                </span>
+                </span>}
               </button>
               <Link href="/profile/edit">
                 <button className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] text-sm md:text-base px-3 py-2 md:px-4 md:py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none cursor-pointer">
@@ -241,31 +240,7 @@ const Profile = () => {
                 </div>
               </div>
             </> :
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {visitores.length === 0 ? (
-                <div className="col-span-full text-center text-[#301B69] py-8">
-                  {tProfile("noVisitores")}
-                </div>
-              ) : (
-                visitores.map((user: any) => (
-                  <IdCard
-                    key={user.id}
-                    id={user.id}
-                    isFav={user?.hasLiked}
-                    name={user.fullName || "User"}
-                    avatar={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
-                    age={user.age}
-                    city={user?.location?.city}
-                    job={user?.natureOfWork}
-                    marriageType={user?.marriageType}
-                    skinColor={user?.bodyColor}
-                    status={user?.maritalStatus}
-                    online={user?.isOnline} // This will now show real-time status
-                  />
-                ))
-              )}
-
-            </div>
+            <Visitores setTotalVisits={setTotalVisits} />
           }
         </div>
 
