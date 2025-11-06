@@ -134,11 +134,11 @@ const PartnerProfile = () => {
     const tPartner = useTranslations("partnerProfile");
 
     const Field = ({ label, value }: FieldProps) => (
-    <div className="flex flex-col gap-1 px-3">
-        <span className="text-base text-[#727272]">{label}</span>
-        <span className="text-[#301B69]">{value !== null && value !== undefined ? value : tPartner('notSpecified')}</span>
-    </div>
-);
+        <div className="flex flex-col gap-1 px-3">
+            <span className="text-base text-[#727272]">{label}</span>
+            <span className="text-[#301B69]">{value !== null && value !== undefined ? value : tPartner('notSpecified')}</span>
+        </div>
+    );
     useEffect(() => {
         const fetchUserDetails = async () => {
             if (!userId) return;
@@ -327,64 +327,64 @@ const PartnerProfile = () => {
                     </>
                 )}
 
-                
-              {/* Section: السكن و الحالة الإجتماعية */}
-              <div className="px-2 md:px-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("basicInfo")}</h4>
-                </div>
-                <div className="flex items-center flex-wrap gap-4">
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("nationality")} value={profile?.location?.country} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("placeOfResidence")} value={profile?.location?.city} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("age")} value={`${profile?.age} ${tPartner("years")}`} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("tribe")} value={profile?.tribe} />
-                  </div>
-                  <div>
-                    <Field label={tPartner("maritalStatus")} value={profile?.maritalStatus} />
-                  </div>
-                </div>
-              </div>
 
-              <hr className="border-[#ECEBFF]" />
+                {/* Section: السكن و الحالة الإجتماعية */}
+                <div className="px-2 md:px-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("basicInfo")}</h4>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-4">
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("nationality")} value={profile?.location?.country} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("placeOfResidence")} value={profile?.location?.city} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("age")} value={`${profile?.age || 0 } ${tPartner("years")}`} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("tribe")} value={profile?.tribe} />
+                        </div>
+                        <div>
+                            <Field label={tPartner("maritalStatus")} value={profile?.maritalStatus} />
+                        </div>
+                    </div>
+                </div>
 
-              <div className="px-2 md:px-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("personalDetails")}</h4>
+                <hr className="border-[#ECEBFF]" />
+
+                <div className="px-2 md:px-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-[#2D1F55] font-semibold text-base">{tPartner("personalDetails")}</h4>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-4">
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("height")} value={profile?.height} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("weight")} value={profile?.weight} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("skinColor")} value={profile?.skinColor} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("beauty")} value={profile?.beauty} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("educationLevel")} value={profile?.educationLevel} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("job")} value={profile?.natureOfWork} />
+                        </div>
+                        <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
+                            <Field label={tPartner("home")} value={profile?.houseAvailable ? tPartner("yes") : tPartner("no")} />
+                        </div>
+                        <div>
+                            <Field label={tPartner("marriageType")} value={profile?.marriageType} />
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center flex-wrap gap-4">
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("height")} value={profile?.height} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("weight")} value={profile?.weight} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("skinColor")} value={profile?.skinColor} />
-                  </div>
-                                    <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("job")} value={profile?.natureOfWork} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("educationLevel")} value={profile?.educationLevel} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("home")} value={profile?.houseAvailable ? tPartner("yes") : tPartner("no")} />
-                  </div>
-                  <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("beauty")} value={profile?.beauty} />
-                  </div>
-                  <div>
-                    <Field label={tPartner("marriageType")} value={profile?.marriageType} />
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
