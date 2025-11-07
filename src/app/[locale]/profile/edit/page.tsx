@@ -652,14 +652,6 @@ export default function EditProfilePage() {
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>}
-                      <FormField label={<Label>{t("fields.children")}</Label>} >
-                        <TextField
-                          type="number"
-                          value={formData.numberOfChildren || ""}
-                          onChange={(e) => updateField("numberOfChildren", e.target.value ? Number(e.target.value) : null)}
-                          placeholder={t("placeholders.children")}
-                        />
-                      </FormField>
                     </div>
 
                     <div>
