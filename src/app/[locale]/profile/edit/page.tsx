@@ -403,7 +403,7 @@ export default function EditProfilePage() {
                         <Select
                           options={countryOptions}
                           value={formData.location.country}
-                          onChange={(e) => handleCountryChange(e.target.value)}
+                          onChange={(val) => handleCountryChange(val)}
                           placeholder={loadingCountries ? tEdit("loading") : t("placeholders.choose")}
                           disabled={loadingCountries}
                         />
@@ -414,7 +414,7 @@ export default function EditProfilePage() {
                         <Select
                           options={cityOptions}
                           value={formData.location.city}
-                          onChange={(e) => updateNestedField("location", "city", e.target.value)}
+                          onChange={(val) => updateNestedField("location", "city", val)}
                           placeholder={
                             !formData.location.country
                               ? tEdit("selectCountryFirst")
@@ -428,13 +428,17 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.tribe")}</Label>} required>
                         <Select
-                          options={[
+                          options={ profile?.gender === "female" ? [
+                            { value: "tribal", label: tEdit("f_tribal") },
+                            { value: "non_tribal", label: tEdit("f_non_tribal") },
+                            { value: "other", label: tEdit("other") },
+                          ]:[
                             { value: "tribal", label: tEdit("tribal") },
                             { value: "non_tribal", label: tEdit("non_tribal") },
                             { value: "other", label: tEdit("other") },
                           ]}
                           value={formData.tribe}
-                          onChange={(e) => updateField("tribe", e.target.value)}
+                          onChange={(val) => updateField("tribe", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -455,7 +459,7 @@ export default function EditProfilePage() {
                             { value: "married", label: tEdit("married") },
                           ]}
                           value={formData.maritalStatus}
-                          onChange={(e) => updateField("maritalStatus", e.target.value)}
+                          onChange={(val) => updateField("maritalStatus", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -472,7 +476,7 @@ export default function EditProfilePage() {
                         <Select
                           options={ profile?.gender === "female" ? [
                             { value: "healthy", label: tEdit("f_healthy") },
-                            { value: "chronically ill", label: tEdit("f_chronically_ill") },
+                            { value: "chronically ill", label: tEdit("chronically_ill") },
                             { value: "disabled", label: tEdit("f_disabled") },
                           ] : [
                             { value: "healthy", label: tEdit("healthy") },
@@ -480,7 +484,7 @@ export default function EditProfilePage() {
                             { value: "disabled", label: tEdit("disabled") },
                           ]}
                           value={formData.healthStatus}
-                          onChange={(e) => updateField("healthStatus", e.target.value)}
+                          onChange={(val) => updateField("healthStatus", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -492,7 +496,7 @@ export default function EditProfilePage() {
                             { value: "average", label: tEdit("average") },
                           ]}
                           value={formData.financialStatus ?? undefined}
-                          onChange={(e) => updateField("financialStatus", e.target.value)}
+                          onChange={(val) => updateField("financialStatus", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -508,7 +512,7 @@ export default function EditProfilePage() {
                             { value: "committed", label: tEdit("committed") },
                           ]}
                           value={formData.religiosityLevel ?? undefined}
-                          onChange={(e) => updateField("religiosityLevel", e.target.value)}
+                          onChange={(val) => updateField("religiosityLevel", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -521,7 +525,7 @@ export default function EditProfilePage() {
                             { value: "higher_education", label: tEdit("higher_education") },
                           ]}
                           value={formData.educationLevel ?? undefined}
-                          onChange={(e) => updateField("educationLevel", e.target.value)}
+                          onChange={(val) => updateField("educationLevel", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -538,7 +542,7 @@ export default function EditProfilePage() {
                             { value: "self_employed", label: tEdit("selfEmployed") },
                           ]}
                           value={formData.natureOfWork}
-                          onChange={(e) => updateField("natureOfWork", e.target.value)}
+                          onChange={(val) => updateField("natureOfWork", val)}
                           placeholder={t("placeholders.choose")} 
                         />
                       </FormField>
@@ -569,7 +573,7 @@ export default function EditProfilePage() {
                             { value: "dark", label: tEdit("dark") },
                           ]}
                           value={formData.skinColor}
-                          onChange={(e) => updateField("skinColor", e.target.value)}
+                          onChange={(val) => updateField("skinColor", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -587,7 +591,7 @@ export default function EditProfilePage() {
                             { value: "handsome", label: tEdit("handsome") }
                           ]}
                           value={formData.beauty}
-                          onChange={(e) => updateField("beauty", e.target.value)}
+                          onChange={(val) => updateField("beauty", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -599,7 +603,7 @@ export default function EditProfilePage() {
                             { value: "false", label: tEdit("notAvailable") },
                           ]}
                           value={formData.houseAvailable?.toString()}
-                          onChange={(e) => updateField("houseAvailable", e.target.value === "true")}
+                          onChange={(val) => updateField("houseAvailable", val === "true")}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -614,7 +618,7 @@ export default function EditProfilePage() {
                             { value: "civil", label: tEdit("civil") }
                           ]}
                           value={formData.marriageType}
-                          onChange={(e) => updateField("marriageType", e.target.value)}
+                          onChange={(val) => updateField("marriageType", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -629,7 +633,7 @@ export default function EditProfilePage() {
                             { value: "No", label: tEdit("no") },
                           ]}
                           value={formData.polygamyStatus?.toString()}
-                          onChange={(e) => updateField("polygamyStatus", e.target.value === "true")}
+                          onChange={(val) => updateField("polygamyStatus", val === "true")}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>}
@@ -644,7 +648,7 @@ export default function EditProfilePage() {
                             { value: "need to think", label: tEdit("needToThink") },
                           ]}
                           value={formData.acceptPolygamy?.toString()}
-                          onChange={(e) => updateField("acceptPolygamy", e.target.value === "true")}
+                          onChange={(val) => updateField("acceptPolygamy", val === "true")}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>}
@@ -667,7 +671,7 @@ export default function EditProfilePage() {
                         <Textarea
                           rows={5}
                           value={formData.bio}
-                          onChange={(e) => updateField("bio", e.target.value)}
+                          onChange={(val) => updateField("bio", val)}
                           placeholder={t("placeholders.write")}
                           className={error && error.includes("socialContactError") ? "border-red-500 focus:border-red-500" : ""}
                         />

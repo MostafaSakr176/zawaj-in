@@ -200,7 +200,7 @@ const NewSubscribers = React.memo(() => {
                                     options={countryOptions}
                                     placeholder={loadingCountries ? t("loading") : t("country")}
                                     value={country}
-                                    onChange={(e) => handleCountryChange(e.target.value)}
+                                    onChange={(val) => handleCountryChange(val)}
                                     disabled={loadingCountries}
                                 />
                             </FormField>
@@ -210,7 +210,7 @@ const NewSubscribers = React.memo(() => {
                                     options={cityOptions}
                                     placeholder={t("city")}
                                     value={city}
-                                    onChange={(e) => handleCityChange(e.target.value)}
+                                    onChange={(val) => handleCityChange(val)}
                                 />
                             </FormField>
                             <FormField required>
@@ -219,7 +219,7 @@ const NewSubscribers = React.memo(() => {
                                     options={marriageTypeOptions}
                                     placeholder={t("marriageType")}
                                     value={marriageType}
-                                    onChange={(e) => handleMarriageTypeChange(e.target.value)}
+                                    onChange={(val) => handleMarriageTypeChange(val)}
                                 />
                             </FormField>
                         </div>

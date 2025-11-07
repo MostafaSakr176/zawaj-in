@@ -207,8 +207,8 @@ export default function RegisterPage() {
                 options={genderOptions}
                 placeholder={t("genderLabel")}
                 value={form.gender}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, gender: e.target.value }))
+                onChange={(val) =>
+                  setForm((s) => ({ ...s, gender: val }))
                 }
               />
             </FormField>

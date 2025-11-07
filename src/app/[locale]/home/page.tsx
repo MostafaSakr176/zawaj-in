@@ -421,7 +421,7 @@ const MyFavorites = () => {
                           }))
                         ]}
                         value={filters.country}
-                        onChange={(e) => handleCountryChange(e.target.value)}
+                        onChange={(val) => handleCountryChange(val)}
                         placeholder={tRequest("placeholders.choose")}
                         disabled={loadingCountries}
                       />
@@ -438,7 +438,7 @@ const MyFavorites = () => {
                           }))
                         ]}
                         value={filters.city}
-                        onChange={(e) => updateFilter("city", e.target.value)}
+                        onChange={(val) => updateFilter("city", val)}
                         placeholder={
                           !filters.country
                             ? tRequest("placeholders.selectCountryFirst")
@@ -458,7 +458,7 @@ const MyFavorites = () => {
                           { value: "widowed", label: tEdit("widowed") },
                         ]}
                         value={filters.maritalStatus}
-                        onChange={(e) => updateFilter("maritalStatus", e.target.value)}
+                        onChange={(val) => updateFilter("maritalStatus", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -472,7 +472,7 @@ const MyFavorites = () => {
                           { value: "higher_education", label: tEdit("higher_education") },
                         ]}
                         value={filters.educationLevel}
-                        onChange={(e) => updateFilter("educationLevel", e.target.value)}
+                        onChange={(val) => updateFilter("educationLevel", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -485,7 +485,7 @@ const MyFavorites = () => {
                           { value: "self_employed", label: tEdit("selfEmployed") },
                         ]}
                         value={filters.natureOfWork}
-                        onChange={(e) => updateFilter("natureOfWork", e.target.value)}
+                        onChange={(val) => updateFilter("natureOfWork", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -535,7 +535,7 @@ const MyFavorites = () => {
                           { value: "darkWheat", label: tEdit("darkWheat") },
                         ]}
                         value={filters.skinColor}
-                        onChange={(e) => updateFilter("skinColor", e.target.value)}
+                        onChange={(val) => updateFilter("skinColor", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -548,7 +548,7 @@ const MyFavorites = () => {
                           { value: "good", label: tEdit("good") },
                         ]}
                         value={filters.beauty}
-                        onChange={(e) => updateFilter("beauty", e.target.value)}
+                        onChange={(val) => updateFilter("beauty", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -560,7 +560,7 @@ const MyFavorites = () => {
                           { value: "civil", label: tEdit("civil") }
                         ]}
                         value={filters.marriageType}
-                        onChange={(e) => updateFilter("marriageType", e.target.value)}
+                        onChange={(val) => updateFilter("marriageType", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -572,7 +572,7 @@ const MyFavorites = () => {
                           { value: "false", label: tEdit("notAvailable") },
                         ]}
                         value={filters.houseAvailable?.toString() || ""}
-                        onChange={(e) => updateFilter("houseAvailable", e.target.value === "" ? null : e.target.value === "true")}
+                        onChange={(val) => updateFilter("houseAvailable", val === "" ? null : val === "true")}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
