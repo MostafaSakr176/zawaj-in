@@ -32,6 +32,7 @@ type Profile = {
   financialStatus: string | null;
   healthStatus: string | null;
   religiosityLevel: string | null;
+  hijab_style: string | null;
   weight: string | null;
   height: string | null;
   skinColor: string | null;

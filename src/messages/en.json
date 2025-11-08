@@ -205,7 +205,8 @@
             "prayer": "Prayer Level",
             "preferredPolygamy": "Accept Polygamy",
             "preferredMarriageType": "Marriage Type",
-            "acceptPolygamy": "Accepts Polygamy?"
+            "acceptPolygamy": "Accepts Polygamy?",
+            "hijab_style": "Al Hijab"
         },
         "placeholders": {
             "choose": "Choose...",
@@ -497,7 +498,7 @@
         "dateOfBirth": "Date of birth",
         "cityPlaceholder": "City",
         "single": "Single",
-        "f_single": "Single",
+        "virgin": "Virgin",
         "divorced": "Divorced",
         "f_divorced": "Divorced",
         "widowed": "Widowed",
@@ -513,8 +514,10 @@
         "fair": "Fair",
         "medium": "Medium",
         "dark": "Dark",
+        "f_dark": "Dark",
         "black": "Black",
         "brown": "Brown",
+        "f_brown": "Brown",
         "blonde": "Blonde",
         "green": "Green",
         "blue": "Blue",
@@ -545,6 +548,7 @@
         "preferredHeightTo": "Preferred height (to)",
         "saving": "Saving...",
         "white": "White",
+        "f_white": "White",
         "lightWheat": "Light Wheat",
         "darkWheat": "Dark Wheat",
         "yes": "Yes",
@@ -583,7 +587,10 @@
         "very_beautiful": "Very Beautiful",
         "f_very_beautiful": "Very Beautiful",
         "polygamyStatus": "Polygamy Status?",
-        "needToThink": "Needs More Thought"
+        "needToThink": "Needs More Thought",
+        "niqab": "Niqab",
+        "veiled": "Veiled",
+        "unveiled": "Unveiled"
     },
     "terms": {
         "imageHeading": "We connect hearts with the intention of marriage, not for fun",

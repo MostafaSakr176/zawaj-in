@@ -187,7 +187,8 @@
       "prayer": "مستوى الصلاة",
       "preferredPolygamy": "قبول التعدد",
       "preferredMarriageType": "نوع الزواج",
-    "acceptPolygamy": "تقبلين التعدد؟"
+    "acceptPolygamy": "تقبلين التعدد؟",
+    "hijab_style":"الحجاب"
     },
     "placeholders": {
       "choose": "فضلاً اختر",
@@ -478,7 +479,7 @@
     "dateOfBirth": "تاريخ الميلاد",
     "cityPlaceholder": "المدينة",
     "single": "أعزب",
-    "f_single": "بكر",
+    "virgin": "بكر",
     "divorced": "مطلق",
     "f_divorced": "مطلقة",
     "widowed": "أرمل",
@@ -493,9 +494,11 @@
     "uae": "الإمارات",
     "fair": "فاتح",
     "medium": "متوسط",
-    "dark": "سمراء",
+    "dark": "اسمر",
+    "f_dark": "سمراء",
     "black": "أسمر",
-    "brown": "حنطية",
+    "brown": "حنطي",
+    "f_brown": "حنطية",
     "blonde": "أشقر",
     "green": "أخضر",
     "blue": "أزرق",
@@ -525,7 +528,8 @@
     "preferredHeightFrom": "الطول المفضل (من)",
     "preferredHeightTo": "الطول المفضل (إلى)",
     "saving": "جارى الحفظ ...",
-    "white": "بيضاء",
+    "white": "ابيض",
+    "f_white": "بيضاء",
     "lightWheat": "حنطى فاتح",
     "darkWheat": "حنطى غامق",
     "yes": "نعم",
@@ -563,7 +567,11 @@
     "very_beautiful": "جميل جدا",
     "f_very_beautiful": "جميلة جدا",
     "polygamyStatus": "معدد",
-    "needToThink": "يحتاج الموضوع لتفكير"
+    "needToThink": "يحتاج الموضوع لتفكير",
+    "niqab":"منقبة",
+    "veiled":"محجبة",
+    "unveiled":"غير محجبة"
+
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسلية",

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/axiosClient";
 
@@ -22,6 +22,12 @@ import Image from "next/image";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import countriesLib from "i18n-iso-countries";
+import enCountries from "i18n-iso-countries/langs/en.json";
+import arCountries from "i18n-iso-countries/langs/ar.json";
+
+countriesLib.registerLocale(enCountries);
+countriesLib.registerLocale(arCountries);
 
 type FormData = {
   username: string;
@@ -59,14 +65,15 @@ type FormData = {
   religiousPractice: string;
   sect: string;
   prayerLevel: string;
+  hijab_style: string;
 };
 
-type CountryData = {
-  iso2: string;
-  iso3: string;
-  country: string;
-  cities: string[];
-};
+// type CountryData = {
+//   iso2: string;
+//   iso3: string;
+//   country: string;
+//   cities: string[];
+// };
 
 export default function EditProfilePage() {
   const t = useTranslations("request");
@@ -76,11 +83,26 @@ export default function EditProfilePage() {
   const [error, setError] = React.useState<string | null>(null);
   const router = useRouter();
   const [success, setSuccess] = React.useState<boolean>(false);
+  const locale = useLocale(); // "en" | "ar"
+  const currentLocale = locale === "ar" ? "ar" : "en";
 
   // Countries and cities state
-  const [countries, setCountries] = React.useState<CountryData[]>([]);
+  // const [countries, setCountries] = React.useState<CountryData[]>([]);
   const [cities, setCities] = React.useState<string[]>([]);
-  const [loadingCountries, setLoadingCountries] = React.useState(false);
+  const [loadingCountries] = React.useState(false);
+
+  // Helper: normalize country name -> ISO2
+  const toISO2 = React.useCallback((maybeName: string) => {
+    if (!maybeName) return "";
+    const trimmed = maybeName.trim();
+    if (trimmed.length === 2 && /^[A-Za-z]{2}$/.test(trimmed)) return trimmed.toUpperCase();
+    // Try both locales
+    return (
+      countriesLib.getAlpha2Code(trimmed, "en") ||
+      countriesLib.getAlpha2Code(trimmed, "ar") ||
+      ""
+    );
+  }, []);
 
   const [formData, setFormData] = React.useState<FormData>({
     username: "",
@@ -115,6 +137,7 @@ export default function EditProfilePage() {
     religiousPractice: "",
     sect: "",
     prayerLevel: "",
+    hijab_style: "",
   });
 
   // Social contact validation function
@@ -179,69 +202,43 @@ export default function EditProfilePage() {
         religiousPractice: profile.religiousPractice || "",
         sect: profile.sect || "",
         prayerLevel: profile.prayerLevel || "",
+        hijab_style: profile.hijab_style || "",
       });
     }
   }, [profile]);
 
   // Fetch countries on component mount
-  React.useEffect(() => {
-    const fetchCountries = async () => {
-      setLoadingCountries(true);
-      try {
-        const response = await fetch("https://countriesnow.space/api/v0.1/countries");
-        const result = await response.json();
-        if (!result.error) {
-          setCountries(result.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch countries:", error);
-      } finally {
-        setLoadingCountries(false);
-      }
-    };
+  // React.useEffect(() => {
+  //   const fetchCountries = async () => {
+  //     setLoadingCountries(true);
+  //     try {
+  //       const response = await fetch("https://countriesnow.space/api/v0.1/countries");
+  //       const result = await response.json();
+  //       if (!result.error) {
+  //         setCountries(result.data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch countries:", error);
+  //     } finally {
+  //       setLoadingCountries(false);
+  //     }
+  //   };
 
-    fetchCountries();
-  }, []);
+  //   fetchCountries();
+  // }, []);
 
-  // Update cities when country changes
-  React.useEffect(() => {
-    if (formData.location.country) {
-      const selectedCountry = countries.find(
-        country => country.country === formData.location.country || country.iso2 === formData.location.country
-      );
-      if (selectedCountry) {
-        setCities(selectedCountry.cities);
-        if (formData.location.city && !selectedCountry.cities.includes(formData.location.city)) {
-          updateNestedField("location", "city", "");
-        }
-      } else {
-        setCities([]);
-      }
-    } else {
-      setCities([]);
-    }
-  }, [formData.location.country, countries]);
+  // Build localized country options
+  const countryOptions = React.useMemo(() => {
+    const names = countriesLib.getNames(currentLocale, { select: "official" });
+    return Object.entries(names)
+      .map(([code, name]) => ({ value: code, label: name }))
+      .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale));
+  }, [currentLocale]);
 
-  const handleCountryChange = (value: string) => {
-    updateNestedField("location", "country", value);
-    updateNestedField("location", "city", "");
+  const handleCountryChange = (iso2: string) => {
+    // Only update country; do NOT reset residence/city
+    updateNestedField("location", "country", iso2);
   };
-
-  // Convert countries to select options
-  const countryOptions = React.useMemo(() =>
-    countries.map(country => ({
-      value: country.country,
-      label: country.country
-    }))
-    , [countries]);
-
-  // Convert cities to select options
-  const cityOptions = React.useMemo(() =>
-    cities.map(city => ({
-      value: city,
-      label: city
-    }))
-    , [cities]);
 
   const updateField = (field: string, value: any) => {
     // Validate social contacts for text fields
@@ -274,13 +271,19 @@ export default function EditProfilePage() {
   const saveProfile = async () => {
     setLoading(true);
     setError(null);
-
     try {
-      // Send complete profile data
+      // Convert ISO2 to English name for API (if required)
+      const countryNameEn =
+        countriesLib.getName(formData.location.country, "en", { select: "official" }) ||
+        formData.location.country;
+
       const profileData = {
         username: formData.username || null,
         dateOfBirth: formData.dateOfBirth || null,
-        location: formData.location,
+        location: {
+          country: countryNameEn, // send name; keep ISO2 internally
+          city: formData.location.city,
+        },
         tribe: formData.tribe || null,
         maritalStatus: formData.maritalStatus || null,
         educationLevel: formData.educationLevel || null,
@@ -297,26 +300,15 @@ export default function EditProfilePage() {
         polygamyStatus: formData.polygamyStatus || null,
         acceptPolygamy: formData.acceptPolygamy || null,
         numberOfChildren: formData.numberOfChildren || null,
-        religiosityLevel: formData.religiosityLevel || null
+        religiosityLevel: formData.religiosityLevel || null,
       };
 
       await api.put("/users/profile", profileData);
-
-      if (refreshProfile) {
-        await refreshProfile();
-      }
-
+      if (refreshProfile) await refreshProfile();
       setSuccess(true);
-      setTimeout(() => {
-        router.push("/home");
-      }, 2000);
-
+      setTimeout(() => { router.push("/home"); }, 2000);
     } catch (err: any) {
-      setError(
-        err?.response?.data?.message ||
-        err?.message ||
-        tEdit("saveErrorDefault")
-      );
+      setError(err?.response?.data?.message || err?.message || tEdit("saveErrorDefault"));
     } finally {
       setLoading(false);
     }
@@ -396,15 +388,12 @@ export default function EditProfilePage() {
                       </FormField>
 
                       {/* Country Field */}
-                      <FormField
-                        label={<Label>{t("fields.nationality2")}</Label>}
-                        required
-                      >
+                      <FormField label={<Label>{t("fields.nationality2")}</Label>} required>
                         <Select
                           options={countryOptions}
                           value={formData.location.country}
-                          onChange={(val) => handleCountryChange(val)}
-                          placeholder={loadingCountries ? tEdit("loading") : t("placeholders.choose")}
+                          onChange={handleCountryChange}
+                          placeholder={t("placeholders.choose")}
                           disabled={loadingCountries}
                         />
                       </FormField>
@@ -412,7 +401,7 @@ export default function EditProfilePage() {
                       {/* City Field - Dependent on Country */}
                       <FormField label={<Label>{t("fields.residence")}</Label>} required>
                         <Select
-                          options={cityOptions}
+                          options={cities.map((city) => ({ value: city, label: city }))}
                           value={formData.location.city}
                           onChange={(val) => updateNestedField("location", "city", val)}
                           placeholder={
@@ -422,17 +411,17 @@ export default function EditProfilePage() {
                                 ? tEdit("noCitiesAvailable")
                                 : t("placeholders.choose")
                           }
-                          disabled={!formData.location.country || cities.length === 0}
+                          // disabled={!formData.location.country || cities.length === 0}
                         />
                       </FormField>
 
                       <FormField label={<Label>{t("fields.tribe")}</Label>} required>
                         <Select
-                          options={ profile?.gender === "female" ? [
+                          options={profile?.gender === "female" ? [
                             { value: "tribal", label: tEdit("f_tribal") },
                             { value: "non_tribal", label: tEdit("f_non_tribal") },
                             { value: "other", label: tEdit("other") },
-                          ]:[
+                          ] : [
                             { value: "tribal", label: tEdit("tribal") },
                             { value: "non_tribal", label: tEdit("non_tribal") },
                             { value: "other", label: tEdit("other") },
@@ -448,10 +437,10 @@ export default function EditProfilePage() {
                         required
                       >
                         <Select
-                          options={ profile?.gender === "female" ? [
-                            { value: "single", label: tEdit("f_single") },
-                            { value: "divorced", label: tEdit("f_divorced") },
-                            { value: "widowed", label: tEdit("f_widowed") },
+                          options={profile?.gender === "female" ? [
+                            { value: "virgin", label: tEdit("virgin") },
+                            { value: "f_divorced", label: tEdit("f_divorced") },
+                            { value: "f_widowed", label: tEdit("f_widowed") },
                           ] : [
                             { value: "single", label: tEdit("single") },
                             { value: "divorced", label: tEdit("divorced") },
@@ -474,13 +463,13 @@ export default function EditProfilePage() {
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       <FormField label={<Label>{t("fields.health")}</Label>}>
                         <Select
-                          options={ profile?.gender === "female" ? [
-                            { value: "healthy", label: tEdit("f_healthy") },
-                            { value: "chronically ill", label: tEdit("chronically_ill") },
-                            { value: "disabled", label: tEdit("f_disabled") },
+                          options={profile?.gender === "female" ? [
+                            { value: "f_healthy", label: tEdit("f_healthy") },
+                            { value: "f_chronically_ill", label: tEdit("chronically_ill") },
+                            { value: "f_disabled", label: tEdit("f_disabled") },
                           ] : [
                             { value: "healthy", label: tEdit("healthy") },
-                            { value: "chronically ill", label: tEdit("chronically_ill") },
+                            { value: "chronically_ill", label: tEdit("chronically_ill") },
                             { value: "disabled", label: tEdit("disabled") },
                           ]}
                           value={formData.healthStatus}
@@ -503,9 +492,9 @@ export default function EditProfilePage() {
                       <FormField label={<Label>{t("fields.religiosity")}</Label>}>
                         <Select
                           options={profile?.gender === "female" ? [
-                            { value: "normal", label: tEdit("f_normal") },
-                            { value: "conservative", label: tEdit("f_conservative") },
-                            { value: "committed", label: tEdit("f_committed") },
+                            { value: "f_normal", label: tEdit("f_normal") },
+                            { value: "f_conservative", label: tEdit("f_conservative") },
+                            { value: "f_committed", label: tEdit("f_committed") },
                           ] : [
                             { value: "normal", label: tEdit("normal") },
                             { value: "conservative", label: tEdit("conservative") },
@@ -533,8 +522,8 @@ export default function EditProfilePage() {
                       <FormField label={<Label>{t("fields.job")}</Label>} required>
                         <Select
                           options={profile?.gender === "female" ? [
-                            { value: "unemployed", label: tEdit("f_unemployed") },
-                            { value: "employed", label: tEdit("f_employed") },
+                            { value: "f_unemployed", label: tEdit("f_unemployed") },
+                            { value: "f_employed", label: tEdit("f_employed") },
                             { value: "self_employed", label: tEdit("selfEmployed") },
                           ] : [
                             { value: "unemployed", label: tEdit("unemployed") },
@@ -543,7 +532,7 @@ export default function EditProfilePage() {
                           ]}
                           value={formData.natureOfWork}
                           onChange={(val) => updateField("natureOfWork", val)}
-                          placeholder={t("placeholders.choose")} 
+                          placeholder={t("placeholders.choose")}
                         />
                       </FormField>
 
@@ -567,10 +556,14 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.skin")}</Label>} required>
                         <Select
-                          options={ [
+                          options={profile?.gender === "female" ? [
+                            { value: "f_white", label: tEdit("f_white") },
+                            { value: "f_brown", label: tEdit("f_brown") },
+                            { value: "f_black", label: tEdit("f_dark") },
+                          ] : [
                             { value: "white", label: tEdit("white") },
                             { value: "brown", label: tEdit("brown") },
-                            { value: "dark", label: tEdit("dark") },
+                            { value: "black", label: tEdit("dark") },
                           ]}
                           value={formData.skinColor}
                           onChange={(val) => updateField("skinColor", val)}
@@ -581,10 +574,10 @@ export default function EditProfilePage() {
                       <FormField label={<Label>{t("fields.beauty")}</Label>} required>
                         <Select
                           options={profile?.gender === "female" ? [
-                            { value: "acceptable", label: tEdit("f_acceptable") },
-                            { value: "average", label: tEdit("f_average") },
-                            { value: "beautiful", label: tEdit("f_beautiful") },
-                            { value: "very_beautiful", label: tEdit("f_very_beautiful") }
+                            { value: "f_acceptable", label: tEdit("f_acceptable") },
+                            { value: "f_average", label: tEdit("f_average") },
+                            { value: "f_beautiful", label: tEdit("f_beautiful") },
+                            { value: "f_very_beautiful", label: tEdit("f_very_beautiful") }
                           ] : [
                             { value: "acceptable", label: tEdit("acceptable") },
                             { value: "average", label: tEdit("average") },
@@ -623,7 +616,7 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                      {profile?.gender === "male" && <FormField
+                      {/* {profile?.gender === "male" && <FormField
                         label={<Label>{t("fields.polygamyStatus")}</Label>}
                         required
                       >
@@ -636,22 +629,42 @@ export default function EditProfilePage() {
                           onChange={(val) => updateField("polygamyStatus", val === "true")}
                           placeholder={t("placeholders.choose")}
                         />
-                      </FormField>}
-                      {profile?.gender === "female" && <FormField
+                      </FormField>} */}
+                      {profile?.gender === "female" &&
+                      <>
+                                            <FormField
                         label={<Label>{t("fields.acceptPolygamy")}</Label>}
                         required
                       >
                         <Select
                           options={[
-                            { value: "Yes", label: tEdit("yes") },
-                            { value: "No", label: tEdit("no") },
-                            { value: "need to think", label: tEdit("needToThink") },
+                            { value: "yes", label: tEdit("yes") },
+                            { value: "no", label: tEdit("no") },
+                            { value: "thinking", label: tEdit("needToThink") },
                           ]}
                           value={formData.acceptPolygamy?.toString()}
                           onChange={(val) => updateField("acceptPolygamy", val === "true")}
                           placeholder={t("placeholders.choose")}
                         />
-                      </FormField>}
+                      </FormField>
+                      <FormField
+                        label={<Label>{t("fields.hijab_style")}</Label>}
+                        required
+                      >
+                        <Select
+                          options={[
+                            { value: "niqab", label: tEdit("niqab") },
+                            { value: "hijab", label: tEdit("veiled") },
+                            { value: "no_hijab", label: tEdit("unveiled") }
+                          ]}
+                          value={formData.hijab_style?.toString()}
+                          onChange={(val) => updateField("hijab_style", val === "true")}
+                          placeholder={t("placeholders.choose")}
+                        />
+                      </FormField>
+                      </>
+
+                      }
                     </div>
 
                     <div>
