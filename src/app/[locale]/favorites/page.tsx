@@ -46,6 +46,7 @@ type user = {
   marriageType: string | null;
   acceptPolygamy: boolean | null;
   religiousPractice: string;
+  skinColor: string | null;
   sect: string;
   prayerLevel: string;
   role: string;
@@ -148,7 +149,7 @@ const MyFavorites = () => {
                         city={like?.likedUser?.location?.city}
                         job={like?.likedUser?.natureOfWork}
                         marriageType={like?.likedUser?.marriageType}
-                        skinColor={like?.likedUser?.bodyColor}
+                        skinColor={like?.likedUser?.skinColor}
                         status={like?.likedUser?.maritalStatus}
                       />
                     ))
@@ -163,7 +164,7 @@ const MyFavorites = () => {
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3'>
                   {interested?.length === 0 ? (
                     <div className="col-span-full text-center text-[#301B69] py-8">
-                      لا توجد بيانات حالياً.
+                      {t("emptyInterested")}
                     </div>
                   ) : (
                     interested.map((like) => (
@@ -177,7 +178,7 @@ const MyFavorites = () => {
                         city={like?.user?.location?.city}
                         job={like?.user?.natureOfWork}
                         marriageType={like?.user?.marriageType}
-                        skinColor={like?.user?.bodyColor}
+                        skinColor={like?.user?.skinColor}
                         status={like?.user?.maritalStatus}
                       />
                     ))

@@ -9,15 +9,10 @@ import {
     Card,
     CardContent,
     CardFooter,
-    CardHeader,
-    CardTitle,
 } from "@/components/ui/card";
-import Label from "@/components/ui/label";
 import { FormField } from "@/components/ui/form";
 import { TextField } from "@/components/ui/text-field";
-import { PasswordInput } from "@/components/ui/password-input";
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
 import Textarea from "@/components/ui/textarea";
 
 

@@ -68,7 +68,7 @@ type Profile = {
   preferredEyeColors: string[] | null;
   partnerPreferencesBio: string | null;
   marriageType: string | null;
-  acceptPolygamy: boolean | null;
+  acceptPolygamy: string | null;
   polygamyStatus: string | null;
   detailedProfile: string | null;
   religiousPractice: string | null;
@@ -123,13 +123,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const Locale = useLocale()
 
   // Fetch profile data from /auth/me
   const refreshProfile = async () => {
     setLoading(true);
     try {
-      const res = await api.get(`/auth/me?lang=${Locale}`);
+      const res = await api.get(`/auth/me`);
       setProfile(res.data.data);
     } catch (err) {
       setProfile(null);

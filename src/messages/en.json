@@ -484,7 +484,9 @@
         "home": "Home available",
         "basicInfo": "Basic Information",
         "personalDetails": "Personal Details",
-        "about": "Additional information about you or your partner"
+        "about": "Additional information about you or your partner",
+    "hijab_style":"Al Hijab"
+
     },
     "profile": {
         "online": "Online",

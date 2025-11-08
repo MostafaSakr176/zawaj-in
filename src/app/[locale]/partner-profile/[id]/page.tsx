@@ -119,6 +119,7 @@ type UserDetails = {
     isliked: boolean;
     matching: boolean;
     lastSeenAt: string;
+    hijab_style:string;
 };
 
 const PartnerProfile = () => {
@@ -187,7 +188,7 @@ const PartnerProfile = () => {
             toast.error(tPartner("pleaseLoginToSendMessage"))
             return
         }
-        if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 25) {
+        if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 80) {
             toast.error(tPartner("completeProfileToSendMessage"));
             router.push('/profile/edit');
             return;
@@ -305,9 +306,9 @@ const PartnerProfile = () => {
                         </button>
                         <button
                             onClick={handleSendMessage}
-                            // disabled={profile && profile.profileCompletion && profile.profileCompletion.percentage < 25 || chatLoading}
+                            disabled={profile && profile.profileCompletion && profile.profileCompletion.percentage < 80 || chatLoading}
                             className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                            title={profile && profile.profileCompletion && profile.profileCompletion.percentage < 25 ? "You need to complete your profile first" : ""}
+                            title={profile && profile.profileCompletion && profile.profileCompletion.percentage < 80 ? "You need to complete your profile first" : ""}
                         >
                             {chatLoading ? tPartner("loadingAction") : tPartner("sendMessage")}
                             <MessageCircle className="w-5 h-5 text-[#2D1F55]" />
@@ -335,19 +336,19 @@ const PartnerProfile = () => {
                     </div>
                     <div className="flex items-center flex-wrap gap-4">
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("nationality")} value={profile?.location?.country} />
+                            <Field label={tPartner("nationality")} value={user?.location?.country} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("placeOfResidence")} value={profile?.location?.city} />
+                            <Field label={tPartner("placeOfResidence")} value={user?.location?.city} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("age")} value={`${profile?.age || 0 } ${tPartner("years")}`} />
+                            <Field label={tPartner("age")} value={`${user?.age || 0} ${tPartner("years")}`} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("tribe")} value={profile?.tribe} />
+                            <Field label={tPartner("tribe")} value={user?.tribe} />
                         </div>
                         <div>
-                            <Field label={tPartner("maritalStatus")} value={profile?.maritalStatus} />
+                            <Field label={tPartner("maritalStatus")} value={user?.maritalStatus} />
                         </div>
                     </div>
                 </div>
@@ -360,29 +361,39 @@ const PartnerProfile = () => {
                     </div>
                     <div className="flex items-center flex-wrap gap-4">
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("height")} value={profile?.height} />
+                            <Field label={tPartner("height")} value={user?.height} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("weight")} value={profile?.weight} />
+                            <Field label={tPartner("weight")} value={user?.weight} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("skinColor")} value={profile?.skinColor} />
+                            <Field label={tPartner("skinColor")} value={user?.skinColor} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("beauty")} value={profile?.beauty} />
+                            <Field label={tPartner("beauty")} value={user?.beauty} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("educationLevel")} value={profile?.educationLevel} />
+                            <Field label={tPartner("educationLevel")} value={user?.educationLevel} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("job")} value={profile?.natureOfWork} />
+                            <Field label={tPartner("job")} value={user?.natureOfWork} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("home")} value={profile?.houseAvailable ? tPartner("yes") : tPartner("no")} />
+                            <Field label={tPartner("home")} value={user?.houseAvailable ? tPartner("yes") : tPartner("no")} />
                         </div>
                         <div>
-                            <Field label={tPartner("marriageType")} value={profile?.marriageType} />
+                            <Field label={tPartner("marriageType")} value={user?.marriageType} />
                         </div>
+                        {user?.gender === "fenale" &&
+                            <>
+                                <div>
+                                    <Field label={tPartner("acceptPolygamy")} value={user.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
+                                </div>
+                                <div>
+                                    <Field label={tPartner("hijab_style")} value={user.hijab_style} />
+                                </div>
+                            </>
+                        }
                     </div>
                 </div>
             </div>

@@ -60,12 +60,36 @@ type FormData = {
   houseAvailable: boolean | null;
   bio: string;
   marriageType: string;
-  acceptPolygamy: boolean | null;
+  acceptPolygamy: string | null;  // CHANGED
   polygamyStatus: string;
   religiousPractice: string;
   sect: string;
   prayerLevel: string;
-  hijab_style: string;
+  hijab_style: string | null; // ensure nullable
+};
+
+// Define payload type (what we send)
+type ProfileUpdatePayload = {
+  username: string | null;
+  dateOfBirth: string | null;
+  location: { country: string | null; city: string | null };
+  tribe: string | null;
+  maritalStatus: string | null;
+  educationLevel: string | null;
+  natureOfWork: string | null;
+  financialStatus: string | null;
+  healthStatus: string | null;
+  weight: string | number | null;
+  height: string | number | null;
+  skinColor: string | null;
+  beauty: string | null;
+  houseAvailable: boolean | null;
+  bio: string | null;
+  marriageType: string | null;
+  religiosityLevel: string | null;
+  // female only (optional)
+  acceptPolygamy?: string | null;
+  hijab_style?: string | null;
 };
 
 // type CountryData = {
@@ -132,12 +156,12 @@ export default function EditProfilePage() {
     houseAvailable: null,
     bio: "",
     marriageType: "",
-    acceptPolygamy: null,
     polygamyStatus: "",
     religiousPractice: "",
     sect: "",
     prayerLevel: "",
-    hijab_style: "",
+  acceptPolygamy: null,          // now string | null
+  hijab_style: null,
   });
 
   // Social contact validation function
@@ -197,7 +221,7 @@ export default function EditProfilePage() {
         houseAvailable: profile.houseAvailable,
         bio: profile.bio || "",
         marriageType: profile.marriageType || "",
-        acceptPolygamy: profile.acceptPolygamy,
+        acceptPolygamy: profile.acceptPolygamy || "",  // CHANGED
         polygamyStatus: profile.polygamyStatus || "",
         religiousPractice: profile.religiousPractice || "",
         sect: profile.sect || "",
@@ -234,6 +258,9 @@ export default function EditProfilePage() {
       .map(([code, name]) => ({ value: code, label: name }))
       .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale));
   }, [currentLocale]);
+
+  console.log("===============> ", countryOptions);
+  
 
   const handleCountryChange = (iso2: string) => {
     // Only update country; do NOT reset residence/city
@@ -273,15 +300,15 @@ export default function EditProfilePage() {
     setError(null);
     try {
       // Convert ISO2 to English name for API (if required)
-      const countryNameEn =
-        countriesLib.getName(formData.location.country, "en", { select: "official" }) ||
-        formData.location.country;
+      // const countryNameEn =
+      //   countriesLib.getName(formData.location.country, "en", { select: "official" }) ||
+      //   formData.location.country;
 
-      const profileData = {
+      const profileData: ProfileUpdatePayload = {
         username: formData.username || null,
         dateOfBirth: formData.dateOfBirth || null,
         location: {
-          country: countryNameEn, // send name; keep ISO2 internally
+          country: formData.location.country, // send name; keep ISO2 internally
           city: formData.location.city,
         },
         tribe: formData.tribe || null,
@@ -297,10 +324,13 @@ export default function EditProfilePage() {
         houseAvailable: formData.houseAvailable,
         bio: formData.bio || null,
         marriageType: formData.marriageType || null,
-        polygamyStatus: formData.polygamyStatus || null,
-        acceptPolygamy: formData.acceptPolygamy || null,
-        numberOfChildren: formData.numberOfChildren || null,
         religiosityLevel: formData.religiosityLevel || null,
+      };
+
+            // Only add female-specific fields
+      if (profile?.gender === "female") {
+        profileData.acceptPolygamy = formData.acceptPolygamy || null;
+        profileData.hijab_style = formData.hijab_style || null;
       };
 
       await api.put("/users/profile", profileData);
@@ -392,7 +422,7 @@ export default function EditProfilePage() {
                         <Select
                           options={countryOptions}
                           value={formData.location.country}
-                          onChange={handleCountryChange}
+                          onChange={(val) => updateNestedField("location", "country", val)}
                           placeholder={t("placeholders.choose")}
                           disabled={loadingCountries}
                         />
@@ -643,7 +673,7 @@ export default function EditProfilePage() {
                             { value: "thinking", label: tEdit("needToThink") },
                           ]}
                           value={formData.acceptPolygamy?.toString()}
-                          onChange={(val) => updateField("acceptPolygamy", val === "true")}
+                          onChange={(val) => updateField("acceptPolygamy", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>
@@ -658,7 +688,7 @@ export default function EditProfilePage() {
                             { value: "no_hijab", label: tEdit("unveiled") }
                           ]}
                           value={formData.hijab_style?.toString()}
-                          onChange={(val) => updateField("hijab_style", val === "true")}
+                          onChange={(val) => updateField("hijab_style", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>

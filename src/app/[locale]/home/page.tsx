@@ -5,8 +5,8 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/axiosClient';
 import { useAuth } from '@/context/AuthContext';
-import { useSocket } from '@/context/SocketContext'; // Add this import
-import { useTranslations } from 'next-intl';
+import { useSocket } from '@/context/SocketContext';
+import { useTranslations, useLocale } from 'next-intl'; // <-- add useLocale
 import {
   Sheet,
   SheetContent,
@@ -20,6 +20,14 @@ import { FormField } from "@/components/ui/form";
 import Label from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { TextField } from "@/components/ui/text-field";
+
+// ADD: i18n-iso-countries (same as Edit Profile)
+import countriesLib from "i18n-iso-countries";
+import enCountries from "i18n-iso-countries/langs/en.json";
+import arCountries from "i18n-iso-countries/langs/ar.json";
+
+countriesLib.registerLocale(enCountries);
+countriesLib.registerLocale(arCountries);
 
 type User = {
   id: string;
@@ -69,7 +77,7 @@ type FilterData = {
   minAge: number | null;
   maxAge: number | null;
   city: string;
-  country: string;
+  country: string; // store ISO2 here to match Edit Profile
   maritalStatus: string;
   skinColor: string;
   beauty: string;
@@ -92,19 +100,7 @@ type FilterData = {
   financialStatus: string;
   healthStatus: string;
   religiosityLevel: string;
-};
-
-type CountryData = {
-  iso2: string;
-  iso3: string;
-  country: string;
-  cities: string[];
-};
-
-type CountriesResponse = {
-  error: boolean;
-  msg: string;
-  data: CountryData[];
+  hijab_style?: string; // add to support female-specific filter
 };
 
 const MyFavorites = () => {
@@ -117,23 +113,20 @@ const MyFavorites = () => {
     totalPages: 1,
   });
 
-  // Countries and cities state
-  const [countries, setCountries] = useState<CountryData[]>([]);
-  const [availableCities, setAvailableCities] = useState<string[]>([]);
-  const [loadingCountries, setLoadingCountries] = useState(false);
-
   const { profile } = useAuth();
   const { isConnected, onlineUsers } = useSocket(); // Add this line
   const t = useTranslations("home");
   const tEdit = useTranslations("profileEdit");
   const tRequest = useTranslations("request");
+  const locale = useLocale();
+  const currentLocale = locale === "ar" ? "ar" : "en";
 
   // Filter state
   const [filters, setFilters] = useState<FilterData>({
     minAge: null,
     maxAge: null,
     city: "",
-    country: "",
+    country: "", // ISO2
     maritalStatus: "",
     skinColor: "",
     beauty: "",
@@ -156,66 +149,32 @@ const MyFavorites = () => {
     financialStatus: "",
     healthStatus: "",
     religiosityLevel: "",
+    hijab_style: "",
   });
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  // Fetch countries and cities data
-  useEffect(() => {
-    const fetchCountries = async () => {
-      setLoadingCountries(true);
-      try {
-        const response = await fetch('https://countriesnow.space/api/v0.1/countries');
-        const data: CountriesResponse = await response.json();
-        if (!data.error) {
-          setCountries(data.data);
-        }
-      } catch (error) {
-        console.error('Error fetching countries:', error);
-      } finally {
-        setLoadingCountries(false);
-      }
-    };
-
-    fetchCountries();
-  }, []);
-
-  // Update cities when country changes
-  useEffect(() => {
-    if (filters.country) {
-      const selectedCountry = countries.find(
-        country => country.country.toLowerCase() === filters.country.toLowerCase()
-      );
-
-      if (selectedCountry) {
-        setAvailableCities(selectedCountry.cities);
-      } else {
-        setAvailableCities([]);
-      }
-    } else {
-      setAvailableCities([]);
-      // Clear city when country is cleared
-      if (filters.city) {
-        updateFilter("city", "");
-      }
-    }
-  }, [filters.country, countries]);
+  // Build localized country options (same as Edit Profile)
+  const countryOptions = React.useMemo(() => {
+    const names = countriesLib.getNames(currentLocale, { select: "official" });
+    return [
+        { value: "", label: t("all") },
+      ...Object.entries(names)
+        .map(([code, name]) => ({ value: code, label: name }))
+        .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale)),
+    ];
+  }, [currentLocale]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateFilter = (field: string, value: any) => {
-    setFilters(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setFilters(prev => ({ ...prev, [field]: value }));
   };
 
-  // Handle country selection
-  const handleCountryChange = (value: string) => {
-    updateFilter("country", value);
-    // Clear city selection when country changes
-    updateFilter("city", "");
+  // Handle country change (independent; city not cleared)
+  const handleCountryChange = (iso2: string) => {
+    updateFilter("country", iso2);
   };
 
-  // Build query parameters from filters
+  // Build query params aligned with Edit Profile values
   const buildQueryParams = () => {
     const params = new URLSearchParams();
 
@@ -224,10 +183,11 @@ const MyFavorites = () => {
     params.append('page', pagination.page.toString());
     params.append('gender', profile?.gender === "male" ? "female" : "male");
 
-    // Optional filters
-    Object.entries(filters).forEach(([key, value]) => {
+    // Append other filters (skip empty/null)
+    const entries = { ...filters }; // already handled
+    Object.entries(entries).forEach(([key, value]) => {
       if (value !== null && value !== "" && value !== undefined) {
-        params.append(key, value.toString());
+        params.append(key, String(value));
       }
     });
 
@@ -299,6 +259,7 @@ const MyFavorites = () => {
       financialStatus: "",
       healthStatus: "",
       religiosityLevel: "",
+      hijab_style: "",
     });
     fetchUsers(1);
     setPagination(prev => ({ ...prev, page: 1 })); // Reset to first page
@@ -414,16 +375,11 @@ const MyFavorites = () => {
                     <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
                       <Select
                         options={[
-                          { value: "", label: t("all") },
-                          ...countries.map(country => ({
-                            value: country.country,
-                            label: country.country
-                          }))
+                          ...countryOptions
                         ]}
                         value={filters.country}
-                        onChange={(val) => handleCountryChange(val)}
+                        onChange={(val) => updateFilter("country", val)}
                         placeholder={tRequest("placeholders.choose")}
-                        disabled={loadingCountries}
                       />
                     </FormField>
 
@@ -431,22 +387,11 @@ const MyFavorites = () => {
                     <FormField label={<Label>{tRequest("fields.residence")}</Label>}>
                       <Select
                         options={[
-                          { value: "", label: t("all") },
-                          ...availableCities.map(city => ({
-                            value: city,
-                            label: city
-                          }))
+                          { value: "", label: t("all") }, 
                         ]}
                         value={filters.city}
                         onChange={(val) => updateFilter("city", val)}
-                        placeholder={
-                          !filters.country
-                            ? tRequest("placeholders.selectCountryFirst")
-                            : availableCities.length === 0
-                              ? tRequest("placeholders.noCitiesAvailable")
-                              : tRequest("placeholders.choose")
-                        }
-                        disabled={!filters.country || availableCities.length === 0}
+                        placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
@@ -611,10 +556,10 @@ const MyFavorites = () => {
                     name={user.fullName || "User"}
                     avatar={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                     age={user.age}
-                    city={user?.location?.city}
+                    city={user?.location?.country}
                     job={user?.natureOfWork}
                     marriageType={user?.marriageType}
-                    skinColor={user?.bodyColor}
+                    skinColor={user?.skinColor}
                     status={user?.maritalStatus}
                     online={user?.isOnline} // This will now show real-time status
                   />

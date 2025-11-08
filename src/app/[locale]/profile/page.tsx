@@ -8,7 +8,6 @@ import { useAuth } from '@/context/AuthContext';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import api from "@/lib/axiosClient";
-import IdCard from '@/components/shared/IdCard';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Visitores from './visitores';
 
@@ -236,6 +235,16 @@ const Profile = () => {
                   <div>
                     <Field label={tPartner("marriageType")} value={profile.marriageType} />
                   </div>
+                  {profile?.gender === "fenale" &&
+                    <>
+                      <div>
+                        <Field label={tPartner("acceptPolygamy")} value={profile.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
+                      </div>
+                      <div>
+                        <Field label={tPartner("hijab_style")} value={profile.hijab_style} />
+                      </div>
+                    </>
+                  }
                 </div>
               </div>
             </> :
