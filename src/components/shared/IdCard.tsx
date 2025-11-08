@@ -1,7 +1,5 @@
 "use client";
-
 import Image from "next/image";
-import { Heart, BadgeCheck, MapPin, Palette, HeartHandshake } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useState } from "react";
 import api from "@/lib/axiosClient";
@@ -10,7 +8,7 @@ import { useTranslations } from "next-intl";
 type IdCardProps = {
     id: string;
     name: string;
-    age: number ;
+    age: number;
     city: string;
     status: string;
     job: string | null;

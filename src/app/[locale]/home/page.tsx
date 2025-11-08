@@ -396,12 +396,18 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
                       <Select
-                        options={[
-                          { value: "", label: t("all") },
-                          { value: "single", label: tEdit("single") },
-                          { value: "divorced", label: tEdit("divorced") },
-                          { value: "widowed", label: tEdit("widowed") },
-                        ]}
+                          options={profile?.gender === "female" ? [
+                            { value: "", label: t("all") },
+                            { value: "virgin", label: tEdit("virgin") },
+                            { value: "f_divorced", label: tEdit("f_divorced") },
+                            { value: "f_widowed", label: tEdit("f_widowed") },
+                          ] : [
+                            { value: "", label: t("all") },
+                            { value: "single", label: tEdit("single") },
+                            { value: "divorced", label: tEdit("divorced") },
+                            { value: "widowed", label: tEdit("widowed") },
+                            { value: "married", label: tEdit("married") },
+                          ]}
                         value={filters.maritalStatus}
                         onChange={(val) => updateFilter("maritalStatus", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -423,12 +429,17 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.job")}</Label>}>
                       <Select
-                        options={[
-                          { value: "", label: t("all") },
-                          { value: "unemployed", label: tEdit("unemployed") },
-                          { value: "employed", label: tEdit("employed") },
-                          { value: "self_employed", label: tEdit("selfEmployed") },
-                        ]}
+                          options={profile?.gender === "female" ? [
+                            { value: "", label: t("all") },
+                            { value: "f_unemployed", label: tEdit("f_unemployed") },
+                            { value: "f_employed", label: tEdit("f_employed") },
+                            { value: "self_employed", label: tEdit("selfEmployed") },
+                          ] : [
+                            { value: "", label: t("all") },
+                            { value: "unemployed", label: tEdit("unemployed") },
+                            { value: "employed", label: tEdit("employed") },
+                            { value: "self_employed", label: tEdit("selfEmployed") },
+                          ]}
                         value={filters.natureOfWork}
                         onChange={(val) => updateFilter("natureOfWork", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -472,13 +483,18 @@ const MyFavorites = () => {
                       </FormField>
                     </div>
                     <FormField label={<Label>{tRequest("fields.skin")}</Label>}>
-                      <Select
-                        options={[
-                          { value: "", label: t("all") },
-                          { value: "white", label: tEdit("white") },
-                          { value: "lightWheat", label: tEdit("lightWheat") },
-                          { value: "darkWheat", label: tEdit("darkWheat") },
-                        ]}
+                        <Select
+                          options={profile?.gender === "female" ? [
+                            { value: "", label: t("all") },
+                            { value: "f_white", label: tEdit("f_white") },
+                            { value: "f_brown", label: tEdit("f_brown") },
+                            { value: "f_black", label: tEdit("f_dark") },
+                          ] : [
+                            { value: "", label: t("all") },
+                            { value: "white", label: tEdit("white") },
+                            { value: "brown", label: tEdit("brown") },
+                            { value: "black", label: tEdit("dark") },
+                          ]}
                         value={filters.skinColor}
                         onChange={(val) => updateFilter("skinColor", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -486,12 +502,18 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.beauty")}</Label>}>
                       <Select
-                        options={[
-                          { value: "", label: t("all") },
-                          { value: "handsome", label: tEdit("handsome") },
-                          { value: "average", label: tEdit("average") },
-                          { value: "good", label: tEdit("good") },
-                        ]}
+                          options={profile?.gender === "female" ? [
+                            { value: "", label: t("all") },
+                            { value: "f_acceptable", label: tEdit("f_acceptable") },
+                            { value: "f_average", label: tEdit("f_average") },
+                            { value: "f_beautiful", label: tEdit("f_beautiful") },
+                            { value: "f_very_beautiful", label: tEdit("f_very_beautiful") }
+                          ] : [
+                            { value: "", label: t("all") },
+                            { value: "acceptable", label: tEdit("acceptable") },
+                            { value: "average", label: tEdit("average") },
+                            { value: "handsome", label: tEdit("handsome") }
+                          ]}
                         value={filters.beauty}
                         onChange={(val) => updateFilter("beauty", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -514,7 +536,7 @@ const MyFavorites = () => {
                         options={[
                           { value: "", label: t("all") },
                           { value: "true", label: tEdit("available") },
-                          { value: "false", label: tEdit("notAvailable") },
+                          { value: "false", label: tEdit("notAvailable")},
                         ]}
                         value={filters.houseAvailable?.toString() || ""}
                         onChange={(val) => updateFilter("houseAvailable", val === "" ? null : val === "true")}

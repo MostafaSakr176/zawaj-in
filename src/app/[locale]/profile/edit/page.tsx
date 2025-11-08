@@ -160,8 +160,8 @@ export default function EditProfilePage() {
     religiousPractice: "",
     sect: "",
     prayerLevel: "",
-  acceptPolygamy: null,          // now string | null
-  hijab_style: null,
+    acceptPolygamy: null,          // now string | null
+    hijab_style: null,
   });
 
   // Social contact validation function
@@ -260,7 +260,7 @@ export default function EditProfilePage() {
   }, [currentLocale]);
 
   console.log("===============> ", countryOptions);
-  
+
 
   const handleCountryChange = (iso2: string) => {
     // Only update country; do NOT reset residence/city
@@ -327,7 +327,7 @@ export default function EditProfilePage() {
         religiosityLevel: formData.religiosityLevel || null,
       };
 
-            // Only add female-specific fields
+      // Only add female-specific fields
       if (profile?.gender === "female") {
         profileData.acceptPolygamy = formData.acceptPolygamy || null;
         profileData.hijab_style = formData.hijab_style || null;
@@ -441,7 +441,7 @@ export default function EditProfilePage() {
                                 ? tEdit("noCitiesAvailable")
                                 : t("placeholders.choose")
                           }
-                          // disabled={!formData.location.country || cities.length === 0}
+                        // disabled={!formData.location.country || cities.length === 0}
                         />
                       </FormField>
 
@@ -646,54 +646,39 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                      {/* {profile?.gender === "male" && <FormField
-                        label={<Label>{t("fields.polygamyStatus")}</Label>}
-                        required
-                      >
-                        <Select
-                          options={[
-                            { value: "Yes", label: tEdit("yes") },
-                            { value: "No", label: tEdit("no") },
-                          ]}
-                          value={formData.polygamyStatus?.toString()}
-                          onChange={(val) => updateField("polygamyStatus", val === "true")}
-                          placeholder={t("placeholders.choose")}
-                        />
-                      </FormField>} */}
                       {profile?.gender === "female" &&
-                      <>
-                                            <FormField
-                        label={<Label>{t("fields.acceptPolygamy")}</Label>}
-                        required
-                      >
-                        <Select
-                          options={[
-                            { value: "yes", label: tEdit("yes") },
-                            { value: "no", label: tEdit("no") },
-                            { value: "thinking", label: tEdit("needToThink") },
-                          ]}
-                          value={formData.acceptPolygamy?.toString()}
-                          onChange={(val) => updateField("acceptPolygamy", val)}
-                          placeholder={t("placeholders.choose")}
-                        />
-                      </FormField>
-                      <FormField
-                        label={<Label>{t("fields.hijab_style")}</Label>}
-                        required
-                      >
-                        <Select
-                          options={[
-                            { value: "niqab", label: tEdit("niqab") },
-                            { value: "hijab", label: tEdit("veiled") },
-                            { value: "no_hijab", label: tEdit("unveiled") }
-                          ]}
-                          value={formData.hijab_style?.toString()}
-                          onChange={(val) => updateField("hijab_style", val)}
-                          placeholder={t("placeholders.choose")}
-                        />
-                      </FormField>
-                      </>
-
+                        <>
+                          <FormField
+                            label={<Label>{t("fields.acceptPolygamy")}</Label>}
+                            required
+                          >
+                            <Select
+                              options={[
+                                { value: "yes", label: tEdit("yes") },
+                                { value: "no", label: tEdit("no") },
+                                { value: "thinking", label: tEdit("needToThink") },
+                              ]}
+                              value={formData.acceptPolygamy?.toString()}
+                              onChange={(val) => updateField("acceptPolygamy", val)}
+                              placeholder={t("placeholders.choose")}
+                            />
+                          </FormField>
+                          <FormField
+                            label={<Label>{t("fields.hijab_style")}</Label>}
+                            required
+                          >
+                            <Select
+                              options={[
+                                { value: "niqab", label: tEdit("niqab") },
+                                { value: "hijab", label: tEdit("veiled") },
+                                { value: "no_hijab", label: tEdit("unveiled") }
+                              ]}
+                              value={formData.hijab_style?.toString()}
+                              onChange={(val) => updateField("hijab_style", val)}
+                              placeholder={t("placeholders.choose")}
+                            />
+                          </FormField>
+                        </>
                       }
                     </div>
 
