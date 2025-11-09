@@ -23,11 +23,22 @@ import { TextField } from "@/components/ui/text-field";
 
 // ADD: i18n-iso-countries (same as Edit Profile)
 import countriesLib from "i18n-iso-countries";
-import enCountries from "i18n-iso-countries/langs/en.json";
-import arCountries from "i18n-iso-countries/langs/ar.json";
+// import enCountries from "i18n-iso-countries/langs/en.json";
+// import arCountries from "i18n-iso-countries/langs/ar.json";
 
-countriesLib.registerLocale(enCountries);
-countriesLib.registerLocale(arCountries);
+if (typeof window !== "undefined") {
+  (async () => {
+    try {
+      const en = await import("i18n-iso-countries/langs/en.json");
+      const ar = await import("i18n-iso-countries/langs/ar.json");
+      countriesLib.registerLocale(en.default || en);
+      countriesLib.registerLocale(ar.default || ar);
+    } catch (err) {
+      // fallback: try to require on server (shouldn't run in client file) or warn
+      // console.warn("i18n-iso-countries locale load failed", err);
+    }
+  })();
+}
 
 type User = {
   id: string;

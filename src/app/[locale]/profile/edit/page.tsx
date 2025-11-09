@@ -23,11 +23,22 @@ import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import countriesLib from "i18n-iso-countries";
-import enCountries from "i18n-iso-countries/langs/en.json";
-import arCountries from "i18n-iso-countries/langs/ar.json";
+// import enCountries from "i18n-iso-countries/langs/en.json";
+// import arCountries from "i18n-iso-countries/langs/ar.json";
 
-countriesLib.registerLocale(enCountries);
-countriesLib.registerLocale(arCountries);
+if (typeof window !== "undefined") {
+  (async () => {
+    try {
+      const en = await import("i18n-iso-countries/langs/en.json");
+      const ar = await import("i18n-iso-countries/langs/ar.json");
+      countriesLib.registerLocale(en.default || en);
+      countriesLib.registerLocale(ar.default || ar);
+    } catch (err) {
+      // fallback: try to require on server (shouldn't run in client file) or warn
+      // console.warn("i18n-iso-countries locale load failed", err);
+    }
+  })();
+}
 
 type FormData = {
   username: string;
@@ -91,13 +102,6 @@ type ProfileUpdatePayload = {
   acceptPolygamy?: string | null;
   hijab_style?: string | null;
 };
-
-// type CountryData = {
-//   iso2: string;
-//   iso3: string;
-//   country: string;
-//   cities: string[];
-// };
 
 export default function EditProfilePage() {
   const t = useTranslations("request");
@@ -252,20 +256,13 @@ export default function EditProfilePage() {
   // }, []);
 
   // Build localized country options
+  
   const countryOptions = React.useMemo(() => {
     const names = countriesLib.getNames(currentLocale, { select: "official" });
     return Object.entries(names)
       .map(([code, name]) => ({ value: code, label: name }))
       .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale));
   }, [currentLocale]);
-
-  console.log("===============> ", countryOptions);
-
-
-  const handleCountryChange = (iso2: string) => {
-    // Only update country; do NOT reset residence/city
-    updateNestedField("location", "country", iso2);
-  };
 
   const updateField = (field: string, value: any) => {
     // Validate social contacts for text fields
@@ -299,11 +296,6 @@ export default function EditProfilePage() {
     setLoading(true);
     setError(null);
     try {
-      // Convert ISO2 to English name for API (if required)
-      // const countryNameEn =
-      //   countriesLib.getName(formData.location.country, "en", { select: "official" }) ||
-      //   formData.location.country;
-
       const profileData: ProfileUpdatePayload = {
         username: formData.username || null,
         dateOfBirth: formData.dateOfBirth || null,
