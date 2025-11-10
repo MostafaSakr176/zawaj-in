@@ -301,7 +301,7 @@ export default function EditProfilePage() {
         dateOfBirth: formData.dateOfBirth || null,
         location: {
           country: formData.location.country, // send name; keep ISO2 internally
-          city: formData.location.city,
+          city: formData.location.city || "Giza",
         },
         tribe: formData.tribe || null,
         maritalStatus: formData.maritalStatus || null,
