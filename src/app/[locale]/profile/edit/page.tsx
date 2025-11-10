@@ -22,23 +22,7 @@ import Image from "next/image";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import countriesLib from "i18n-iso-countries";
-// import enCountries from "i18n-iso-countries/langs/en.json";
-// import arCountries from "i18n-iso-countries/langs/ar.json";
-
-if (typeof window !== "undefined") {
-  (async () => {
-    try {
-      const en = await import("i18n-iso-countries/langs/en.json");
-      const ar = await import("i18n-iso-countries/langs/ar.json");
-      countriesLib.registerLocale(en.default || en);
-      countriesLib.registerLocale(ar.default || ar);
-    } catch (err) {
-      // fallback: try to require on server (shouldn't run in client file) or warn
-      // console.warn("i18n-iso-countries locale load failed", err);
-    }
-  })();
-}
+import { getCountryOptions, getCountryName, getCountryByCode, findCountryByName, getCityTranslation } from "@/lib/countries";
 
 type FormData = {
   username: string;
@@ -115,21 +99,41 @@ export default function EditProfilePage() {
   const currentLocale = locale === "ar" ? "ar" : "en";
 
   // Countries and cities state
-  // const [countries, setCountries] = React.useState<CountryData[]>([]);
+  const [countriesData, setCountriesData] = React.useState<Array<{ iso2: string; iso3: string; country: string; cities: string[] }>>([]);
   const [cities, setCities] = React.useState<string[]>([]);
-  const [loadingCountries] = React.useState(false);
+  const [loadingCountries, setLoadingCountries] = React.useState(false);
+  const [countryOptions, setCountryOptions] = React.useState<Array<{ value: string; label: string }>>([]);
 
-  // Helper: normalize country name -> ISO2
-  const toISO2 = React.useCallback((maybeName: string) => {
-    if (!maybeName) return "";
-    const trimmed = maybeName.trim();
-    if (trimmed.length === 2 && /^[A-Za-z]{2}$/.test(trimmed)) return trimmed.toUpperCase();
-    // Try both locales
-    return (
-      countriesLib.getAlpha2Code(trimmed, "en") ||
-      countriesLib.getAlpha2Code(trimmed, "ar") ||
-      ""
-    );
+  // Fetch countries from REST Countries API
+  React.useEffect(() => {
+    const fetchCountries = async () => {
+      setLoadingCountries(true);
+      try {
+        const options = await getCountryOptions(currentLocale as 'en' | 'ar');
+        setCountryOptions(options);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      } finally {
+        setLoadingCountries(false);
+      }
+    };
+    fetchCountries();
+  }, [currentLocale]);
+
+  // Fetch cities data from countriesnow.space API (REST Countries doesn't provide cities)
+  React.useEffect(() => {
+    const fetchCitiesData = async () => {
+      try {
+        const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+        const data = await response.json();
+        if (!data.error) {
+          setCountriesData(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching cities data:', error);
+      }
+    };
+    fetchCitiesData();
   }, []);
 
   const [formData, setFormData] = React.useState<FormData>({
@@ -168,6 +172,39 @@ export default function EditProfilePage() {
     hijab_style: null,
   });
 
+  // Update cities when country changes
+  React.useEffect(() => {
+    const updateCities = async () => {
+      if (formData.location.country) {
+        try {
+          // Get country name from REST Countries API
+          const countryNameEn = await getCountryName(formData.location.country, 'en');
+          const countryNameAr = await getCountryName(formData.location.country, 'ar');
+
+          // Find matching country in cities API data (countriesnow.space)
+          const selectedCountry = countriesData.find(
+            countryData =>
+              countryData.country.toLowerCase() === countryNameEn?.toLowerCase() ||
+              countryData.country.toLowerCase() === countryNameAr?.toLowerCase() ||
+              countryData.iso2?.toLowerCase() === formData.location.country.toLowerCase()
+          );
+
+          if (selectedCountry) {
+            setCities(selectedCountry.cities || []);
+          } else {
+            setCities([]);
+          }
+        } catch (error) {
+          console.error('Error updating cities:', error);
+          setCities([]);
+        }
+      } else {
+        setCities([]);
+      }
+    };
+    updateCities();
+  }, [formData.location.country, countriesData]);
+
   // Social contact validation function
   const validateSocialContacts = (text: string): string | null => {
     const socialPatterns = [
@@ -196,43 +233,59 @@ export default function EditProfilePage() {
 
   // Initialize form data with profile data
   React.useEffect(() => {
-    if (profile) {
-      setFormData({
-        username: profile.username || "",
-        dateOfBirth: profile.dateOfBirth || "",
-        age: profile.age,
-        location: profile.location || { city: "", country: "" },
-        origin: profile.origin || "",
-        nationality: profile.nationality || "",
-        placeOfResidence: profile.placeOfResidence || "",
-        tribe: profile.tribe || "",
-        maritalStatus: profile.maritalStatus || "",
-        numberOfChildren: profile.numberOfChildren,
-        profession: profile.profession || "",
-        educationLevel: profile.educationLevel || "",
-        natureOfWork: profile.natureOfWork || "",
-        financialStatus: profile.financialStatus || "",
-        healthStatus: profile.healthStatus || "",
-        religiosityLevel: profile.religiosityLevel || "",
-        weight: profile.weight,
-        height: profile.height,
-        skinColor: profile.skinColor || "",
-        beauty: profile.beauty || "",
-        bodyColor: profile.bodyColor || "",
-        hairColor: profile.hairColor || "",
-        hairType: profile.hairType || "",
-        eyeColor: profile.eyeColor || "",
-        houseAvailable: profile.houseAvailable,
-        bio: profile.bio || "",
-        marriageType: profile.marriageType || "",
-        acceptPolygamy: profile.acceptPolygamy || "",  // CHANGED
-        polygamyStatus: profile.polygamyStatus || "",
-        religiousPractice: profile.religiousPractice || "",
-        sect: profile.sect || "",
-        prayerLevel: profile.prayerLevel || "",
-        hijab_style: profile.hijab_style || "",
-      });
-    }
+    const initializeFormData = async () => {
+      if (profile) {
+        let countryCode = profile.location?.country || "";
+
+        // If country is a name (not ISO2 code), try to find the ISO2 code
+        if (countryCode && countryCode.length > 2) {
+          const foundCountry = await findCountryByName(countryCode);
+          if (foundCountry) {
+            countryCode = foundCountry.cca2;
+          }
+        }
+
+        setFormData({
+          username: profile.username || "",
+          dateOfBirth: profile.dateOfBirth || "",
+          age: profile.age,
+          location: {
+            city: profile.location?.city || "",
+            country: countryCode,
+          },
+          origin: profile.origin || "",
+          nationality: profile.nationality || "",
+          placeOfResidence: profile.placeOfResidence || "",
+          tribe: profile.tribe || "",
+          maritalStatus: profile.maritalStatus || "",
+          numberOfChildren: profile.numberOfChildren,
+          profession: profile.profession || "",
+          educationLevel: profile.educationLevel || "",
+          natureOfWork: profile.natureOfWork || "",
+          financialStatus: profile.financialStatus || "",
+          healthStatus: profile.healthStatus || "",
+          religiosityLevel: profile.religiosityLevel || "",
+          weight: profile.weight,
+          height: profile.height,
+          skinColor: profile.skinColor || "",
+          beauty: profile.beauty || "",
+          bodyColor: profile.bodyColor || "",
+          hairColor: profile.hairColor || "",
+          hairType: profile.hairType || "",
+          eyeColor: profile.eyeColor || "",
+          houseAvailable: profile.houseAvailable,
+          bio: profile.bio || "",
+          marriageType: profile.marriageType || "",
+          acceptPolygamy: profile.acceptPolygamy || "",  // CHANGED
+          polygamyStatus: profile.polygamyStatus || "",
+          religiousPractice: profile.religiousPractice || "",
+          sect: profile.sect || "",
+          prayerLevel: profile.prayerLevel || "",
+          hijab_style: profile.hijab_style || "",
+        });
+      }
+    };
+    initializeFormData();
   }, [profile]);
 
   // Fetch countries on component mount
@@ -255,14 +308,39 @@ export default function EditProfilePage() {
   //   fetchCountries();
   // }, []);
 
-  // Build localized country options
-  
-  const countryOptions = React.useMemo(() => {
-    const names = countriesLib.getNames(currentLocale, { select: "official" });
-    return Object.entries(names)
-      .map(([code, name]) => ({ value: code, label: name }))
-      .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale));
-  }, [currentLocale]);
+  // City translations state
+  const [cityTranslations, setCityTranslations] = React.useState<Record<string, string>>({});
+
+  // Fetch city translations when cities change
+  React.useEffect(() => {
+    const fetchTranslations = async () => {
+      if (currentLocale === "ar" && cities.length > 0) {
+        const translations: Record<string, string> = {};
+        await Promise.all(
+          cities.map(async (cityName) => {
+            try {
+              const translated = await getCityTranslation(cityName, 'ar');
+              translations[cityName] = translated;
+            } catch (error) {
+              translations[cityName] = cityName;
+            }
+          })
+        );
+        setCityTranslations(translations);
+      } else {
+        setCityTranslations({});
+      }
+    };
+    fetchTranslations();
+  }, [cities, currentLocale]);
+
+  // Helper function to get translated city name
+  const translateCityName = React.useCallback((cityName: string): string => {
+    if (currentLocale === "ar" && cityTranslations[cityName]) {
+      return cityTranslations[cityName];
+    }
+    return cityName;
+  }, [currentLocale, cityTranslations]);
 
   const updateField = (field: string, value: any) => {
     // Validate social contacts for text fields
@@ -414,7 +492,13 @@ export default function EditProfilePage() {
                         <Select
                           options={countryOptions}
                           value={formData.location.country}
-                          onChange={(val) => updateNestedField("location", "country", val)}
+                          onChange={(val) => {
+                            updateNestedField("location", "country", val);
+                            // Clear city when country changes
+                            if (val !== formData.location.country) {
+                              updateNestedField("location", "city", "");
+                            }
+                          }}
                           placeholder={t("placeholders.choose")}
                           disabled={loadingCountries}
                         />
@@ -423,17 +507,22 @@ export default function EditProfilePage() {
                       {/* City Field - Dependent on Country */}
                       <FormField label={<Label>{t("fields.residence")}</Label>} required>
                         <Select
-                          options={cities.map((city) => ({ value: city, label: city }))}
+                          options={cities
+                            .map((city) => ({
+                              value: city,
+                              label: translateCityName(city)
+                            }))
+                            .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale))}
                           value={formData.location.city}
                           onChange={(val) => updateNestedField("location", "city", val)}
                           placeholder={
                             !formData.location.country
-                              ? tEdit("selectCountryFirst")
+                              ? tEdit("selectCountryFirst") || t("placeholders.choose")
                               : cities.length === 0
-                                ? tEdit("noCitiesAvailable")
+                                ? tEdit("noCitiesAvailable") || t("placeholders.choose")
                                 : t("placeholders.choose")
                           }
-                        // disabled={!formData.location.country || cities.length === 0}
+                          disabled={!formData.location.country || cities.length === 0 || loadingCountries}
                         />
                       </FormField>
 

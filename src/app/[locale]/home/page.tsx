@@ -21,24 +21,7 @@ import Label from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { TextField } from "@/components/ui/text-field";
 
-// ADD: i18n-iso-countries (same as Edit Profile)
-import countriesLib from "i18n-iso-countries";
-// import enCountries from "i18n-iso-countries/langs/en.json";
-// import arCountries from "i18n-iso-countries/langs/ar.json";
-
-if (typeof window !== "undefined") {
-  (async () => {
-    try {
-      const en = await import("i18n-iso-countries/langs/en.json");
-      const ar = await import("i18n-iso-countries/langs/ar.json");
-      countriesLib.registerLocale(en.default || en);
-      countriesLib.registerLocale(ar.default || ar);
-    } catch (err) {
-      // fallback: try to require on server (shouldn't run in client file) or warn
-      // console.warn("i18n-iso-countries locale load failed", err);
-    }
-  })();
-}
+import { getCountryOptions, getCountryName, getCityTranslation } from "@/lib/countries";
 
 type User = {
   id: string;
@@ -165,24 +148,146 @@ const MyFavorites = () => {
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  // Build localized country options (same as Edit Profile)
-  const countryOptions = React.useMemo(() => {
-    const names = countriesLib.getNames(currentLocale, { select: "official" });
+  // Countries and cities state
+  const [countriesData, setCountriesData] = useState<Array<{ iso2: string; iso3: string; country: string; cities: string[] }>>([]);
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const [loadingCountries, setLoadingCountries] = useState(false);
+  const [countryOptions, setCountryOptions] = useState<Array<{ value: string; label: string }>>([]);
+
+  // Fetch countries from REST Countries API
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setLoadingCountries(true);
+      try {
+        const options = await getCountryOptions(currentLocale as 'en' | 'ar');
+        setCountryOptions([
+          { value: "", label: t("all") },
+          ...options,
+        ]);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      } finally {
+        setLoadingCountries(false);
+      }
+    };
+    fetchCountries();
+  }, [currentLocale, t]);
+
+  // Fetch cities data from countriesnow.space API (REST Countries doesn't provide cities)
+  useEffect(() => {
+    const fetchCitiesData = async () => {
+      try {
+        const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+        const data = await response.json();
+        if (!data.error) {
+          setCountriesData(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching cities data:', error);
+      }
+    };
+    fetchCitiesData();
+  }, []);
+
+  // Update cities when country changes
+  useEffect(() => {
+    const fetchCitiesForCountry = async () => {
+      if (filters.country) {
+        try {
+          // Get country name from REST Countries API
+          const countryNameEn = await getCountryName(filters.country, 'en');
+          const countryNameAr = await getCountryName(filters.country, 'ar');
+
+          // Find matching country in cities API data (countriesnow.space)
+          const selectedCountry = countriesData.find(
+            countryData =>
+              countryData.country.toLowerCase() === countryNameEn?.toLowerCase() ||
+              countryData.country.toLowerCase() === countryNameAr?.toLowerCase() ||
+              countryData.iso2?.toLowerCase() === filters.country.toLowerCase()
+          );
+
+          if (selectedCountry) {
+            setAvailableCities(selectedCountry.cities || []);
+          } else {
+            setAvailableCities([]);
+          }
+        } catch (error) {
+          console.error('Error updating cities:', error);
+          setAvailableCities([]);
+        }
+      } else {
+        setAvailableCities([]);
+        // Clear city when country is cleared
+        if (filters.city) {
+          setFilters(prev => ({ ...prev, city: "" }));
+        }
+      }
+    };
+
+    fetchCitiesForCountry();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters.country, countriesData]);
+
+  // City translations state
+  const [cityTranslations, setCityTranslations] = React.useState<Record<string, string>>({});
+
+  // Fetch city translations when cities change
+  React.useEffect(() => {
+    const fetchTranslations = async () => {
+      if (currentLocale === "ar" && availableCities.length > 0) {
+        const translations: Record<string, string> = {};
+        await Promise.all(
+          availableCities.map(async (cityName) => {
+            try {
+              const translated = await getCityTranslation(cityName, 'ar');
+              translations[cityName] = translated;
+            } catch (error) {
+              translations[cityName] = cityName;
+            }
+          })
+        );
+        setCityTranslations(translations);
+      } else {
+        setCityTranslations({});
+      }
+    };
+    fetchTranslations();
+  }, [availableCities, currentLocale]);
+
+  // Helper function to get translated city name
+  const getTranslatedCityName = React.useCallback((cityName: string): string => {
+    if (currentLocale === "ar" && cityTranslations[cityName]) {
+      return cityTranslations[cityName];
+    }
+    return cityName;
+  }, [currentLocale, cityTranslations]);
+
+  // Generate city options based on selected country
+  const cityOptions = React.useMemo(() => {
+    const cities = availableCities.map(cityName => ({
+      value: cityName,
+      label: getTranslatedCityName(cityName)
+    }));
+
+    // Sort cities based on locale
+    cities.sort((a, b) => {
+      return String(a.label).localeCompare(String(b.label), currentLocale);
+    });
+
     return [
-        { value: "", label: t("all") },
-      ...Object.entries(names)
-        .map(([code, name]) => ({ value: code, label: name }))
-        .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale)),
+      { value: "", label: t("all") },
+      ...cities
     ];
-  }, [currentLocale]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [availableCities, getTranslatedCityName, currentLocale, t]);
 
   const updateFilter = (field: string, value: any) => {
     setFilters(prev => ({ ...prev, [field]: value }));
   };
 
-  // Handle country change (independent; city not cleared)
+  // Handle country change - clear city when country changes
   const handleCountryChange = (iso2: string) => {
     updateFilter("country", iso2);
+    updateFilter("city", ""); // Clear city when country changes
   };
 
   // Build query params aligned with Edit Profile values
@@ -193,7 +298,7 @@ const MyFavorites = () => {
     params.append('limit', pagination.limit.toString());
     params.append('page', pagination.page.toString());
 
-      params.append('gender', profile?.gender === "male" || profile?.gender === "ذكر" ? "female" : "male");
+    params.append('gender', profile?.gender === "male" || profile?.gender === "ذكر" ? "female" : "male");
 
 
     // Append other filters (skip empty/null)
@@ -387,40 +492,44 @@ const MyFavorites = () => {
                     </div>
                     <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
                       <Select
-                        options={[
-                          ...countryOptions
-                        ]}
+                        options={countryOptions}
                         value={filters.country}
-                        onChange={(val) => updateFilter("country", val)}
+                        onChange={(val) => handleCountryChange(val)}
                         placeholder={tRequest("placeholders.choose")}
+                        disabled={loadingCountries}
                       />
                     </FormField>
 
                     {/* City Select - dependent on country */}
                     <FormField label={<Label>{tRequest("fields.residence")}</Label>}>
                       <Select
-                        options={[
-                          { value: "", label: t("all") }, 
-                        ]}
+                        options={cityOptions}
                         value={filters.city}
                         onChange={(val) => updateFilter("city", val)}
-                        placeholder={tRequest("placeholders.choose")}
+                        placeholder={
+                          !filters.country
+                            ? tRequest("placeholders.chooseCountryFirst") || tRequest("placeholders.choose")
+                            : availableCities.length === 0
+                              ? tRequest("placeholders.noCitiesAvailable") || tRequest("placeholders.choose")
+                              : tRequest("placeholders.choose")
+                        }
+                        disabled={!filters.country || loadingCountries}
                       />
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
                       <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
-                            { value: "virgin", label: tEdit("virgin") },
-                            { value: "f_divorced", label: tEdit("f_divorced") },
-                            { value: "f_widowed", label: tEdit("f_widowed") },
-                          ] : [
-                            { value: "", label: t("all") },
-                            { value: "single", label: tEdit("single") },
-                            { value: "divorced", label: tEdit("divorced") },
-                            { value: "widowed", label: tEdit("widowed") },
-                            { value: "married", label: tEdit("married") },
-                          ]}
+                        options={profile?.gender === "female" ? [
+                          { value: "", label: t("all") },
+                          { value: "virgin", label: tEdit("virgin") },
+                          { value: "f_divorced", label: tEdit("f_divorced") },
+                          { value: "f_widowed", label: tEdit("f_widowed") },
+                        ] : [
+                          { value: "", label: t("all") },
+                          { value: "single", label: tEdit("single") },
+                          { value: "divorced", label: tEdit("divorced") },
+                          { value: "widowed", label: tEdit("widowed") },
+                          { value: "married", label: tEdit("married") },
+                        ]}
                         value={filters.maritalStatus}
                         onChange={(val) => updateFilter("maritalStatus", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -442,17 +551,17 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.job")}</Label>}>
                       <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
-                            { value: "f_unemployed", label: tEdit("f_unemployed") },
-                            { value: "f_employed", label: tEdit("f_employed") },
-                            { value: "self_employed", label: tEdit("selfEmployed") },
-                          ] : [
-                            { value: "", label: t("all") },
-                            { value: "unemployed", label: tEdit("unemployed") },
-                            { value: "employed", label: tEdit("employed") },
-                            { value: "self_employed", label: tEdit("selfEmployed") },
-                          ]}
+                        options={profile?.gender === "female" ? [
+                          { value: "", label: t("all") },
+                          { value: "f_unemployed", label: tEdit("f_unemployed") },
+                          { value: "f_employed", label: tEdit("f_employed") },
+                          { value: "self_employed", label: tEdit("selfEmployed") },
+                        ] : [
+                          { value: "", label: t("all") },
+                          { value: "unemployed", label: tEdit("unemployed") },
+                          { value: "employed", label: tEdit("employed") },
+                          { value: "self_employed", label: tEdit("selfEmployed") },
+                        ]}
                         value={filters.natureOfWork}
                         onChange={(val) => updateFilter("natureOfWork", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -496,18 +605,18 @@ const MyFavorites = () => {
                       </FormField>
                     </div>
                     <FormField label={<Label>{tRequest("fields.skin")}</Label>}>
-                        <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
-                            { value: "f_white", label: tEdit("f_white") },
-                            { value: "f_brown", label: tEdit("f_brown") },
-                            { value: "f_black", label: tEdit("f_dark") },
-                          ] : [
-                            { value: "", label: t("all") },
-                            { value: "white", label: tEdit("white") },
-                            { value: "brown", label: tEdit("brown") },
-                            { value: "black", label: tEdit("dark") },
-                          ]}
+                      <Select
+                        options={profile?.gender === "female" ? [
+                          { value: "", label: t("all") },
+                          { value: "f_white", label: tEdit("f_white") },
+                          { value: "f_brown", label: tEdit("f_brown") },
+                          { value: "f_black", label: tEdit("f_dark") },
+                        ] : [
+                          { value: "", label: t("all") },
+                          { value: "white", label: tEdit("white") },
+                          { value: "brown", label: tEdit("brown") },
+                          { value: "black", label: tEdit("dark") },
+                        ]}
                         value={filters.skinColor}
                         onChange={(val) => updateFilter("skinColor", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -515,18 +624,18 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.beauty")}</Label>}>
                       <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
-                            { value: "f_acceptable", label: tEdit("f_acceptable") },
-                            { value: "f_average", label: tEdit("f_average") },
-                            { value: "f_beautiful", label: tEdit("f_beautiful") },
-                            { value: "f_very_beautiful", label: tEdit("f_very_beautiful") }
-                          ] : [
-                            { value: "", label: t("all") },
-                            { value: "acceptable", label: tEdit("acceptable") },
-                            { value: "average", label: tEdit("average") },
-                            { value: "handsome", label: tEdit("handsome") }
-                          ]}
+                        options={profile?.gender === "female" ? [
+                          { value: "", label: t("all") },
+                          { value: "f_acceptable", label: tEdit("f_acceptable") },
+                          { value: "f_average", label: tEdit("f_average") },
+                          { value: "f_beautiful", label: tEdit("f_beautiful") },
+                          { value: "f_very_beautiful", label: tEdit("f_very_beautiful") }
+                        ] : [
+                          { value: "", label: t("all") },
+                          { value: "acceptable", label: tEdit("acceptable") },
+                          { value: "average", label: tEdit("average") },
+                          { value: "handsome", label: tEdit("handsome") }
+                        ]}
                         value={filters.beauty}
                         onChange={(val) => updateFilter("beauty", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -549,7 +658,7 @@ const MyFavorites = () => {
                         options={[
                           { value: "", label: t("all") },
                           { value: "true", label: tEdit("available") },
-                          { value: "false", label: tEdit("notAvailable")},
+                          { value: "false", label: tEdit("notAvailable") },
                         ]}
                         value={filters.houseAvailable?.toString() || ""}
                         onChange={(val) => updateFilter("houseAvailable", val === "" ? null : val === "true")}

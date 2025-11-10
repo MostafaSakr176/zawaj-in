@@ -5,22 +5,23 @@ import IdCard from "@/components/shared/IdCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Select from "@/components/ui/select";
 import { FormField } from "@/components/ui/form";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import api from "@/lib/axiosClient";
 import Cookies from "js-cookie";
+import { getCountryOptions, getCountryName } from "@/lib/countries";
 
 // Types for countries API
 type CountryData = {
-  iso2: string;
-  iso3: string;
-  country: string;
-  cities: string[];
+    iso2: string;
+    iso3: string;
+    country: string;
+    cities: string[];
 };
 
 type CountriesResponse = {
-  error: boolean;
-  msg: string;
-  data: CountryData[];
+    error: boolean;
+    msg: string;
+    data: CountryData[];
 };
 
 const marriageTypeOptions = [
@@ -38,11 +39,14 @@ const PAGE_SIZE = 9;
 
 const NewSubscribers = React.memo(() => {
     const t = useTranslations("filters");
+    const locale = useLocale();
+    const currentLocale = locale === "ar" ? "ar" : "en";
 
     // Countries and cities state
     const [countries, setCountries] = useState<CountryData[]>([]);
     const [availableCities, setAvailableCities] = useState<string[]>([]);
     const [loadingCountries, setLoadingCountries] = useState(false);
+    const [countryOptions, setCountryOptions] = useState<Array<{ value: string; label: string }>>([]);
 
     // Filters and pagination state
     const [gender, setGender] = useState<string | undefined>(undefined);
@@ -61,34 +65,50 @@ const NewSubscribers = React.memo(() => {
     });
     const [loading, setLoading] = useState(false);
 
-    // Fetch countries and cities on component mount
+    // Fetch countries from REST Countries API
     useEffect(() => {
         const fetchCountries = async () => {
             setLoadingCountries(true);
             try {
-                const response = await fetch('https://countriesnow.space/api/v0.1/countries');
-                const data: CountriesResponse = await response.json();
-                
-                if (!data.error) {
-                    setCountries(data.data);
-                }
+                const options = await getCountryOptions(currentLocale as 'en' | 'ar');
+                // Use English name as value (for API compatibility) but show localized label
+                setCountryOptions(options.map(opt => ({
+                    value: opt.nameEn, // Use English name for API
+                    label: opt.label   // Show localized name
+                })));
             } catch (error) {
                 console.error('Error fetching countries:', error);
             } finally {
                 setLoadingCountries(false);
             }
         };
-
         fetchCountries();
+    }, [currentLocale]);
+
+    // Fetch cities data from countriesnow.space API (REST Countries doesn't provide cities)
+    useEffect(() => {
+        const fetchCitiesData = async () => {
+            try {
+                const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+                const data: CountriesResponse = await response.json();
+                if (!data.error) {
+                    setCountries(data.data);
+                }
+            } catch (error) {
+                console.error('Error fetching cities data:', error);
+            }
+        };
+        fetchCitiesData();
     }, []);
 
     // Update cities when country changes
     useEffect(() => {
         if (country) {
+            // country is the English name from REST Countries
             const selectedCountry = countries.find(
                 countryData => countryData.country.toLowerCase() === country.toLowerCase()
             );
-            
+
             if (selectedCountry) {
                 setAvailableCities(selectedCountry.cities);
             } else {
@@ -102,14 +122,6 @@ const NewSubscribers = React.memo(() => {
             }
         }
     }, [country, countries, city]);
-
-    // Generate country options from API data
-    const countryOptions = useMemo(() => {
-        return countries.map(country => ({
-            value: country.country,
-            label: country.country
-        }));
-    }, [countries]);
 
     // Generate city options based on selected country
     const cityOptions = useMemo(() => {
@@ -270,41 +282,41 @@ const NewSubscribers = React.memo(() => {
 });
 
 function Pagination({
-	t,
-	page,
-	totalPages,
-	onPageChange,
+    t,
+    page,
+    totalPages,
+    onPageChange,
 }: {
-	t: (key: string, values?: Record<string, any>) => string;
-	page: number;
-	totalPages: number;
-	onPageChange: (page: number) => void;
+    t: (key: string, values?: Record<string, any>) => string;
+    page: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
 }) {
-	return (
-		<div className="flex items-center justify-between gap-4">
-			<div className="flex items-center gap-2">
-				<button
-					className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
-					onClick={() => onPageChange(Math.max(1, page - 1))}
-					disabled={page === 1}
-				>
-					{t("prev")}
-				</button>
-				<button
-					className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
-					onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-					disabled={page === totalPages}
-				>
-					{t("next")}
-				</button>
-			</div>
-			<div className="flex items-center gap-2">
-				<span className="text-[#8A97AB] text-sm">
-					{t("pageInfo", { page, totalPages })}
-				</span>
-			</div>
-		</div>
-	);
+    return (
+        <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
+                    onClick={() => onPageChange(Math.max(1, page - 1))}
+                    disabled={page === 1}
+                >
+                    {t("prev")}
+                </button>
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
+                    onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+                    disabled={page === totalPages}
+                >
+                    {t("next")}
+                </button>
+            </div>
+            <div className="flex items-center gap-2">
+                <span className="text-[#8A97AB] text-sm">
+                    {t("pageInfo", { page, totalPages })}
+                </span>
+            </div>
+        </div>
+    );
 }
 
 export default NewSubscribers;
