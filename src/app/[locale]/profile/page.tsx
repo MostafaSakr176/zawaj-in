@@ -15,7 +15,7 @@ type FieldProps = { label: string; value: string | number | null | undefined };
 
 
 const Profile = () => {
-  const { profile } = useAuth();
+  const { profile, refreshProfile } = useAuth();
   const tProfile = useTranslations("profile");
   const tPartner = useTranslations("partnerProfile");
   const [totalVisits, setTotalVisits] = useState<number>(0);
@@ -39,6 +39,7 @@ const Profile = () => {
   const handleOnlineToggle = (checked: boolean) => {
     setIsOnline(checked);
     api.post("/users/status", { isOnline: checked }).catch(() => { });
+    // refreshProfile();
   };
 
   const Field = ({ label, value }: FieldProps) => (
