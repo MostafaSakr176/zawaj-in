@@ -683,7 +683,7 @@ export default function EditProfilePage() {
                         <Textarea
                           rows={5}
                           value={formData.bio}
-                          onChange={(val) => updateField("bio", val)}
+                          onChange={(e) => updateField("bio", e.target.value)}
                           placeholder={t("placeholders.write")}
                           className={error && error.includes("socialContactError") ? "border-red-500 focus:border-red-500" : ""}
                         />

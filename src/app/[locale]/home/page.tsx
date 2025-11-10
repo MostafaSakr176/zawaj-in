@@ -192,7 +192,9 @@ const MyFavorites = () => {
     // Required params
     params.append('limit', pagination.limit.toString());
     params.append('page', pagination.page.toString());
-    params.append('gender', profile?.gender === "male" ? "female" : "male");
+
+      params.append('gender', profile?.gender === "male" || profile?.gender === "ذكر" ? "female" : "male");
+
 
     // Append other filters (skip empty/null)
     const entries = { ...filters }; // already handled
@@ -335,7 +337,7 @@ const MyFavorites = () => {
                   height={80}
                   className="rounded-full w-12 h-12 md:w-20 md:h-20 object-cover"
                 />
-                {true && (
+                {profile?.isOnline && (
                   <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 rounded-full bg-[#2DC653] ring-3 ring-white" />
                 )}
               </div>

@@ -101,9 +101,9 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
   if (m.messageType === "audio" && m.fileUrl) {
     return (
       <div className={`flex items-end gap-3 ${fromMe ? 'justify-end' : 'justify-start'}`}>
-        {!fromMe && <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />}
+        {!fromMe && <Image src={profile?.gender === "male" || profile?.gender === "ذكر" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />}
         <AudioPlayer audioUrl={m.fileUrl} duration={m.audioDuration || undefined} fromMe={fromMe} />
-        {fromMe && <Image src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />}
+        {fromMe && <Image src={profile?.gender === "female" || profile?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />}
       </div>
     );
   }
@@ -120,7 +120,7 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
     </div>
   ) : (
     <div className="flex items-end justify-start gap-2">
-      <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />
+      <Image src={profile?.gender === "male" || profile?.gender === "ذكر" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />
       <div className={`${common} bg-[#EDF3FF] text-[#2D1F55] rounded-br-none`}>
         {m.content}
       </div>
@@ -169,7 +169,7 @@ function ChatListItem({
     >
       <div className="relative">
         <Image
-          src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+          src={profile?.gender === "male" || profile?.gender === "ذكر" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
           alt={otherParticipant?.fullName || "User"}
           width={40}
           height={40}
@@ -671,7 +671,7 @@ const Chats = () => {
                       <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0F2FA]">
                         <div className="flex items-center gap-3">
                           <div className="relative">
-                            <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                            <Image src={profile?.gender === "male" || profile?.gender === "ذكر" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
                             {isOtherUserOnline && !isCurrentUserBlocked && (
                               <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                             )}
@@ -823,7 +823,7 @@ const Chats = () => {
                               <ArrowLeft className="text-[#2D1F55] rtl:hidden" />
                             </button>
                             <div className="relative">
-                              <Image src={profile?.gender === "male" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
+                              <Image src={profile?.gender === "male" || profile?.gender === "ذكر" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={44} height={44} className="rounded-full ring-4 ring-white" />
                               {isOtherUserOnline && !isCurrentUserBlocked && (
                                 <span className="absolute -bottom-0.5 -left-0.5 size-3 rounded-full bg-[#28C76F] ring-2 ring-white" />
                               )}

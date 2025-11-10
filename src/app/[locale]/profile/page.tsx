@@ -20,7 +20,7 @@ const Profile = () => {
   const tPartner = useTranslations("partnerProfile");
   const [totalVisits, setTotalVisits] = useState<number>(0);
   const [showVisitores, setShowVisitores] = useState<boolean>(false);
-  const [isOnline, setIsOnline] = useState<boolean>(!!profile?.isActive);
+  const [isOnline, setIsOnline] = useState<boolean>(!!profile?.isOnline);
 
   useEffect(() => {
     api.get("/users/profile/visitors")
@@ -33,8 +33,8 @@ const Profile = () => {
 
   // Sync isOnline state with profile when profile changes
   useEffect(() => {
-    setIsOnline(!!profile?.isActive);
-  }, [profile?.isActive]);
+    setIsOnline(!!profile?.isOnline);
+  }, [profile?.isOnline]);
 
   const handleOnlineToggle = (checked: boolean) => {
     setIsOnline(checked);
