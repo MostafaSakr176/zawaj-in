@@ -4,12 +4,16 @@ import { useRouter } from "@/i18n/navigation";
 import { useEffect } from "react";
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, loading,profile } = useAuth();
+  const { isAuthenticated, loading, profile } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.replace("/auth/sign-in");
+    }
+    if (profile?.termsAccepted === false) {
+      // If user is authenticated and has a profile, redirect to terms of use
+      router.replace("/terms-of-use");
     }
   }, [isAuthenticated, loading, router, profile]);
 

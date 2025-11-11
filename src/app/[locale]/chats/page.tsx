@@ -116,7 +116,7 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
         {m.content}
         {m.status === "sent" ? (<Check color="#8A97AB" size={16} />) : m.status === "delivered" ? (<CheckCheck color="#8A97AB" size={16} />) : m.status === "read" ? (<CheckCheck color="#3B0C46" size={16} />) : null}
       </div>
-      <Image src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />
+      <Image src={profile?.gender === "female" || profile?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />
     </div>
   ) : (
     <div className="flex items-end justify-start gap-2">

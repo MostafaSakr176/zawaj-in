@@ -71,13 +71,13 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           <button
             type="button"
             className={cn(
-              "appearance-none bg-white rtl:pl-6 ltr:pr-6 rtl:md:pl-8 ltr:md:pr-8 h-11 w-full rounded-[8px] border border-[#D0D5DD] px-3 md:px-4 text-[1rem] shadow-xs outline-none flex items-center justify-between transition-[color,box-shadow]",
+              "appearance-none bg-white h-11 w-full rounded-[8px] border border-[#D0D5DD] px-3 text-[1rem] shadow-xs outline-none flex items-center justify-between transition-[color,box-shadow]",
               open && "ring-2 ring-[#AFAFAF]"
             )}
             onClick={() => setOpen((v) => !v)}
             disabled={disabled}
           >
-            <span className={selected ? "" : "text-[#AFAFAF]"}>
+            <span className={selected ? "" : "text-[#AFAFAF] text-nowrap"}>
               {selected ? selected.label : placeholder || "Select..."}
             </span>
             <ChevronDown size={18} className="text-[#AFAFAF]" />

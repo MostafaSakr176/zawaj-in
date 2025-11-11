@@ -5,23 +5,27 @@ import IdCard from "@/components/shared/IdCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Select from "@/components/ui/select";
 import { FormField } from "@/components/ui/form";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import api from "@/lib/axiosClient";
 import Cookies from "js-cookie";
 
-// Types for countries API
-type CountryData = {
-  iso2: string;
-  iso3: string;
-  country: string;
-  cities: string[];
-};
+// ADD: i18n-iso-countries
+import countriesLib from "i18n-iso-countries";
 
-type CountriesResponse = {
-  error: boolean;
-  msg: string;
-  data: CountryData[];
-};
+if (typeof window !== "undefined") {
+  (async () => {
+    try {
+      const en = await import("i18n-iso-countries/langs/en.json");
+      const ar = await import("i18n-iso-countries/langs/ar.json");
+      countriesLib.registerLocale(en.default || en);
+      countriesLib.registerLocale(ar.default || ar);
+    } catch (err) {
+      // console.warn("i18n-iso-countries locale load failed", err);
+    }
+  })();
+}
+
+// REMOVE: CountryData and CountriesResponse types (no longer needed)
 
 const marriageTypeOptions = [
     { value: "normalMarriage", label: "زواج عادي" },
@@ -38,16 +42,18 @@ const PAGE_SIZE = 9;
 
 const NewSubscribers = React.memo(() => {
     const t = useTranslations("filters");
+    const locale = useLocale();
+    const currentLocale = locale === "ar" ? "ar" : "en";
 
-    // Countries and cities state
-    const [countries, setCountries] = useState<CountryData[]>([]);
-    const [availableCities, setAvailableCities] = useState<string[]>([]);
-    const [loadingCountries, setLoadingCountries] = useState(false);
+    // REMOVE: countries and cities state from API
+    // const [countries, setCountries] = useState<CountryData[]>([]);
+    // const [availableCities, setAvailableCities] = useState<string[]>([]);
+    // const [loadingCountries, setLoadingCountries] = useState(false);
 
     // Filters and pagination state
     const [gender, setGender] = useState<string | undefined>(undefined);
-    const [country, setCountry] = useState<string | undefined>(undefined);
-    const [city, setCity] = useState<string | undefined>(undefined);
+    const [nationality, setNationality] = useState<string | undefined>(undefined); // ISO2
+    const [placeOfResidence, setPlaceOfResidence] = useState<string | undefined>(undefined); // free text
     const [marriageType, setMarriageType] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
 
@@ -61,63 +67,19 @@ const NewSubscribers = React.memo(() => {
     });
     const [loading, setLoading] = useState(false);
 
-    // Fetch countries and cities on component mount
-    useEffect(() => {
-        const fetchCountries = async () => {
-            setLoadingCountries(true);
-            try {
-                const response = await fetch('https://countriesnow.space/api/v0.1/countries');
-                const data: CountriesResponse = await response.json();
-                
-                if (!data.error) {
-                    setCountries(data.data);
-                }
-            } catch (error) {
-                console.error('Error fetching countries:', error);
-            } finally {
-                setLoadingCountries(false);
-            }
-        };
+    // REMOVE: Fetch countries from API
+    // useEffect(() => { fetchCountries... }, []);
 
-        fetchCountries();
-    }, []);
+    // REMOVE: Update cities when country changes
+    // useEffect(() => { ... }, [country, countries, city]);
 
-    // Update cities when country changes
-    useEffect(() => {
-        if (country) {
-            const selectedCountry = countries.find(
-                countryData => countryData.country.toLowerCase() === country.toLowerCase()
-            );
-            
-            if (selectedCountry) {
-                setAvailableCities(selectedCountry.cities);
-            } else {
-                setAvailableCities([]);
-            }
-        } else {
-            setAvailableCities([]);
-            // Clear city when country is cleared
-            if (city) {
-                setCity(undefined);
-            }
-        }
-    }, [country, countries, city]);
-
-    // Generate country options from API data
+    // Build localized country options (same as page.tsx)
     const countryOptions = useMemo(() => {
-        return countries.map(country => ({
-            value: country.country,
-            label: country.country
-        }));
-    }, [countries]);
-
-    // Generate city options based on selected country
-    const cityOptions = useMemo(() => {
-        return availableCities.map(cityName => ({
-            value: cityName,
-            label: cityName
-        }));
-    }, [availableCities]);
+        const names = countriesLib.getNames(currentLocale, { select: "official" });
+        return Object.entries(names)
+            .map(([code, name]) => ({ value: code, label: name }))
+            .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale));
+    }, [currentLocale]);
 
     // Fetch users from API
     useEffect(() => {
@@ -127,8 +89,17 @@ const NewSubscribers = React.memo(() => {
             limit: PAGE_SIZE,
         };
         if (gender && gender !== "all") params.gender = gender;
-        if (country) params.country = country;
-        if (city) params.city = city;
+        
+        // Send nationality as ISO2 code (or convert to English name if backend expects it)
+        if (nationality) {
+            // Option 1: Send ISO2 directly
+            params.nationality = nationality;
+            // Option 2: Convert to English name if backend expects country name
+            // const countryNameEn = countriesLib.getName(nationality, "en", { select: "official" }) || nationality;
+            // params.country = countryNameEn;
+        }
+        
+        if (placeOfResidence) params.city = placeOfResidence; // Send as city param
         if (marriageType) params.marriageType = marriageType;
 
         const token = Cookies.get("access_token");
@@ -147,7 +118,7 @@ const NewSubscribers = React.memo(() => {
                 setPagination({ total: 0, page: 1, limit: PAGE_SIZE, totalPages: 1 });
             })
             .finally(() => setLoading(false));
-    }, [gender, country, city, marriageType, page]);
+    }, [gender, nationality, placeOfResidence, marriageType, page]);
 
     // Handle tab change
     const handleTabChange = (tab: string) => {
@@ -156,14 +127,13 @@ const NewSubscribers = React.memo(() => {
     };
 
     // Handle filter change
-    const handleCountryChange = (val: string) => {
-        setCountry(val);
-        setCity(undefined); // Clear city when country changes
+    const handleNationalityChange = (val: string) => {
+        setNationality(val);
         setPage(1);
     };
 
-    const handleCityChange = (val: string) => {
-        setCity(val);
+    const handlePlaceOfResidenceChange = (val: string) => {
+        setPlaceOfResidence(val);
         setPage(1);
     };
 
@@ -194,25 +164,28 @@ const NewSubscribers = React.memo(() => {
                             ))}
                         </div>
                         <div className="flex items-center gap-2">
+                            {/* Nationality Select (ISO2 codes, localized names) */}
                             <FormField required>
                                 <Select
                                     className="bg-white/40"
                                     options={countryOptions}
-                                    placeholder={loadingCountries ? t("loading") : t("country")}
-                                    value={country}
-                                    onChange={(val) => handleCountryChange(val)}
-                                    disabled={loadingCountries}
+                                    placeholder={t("nationality")}
+                                    value={nationality}
+                                    onChange={(val) => handleNationalityChange(val)}
                                 />
                             </FormField>
+                            
+                            {/* Place of Residence Select (also uses country options, independent) */}
                             <FormField required>
                                 <Select
                                     className="bg-white/40"
-                                    options={cityOptions}
-                                    placeholder={t("city")}
-                                    value={city}
-                                    onChange={(val) => handleCityChange(val)}
+                                    options={countryOptions}
+                                    placeholder={t("placeOfResidence")}
+                                    value={placeOfResidence}
+                                    onChange={(val) => handlePlaceOfResidenceChange(val)}
                                 />
                             </FormField>
+                            
                             <FormField required>
                                 <Select
                                     className="bg-white/40"
@@ -270,41 +243,41 @@ const NewSubscribers = React.memo(() => {
 });
 
 function Pagination({
-	t,
-	page,
-	totalPages,
-	onPageChange,
+    t,
+    page,
+    totalPages,
+    onPageChange,
 }: {
-	t: (key: string, values?: Record<string, any>) => string;
-	page: number;
-	totalPages: number;
-	onPageChange: (page: number) => void;
+    t: (key: string, values?: Record<string, any>) => string;
+    page: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
 }) {
-	return (
-		<div className="flex items-center justify-between gap-4">
-			<div className="flex items-center gap-2">
-				<button
-					className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
-					onClick={() => onPageChange(Math.max(1, page - 1))}
-					disabled={page === 1}
-				>
-					{t("prev")}
-				</button>
-				<button
-					className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
-					onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-					disabled={page === totalPages}
-				>
-					{t("next")}
-				</button>
-			</div>
-			<div className="flex items-center gap-2">
-				<span className="text-[#8A97AB] text-sm">
-					{t("pageInfo", { page, totalPages })}
-				</span>
-			</div>
-		</div>
-	);
+    return (
+        <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
+                    onClick={() => onPageChange(Math.max(1, page - 1))}
+                    disabled={page === 1}
+                >
+                    {t("prev")}
+                </button>
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-[6px] text-sm border border-[#D0D5DD] bg-white/70 text-[#344054] hover:bg-white transition"
+                    onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+                    disabled={page === totalPages}
+                >
+                    {t("next")}
+                </button>
+            </div>
+            <div className="flex items-center gap-2">
+                <span className="text-[#8A97AB] text-sm">
+                    {t("pageInfo", { page, totalPages })}
+                </span>
+            </div>
+        </div>
+    );
 }
 
 export default NewSubscribers;

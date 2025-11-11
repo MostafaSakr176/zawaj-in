@@ -268,7 +268,7 @@ const PartnerProfile = () => {
                     <div className="flex items-center gap-3">
                         <div className="relative">
                             <Image
-                                src={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+                                src={user.gender === "female" || user.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                                 alt="avatar"
                                 width={72}
                                 height={72}
@@ -397,7 +397,7 @@ const PartnerProfile = () => {
                         <div>
                             <Field label={tPartner("marriageType")} value={user?.marriageType} />
                         </div>
-                        {user?.gender === "fenale" &&
+                        {user?.gender === "female" || user?.gender === "أنثى" &&
                             <>
                                 <div>
                                     <Field label={tPartner("acceptPolygamy")} value={user.acceptPolygamy ? tPartner("yes") : tPartner("no")} />

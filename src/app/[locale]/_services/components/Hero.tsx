@@ -114,7 +114,7 @@ const Hero = React.memo(() => {
                       <span className="text-md md:text-2xl font-semibold font-sans text-[#343B46]">
                         {t("successRate")}
                       </span>
-                      <p className="text-xs md:text-sm text-gray-600 font-medium">
+                      <p className="text-xs text-gray-600 font-medium">
                         {t("successRateLabel")}
                       </p>
                     </div>

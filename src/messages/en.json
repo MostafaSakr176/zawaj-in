@@ -317,6 +317,8 @@
         "males": "Males",
         "females": "Females",
         "country": "Country",
+        "nationality":"Nationality",
+        "placeOfResidence":"Place of Residence",
         "city": "Cities",
         "job": "Job",
         "marriageType": "Marriage type",
@@ -378,7 +380,12 @@
         "email": "Email",
         "message": "Message",
         "send": "Send Message",
-        "emailInvalid": "Invalid email format"
+        "emailInvalid": "Invalid email format",
+        "nameRequired": "Name is required",
+        "messageRequired": "Message is required",
+        "sendError": "Failed to send message. Please try again.",
+        "sendSuccess": "Message sent successfully! We'll get back to you soon.",
+        "sending": "Sending..."
     },
     "favorites": {
         "tabFavorites": "Favorites",
@@ -485,8 +492,7 @@
         "basicInfo": "Basic Information",
         "personalDetails": "Personal Details",
         "about": "Additional information about you or your partner",
-    "hijab_style":"Al Hijab"
-
+        "hijab_style": "Al Hijab"
     },
     "profile": {
         "online": "Online",

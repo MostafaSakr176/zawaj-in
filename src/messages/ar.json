@@ -298,6 +298,8 @@
     "males": "الذكور",
     "females": "الاناث",
     "country": "الدولة",
+    "nationality":"الجنسية",
+    "placeOfResidence":"محل الإقامة",
     "city": "المدن",
     "job": "المهن",
     "marriageType": "نوع الزواج",
@@ -359,7 +361,12 @@
     "email": "البريد الإلكتروني",
     "message": "الرسالة",
     "send": "ارسال رسالة",
-    "emailInvalid": "صيغة البريد غير صحيحة"
+    "emailInvalid": "صيغة البريد غير صحيحة",
+    "nameRequired": "الاسم مطلوب",
+    "messageRequired": "الرسالة مطلوبة",
+    "sendError": "فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى.",
+    "sendSuccess": "تم إرسال الرسالة بنجاح! سنتواصل معك قريبًا.",
+    "sending": "جاري الإرسال..."
   },
   "favorites": {
     "tabFavorites": "التفضيلات",

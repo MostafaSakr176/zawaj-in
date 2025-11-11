@@ -14,12 +14,13 @@ export function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: "Zawaj-In",
-  description: "Zawaj-In is a modern matchmaking platform for serious relationships.",
+  title: "ZwajIn",
+  description: "ZwajIn is a modern matchmaking platform for serious relationships.",
   keywords: [
     "marriage",
     "matchmaking",
     "zawaj",
+    "zwaj",
     "halal dating",
     "serious relationships",
     "Muslim marriage",

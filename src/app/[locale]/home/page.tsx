@@ -169,7 +169,6 @@ const MyFavorites = () => {
   const countryOptions = React.useMemo(() => {
     const names = countriesLib.getNames(currentLocale, { select: "official" });
     return [
-        { value: "", label: t("all") },
       ...Object.entries(names)
         .map(([code, name]) => ({ value: code, label: name }))
         .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale)),
@@ -331,7 +330,7 @@ const MyFavorites = () => {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <Image
-                  src={profile?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+                  src={profile?.gender === "female" || profile?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                   alt={"avatar"}
                   width={80}
                   height={80}
@@ -399,9 +398,7 @@ const MyFavorites = () => {
                     {/* City Select - dependent on country */}
                     <FormField label={<Label>{tRequest("fields.residence")}</Label>}>
                       <Select
-                        options={[
-                          { value: "", label: t("all") }, 
-                        ]}
+                        options={[]}
                         value={filters.city}
                         onChange={(val) => updateFilter("city", val)}
                         placeholder={tRequest("placeholders.choose")}
@@ -409,13 +406,11 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.marital")}</Label>}>
                       <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
+                          options={profile?.gender === "male" || profile?.gender === "ذكر" ? [
                             { value: "virgin", label: tEdit("virgin") },
                             { value: "f_divorced", label: tEdit("f_divorced") },
                             { value: "f_widowed", label: tEdit("f_widowed") },
                           ] : [
-                            { value: "", label: t("all") },
                             { value: "single", label: tEdit("single") },
                             { value: "divorced", label: tEdit("divorced") },
                             { value: "widowed", label: tEdit("widowed") },
@@ -429,7 +424,6 @@ const MyFavorites = () => {
                     <FormField label={<Label>{tRequest("fields.education")}</Label>}>
                       <Select
                         options={[
-                          { value: "", label: t("all") },
                           { value: "secondary", label: tEdit("secondary") },
                           { value: "diploma", label: tEdit("diploma") },
                           { value: "university", label: tEdit("university") },
@@ -442,13 +436,13 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.job")}</Label>}>
                       <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
+                          options={profile?.gender === "male" || profile?.gender === "ذكر" ? [
+                            
                             { value: "f_unemployed", label: tEdit("f_unemployed") },
                             { value: "f_employed", label: tEdit("f_employed") },
                             { value: "self_employed", label: tEdit("selfEmployed") },
                           ] : [
-                            { value: "", label: t("all") },
+                            
                             { value: "unemployed", label: tEdit("unemployed") },
                             { value: "employed", label: tEdit("employed") },
                             { value: "self_employed", label: tEdit("selfEmployed") },
@@ -497,13 +491,13 @@ const MyFavorites = () => {
                     </div>
                     <FormField label={<Label>{tRequest("fields.skin")}</Label>}>
                         <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
+                          options={profile?.gender === "male" || profile?.gender === "ذكر" ? [
+                            
                             { value: "f_white", label: tEdit("f_white") },
                             { value: "f_brown", label: tEdit("f_brown") },
                             { value: "f_black", label: tEdit("f_dark") },
                           ] : [
-                            { value: "", label: t("all") },
+                            
                             { value: "white", label: tEdit("white") },
                             { value: "brown", label: tEdit("brown") },
                             { value: "black", label: tEdit("dark") },
@@ -515,14 +509,13 @@ const MyFavorites = () => {
                     </FormField>
                     <FormField label={<Label>{tRequest("fields.beauty")}</Label>}>
                       <Select
-                          options={profile?.gender === "female" ? [
-                            { value: "", label: t("all") },
+                          options={profile?.gender === "male" || profile?.gender === "ذكر" ? [
                             { value: "f_acceptable", label: tEdit("f_acceptable") },
                             { value: "f_average", label: tEdit("f_average") },
                             { value: "f_beautiful", label: tEdit("f_beautiful") },
                             { value: "f_very_beautiful", label: tEdit("f_very_beautiful") }
                           ] : [
-                            { value: "", label: t("all") },
+                            
                             { value: "acceptable", label: tEdit("acceptable") },
                             { value: "average", label: tEdit("average") },
                             { value: "handsome", label: tEdit("handsome") }
@@ -535,7 +528,6 @@ const MyFavorites = () => {
                     <FormField label={<Label>{tRequest("fields.marriageType")}</Label>}>
                       <Select
                         options={[
-                          { value: "", label: t("all") },
                           { value: "traditional", label: tEdit("traditional") },
                           { value: "civil", label: tEdit("civil") }
                         ]}
@@ -547,7 +539,6 @@ const MyFavorites = () => {
                     <FormField label={<Label>{tRequest("fields.home")}</Label>}>
                       <Select
                         options={[
-                          { value: "", label: t("all") },
                           { value: "true", label: tEdit("available") },
                           { value: "false", label: tEdit("notAvailable")},
                         ]}

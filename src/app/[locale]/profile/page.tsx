@@ -39,7 +39,7 @@ const Profile = () => {
   const handleOnlineToggle = (checked: boolean) => {
     setIsOnline(checked);
     api.post("/users/status", { isOnline: checked }).catch(() => { });
-    // refreshProfile();
+    refreshProfile();
   };
 
   const Field = ({ label, value }: FieldProps) => (
@@ -85,7 +85,7 @@ const Profile = () => {
                 {showVisitores && <> <ArrowRight size={30} onClick={() => setShowVisitores(false)} className='ltr:hidden' /> <ArrowLeft size={30} onClick={() => setShowVisitores(false)} className='rtl:hidden' />  </>}
                 <div className="relative">
                   <Image
-                    src={profile.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+                    src={profile.gender === "female" || profile.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                     alt="avatar"
                     width={72}
                     height={72}
@@ -236,7 +236,7 @@ const Profile = () => {
                   <div>
                     <Field label={tPartner("marriageType")} value={profile.marriageType} />
                   </div>
-                  {profile?.gender === "fenale" &&
+                  {profile?.gender === "female" || profile?.gender === "أنثى" &&
                     <>
                       <div>
                         <Field label={tPartner("acceptPolygamy")} value={profile.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
