@@ -77,7 +77,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             onClick={() => setOpen((v) => !v)}
             disabled={disabled}
           >
-            <span className={selected ? "" : "text-[#AFAFAF]"}>
+            <span className={selected ? "" : "text-[#AFAFAF] text-xs md:text-sm"}>
               {selected ? selected.label : placeholder || "Select..."}
             </span>
             <ChevronDown size={18} className="text-[#AFAFAF]" />
