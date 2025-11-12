@@ -190,7 +190,7 @@ const PlatformStatistics = React.memo(function PlatformStatistics() {
         <div
           className="w-fit border border-white shadow-md rounded-3xl lg:rounded-4xl px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 bg-[linear-gradient(229.14deg,#F2EFFF_-7.04%,#FFF1FE_121.07%)]"
         >
-          <span className="text-lg md:text-xl text-black font-semibold">
+          <span className="text-sm md:text-xl text-black font-semibold">
             {t("title")}
           </span>
           <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
