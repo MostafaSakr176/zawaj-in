@@ -130,6 +130,15 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       addOrUpdateUser(data.userId, false);
     });
 
+    // Handle initial online users list (if server sends it)
+    newSocket.on('online_users_list', (data: { users: Array<{ userId: string; isOnline: boolean }> }) => {
+      if (Array.isArray(data.users)) {
+        data.users.forEach((user) => {
+          addOrUpdateUser(user.userId, user.isOnline);
+        });
+      }
+    });
+
     // Notification Events
     newSocket.on('notification_received', (notification: Notification) => {
       addNotification(notification);

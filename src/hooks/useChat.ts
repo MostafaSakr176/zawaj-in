@@ -73,23 +73,27 @@ export function useConversations() {
 
 
 export function useChat(conversationId: string | null) {
-  const { socket, isConnected } = useSocket();
+  const { socket, isConnected, isUserOnline } = useSocket();
   const { profile } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isTyping, setIsTyping] = useState(false);
-  const [isOtherUserOnline, setIsOtherUserOnline] = useState(false);
+  const [otherUserId, setOtherUserId] = useState<string | null>(null);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { refreshConversations } = useConversations();
+
+  // Get real-time online status from SocketContext
+  const isOtherUserOnline = otherUserId ? isUserOnline(otherUserId) : false;
+
   // Load initial messages and conversation details
   useEffect(() => {
     if (!conversationId) {
       setMessages([]);
       setLoading(false);
-      setIsOtherUserOnline(false);
+      setOtherUserId(null);
       return;
     }
 
@@ -104,17 +108,10 @@ export function useChat(conversationId: string | null) {
 
         // Get conversation details to determine other participant
         const conversation = await chatService.getConversationById(conversationId);
-        const otherUserId = conversation.participant1Id === profile?.id
+        const otherId = conversation.participant1Id === profile?.id
           ? conversation.participant2Id
           : conversation.participant1Id;
-
-        // Get initial presence status of the other user
-        try {
-          const presence = await chatService.getUserPresence(otherUserId);
-          setIsOtherUserOnline(presence.isOnline);
-        } catch (err) {
-          setIsOtherUserOnline(false);
-        }
+        setOtherUserId(otherId);
 
       } catch (err: any) {
         setError(err.response?.data?.message || "Failed to load messages");
@@ -209,17 +206,25 @@ export function useChat(conversationId: string | null) {
       }
     };
 
+    const handleUserStatusChanged = (data: { userId: string; isOnline: boolean }) => {
+      // Only update if this is the other participant in the current conversation
+      if (data.userId === otherUserId && data.userId !== profile?.id) {
+        // Status is already updated in SocketContext, no need to set state here
+        // The isOtherUserOnline will automatically update via isUserOnline hook
+      }
+    };
+
     const handleUserOnline = (data: { userId: string }) => {
-      // Check if this user is in the current conversation
-      if (data.userId !== profile?.id) {
-        setIsOtherUserOnline(true);
+      // Only update if this is the other participant in the current conversation
+      if (data.userId === otherUserId && data.userId !== profile?.id) {
+        // Status is already updated in SocketContext
       }
     };
 
     const handleUserOffline = (data: { userId: string }) => {
-      // Check if this user is in the current conversation
-      if (data.userId !== profile?.id) {
-        setIsOtherUserOnline(false);
+      // Only update if this is the other participant in the current conversation
+      if (data.userId === otherUserId && data.userId !== profile?.id) {
+        // Status is already updated in SocketContext
       }
     };
 
@@ -236,6 +241,7 @@ export function useChat(conversationId: string | null) {
     socket.on("message_delivered", handleMessageDelivered);
     socket.on("message_read", handleMessageRead);
     socket.on("user_typing", handleUserTyping);
+    socket.on("user_status_changed", handleUserStatusChanged);
     socket.on("user_online", handleUserOnline);
     socket.on("user_offline", handleUserOffline);
     socket.on("newMessage", handleNewMessage);
@@ -245,11 +251,12 @@ export function useChat(conversationId: string | null) {
       socket.off("message_delivered", handleMessageDelivered);
       socket.off("message_read", handleMessageRead);
       socket.off("user_typing", handleUserTyping);
+      socket.off("user_status_changed", handleUserStatusChanged);
       socket.off("user_online", handleUserOnline);
       socket.off("user_offline", handleUserOffline);
       socket.off("newMessage", handleNewMessage);
     };
-  }, [socket, conversationId, profile?.id, refreshConversations]);
+  }, [socket, conversationId, profile?.id, otherUserId, refreshConversations]);
 
   // Send message via socket
   const sendMessage = useCallback(
