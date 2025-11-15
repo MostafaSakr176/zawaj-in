@@ -10,6 +10,8 @@ import { chatService } from '@/services/chatService';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-hot-toast';
+import { useChat } from '@/hooks/useChat';
+import { useSocket } from '@/context/SocketContext';
 
 type FieldProps = { label: string; value: string | number | null | undefined };
 
@@ -123,7 +125,8 @@ type UserDetails = {
 };
 
 const PartnerProfile = () => {
-    const { profile, isAuthenticated } = useAuth()
+    const { profile, isAuthenticated } = useAuth();
+    const { isUserOnline } = useSocket();
     const params = useParams();
     const router = useRouter();
     const userId = params?.id as string;
@@ -133,6 +136,10 @@ const PartnerProfile = () => {
     const [likeLoading, setLikeLoading] = useState(false);
     const [chatLoading, setChatLoading] = useState(false);
     const tPartner = useTranslations("partnerProfile");
+    const tChats = useTranslations("chats");
+
+    // Get real-time online status for this user
+    const isOnline = userId ? isUserOnline(userId) : false;
 
     const Field = ({ label, value }: FieldProps) => (
         <div className="flex flex-col gap-1 px-3">
@@ -226,7 +233,6 @@ const PartnerProfile = () => {
 
     if (loading) {
         return (
-
             <div className="w-screen h-screen bg-white text-center fixed top-0 left-0 z-[999999] flex items-center justify-center">
                 <div className='w-full h-full flex items-center justify-center'
                     style={{
@@ -254,10 +260,7 @@ const PartnerProfile = () => {
 
     return (
 
-        <div className='relative pt-24 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'
-            style={{
-                // background: 'linear-gradient(224.16deg, #E0DAFF -2.22%, #FECDFB 112.2%)',
-            }}>
+        <div className='relative pt-24 md:pt-36 pb-6 bg-gradient-to-b from-[#E0DAFF] to-[#fff] space-y-4'>
             <Image src="/photos/terms-bg.webp" alt='Terms Background' width={100} height={100} className='absolute w-full inset-x-0 top-0 z-1' />
 
             <div className='max-w-7xl mx-auto px-4 relative z-2 rounded-3xl py-6 shadow-lg space-y-6 bg-white border border-[#301B6929]'>
@@ -274,8 +277,8 @@ const PartnerProfile = () => {
                                 height={72}
                                 className="w-12 h-12 md:w-[72px] md:h-[72px] rounded-full ring-4 ring-white shadow"
                             />
-                            {user.isOnline && (
-                                <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 md:w-4 md:h-4 rounded-full bg-[#28C76F] ring-2 ring-white" />
+                            {isOnline && (
+                                <span className="absolute top-0 left-0 md:top-1 md:left-1 w-3 h-3 md:w-4 md:h-4 rounded-full bg-[#28C76F] ring-2 ring-white animate-pulse" />
                             )}
                         </div>
                         <div className="space-y-1 md:space-y-2">
@@ -286,7 +289,9 @@ const PartnerProfile = () => {
                                     </h4>
                                     {user.isVerified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                                 </div>
-                                <div className="text-[#8A97AB] text-xs md:text-base mb-1">{user.lastSeenAt ? `${tPartner("lastSeen")}: ${formatDate(user.lastSeenAt)}` : null}</div>
+                                <div className={`text-xs md:text-base mb-1 ${isOnline ? 'text-[#28C76F] font-medium' : 'text-[#8A97AB]'}`}>
+                                    {isOnline ? tChats("statusOnline") : (user.lastSeenAt ? `${tPartner("lastSeen")}: ${formatDate(user.lastSeenAt)}` : tChats("statusOffline"))}
+                                </div>
                             </div>
                             <div className="text-[#8A97AB] text-base">{tPartner("membershipNumber")} {user.chartNumber}</div>
                         </div>
@@ -349,10 +354,10 @@ const PartnerProfile = () => {
                     </div>
                     <div className="flex items-center flex-wrap gap-4">
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("nationality")} value={user?.location?.country} />
+                            <Field label={tPartner("nationality")} value={user?.nationality} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                            <Field label={tPartner("placeOfResidence")} value={user?.location?.city} />
+                            <Field label={tPartner("placeOfResidence")} value={user?.placeOfResidence} />
                         </div>
                         <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                             <Field label={tPartner("age")} value={`${user?.age || 0} ${tPartner("years")}`} />

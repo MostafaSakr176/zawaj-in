@@ -27,11 +27,6 @@ if (typeof window !== "undefined") {
 
 // REMOVE: CountryData and CountriesResponse types (no longer needed)
 
-const marriageTypeOptions = [
-    { value: "normalMarriage", label: "زواج عادي" },
-    { value: "misyarMarriage", label: "زواج مسيار" }
-];
-
 const genderTabs = [
     { value: "all", labelKey: "all" },
     { value: "male", labelKey: "males" },
@@ -42,6 +37,7 @@ const PAGE_SIZE = 9;
 
 const NewSubscribers = React.memo(() => {
     const t = useTranslations("filters");
+    const tEdit = useTranslations("profileEdit");
     const locale = useLocale();
     const currentLocale = locale === "ar" ? "ar" : "en";
 
@@ -52,7 +48,7 @@ const NewSubscribers = React.memo(() => {
 
     // Filters and pagination state
     const [gender, setGender] = useState<string | undefined>(undefined);
-    const [nationality, setNationality] = useState<string | undefined>(undefined); // ISO2
+    const [country, setCountry] = useState<string | undefined>(undefined); // ISO2
     const [placeOfResidence, setPlaceOfResidence] = useState<string | undefined>(undefined); // free text
     const [marriageType, setMarriageType] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
@@ -90,12 +86,12 @@ const NewSubscribers = React.memo(() => {
         };
         if (gender && gender !== "all") params.gender = gender;
         
-        // Send nationality as ISO2 code (or convert to English name if backend expects it)
-        if (nationality) {
+        // Send country as ISO2 code (or convert to English name if backend expects it)
+        if (country) {
             // Option 1: Send ISO2 directly
-            params.nationality = nationality;
+            params.country = country;
             // Option 2: Convert to English name if backend expects country name
-            // const countryNameEn = countriesLib.getName(nationality, "en", { select: "official" }) || nationality;
+            // const countryNameEn = countriesLib.getName(country, "en", { select: "official" }) || country;
             // params.country = countryNameEn;
         }
         
@@ -118,7 +114,7 @@ const NewSubscribers = React.memo(() => {
                 setPagination({ total: 0, page: 1, limit: PAGE_SIZE, totalPages: 1 });
             })
             .finally(() => setLoading(false));
-    }, [gender, nationality, placeOfResidence, marriageType, page]);
+    }, [gender, country, placeOfResidence, marriageType, page]);
 
     // Handle tab change
     const handleTabChange = (tab: string) => {
@@ -127,8 +123,8 @@ const NewSubscribers = React.memo(() => {
     };
 
     // Handle filter change
-    const handleNationalityChange = (val: string) => {
-        setNationality(val);
+    const handleCountryChange = (val: string) => {
+        setCountry(val);
         setPage(1);
     };
 
@@ -164,14 +160,14 @@ const NewSubscribers = React.memo(() => {
                             ))}
                         </div>
                         <div className="flex items-center gap-2">
-                            {/* Nationality Select (ISO2 codes, localized names) */}
+                            {/* Country Select (ISO2 codes, localized names) */}
                             <FormField required>
                                 <Select
                                     className="bg-white/40"
                                     options={countryOptions}
-                                    placeholder={t("nationality")}
-                                    value={nationality}
-                                    onChange={(val) => handleNationalityChange(val)}
+                                    placeholder={t("country")}
+                                    value={country}
+                                    onChange={(val) => handleCountryChange(val)}
                                 />
                             </FormField>
                             
@@ -189,7 +185,10 @@ const NewSubscribers = React.memo(() => {
                             <FormField required>
                                 <Select
                                     className="bg-white/40"
-                                    options={marriageTypeOptions}
+                                    options={[
+                                        { value: "traditional", label: tEdit("traditional") },
+                                        { value: "mesyar", label: tEdit("civil") }
+                                      ]}
                                     placeholder={t("marriageType")}
                                     value={marriageType}
                                     onChange={(val) => handleMarriageTypeChange(val)}
@@ -215,9 +214,9 @@ const NewSubscribers = React.memo(() => {
                                                 id={user?.id}
                                                 isFav={user?.hasLiked}
                                                 name={user?.fullName}
-                                                avatar={user?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+                                                avatar={user?.gender === "female" || user?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                                                 age={user?.age}
-                                                city={user?.location?.city}
+                                                placeOfResidence={user?.placeOfResidence}
                                                 job={user?.natureOfWork}
                                                 marriageType={user?.marriageType}
                                                 skinColor={user?.bodyColor}

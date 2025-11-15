@@ -398,7 +398,7 @@ export default function EditProfilePage() {
       };
 
       // Only add female-specific fields
-      if (profile?.gender === "female") {
+      if (profile?.gender === "female" || profile?.gender === "أنثى" ) {
         profileData.acceptPolygamy = formData.acceptPolygamy || null;
         profileData.hijab_style = formData.hijab_style || null;
       };
@@ -471,14 +471,14 @@ export default function EditProfilePage() {
                       {t("sections.basicInfo")}
                     </h3>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                      <FormField label={<Label>{t("fields.username")}</Label>} required>
-                        <TextField
+                      {/*<FormField label={<Label>{t("fields.username")}</Label>} required>
+                         <TextField
                           value={formData.username}
                           onChange={(e) => updateField("username", e.target.value)}
                           placeholder={t("placeholders.write")}
                           disabled={!!profile?.username}
                         />
-                      </FormField>
+                      </FormField> */}
                       <FormField label={<Label>{tEdit("dateOfBirth")}</Label>} required>
                         <TextField
                           type="date"
@@ -491,12 +491,12 @@ export default function EditProfilePage() {
                       <FormField label={<Label>{t("fields.nationality2")}</Label>} required>
                         <Select
                           options={countryOptions}
-                          value={formData.location.country}
+                          value={formData.nationality}
                           onChange={(val) => {
-                            updateNestedField("location", "country", val);
+                            updateField("nationality", val);
                             // Clear city when country changes
-                            if (val !== formData.location.country) {
-                              updateNestedField("location", "city", "");
+                            if (val !== formData.nationality) {
+                              updateField("nationality", "");
                             }
                           }}
                           placeholder={t("placeholders.choose")}
@@ -507,28 +507,16 @@ export default function EditProfilePage() {
                       {/* City Field - Dependent on Country */}
                       <FormField label={<Label>{t("fields.residence")}</Label>} required>
                         <Select
-                          options={cities
-                            .map((city) => ({
-                              value: city,
-                              label: translateCityName(city)
-                            }))
-                            .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale))}
-                          value={formData.location.city}
-                          onChange={(val) => updateNestedField("location", "city", val)}
-                          placeholder={
-                            !formData.location.country
-                              ? tEdit("selectCountryFirst") || t("placeholders.choose")
-                              : cities.length === 0
-                                ? tEdit("noCitiesAvailable") || t("placeholders.choose")
-                                : t("placeholders.choose")
-                          }
-                          disabled={!formData.location.country || cities.length === 0 || loadingCountries}
+                          options={countryOptions}
+                          value={formData.placeOfResidence}
+                          onChange={(val) => updateField("placeOfResidence", val)}
+                          placeholder={t("placeholders.choose")}
                         />
                       </FormField>
 
                       <FormField label={<Label>{t("fields.tribe")}</Label>} required>
                         <Select
-                          options={profile?.gender === "female" ? [
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "tribal", label: tEdit("f_tribal") },
                             { value: "non_tribal", label: tEdit("f_non_tribal") },
                             { value: "other", label: tEdit("other") },
@@ -548,7 +536,7 @@ export default function EditProfilePage() {
                         required
                       >
                         <Select
-                          options={profile?.gender === "female" ? [
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "virgin", label: tEdit("virgin") },
                             { value: "f_divorced", label: tEdit("f_divorced") },
                             { value: "f_widowed", label: tEdit("f_widowed") },
@@ -574,7 +562,7 @@ export default function EditProfilePage() {
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       <FormField label={<Label>{t("fields.health")}</Label>}>
                         <Select
-                          options={profile?.gender === "female" ? [
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_healthy", label: tEdit("f_healthy") },
                             { value: "f_chronically_ill", label: tEdit("chronically_ill") },
                             { value: "f_disabled", label: tEdit("f_disabled") },
@@ -602,7 +590,7 @@ export default function EditProfilePage() {
                       </FormField>
                       <FormField label={<Label>{t("fields.religiosity")}</Label>}>
                         <Select
-                          options={profile?.gender === "female" ? [
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_normal", label: tEdit("f_normal") },
                             { value: "f_conservative", label: tEdit("f_conservative") },
                             { value: "f_committed", label: tEdit("f_committed") },
@@ -632,7 +620,7 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.job")}</Label>} required>
                         <Select
-                          options={profile?.gender === "female" ? [
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_unemployed", label: tEdit("f_unemployed") },
                             { value: "f_employed", label: tEdit("f_employed") },
                             { value: "self_employed", label: tEdit("selfEmployed") },
@@ -667,7 +655,7 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.skin")}</Label>} required>
                         <Select
-                          options={profile?.gender === "female" ? [
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_white", label: tEdit("f_white") },
                             { value: "f_brown", label: tEdit("f_brown") },
                             { value: "f_black", label: tEdit("f_dark") },
@@ -684,7 +672,7 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.beauty")}</Label>} required>
                         <Select
-                          options={profile?.gender === "female" ? [
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_acceptable", label: tEdit("f_acceptable") },
                             { value: "f_average", label: tEdit("f_average") },
                             { value: "f_beautiful", label: tEdit("f_beautiful") },
@@ -719,7 +707,7 @@ export default function EditProfilePage() {
                         <Select
                           options={[
                             { value: "traditional", label: tEdit("traditional") },
-                            { value: "civil", label: tEdit("civil") }
+                            { value: "mesyar", label: tEdit("civil") }
                           ]}
                           value={formData.marriageType}
                           onChange={(val) => updateField("marriageType", val)}
@@ -727,7 +715,7 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                      {profile?.gender === "female" &&
+                      {profile?.gender === "female" || profile?.gender === "أنثى" &&
                         <>
                           <FormField
                             label={<Label>{t("fields.acceptPolygamy")}</Label>}

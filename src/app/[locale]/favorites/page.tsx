@@ -19,10 +19,8 @@ type user = {
   isActive: boolean;
   dateOfBirth: string | null;
   age: number;
-  location: {
-    city: string;
-    country: string;
-  };
+  nationality: string;
+  placeOfResidence: string;
   origin: string | null;
   maritalStatus: string;
   profession: string;
@@ -144,9 +142,9 @@ const MyFavorites = () => {
                         id={like?.likedUser?.id}
                         isFav={true}
                         name={like?.likedUser?.fullName}
-                        avatar={like?.likedUser?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+                        avatar={like?.likedUser?.gender === "female" || like?.likedUser?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                         age={like?.likedUser?.age}
-                        city={like?.likedUser?.location?.city}
+                        placeOfResidence={like?.likedUser?.placeOfResidence}
                         job={like?.likedUser?.natureOfWork}
                         marriageType={like?.likedUser?.marriageType}
                         skinColor={like?.likedUser?.skinColor}
@@ -173,9 +171,9 @@ const MyFavorites = () => {
                         id={like?.user?.id}
                         isFav={true}
                         name={like?.user?.fullName}
-                        avatar={like?.user?.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+                        avatar={like?.user?.gender === "female" || like?.user?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                         age={like?.user?.age}
-                        city={like?.user?.location?.city}
+                        placeOfResidence={like?.user?.placeOfResidence}
                         job={like?.user?.natureOfWork}
                         marriageType={like?.user?.marriageType}
                         skinColor={like?.user?.skinColor}

@@ -42,9 +42,9 @@ const Visitores = ({ setTotalVisits }: { setTotalVisits: React.Dispatch<React.Se
                         id={user.id}
                         isFav={user?.hasLiked}
                         name={user.fullName || "User"}
-                        avatar={user.gender === "female" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
+                        avatar={user.gender === "female" || user.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                         age={user.age}
-                        city={user?.location?.city}
+                        placeOfResidence={user?.placeOfResidence}
                         job={user?.natureOfWork}
                         marriageType={user?.marriageType}
                         skinColor={user?.bodyColor}

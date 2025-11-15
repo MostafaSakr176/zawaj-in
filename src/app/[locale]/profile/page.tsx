@@ -38,8 +38,9 @@ const Profile = () => {
 
   const handleOnlineToggle = (checked: boolean) => {
     setIsOnline(checked);
-    api.post("/users/status", { isOnline: checked }).catch(() => { });
-    refreshProfile();
+    api.post("/users/status", { isOnline: checked })
+      .then(() => refreshProfile())
+      .catch(() => { });
   };
 
   const Field = ({ label, value }: FieldProps) => (
@@ -188,10 +189,10 @@ const Profile = () => {
                 </div>
                 <div className="flex items-center flex-wrap gap-4">
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("nationality")} value={profile?.location?.country} />
+                    <Field label={tPartner("nationality")} value={profile?.nationality} />
                   </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("placeOfResidence")} value={profile?.location?.city} />
+                    <Field label={tPartner("placeOfResidence")} value={profile?.placeOfResidence} />
                   </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                     <Field label={tPartner("age")} value={`${profile.age} ${tPartner("years")}`} />

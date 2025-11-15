@@ -378,6 +378,7 @@
   },
   "home": {
     "welcome": "أهلاً بك",
+    "f_welcome": "أهلا بكِ",
     "loadingRecommendations": "جاري تحميل التوصيات...",
     "noRecommendations": "لا توجد توصيات حالياً.",
     "filters": "التصنيف",

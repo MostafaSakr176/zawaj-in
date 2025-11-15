@@ -15,7 +15,7 @@ const TermsAndConditions = () => {
     const handleAcceptTerms = async () => {
         try {
             await api.post("/auth/accept-terms", { termsAccepted: true });
-            refreshProfile();
+            await refreshProfile();
             router.push("/home");
             // Optionally, redirect or show a success message here
         } catch (error) {

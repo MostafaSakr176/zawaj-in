@@ -47,8 +47,8 @@ type User = {
   gender: string;
   location: { city: string; country: string };
   origin: string | null;
-  nationality: string | null;
-  placeOfResidence: string | null;
+  nationality: string;
+  placeOfResidence: string;
   tribe: string | null;
   maritalStatus: string;
   numberOfChildren: number | null;
@@ -90,6 +90,8 @@ type FilterData = {
   city: string;
   country: string; // store ISO2 here to match Edit Profile
   maritalStatus: string;
+  nationality: string;
+  placeOfResidence: string;
   skinColor: string;
   beauty: string;
   religiousPractice: string;
@@ -139,6 +141,8 @@ const MyFavorites = () => {
     city: "",
     country: "", // ISO2
     maritalStatus: "",
+    nationality: "",
+    placeOfResidence: "",
     skinColor: "",
     beauty: "",
     religiousPractice: "",
@@ -191,8 +195,7 @@ const MyFavorites = () => {
     // Required params
     params.append('limit', pagination.limit.toString());
     params.append('page', pagination.page.toString());
-
-      params.append('gender', profile?.gender === "male" || profile?.gender === "ذكر" ? "female" : "male");
+    params.append('gender', profile?.gender === "male" || profile?.gender === "ذكر" ? "female" : "male");
 
 
     // Append other filters (skip empty/null)
@@ -250,6 +253,8 @@ const MyFavorites = () => {
       city: "",
       country: "",
       maritalStatus: "",
+      nationality: "",
+      placeOfResidence: "",
       skinColor: "",
       beauty: "",
       religiousPractice: "",
@@ -341,7 +346,7 @@ const MyFavorites = () => {
                 )}
               </div>
               <div>
-                <div className="text-[#301B69] text-base md:text-2xl">{t("welcome")}</div>
+                <div className="text-[#301B69] text-base md:text-2xl">{ profile?.gender === "female" || profile?.gender === "أنثى" ? t("f_welcome") : t("welcome")}</div>
                 <div className="flex items-center justify-end gap-1">
                   <h4 className="text-lg md:text-3xl font-semibold text-[#301B69] leading-none">
                     {profile?.fullName || "User"}
@@ -389,8 +394,8 @@ const MyFavorites = () => {
                         options={[
                           ...countryOptions
                         ]}
-                        value={filters.country}
-                        onChange={(val) => updateFilter("country", val)}
+                        value={filters.nationality}
+                        onChange={(val) => updateFilter("nationality", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -399,8 +404,8 @@ const MyFavorites = () => {
                     <FormField label={<Label>{tRequest("fields.residence")}</Label>}>
                       <Select
                         options={[]}
-                        value={filters.city}
-                        onChange={(val) => updateFilter("city", val)}
+                        value={filters.placeOfResidence}
+                        onChange={(val) => updateFilter("placeOfResidence", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
@@ -529,7 +534,7 @@ const MyFavorites = () => {
                       <Select
                         options={[
                           { value: "traditional", label: tEdit("traditional") },
-                          { value: "civil", label: tEdit("civil") }
+                          { value: "mesyar", label: tEdit("civil") }
                         ]}
                         value={filters.marriageType}
                         onChange={(val) => updateFilter("marriageType", val)}
@@ -582,7 +587,7 @@ const MyFavorites = () => {
                     name={user.fullName || "User"}
                     avatar={user.gender === "female" || user.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                     age={user.age}
-                    city={user?.location?.country}
+                    placeOfResidence={user?.placeOfResidence}
                     job={user?.natureOfWork}
                     marriageType={user?.marriageType}
                     skinColor={user?.skinColor}
