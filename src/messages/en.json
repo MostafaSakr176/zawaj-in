@@ -397,6 +397,7 @@
     },
     "home": {
         "welcome": "Welcome",
+        "f_welcome": "Welcome",
         "loadingRecommendations": "Loading recommendations...",
         "noRecommendations": "No recommendations currently.",
         "filters": "Filters",

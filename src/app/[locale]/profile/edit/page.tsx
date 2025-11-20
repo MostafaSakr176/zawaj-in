@@ -672,7 +672,7 @@ export default function EditProfilePage() {
 
                       <FormField label={<Label>{t("fields.beauty")}</Label>} required>
                         <Select
-                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
+                          options={(profile?.gender === "female" || profile?.gender === "أنثى") ? [
                             { value: "f_acceptable", label: tEdit("f_acceptable") },
                             { value: "f_average", label: tEdit("f_average") },
                             { value: "f_beautiful", label: tEdit("f_beautiful") },
@@ -715,7 +715,7 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                      {profile?.gender === "female" || profile?.gender === "أنثى" &&
+                      {(profile?.gender === "female" || profile?.gender === "أنثى") &&
                         <>
                           <FormField
                             label={<Label>{t("fields.acceptPolygamy")}</Label>}
