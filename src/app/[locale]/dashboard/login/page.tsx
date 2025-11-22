@@ -3,91 +3,12 @@
 import * as React from "react";
 import { z } from "zod";
 import api from "@/lib/axiosClient";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import Label from "@/components/ui/label";
-import { FormField } from "@/components/ui/form";
-import { TextField } from "@/components/ui/text-field";
-import { PasswordInput } from "@/components/ui/password-input";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "@/i18n/navigation";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
-
-const MailIcon = (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M17.5 4.375L10 11.25L2.5 4.375"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M2.5 4.375H17.5V15C17.5 15.1658 17.4342 15.3247 17.3169 15.4419C17.1997 15.5592 17.0408 15.625 16.875 15.625H3.125C2.95924 15.625 2.80027 15.5592 2.68306 15.4419C2.56585 15.3247 2.5 15.1658 2.5 15V4.375Z"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M8.63602 10L2.69238 15.4484"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M17.307 15.4484L11.3633 10"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const LockIcon = (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M10 12.5C10.8629 12.5 11.5625 11.8004 11.5625 10.9375C11.5625 10.0746 10.8629 9.375 10 9.375C9.13706 9.375 8.4375 10.0746 8.4375 10.9375C8.4375 11.8004 9.13706 12.5 10 12.5Z"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M10 12.5V14.375"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M16.25 6.875H3.75C3.40482 6.875 3.125 7.15482 3.125 7.5V16.25C3.125 16.5952 3.40482 16.875 3.75 16.875H16.25C16.5952 16.875 16.875 16.5952 16.875 16.25V7.5C16.875 7.15482 16.5952 6.875 16.25 6.875Z"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M7.1875 6.875V4.0625C7.1875 3.31658 7.48382 2.60121 8.01126 2.07376C8.53871 1.54632 9.25408 1.25 10 1.25C10.7459 1.25 11.4613 1.54632 11.9887 2.07376C12.5162 2.60121 12.8125 3.31658 12.8125 4.0625V6.875"
-      stroke="#AFAFAF"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+import { Eye, EyeOff, Lock, HelpCircle, FileText } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -95,7 +16,8 @@ const loginSchema = z.object({
 });
 
 export default function AdminLoginPage() {
-  const [state, setState] = React.useState({ email: "", password: "" });
+  const [state, setState] = React.useState({ email: "", password: "", keepLogin: false });
+  const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const router = useRouter();
@@ -133,9 +55,10 @@ export default function AdminLoginPage() {
         }
 
         // Set tokens
+        const tokenExpiry = state.keepLogin ? 30 : 7;
         Cookies.set("access_token", userData.access_token, {
           path: "/",
-          expires: 7,
+          expires: tokenExpiry,
         });
         Cookies.set("refresh_token", userData.refresh_token, {
           path: "/",
@@ -154,139 +77,191 @@ export default function AdminLoginPage() {
     }
   };
 
-  const emailError =
-    state.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email)
-      ? "Invalid email format"
-      : undefined;
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
+      {/* Background gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(180deg, #F8F5FF 0%, #F0E8FF 30%, #E8E0F8 60%, #F5F0FF 100%)",
+        }}
+      />
+
+      {/* Decorative clouds/shapes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-32 bg-white/40 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-20 w-80 h-40 bg-purple-100/50 rounded-full blur-3xl" />
+        <div className="absolute bottom-40 left-1/4 w-96 h-48 bg-white/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-1/4 w-72 h-36 bg-purple-50/40 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 w-full max-w-md mx-4">
-        {/* Logo/Brand */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl mb-4">
-            <svg
-              className="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-white mb-1">Zawajin Admin</h1>
-          <p className="text-white/60 text-sm">Dashboard Management Portal</p>
+      {/* Logo at top */}
+      <div className="relative z-10 pt-8 pb-4 flex justify-center">
+        <div className="flex items-center gap-1">
+          <span className="text-3xl font-bold text-[#E91E8C]">زواج</span>
+          <span className="text-3xl font-bold text-[#301B69]">إن</span>
         </div>
+      </div>
 
-        <Card className="rounded-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-          <form onSubmit={handleSubmit}>
-            <CardHeader className="pb-4 pt-8">
-              <CardTitle className="text-center text-xl font-bold text-[#1D1B23]">
-                Admin Sign In
-              </CardTitle>
-              <p className="text-center text-sm text-gray-500 mt-1">
-                Enter your credentials to access the dashboard
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-5 px-8 pb-8">
-              <FormField
-                label={<Label className="sr-only">Email</Label>}
-                error={emailError}
-              >
-                <TextField
-                  placeholder="admin@zawajin.com"
-                  startAdornment={MailIcon}
-                  endAdornment={null}
+      {/* Main content */}
+      <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md">
+          {/* Login Card */}
+          <div className="bg-white rounded-3xl shadow-xl px-8 py-10">
+            {/* User Icon */}
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 rounded-full border-2 border-[#301B69] flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-[#301B69]"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-2xl font-bold text-center text-[#0D0D12] mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-center text-[#666D80] text-sm mb-8">
+              Glad to see you again. Log in to your account.
+            </p>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-medium text-[#0D0D12] mb-2">
+                  Email Address <span className="text-[#DF1C41]">*</span>
+                </label>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
                   value={state.email}
-                  onChange={(e) =>
-                    setState((s) => ({ ...s, email: e.target.value }))
-                  }
-                  className="text-[1rem]"
-                  aria-label="Email"
+                  onChange={(e) => setState(s => ({ ...s, email: e.target.value }))}
+                  className="w-full px-4 py-3 border border-[#DFE1E7] rounded-xl text-sm text-[#0D0D12] placeholder:text-[#A4ACB9] focus:outline-none focus:ring-2 focus:ring-[#301B69]/20 focus:border-[#301B69] transition-colors"
                 />
-              </FormField>
+              </div>
 
-              <FormField
-                label={<Label className="sr-only">Password</Label>}
-              >
-                <PasswordInput
-                  placeholder="Enter your password"
-                  startAdornment={LockIcon}
-                  togglePosition="end"
-                  value={state.password}
-                  onChange={(e) =>
-                    setState((s) => ({ ...s, password: e.target.value }))
-                  }
-                  className="text-[1rem]"
-                  aria-label="Password"
-                />
-              </FormField>
+              {/* Password Field */}
+              <div>
+                <label className="block text-sm font-medium text-[#0D0D12] mb-2">
+                  Password <span className="text-[#DF1C41]">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={state.password}
+                    onChange={(e) => setState(s => ({ ...s, password: e.target.value }))}
+                    className="w-full px-4 py-3 pr-12 border border-[#DFE1E7] rounded-xl text-sm text-[#0D0D12] placeholder:text-[#A4ACB9] focus:outline-none focus:ring-2 focus:ring-[#301B69]/20 focus:border-[#301B69] transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A4ACB9] hover:text-[#666D80] transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
 
+              {/* Keep me logged in & Forgot Password */}
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={state.keepLogin}
+                    onChange={(e) => setState(s => ({ ...s, keepLogin: e.target.checked }))}
+                    className="w-4 h-4 rounded border-[#DFE1E7] text-[#301B69] focus:ring-[#301B69]"
+                  />
+                  <span className="text-sm text-[#666D80]">Keep me login</span>
+                </label>
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-sm text-[#301B69] hover:underline font-medium"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+
+              {/* Error Message */}
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <div className="bg-red-50 border border-red-200 rounded-xl p-3">
                   <p className="text-red-600 text-center text-sm">{error}</p>
                 </div>
               )}
 
-              <div className="pt-2">
-                <Button
-                  className="w-full rounded-xl bg-gradient-to-r from-[#1a1a2e] to-[#16213e] hover:from-[#16213e] hover:to-[#0f3460] py-6 text-base font-semibold shadow-lg transition-all duration-200"
-                  type="submit"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <span className="flex items-center gap-2">
-                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                          fill="none"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      Signing in...
-                    </span>
-                  ) : (
-                    "Sign In to Dashboard"
-                  )}
-                </Button>
-              </div>
+              {/* Login Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3.5 rounded-xl text-white font-medium text-base transition-all duration-200 disabled:opacity-50"
+                style={{
+                  background: "linear-gradient(135deg, #301B69 0%, #5B3D8F 50%, #8B6DB5 100%)",
+                  boxShadow: "0 4px 15px rgba(48, 27, 105, 0.3)",
+                }}
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Signing in...
+                  </span>
+                ) : (
+                  "Login"
+                )}
+              </button>
 
-              <div className="pt-4 text-center">
-                <p className="text-xs text-gray-400">
-                  This portal is for authorized administrators only.
-                  <br />
-                  Unauthorized access attempts are logged.
-                </p>
-              </div>
-            </CardContent>
-          </form>
-        </Card>
+              {/* Register Link */}
+              <p className="text-center text-sm text-[#666D80]">
+                Don&apos;t have an account?{" "}
+                <Link href="/auth/register" className="text-[#301B69] font-medium hover:underline">
+                  Register
+                </Link>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
 
-        {/* Footer */}
-        <p className="text-center text-white/40 text-xs mt-6">
-          Zawajin Matrimonial Platform
-        </p>
+      {/* Footer */}
+      <div className="relative z-10 py-6 px-8">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <p className="text-sm text-[#666D80]">
+            &copy; 2025 Tickety. All right reserved.
+          </p>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy" className="flex items-center gap-1.5 text-sm text-[#666D80] hover:text-[#0D0D12] transition-colors">
+              <Lock className="w-4 h-4" />
+              Privacy
+            </Link>
+            <Link href="/terms" className="flex items-center gap-1.5 text-sm text-[#666D80] hover:text-[#0D0D12] transition-colors">
+              <FileText className="w-4 h-4" />
+              Terms
+            </Link>
+            <Link href="/help" className="flex items-center gap-1.5 text-sm text-[#666D80] hover:text-[#0D0D12] transition-colors">
+              <HelpCircle className="w-4 h-4" />
+              Get help
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
