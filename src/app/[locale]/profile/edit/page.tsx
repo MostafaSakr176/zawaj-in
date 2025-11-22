@@ -22,7 +22,9 @@ import Image from "next/image";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { getCountryOptions, getCountryName, getCountryByCode, findCountryByName, getCityTranslation } from "@/lib/countries";
+
+import countriesData from "@/lib/countries.json";
+import citiesData from "@/lib/cities.json";
 
 type FormData = {
   username: string;
@@ -95,47 +97,8 @@ export default function EditProfilePage() {
   const [error, setError] = React.useState<string | null>(null);
   const router = useRouter();
   const [success, setSuccess] = React.useState<boolean>(false);
-  const locale = useLocale(); // "en" | "ar"
+  const locale = useLocale();
   const currentLocale = locale === "ar" ? "ar" : "en";
-
-  // Countries and cities state
-  const [countriesData, setCountriesData] = React.useState<Array<{ iso2: string; iso3: string; country: string; cities: string[] }>>([]);
-  const [cities, setCities] = React.useState<string[]>([]);
-  const [loadingCountries, setLoadingCountries] = React.useState(false);
-  const [countryOptions, setCountryOptions] = React.useState<Array<{ value: string; label: string }>>([]);
-
-  // Fetch countries from REST Countries API
-  React.useEffect(() => {
-    const fetchCountries = async () => {
-      setLoadingCountries(true);
-      try {
-        const options = await getCountryOptions(currentLocale as 'en' | 'ar');
-        setCountryOptions(options);
-      } catch (error) {
-        console.error('Error fetching countries:', error);
-      } finally {
-        setLoadingCountries(false);
-      }
-    };
-    fetchCountries();
-  }, [currentLocale]);
-
-  // Fetch cities data from countriesnow.space API (REST Countries doesn't provide cities)
-  React.useEffect(() => {
-    const fetchCitiesData = async () => {
-      try {
-        const response = await fetch('https://countriesnow.space/api/v0.1/countries');
-        const data = await response.json();
-        if (!data.error) {
-          setCountriesData(data.data);
-        }
-      } catch (error) {
-        console.error('Error fetching cities data:', error);
-      }
-    };
-    fetchCitiesData();
-  }, []);
-
   const [formData, setFormData] = React.useState<FormData>({
     username: "",
     dateOfBirth: "",
@@ -172,39 +135,6 @@ export default function EditProfilePage() {
     hijab_style: null,
   });
 
-  // Update cities when country changes
-  React.useEffect(() => {
-    const updateCities = async () => {
-      if (formData.location.country) {
-        try {
-          // Get country name from REST Countries API
-          const countryNameEn = await getCountryName(formData.location.country, 'en');
-          const countryNameAr = await getCountryName(formData.location.country, 'ar');
-
-          // Find matching country in cities API data (countriesnow.space)
-          const selectedCountry = countriesData.find(
-            countryData =>
-              countryData.country.toLowerCase() === countryNameEn?.toLowerCase() ||
-              countryData.country.toLowerCase() === countryNameAr?.toLowerCase() ||
-              countryData.iso2?.toLowerCase() === formData.location.country.toLowerCase()
-          );
-
-          if (selectedCountry) {
-            setCities(selectedCountry.cities || []);
-          } else {
-            setCities([]);
-          }
-        } catch (error) {
-          console.error('Error updating cities:', error);
-          setCities([]);
-        }
-      } else {
-        setCities([]);
-      }
-    };
-    updateCities();
-  }, [formData.location.country, countriesData]);
-
   // Social contact validation function
   const validateSocialContacts = (text: string): string | null => {
     const socialPatterns = [
@@ -231,27 +161,33 @@ export default function EditProfilePage() {
     return null;
   };
 
+  // Build nationality options from countries.json
+  const nationalityOptions = React.useMemo(() => {
+    return countriesData.map((c: any) => ({
+      value: c.code,
+      label: currentLocale === "ar" ? c.ar : c.en
+    }));
+  }, [currentLocale]);
+
+  // Build placeOfResidence options from cities.json
+  const placeOfResidenceOptions = React.useMemo(() => {
+    return citiesData.map((city: any) => ({
+      value: city.code,
+      label: currentLocale === "ar" ? city.ar : city.en
+    }));
+  }, [currentLocale]);
+
   // Initialize form data with profile data
   React.useEffect(() => {
     const initializeFormData = async () => {
       if (profile) {
-        let countryCode = profile.location?.country || "";
-
-        // If country is a name (not ISO2 code), try to find the ISO2 code
-        if (countryCode && countryCode.length > 2) {
-          const foundCountry = await findCountryByName(countryCode);
-          if (foundCountry) {
-            countryCode = foundCountry.cca2;
-          }
-        }
-
         setFormData({
           username: profile.username || "",
           dateOfBirth: profile.dateOfBirth || "",
           age: profile.age,
           location: {
             city: profile.location?.city || "",
-            country: countryCode,
+            country: profile.location?.country || "",
           },
           origin: profile.origin || "",
           nationality: profile.nationality || "",
@@ -287,60 +223,6 @@ export default function EditProfilePage() {
     };
     initializeFormData();
   }, [profile]);
-
-  // Fetch countries on component mount
-  // React.useEffect(() => {
-  //   const fetchCountries = async () => {
-  //     setLoadingCountries(true);
-  //     try {
-  //       const response = await fetch("https://countriesnow.space/api/v0.1/countries");
-  //       const result = await response.json();
-  //       if (!result.error) {
-  //         setCountries(result.data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch countries:", error);
-  //     } finally {
-  //       setLoadingCountries(false);
-  //     }
-  //   };
-
-  //   fetchCountries();
-  // }, []);
-
-  // City translations state
-  const [cityTranslations, setCityTranslations] = React.useState<Record<string, string>>({});
-
-  // Fetch city translations when cities change
-  React.useEffect(() => {
-    const fetchTranslations = async () => {
-      if (currentLocale === "ar" && cities.length > 0) {
-        const translations: Record<string, string> = {};
-        await Promise.all(
-          cities.map(async (cityName) => {
-            try {
-              const translated = await getCityTranslation(cityName, 'ar');
-              translations[cityName] = translated;
-            } catch (error) {
-              translations[cityName] = cityName;
-            }
-          })
-        );
-        setCityTranslations(translations);
-      } else {
-        setCityTranslations({});
-      }
-    };
-    fetchTranslations();
-  }, [cities, currentLocale]);
-
-  // Helper function to get translated city name
-  const translateCityName = React.useCallback((cityName: string): string => {
-    if (currentLocale === "ar" && cityTranslations[cityName]) {
-      return cityTranslations[cityName];
-    }
-    return cityName;
-  }, [currentLocale, cityTranslations]);
 
   const updateField = (field: string, value: any) => {
     // Validate social contacts for text fields
@@ -398,7 +280,7 @@ export default function EditProfilePage() {
       };
 
       // Only add female-specific fields
-      if (profile?.gender === "female" || profile?.gender === "أنثى" ) {
+      if (profile?.gender === "female" || profile?.gender === "أنثى") {
         profileData.acceptPolygamy = formData.acceptPolygamy || null;
         profileData.hijab_style = formData.hijab_style || null;
       };
@@ -487,27 +369,18 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                      {/* Country Field */}
                       <FormField label={<Label>{t("fields.nationality2")}</Label>} required>
                         <Select
-                          options={countryOptions}
+                          options={nationalityOptions}
                           value={formData.nationality}
-                          onChange={(val) => {
-                            updateField("nationality", val);
-                            // Clear city when country changes
-                            if (val !== formData.nationality) {
-                              updateField("nationality", "");
-                            }
-                          }}
+                          onChange={(val) => updateField("nationality", val)}
                           placeholder={t("placeholders.choose")}
-                          disabled={loadingCountries}
                         />
                       </FormField>
 
-                      {/* City Field - Dependent on Country */}
                       <FormField label={<Label>{t("fields.residence")}</Label>} required>
                         <Select
-                          options={countryOptions}
+                          options={placeOfResidenceOptions}
                           value={formData.placeOfResidence}
                           onChange={(val) => updateField("placeOfResidence", val)}
                           placeholder={t("placeholders.choose")}

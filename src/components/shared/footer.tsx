@@ -100,7 +100,7 @@ const Footer = () => {
                                     <path d="M11.5463 20V10.8777H14.607L15.0662 7.32156H11.5463V5.05147C11.5463 4.0222 11.8309 3.32076 13.3085 3.32076L15.1901 3.31999V0.13923C14.8647 0.0969453 13.7478 0 12.4478 0C9.73317 0 7.87471 1.65697 7.87471 4.69927V7.32156H4.80469V10.8777H7.87471V20H11.5463Z" fill="url(#paint0_linear_9524_17155)" />
                                     <defs>
                                         <linearGradient id="paint0_linear_9524_17155" x1="13.7277" y1="-6.29226" x2="-6.9198" y2="2.98248" gradientUnits="userSpaceOnUse">
-                                            <stop stop-color="#F2EFFF" />
+                                            <stop stopColor="#F2EFFF" />
                                             <stop offset="1" stop-color="#FFF1FE" />
                                         </linearGradient>
                                     </defs>

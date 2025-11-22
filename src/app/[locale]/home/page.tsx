@@ -21,24 +21,8 @@ import Label from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { TextField } from "@/components/ui/text-field";
 
-// ADD: i18n-iso-countries (same as Edit Profile)
-import countriesLib from "i18n-iso-countries";
-// import enCountries from "i18n-iso-countries/langs/en.json";
-// import arCountries from "i18n-iso-countries/langs/ar.json";
-
-if (typeof window !== "undefined") {
-  (async () => {
-    try {
-      const en = await import("i18n-iso-countries/langs/en.json");
-      const ar = await import("i18n-iso-countries/langs/ar.json");
-      countriesLib.registerLocale(en.default || en);
-      countriesLib.registerLocale(ar.default || ar);
-    } catch (err) {
-      // fallback: try to require on server (shouldn't run in client file) or warn
-      // console.warn("i18n-iso-countries locale load failed", err);
-    }
-  })();
-}
+import countriesData from "@/lib/countries.json";
+import citiesData from "@/lib/cities.json";
 
 type User = {
   id: string;
@@ -134,6 +118,22 @@ const MyFavorites = () => {
   const locale = useLocale();
   const currentLocale = locale === "ar" ? "ar" : "en";
 
+  // Build nationality options from countries.json
+  const nationalityOptions = React.useMemo(() => {
+    return countriesData.map((c: any) => ({
+      value: c.code,
+      label: currentLocale === "ar" ? c.ar : c.en
+    }));
+  }, [currentLocale]);
+
+  // Build placeOfResidence options from cities.json
+  const placeOfResidenceOptions = React.useMemo(() => {
+    return citiesData.map((city: any) => ({
+      value: city.code,
+      label: currentLocale === "ar" ? city.ar : city.en
+    }));
+  }, [currentLocale]);
+
   // Filter state
   const [filters, setFilters] = useState<FilterData>({
     minAge: null,
@@ -168,16 +168,6 @@ const MyFavorites = () => {
   });
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
-  // Build localized country options (same as Edit Profile)
-  const countryOptions = React.useMemo(() => {
-    const names = countriesLib.getNames(currentLocale, { select: "official" });
-    return [
-      ...Object.entries(names)
-        .map(([code, name]) => ({ value: code, label: name }))
-        .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale)),
-    ];
-  }, [currentLocale]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateFilter = (field: string, value: any) => {
     setFilters(prev => ({ ...prev, [field]: value }));
@@ -391,19 +381,15 @@ const MyFavorites = () => {
                     </div>
                     <FormField label={<Label>{tRequest("fields.nationality")}</Label>}>
                       <Select
-                        options={[
-                          ...countryOptions
-                        ]}
+                        options={nationalityOptions}
                         value={filters.nationality}
                         onChange={(val) => updateFilter("nationality", val)}
                         placeholder={tRequest("placeholders.choose")}
                       />
                     </FormField>
-
-                    {/* City Select - dependent on country */}
                     <FormField label={<Label>{tRequest("fields.residence")}</Label>}>
                       <Select
-                        options={[]}
+                        options={placeOfResidenceOptions}
                         value={filters.placeOfResidence}
                         onChange={(val) => updateFilter("placeOfResidence", val)}
                         placeholder={tRequest("placeholders.choose")}

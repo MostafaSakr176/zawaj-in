@@ -1,0 +1,857 @@
+[
+  {
+    "code": "RIY",
+    "ar": "الرياض",
+    "en": "Riyadh"
+  },
+  {
+    "code": "JED",
+    "ar": "جدة",
+    "en": "Jeddah"
+  },
+  {
+    "code": "MEC",
+    "ar": "مكة المكرمة",
+    "en": "Mecca"
+  },
+  {
+    "code": "MED",
+    "ar": "المدينة المنورة",
+    "en": "Medina"
+  },
+  {
+    "code": "DAM",
+    "ar": "الدمام",
+    "en": "Dammam"
+  },
+  {
+    "code": "KHO",
+    "ar": "الخبر",
+    "en": "Khobar"
+  },
+  {
+    "code": "DHA",
+    "ar": "الظهران",
+    "en": "Dhahran"
+  },
+  {
+    "code": "TAI",
+    "ar": "الطائف",
+    "en": "Taif"
+  },
+  {
+    "code": "BUR",
+    "ar": "بريدة",
+    "en": "Buraydah"
+  },
+  {
+    "code": "UNA",
+    "ar": "عنيزة",
+    "en": "Unaizah"
+  },
+  {
+    "code": "HAI",
+    "ar": "حائل",
+    "en": "Hail"
+  },
+  {
+    "code": "TAB",
+    "ar": "تبوك",
+    "en": "Tabuk"
+  },
+  {
+    "code": "ABH",
+    "ar": "أبها",
+    "en": "Abha"
+  },
+  {
+    "code": "KHA",
+    "ar": "خميس مشيط",
+    "en": "Khamis Mushait"
+  },
+  {
+    "code": "JAZ",
+    "ar": "جازان",
+    "en": "Jazan"
+  },
+  {
+    "code": "NAJ",
+    "ar": "نجران",
+    "en": "Najran"
+  },
+  {
+    "code": "ALB",
+    "ar": "الباحة",
+    "en": "Al Bahah"
+  },
+  {
+    "code": "SAK",
+    "ar": "سكاكا",
+    "en": "Sakaka"
+  },
+  {
+    "code": "ARA",
+    "ar": "عرعر",
+    "en": "Arar"
+  },
+  {
+    "code": "YAN",
+    "ar": "ينبع",
+    "en": "Yanbu"
+  },
+  {
+    "code": "JUB",
+    "ar": "الجبيل",
+    "en": "Jubail"
+  },
+  {
+    "code": "QAT",
+    "ar": "القطيف",
+    "en": "Qatif"
+  },
+  {
+    "code": "ALA",
+    "ar": "الأحساء",
+    "en": "Al Ahsa"
+  },
+  {
+    "code": "HOF",
+    "ar": "الهفوف",
+    "en": "Hofuf"
+  },
+  {
+    "code": "ALM",
+    "ar": "المبرز",
+    "en": "Al Mubarraz"
+  },
+  {
+    "code": "ARR",
+    "ar": "الرس",
+    "en": "Ar Rass"
+  },
+  {
+    "code": "ALM2",
+    "ar": "المجمعة",
+    "en": "Al Majmaah"
+  },
+  {
+    "code": "AZZ",
+    "ar": "الزلفي",
+    "en": "Az Zulfi"
+  },
+  {
+    "code": "SHA",
+    "ar": "شقراء",
+    "en": "Shaqra"
+  },
+  {
+    "code": "ALA2",
+    "ar": "الأفلاج",
+    "en": "Al Aflaj"
+  },
+  {
+    "code": "WAD",
+    "ar": "وادي الدواسر",
+    "en": "Wadi Ad Dawasir"
+  },
+  {
+    "code": "BIS",
+    "ar": "بيشة",
+    "en": "Bisha"
+  },
+  {
+    "code": "MAH",
+    "ar": "محايل عسير",
+    "en": "Mahayel Asir"
+  },
+  {
+    "code": "SAB",
+    "ar": "صبيا",
+    "en": "Sabya"
+  },
+  {
+    "code": "SAM",
+    "ar": "صامطة",
+    "en": "Samtah"
+  },
+  {
+    "code": "ALQ",
+    "ar": "القنفذة",
+    "en": "Al Qunfudhah"
+  },
+  {
+    "code": "RAB",
+    "ar": "رابغ",
+    "en": "Rabigh"
+  },
+  {
+    "code": "QUR",
+    "ar": "القريات",
+    "en": "Qurayyat"
+  },
+  {
+    "code": "TAB2",
+    "ar": "طبرجل",
+    "en": "Tabarjal"
+  },
+  {
+    "code": "RAF",
+    "ar": "رفحاء",
+    "en": "Rafha"
+  },
+  {
+    "code": "TAR",
+    "ar": "طريف",
+    "en": "Tarif"
+  },
+  {
+    "code": "YAN2",
+    "ar": "ينبع البحر",
+    "en": "Yanbu Al Bahr"
+  },
+  {
+    "code": "RAS",
+    "ar": "رأس تنورة",
+    "en": "Ras Tanura"
+  },
+  {
+    "code": "KHA2",
+    "ar": "الخفجي",
+    "en": "Khafji"
+  },
+  {
+    "code": "HAF",
+    "ar": "حفر الباطن",
+    "en": "Hafar Al Batin"
+  },
+  {
+    "code": "TUR",
+    "ar": "تربة",
+    "en": "Turabah"
+  },
+  {
+    "code": "ALH",
+    "ar": "الحائط",
+    "en": "Al Hait"
+  },
+  {
+    "code": "DUB",
+    "ar": "دبي",
+    "en": "Dubai"
+  },
+  {
+    "code": "ABU",
+    "ar": "أبوظبي",
+    "en": "Abu Dhabi"
+  },
+  {
+    "code": "SHA2",
+    "ar": "الشارقة",
+    "en": "Sharjah"
+  },
+  {
+    "code": "ALA3",
+    "ar": "العين",
+    "en": "Al Ain"
+  },
+  {
+    "code": "AJM",
+    "ar": "عجمان",
+    "en": "Ajman"
+  },
+  {
+    "code": "KUW",
+    "ar": "الكويت",
+    "en": "Kuwait City"
+  },
+  {
+    "code": "FAR",
+    "ar": "الفروانية",
+    "en": "Farwaniya"
+  },
+  {
+    "code": "AHM",
+    "ar": "الأحمدي",
+    "en": "Ahmadi"
+  },
+  {
+    "code": "HAW",
+    "ar": "حولي",
+    "en": "Hawalli"
+  },
+  {
+    "code": "JAH",
+    "ar": "الجهراء",
+    "en": "Jahra"
+  },
+  {
+    "code": "DOH",
+    "ar": "الدوحة",
+    "en": "Doha"
+  },
+  {
+    "code": "ALR",
+    "ar": "الريان",
+    "en": "Al Rayyan"
+  },
+  {
+    "code": "ALW",
+    "ar": "الوكرة",
+    "en": "Al Wakrah"
+  },
+  {
+    "code": "ALK",
+    "ar": "الخور",
+    "en": "Al Khor"
+  },
+  {
+    "code": "UMM",
+    "ar": "أم صلال",
+    "en": "Umm Salal"
+  },
+  {
+    "code": "MUS",
+    "ar": "مسقط",
+    "en": "Muscat"
+  },
+  {
+    "code": "SAL",
+    "ar": "صلالة",
+    "en": "Salalah"
+  },
+  {
+    "code": "SOH",
+    "ar": "صحار",
+    "en": "Sohar"
+  },
+  {
+    "code": "NIZ",
+    "ar": "نزوى",
+    "en": "Nizwa"
+  },
+  {
+    "code": "SUR",
+    "ar": "صور",
+    "en": "Sur"
+  },
+  {
+    "code": "MAN",
+    "ar": "المنامة",
+    "en": "Manama"
+  },
+  {
+    "code": "MUH",
+    "ar": "المحرق",
+    "en": "Muharraq"
+  },
+  {
+    "code": "RIF",
+    "ar": "الرفاع",
+    "en": "Riffa"
+  },
+  {
+    "code": "ISA",
+    "ar": "عيسى",
+    "en": "Isa Town"
+  },
+  {
+    "code": "SIT",
+    "ar": "سترة",
+    "en": "Sitra"
+  },
+  {
+    "code": "BAG",
+    "ar": "بغداد",
+    "en": "Baghdad"
+  },
+  {
+    "code": "BAS",
+    "ar": "البصرة",
+    "en": "Basra"
+  },
+  {
+    "code": "MOS",
+    "ar": "الموصل",
+    "en": "Mosul"
+  },
+  {
+    "code": "ERB",
+    "ar": "أربيل",
+    "en": "Erbil"
+  },
+  {
+    "code": "KAR",
+    "ar": "كربلاء",
+    "en": "Karbala"
+  },
+  {
+    "code": "AMM",
+    "ar": "عمّان",
+    "en": "Amman"
+  },
+  {
+    "code": "ZAR",
+    "ar": "الزرقاء",
+    "en": "Zarqa"
+  },
+  {
+    "code": "IRB",
+    "ar": "إربد",
+    "en": "Irbid"
+  },
+  {
+    "code": "RAM",
+    "ar": "الرمثا",
+    "en": "Ramtha"
+  },
+  {
+    "code": "AQA",
+    "ar": "العقبة",
+    "en": "Aqaba"
+  },
+  {
+    "code": "JER",
+    "ar": "القدس",
+    "en": "Jerusalem"
+  },
+  {
+    "code": "GAZ",
+    "ar": "غزة",
+    "en": "Gaza"
+  },
+  {
+    "code": "HEB",
+    "ar": "الخليل",
+    "en": "Hebron"
+  },
+  {
+    "code": "RAM2",
+    "ar": "رام الله",
+    "en": "Ramallah"
+  },
+  {
+    "code": "NAB",
+    "ar": "نابلس",
+    "en": "Nablus"
+  },
+  {
+    "code": "DAM2",
+    "ar": "دمشق",
+    "en": "Damascus"
+  },
+  {
+    "code": "ALE",
+    "ar": "حلب",
+    "en": "Aleppo"
+  },
+  {
+    "code": "HOM",
+    "ar": "حمص",
+    "en": "Homs"
+  },
+  {
+    "code": "HAM",
+    "ar": "حماة",
+    "en": "Hama"
+  },
+  {
+    "code": "LAT",
+    "ar": "اللاذقية",
+    "en": "Latakia"
+  },
+  {
+    "code": "BEI",
+    "ar": "بيروت",
+    "en": "Beirut"
+  },
+  {
+    "code": "TRI",
+    "ar": "طرابلس",
+    "en": "Tripoli"
+  },
+  {
+    "code": "SID",
+    "ar": "صيدا",
+    "en": "Sidon"
+  },
+  {
+    "code": "TYR",
+    "ar": "صور",
+    "en": "Tyre"
+  },
+  {
+    "code": "ZAH",
+    "ar": "زحلة",
+    "en": "Zahle"
+  },
+  {
+    "code": "CAI",
+    "ar": "القاهرة",
+    "en": "Cairo"
+  },
+  {
+    "code": "ALE2",
+    "ar": "الإسكندرية",
+    "en": "Alexandria"
+  },
+  {
+    "code": "GIZ",
+    "ar": "الجيزة",
+    "en": "Giza"
+  },
+  {
+    "code": "POR",
+    "ar": "بورسعيد",
+    "en": "Port Said"
+  },
+  {
+    "code": "SUE",
+    "ar": "السويس",
+    "en": "Suez"
+  },
+  {
+    "code": "TRI2",
+    "ar": "طرابلس",
+    "en": "Tripoli"
+  },
+  {
+    "code": "BEN",
+    "ar": "بنغازي",
+    "en": "Benghazi"
+  },
+  {
+    "code": "MIS",
+    "ar": "مصراتة",
+    "en": "Misrata"
+  },
+  {
+    "code": "ZAW",
+    "ar": "الزاوية",
+    "en": "Zawiya"
+  },
+  {
+    "code": "SAB2",
+    "ar": "سبها",
+    "en": "Sabha"
+  },
+  {
+    "code": "TUN",
+    "ar": "تونس",
+    "en": "Tunis"
+  },
+  {
+    "code": "SFA",
+    "ar": "صفاقس",
+    "en": "Sfax"
+  },
+  {
+    "code": "SOU",
+    "ar": "سوسة",
+    "en": "Sousse"
+  },
+  {
+    "code": "MAH2",
+    "ar": "المهدية",
+    "en": "Mahdia"
+  },
+  {
+    "code": "KAI",
+    "ar": "القيروان",
+    "en": "Kairouan"
+  },
+  {
+    "code": "ALG",
+    "ar": "الجزائر",
+    "en": "Algiers"
+  },
+  {
+    "code": "ORA",
+    "ar": "وهران",
+    "en": "Oran"
+  },
+  {
+    "code": "CON",
+    "ar": "قسنطينة",
+    "en": "Constantine"
+  },
+  {
+    "code": "ANN",
+    "ar": "عنّابة",
+    "en": "Annaba"
+  },
+  {
+    "code": "TLE",
+    "ar": "تلمسان",
+    "en": "Tlemcen"
+  },
+  {
+    "code": "CAS",
+    "ar": "الدار البيضاء",
+    "en": "Casablanca"
+  },
+  {
+    "code": "RAB2",
+    "ar": "الرباط",
+    "en": "Rabat"
+  },
+  {
+    "code": "MAR",
+    "ar": "مراكش",
+    "en": "Marrakesh"
+  },
+  {
+    "code": "TAN",
+    "ar": "طنجة",
+    "en": "Tangier"
+  },
+  {
+    "code": "FES",
+    "ar": "فاس",
+    "en": "Fes"
+  },
+  {
+    "code": "KHA3",
+    "ar": "الخرطوم",
+    "en": "Khartoum"
+  },
+  {
+    "code": "OMD",
+    "ar": "أم درمان",
+    "en": "Omdurman"
+  },
+  {
+    "code": "BAH",
+    "ar": "بحري",
+    "en": "Bahri"
+  },
+  {
+    "code": "POR2",
+    "ar": "بورتسودان",
+    "en": "Port Sudan"
+  },
+  {
+    "code": "ELO",
+    "ar": "الأبيض",
+    "en": "El-Obeid"
+  },
+  {
+    "code": "NOU",
+    "ar": "نواكشوط",
+    "en": "Nouakchott"
+  },
+  {
+    "code": "NOU2",
+    "ar": "نواذيبو",
+    "en": "Nouadhibou"
+  },
+  {
+    "code": "KAE",
+    "ar": "كيهيدي",
+    "en": "Kaedi"
+  },
+  {
+    "code": "ROS",
+    "ar": "روصو",
+    "en": "Rosso"
+  },
+  {
+    "code": "ATA",
+    "ar": "أطار",
+    "en": "Atar"
+  },
+  {
+    "code": "MOG",
+    "ar": "مقديشو",
+    "en": "Mogadishu"
+  },
+  {
+    "code": "HAR",
+    "ar": "هرجيسا",
+    "en": "Hargeisa"
+  },
+  {
+    "code": "BOS",
+    "ar": "بوصاصو",
+    "en": "Bosaso"
+  },
+  {
+    "code": "KIS",
+    "ar": "كيسمايو",
+    "en": "Kismayo"
+  },
+  {
+    "code": "BAI",
+    "ar": "بيدوة",
+    "en": "Baidoa"
+  },
+  {
+    "code": "DJI",
+    "ar": "جيبوتي",
+    "en": "Djibouti City"
+  },
+  {
+    "code": "ALI",
+    "ar": "علي صبيح",
+    "en": "Ali Sabieh"
+  },
+  {
+    "code": "TAD",
+    "ar": "تجورة",
+    "en": "Tadjoura"
+  },
+  {
+    "code": "OBO",
+    "ar": "أوبوك",
+    "en": "Obock"
+  },
+  {
+    "code": "DIK",
+    "ar": "دخيل",
+    "en": "Dikhil"
+  },
+  {
+    "code": "MOR",
+    "ar": "موروني",
+    "en": "Moroni"
+  },
+  {
+    "code": "MUT",
+    "ar": "موتسامودو",
+    "en": "Mutsamudu"
+  },
+  {
+    "code": "FOM",
+    "ar": "فومبوني",
+    "en": "Fomboni"
+  },
+  {
+    "code": "DOM",
+    "ar": "دوموني",
+    "en": "Domoni"
+  },
+  {
+    "code": "MBA",
+    "ar": "مافا",
+    "en": "M’baé"
+  },
+  {
+    "code": "SAN",
+    "ar": "صنعاء",
+    "en": "Sanaa"
+  },
+  {
+    "code": "ADE",
+    "ar": "عدن",
+    "en": "Aden"
+  },
+  {
+    "code": "TAI2",
+    "ar": "تعز",
+    "en": "Taiz"
+  },
+  {
+    "code": "MUK",
+    "ar": "المكلا",
+    "en": "Mukalla"
+  },
+  {
+    "code": "HOD",
+    "ar": "الحديدة",
+    "en": "Hodeidah"
+  },
+  {
+    "code": "BEI2",
+    "ar": "بكين",
+    "en": "Beijing"
+  },
+  {
+    "code": "NEW",
+    "ar": "نيودلهي",
+    "en": "New Delhi"
+  },
+  {
+    "code": "WAS",
+    "ar": "واشنطن",
+    "en": "Washington, D.C."
+  },
+  {
+    "code": "JAK",
+    "ar": "جاكرتا",
+    "en": "Jakarta"
+  },
+  {
+    "code": "BRA",
+    "ar": "برازيليا",
+    "en": "Brasília"
+  },
+  {
+    "code": "ISL",
+    "ar": "إسلام آباد",
+    "en": "Islamabad"
+  },
+  {
+    "code": "ABU2",
+    "ar": "أبوجا",
+    "en": "Abuja"
+  },
+  {
+    "code": "DHA2",
+    "ar": "دكا",
+    "en": "Dhaka"
+  },
+  {
+    "code": "MOS2",
+    "ar": "موسكو",
+    "en": "Moscow"
+  },
+  {
+    "code": "MEX",
+    "ar": "مكسيكو سيتي",
+    "en": "Mexico City"
+  },
+  {
+    "code": "TOK",
+    "ar": "طوكيو",
+    "en": "Tokyo"
+  },
+  {
+    "code": "ADD",
+    "ar": "أديس أبابا",
+    "en": "Addis Ababa"
+  },
+  {
+    "code": "MAN2",
+    "ar": "مانيلا",
+    "en": "Manila"
+  },
+  {
+    "code": "HAN",
+    "ar": "هانوي",
+    "en": "Hanoi"
+  },
+  {
+    "code": "ANK",
+    "ar": "أنقرة",
+    "en": "Ankara"
+  },
+  {
+    "code": "TEH",
+    "ar": "طهران",
+    "en": "Tehran"
+  },
+  {
+    "code": "BER",
+    "ar": "برلين",
+    "en": "Berlin"
+  },
+  {
+    "code": "PAR",
+    "ar": "باريس",
+    "en": "Paris"
+  },
+  {
+    "code": "LON",
+    "ar": "لندن",
+    "en": "London"
+  }
+]

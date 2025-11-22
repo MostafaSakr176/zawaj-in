@@ -8,24 +8,8 @@ import { FormField } from "@/components/ui/form";
 import { useTranslations, useLocale } from "next-intl";
 import api from "@/lib/axiosClient";
 import Cookies from "js-cookie";
-
-// ADD: i18n-iso-countries
-import countriesLib from "i18n-iso-countries";
-
-if (typeof window !== "undefined") {
-  (async () => {
-    try {
-      const en = await import("i18n-iso-countries/langs/en.json");
-      const ar = await import("i18n-iso-countries/langs/ar.json");
-      countriesLib.registerLocale(en.default || en);
-      countriesLib.registerLocale(ar.default || ar);
-    } catch (err) {
-      // console.warn("i18n-iso-countries locale load failed", err);
-    }
-  })();
-}
-
-// REMOVE: CountryData and CountriesResponse types (no longer needed)
+import countriesData from "@/lib/countries.json";
+import citiesData from "@/lib/cities.json";
 
 const genderTabs = [
     { value: "all", labelKey: "all" },
@@ -40,11 +24,6 @@ const NewSubscribers = React.memo(() => {
     const tEdit = useTranslations("profileEdit");
     const locale = useLocale();
     const currentLocale = locale === "ar" ? "ar" : "en";
-
-    // REMOVE: countries and cities state from API
-    // const [countries, setCountries] = useState<CountryData[]>([]);
-    // const [availableCities, setAvailableCities] = useState<string[]>([]);
-    // const [loadingCountries, setLoadingCountries] = useState(false);
 
     // Filters and pagination state
     const [gender, setGender] = useState<string | undefined>(undefined);
@@ -63,18 +42,20 @@ const NewSubscribers = React.memo(() => {
     });
     const [loading, setLoading] = useState(false);
 
-    // REMOVE: Fetch countries from API
-    // useEffect(() => { fetchCountries... }, []);
+    // Build nationality options from countries.json
+    const nationalityOptions = useMemo(() => {
+        return countriesData.map((c: any) => ({
+            value: c.code,
+            label: currentLocale === "ar" ? c.ar : c.en
+        }));
+    }, [currentLocale]);
 
-    // REMOVE: Update cities when country changes
-    // useEffect(() => { ... }, [country, countries, city]);
-
-    // Build localized country options (same as page.tsx)
-    const countryOptions = useMemo(() => {
-        const names = countriesLib.getNames(currentLocale, { select: "official" });
-        return Object.entries(names)
-            .map(([code, name]) => ({ value: code, label: name }))
-            .sort((a, b) => String(a.label).localeCompare(String(b.label), currentLocale));
+    // Build placeOfResidence options from cities.json
+    const placeOfResidenceOptions = useMemo(() => {
+        return citiesData.map((city: any) => ({
+            value: city.code,
+            label: currentLocale === "ar" ? city.ar : city.en
+        }));
     }, [currentLocale]);
 
     // Fetch users from API
@@ -160,25 +141,24 @@ const NewSubscribers = React.memo(() => {
                             ))}
                         </div>
                         <div className="flex items-center gap-2">
-                            {/* Country Select (ISO2 codes, localized names) */}
+                            {/* Nationality Select */}
                             <FormField required>
                                 <Select
                                     className="bg-white/40"
-                                    options={countryOptions}
-                                    placeholder={t("country")}
+                                    options={nationalityOptions}
+                                    placeholder={t("nationality")}
                                     value={country}
-                                    onChange={(val) => handleCountryChange(val)}
+                                    onChange={handleCountryChange}
                                 />
                             </FormField>
-                            
-                            {/* Place of Residence Select (also uses country options, independent) */}
+                            {/* Place of Residence Select */}
                             <FormField required>
                                 <Select
                                     className="bg-white/40"
-                                    options={countryOptions}
+                                    options={placeOfResidenceOptions}
                                     placeholder={t("placeOfResidence")}
                                     value={placeOfResidence}
-                                    onChange={(val) => handlePlaceOfResidenceChange(val)}
+                                    onChange={handlePlaceOfResidenceChange}
                                 />
                             </FormField>
                             
