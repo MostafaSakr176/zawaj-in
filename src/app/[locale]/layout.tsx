@@ -9,6 +9,7 @@ import Footer from "@/components/shared/footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { SocketProvider } from "@/context/SocketContext";
 import { Toaster } from 'react-hot-toast';
+import { headers } from "next/headers";
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -55,16 +56,21 @@ export default async function RootLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
+  // Check if the current route is a dashboard route
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const isDashboard = pathname.includes("/dashboard");
+
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body className="!mr-0 !ml-0 !overflow-auto">
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
             <SocketProvider>
-              <Navbar />
+              {!isDashboard && <Navbar />}
               {children}
               <Toaster />
-              <Footer />
+              {!isDashboard && <Footer />}
             </SocketProvider>
           </AuthProvider>
         </NextIntlClientProvider>

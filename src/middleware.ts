@@ -1,11 +1,21 @@
 import createMiddleware from 'next-intl/middleware';
 import {routing} from './i18n/routing';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default createMiddleware({
+const intlMiddleware = createMiddleware({
   ...routing,
   defaultLocale: 'ar', // إجبار اللغة الافتراضية عربي
   localeDetection: false, // 🔥 يمنع اكتشاف اللغة من المتصفح (Edge/Chrome)
 });
+
+export default function middleware(request: NextRequest) {
+  const response = intlMiddleware(request);
+
+  // Add pathname to headers for layout detection
+  response.headers.set('x-pathname', request.nextUrl.pathname);
+
+  return response;
+}
 
 export const config = {
   matcher: ['/', '/(ar|en)/:path*'],
