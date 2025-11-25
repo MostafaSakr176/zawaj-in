@@ -5,7 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import api from '@/lib/axiosClient'
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import countriesData from "@/lib/countries.json";
+import citiesData from "@/lib/cities.json";
+import { get } from 'http'
 
 type user = {
   id: string;
@@ -85,6 +88,19 @@ const MyFavorites = () => {
   const [loadingLikes, setLoadingLikes] = useState(true);
   const [loadingInterested, setLoadingInterested] = useState(true);
 
+  const locale = useLocale();
+const currentLocale = locale === "ar" ? "ar" : "en";
+
+  function getNationalityLabel(code: string, locale: string) {
+  const item = countriesData.find((c: any) => c.code === code);
+  return item ? (locale === "ar" ? item.ar : item.en) : code;
+}
+
+function getPlaceOfResidenceLabel(code: string, locale: string) {
+  const item = citiesData.find((city: any) => city.code === code);
+  return item ? (locale === "ar" ? item.ar ?? item.en : item.en) : code;
+}
+
   useEffect(() => {
     const fetchLikes = async () => {
       setLoadingLikes(true);
@@ -144,7 +160,8 @@ const MyFavorites = () => {
                         name={like?.likedUser?.fullName}
                         avatar={like?.likedUser?.gender === "female" || like?.likedUser?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                         age={like?.likedUser?.age}
-                        placeOfResidence={like?.likedUser?.placeOfResidence}
+                        placeOfResidence={getPlaceOfResidenceLabel(like?.likedUser?.placeOfResidence, currentLocale)}
+                        nationality={getNationalityLabel(like?.likedUser?.nationality, currentLocale)}
                         job={like?.likedUser?.natureOfWork}
                         marriageType={like?.likedUser?.marriageType}
                         skinColor={like?.likedUser?.skinColor}
@@ -173,7 +190,8 @@ const MyFavorites = () => {
                         name={like?.user?.fullName}
                         avatar={like?.user?.gender === "female" || like?.user?.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                         age={like?.user?.age}
-                        placeOfResidence={like?.user?.placeOfResidence}
+                        placeOfResidence={getPlaceOfResidenceLabel(like?.user?.placeOfResidence, currentLocale)}
+                        nationality={getNationalityLabel(like?.user?.nationality, currentLocale)}
                         job={like?.user?.natureOfWork}
                         marriageType={like?.user?.marriageType}
                         skinColor={like?.user?.skinColor}

@@ -134,6 +134,16 @@ const MyFavorites = () => {
     }));
   }, [currentLocale]);
 
+  function getNationalityLabel(code: string, locale: string) {
+  const item = countriesData.find((c: any) => c.code === code);
+  return item ? (locale === "ar" ? item.ar : item.en) : code;
+}
+
+function getPlaceOfResidenceLabel(code: string, locale: string) {
+  const item = citiesData.find((city: any) => city.code === code);
+  return item ? (locale === "ar" ? item.ar ?? item.en : item.en) : code;
+}
+
   // Filter state
   const [filters, setFilters] = useState<FilterData>({
     minAge: null,
@@ -573,7 +583,8 @@ const MyFavorites = () => {
                     name={user.fullName || "User"}
                     avatar={user.gender === "female" || user.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                     age={user.age}
-                    placeOfResidence={user?.placeOfResidence}
+                    placeOfResidence={getPlaceOfResidenceLabel(user?.placeOfResidence, currentLocale)}
+                    nationality={getNationalityLabel(user?.nationality, currentLocale)}
                     job={user?.natureOfWork}
                     marriageType={user?.marriageType}
                     skinColor={user?.skinColor}

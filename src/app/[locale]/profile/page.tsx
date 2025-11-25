@@ -6,11 +6,12 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from '@/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import api from "@/lib/axiosClient";
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Visitores from './visitores';
-
+import countriesData from "@/lib/countries.json";
+import citiesData from "@/lib/cities.json";
 type FieldProps = { label: string; value: string | number | null | undefined };
 
 
@@ -21,6 +22,21 @@ const Profile = () => {
   const [totalVisits, setTotalVisits] = useState<number>(0);
   const [showVisitores, setShowVisitores] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(!!profile?.isOnline);
+
+  const getNationalityLabel = (code: string, locale: string) => {
+  const item = countriesData.find((c: any) => c.code === code);
+  return item ? (locale === "ar" ? item.ar : item.en) : code; ;
+};
+
+const getPlaceOfResidenceLabel = (code: string, locale: string) => {
+  const item = citiesData.find((city: any) => city.code === code);
+  return item
+    ? (locale === "ar" ? item.ar ?? item.en : item.en)
+    : code;
+};
+
+  const locale = useLocale();
+  const currentLocale = locale === "ar" ? "ar" : "en";
 
   useEffect(() => {
     api.get("/users/profile/visitors")
@@ -189,13 +205,17 @@ const Profile = () => {
                 </div>
                 <div className="flex items-center flex-wrap gap-4">
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("nationality")} value={profile?.nationality} />
-                  </div>
+                    <Field
+                      label={tPartner("nationality")}
+                      value={profile?.nationality ? getNationalityLabel(profile?.nationality, currentLocale) : null}
+                    />                  </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("placeOfResidence")} value={profile?.placeOfResidence} />
-                  </div>
+                    <Field
+                      label={tPartner("placeOfResidence")}
+                      value={profile?.placeOfResidence ? getPlaceOfResidenceLabel(profile?.placeOfResidence, currentLocale) : null}
+                    />                  </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
-                    <Field label={tPartner("age")} value={`${profile.age} ${tPartner("years")}`} />
+                    <Field label={tPartner("age")} value={`${profile.age ? profile.age > 0 ? profile.age : 0 : 0} ${tPartner("years")}`} />
                   </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                     <Field label={tPartner("tribe")} value={profile.tribe} />

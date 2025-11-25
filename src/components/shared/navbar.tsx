@@ -298,7 +298,7 @@ const Navbar = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    className='text-[#FF3B30] font-medium text-lg'
+                    className='text-[#FF3B30] hover:text-[#FF3B30] font-medium text-lg'
                     onClick={logout}
                   >
                     <Power size={22} color='#FF3B30' />

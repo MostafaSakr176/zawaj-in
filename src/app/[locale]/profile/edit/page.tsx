@@ -242,16 +242,6 @@ export default function EditProfilePage() {
     }));
   };
 
-  const updateNestedField = (parent: string, field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [parent]: {
-        ...((prev[parent as keyof FormData] as object) || {}),
-        [field]: value
-      }
-    }));
-  };
-
   const saveProfile = async () => {
     setLoading(true);
     setError(null);
@@ -260,8 +250,8 @@ export default function EditProfilePage() {
         username: formData.username || null,
         dateOfBirth: formData.dateOfBirth || null,
         location: {
-          country: formData.location.country, // send name; keep ISO2 internally
-          city: formData.location.city || "Giza",
+          country: formData.location.country || null, // send name; keep ISO2 internally
+          city: formData.location.city || null,
         },
         tribe: formData.tribe || null,
         maritalStatus: formData.maritalStatus || null,
@@ -353,19 +343,32 @@ export default function EditProfilePage() {
                       {t("sections.basicInfo")}
                     </h3>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                      {/*<FormField label={<Label>{t("fields.username")}</Label>} required>
-                         <TextField
-                          value={formData.username}
-                          onChange={(e) => updateField("username", e.target.value)}
-                          placeholder={t("placeholders.write")}
-                          disabled={!!profile?.username}
-                        />
-                      </FormField> */}
                       <FormField label={<Label>{tEdit("dateOfBirth")}</Label>} required>
                         <TextField
                           type="date"
                           value={formData.dateOfBirth}
                           onChange={(e) => updateField("dateOfBirth", e.target.value)}
+                        />
+                      </FormField>
+
+                      <FormField
+                        label={<Label>{t("fields.marital")}</Label>}
+                        required
+                      >
+                        <Select
+                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
+                            { value: "virgin", label: tEdit("virgin") },
+                            { value: "f_divorced", label: tEdit("f_divorced") },
+                            { value: "f_widowed", label: tEdit("f_widowed") },
+                          ] : [
+                            { value: "single", label: tEdit("single") },
+                            { value: "divorced", label: tEdit("divorced") },
+                            { value: "widowed", label: tEdit("widowed") },
+                            { value: "married", label: tEdit("married") },
+                          ]}
+                          value={formData.maritalStatus}
+                          onChange={(val) => updateField("maritalStatus", val)}
+                          placeholder={t("placeholders.choose")}
                         />
                       </FormField>
 
@@ -400,27 +403,6 @@ export default function EditProfilePage() {
                           ]}
                           value={formData.tribe}
                           onChange={(val) => updateField("tribe", val)}
-                          placeholder={t("placeholders.choose")}
-                        />
-                      </FormField>
-
-                      <FormField
-                        label={<Label>{t("fields.marital")}</Label>}
-                        required
-                      >
-                        <Select
-                          options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
-                            { value: "virgin", label: tEdit("virgin") },
-                            { value: "f_divorced", label: tEdit("f_divorced") },
-                            { value: "f_widowed", label: tEdit("f_widowed") },
-                          ] : [
-                            { value: "single", label: tEdit("single") },
-                            { value: "divorced", label: tEdit("divorced") },
-                            { value: "widowed", label: tEdit("widowed") },
-                            { value: "married", label: tEdit("married") },
-                          ]}
-                          value={formData.maritalStatus}
-                          onChange={(val) => updateField("maritalStatus", val)}
                           placeholder={t("placeholders.choose")}
                         />
                       </FormField>

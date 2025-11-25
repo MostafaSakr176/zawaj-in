@@ -10,6 +10,7 @@ type IdCardProps = {
     name: string;
     age: number;
     placeOfResidence: string;
+    nationality: string;
     status: string;
     job: string | null;
     skinColor: string | null;
@@ -25,6 +26,7 @@ const IdCard = ({
     name,
     age,
     placeOfResidence,
+    nationality,
     status,
     job,
     skinColor,
@@ -86,11 +88,11 @@ const IdCard = ({
                     <div>
                         <div className="flex items-center justify-end gap-1">
                             <h4 className="text-base font-semibold text-[#301B69] leading-none">
-                                {name}
+                                {name} {nationality ? <span className="text-xs text-[#45376a] leading-none">({nationality})</span> : null}
                             </h4>
                             {verified && <Image src={"/icons/virify.webp"} alt="virify" width={16} height={16} />}
                         </div>
-                        <div className="text-[#301B69] text-sm font-semibold mt-1">{ (age || 0)} {tPartner("years")}</div>
+                        <div className="text-[#301B69] text-sm font-semibold mt-1">{ (age > 0 ? age + " " + tPartner("years") : 0 + " " + tPartner("years"))}</div>
                     </div>
                 </div>
                 {/* Favorite */}
