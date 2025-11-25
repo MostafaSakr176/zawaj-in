@@ -69,7 +69,8 @@ type FormData = {
 type ProfileUpdatePayload = {
   username: string | null;
   dateOfBirth: string | null;
-  location: { country: string | null; city: string | null };
+  nationality: string | null;
+  placeOfResidence: string | null;
   tribe: string | null;
   maritalStatus: string | null;
   educationLevel: string | null;
@@ -249,10 +250,8 @@ export default function EditProfilePage() {
       const profileData: ProfileUpdatePayload = {
         username: formData.username || null,
         dateOfBirth: formData.dateOfBirth || null,
-        location: {
-          country: formData.location.country || null, // send name; keep ISO2 internally
-          city: formData.location.city || null,
-        },
+        nationality: formData.nationality || null,
+        placeOfResidence: formData.placeOfResidence || null,
         tribe: formData.tribe || null,
         maritalStatus: formData.maritalStatus || null,
         educationLevel: formData.educationLevel || null,
@@ -393,9 +392,9 @@ export default function EditProfilePage() {
                       <FormField label={<Label>{t("fields.tribe")}</Label>} required>
                         <Select
                           options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
-                            { value: "tribal", label: tEdit("f_tribal") },
-                            { value: "non_tribal", label: tEdit("f_non_tribal") },
-                            { value: "other", label: tEdit("other") },
+                            { value: "f_tribal", label: tEdit("f_tribal") },
+                            { value: "f_non_tribal", label: tEdit("f_non_tribal") },
+                            { value: "f_other", label: tEdit("other") },
                           ] : [
                             { value: "tribal", label: tEdit("tribal") },
                             { value: "non_tribal", label: tEdit("non_tribal") },
