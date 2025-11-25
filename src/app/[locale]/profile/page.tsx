@@ -24,16 +24,16 @@ const Profile = () => {
   const [isOnline, setIsOnline] = useState<boolean>(!!profile?.isOnline);
 
   const getNationalityLabel = (code: string, locale: string) => {
-  const item = countriesData.find((c: any) => c.code === code);
-  return item ? (locale === "ar" ? item.ar : item.en) : code; ;
-};
+    const item = countriesData.find((c: any) => c.code === code);
+    return item ? (locale === "ar" ? item.ar : item.en) : code;;
+  };
 
-const getPlaceOfResidenceLabel = (code: string, locale: string) => {
-  const item = citiesData.find((city: any) => city.code === code);
-  return item
-    ? (locale === "ar" ? item.ar ?? item.en : item.en)
-    : code;
-};
+  const getPlaceOfResidenceLabel = (code: string, locale: string) => {
+    const item = citiesData.find((city: any) => city.code === code);
+    return item
+      ? (locale === "ar" ? item.ar ?? item.en : item.en)
+      : code;
+  };
 
   const locale = useLocale();
   const currentLocale = locale === "ar" ? "ar" : "en";
@@ -208,12 +208,14 @@ const getPlaceOfResidenceLabel = (code: string, locale: string) => {
                     <Field
                       label={tPartner("nationality")}
                       value={profile?.nationality ? getNationalityLabel(profile?.nationality, currentLocale) : null}
-                    />                  </div>
+                    />                  
+                  </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                     <Field
                       label={tPartner("placeOfResidence")}
                       value={profile?.placeOfResidence ? getPlaceOfResidenceLabel(profile?.placeOfResidence, currentLocale) : null}
-                    />                  </div>
+                    />                  
+                  </div>
                   <div className="rtl:border-l ltr:border-r border-[#ECEBFF]">
                     <Field label={tPartner("age")} value={`${profile.age ? profile.age > 0 ? profile.age : 0 : 0} ${tPartner("years")}`} />
                   </div>
