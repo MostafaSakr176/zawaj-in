@@ -15,7 +15,9 @@ import {
   Settings,
   Search,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Crown,
+  FileText
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -42,9 +44,10 @@ const menuSections: MenuSection[] = [
     title: "Management",
     items: [
       { icon: Users, label: "Users", href: "/dashboard/users" },
+      { icon: Crown, label: "Subscription Plans", href: "/dashboard/plans" },
       { icon: BarChart3, label: "Analytics & Insights", href: "/dashboard/analytics" },
       { icon: MessageSquare, label: "Chats", href: "/dashboard/chats" },
-      { icon: MessageSquare, label: "Content", href: "/dashboard/content" },
+      { icon: FileText, label: "Content", href: "/dashboard/content" },
       { icon: Lock, label: "Security & Privacy", href: "/dashboard/security" },
       { icon: MessageCircle, label: "Reviews & Feedback", href: "/dashboard/reviews" },
       { icon: UserCircle, label: "Roles & Permissions", href: "/dashboard/roles" },

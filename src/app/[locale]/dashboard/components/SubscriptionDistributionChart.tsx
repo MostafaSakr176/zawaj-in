@@ -4,19 +4,17 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
 import { RefreshCw } from "lucide-react"
 
 const data = [
-  { name: "Free", value: 40, color: "#0D0D12" },
-  { name: "One Time", value: 15, color: "#E91E8C" },
-  { name: "Gold package", value: 20, color: "#F59E0B" },
-  { name: "Silver Package", value: 25, color: "#A855F7" },
+  { name: "Free", value: 40, color: "#2D2A5E" },
+  { name: "one time", value: 15, color: "#E91E8C" },
+  { name: "Gold package", value: 20, color: "#3B82F6" },
+  { name: "Silver Package", value: 25, color: "#C4B5D0" },
 ]
 
 export function SubscriptionDistributionChart() {
-  const total = data.reduce((sum, item) => sum + item.value, 0)
-
   return (
-    <div className="bg-white rounded-2xl border border-[#DFE1E7] p-6">
+    <div className="bg-white rounded-2xl border border-[#DFE1E7] p-6 h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-[#0D0D12]">Subscription Distribution</h3>
         <button className="p-1.5 hover:bg-gray-100 rounded transition-colors">
           <RefreshCw className="w-4 h-4 text-[#666D80]" />
@@ -24,16 +22,16 @@ export function SubscriptionDistributionChart() {
       </div>
 
       {/* Chart */}
-      <div className="flex items-center gap-6">
-        <div className="relative w-40 h-40">
+      <div className="flex flex-col items-center flex-1 justify-center">
+        <div className="relative w-44 h-44 mb-6">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
-                innerRadius={50}
-                outerRadius={70}
+                innerRadius={55}
+                outerRadius={80}
                 paddingAngle={2}
                 dataKey="value"
                 strokeWidth={0}
@@ -51,9 +49,9 @@ export function SubscriptionDistributionChart() {
         </div>
 
         {/* Legend */}
-        <div className="space-y-3">
+        <div className="w-full space-y-3">
           {data.map((item, index) => (
-            <div key={index} className="flex items-center justify-between gap-8">
+            <div key={index} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
                   className="w-2.5 h-2.5 rounded-full"
@@ -61,7 +59,7 @@ export function SubscriptionDistributionChart() {
                 />
                 <span className="text-sm text-[#666D80]">{item.name}</span>
               </div>
-              <span className="text-sm font-semibold text-[#0D0D12]">{item.value}%</span>
+              <span className="text-sm font-medium text-[#0D0D12]">{item.value}%</span>
             </div>
           ))}
         </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { DashboardHeader } from "../components/DashboardHeader"
 import { DashboardSidebar } from "../components/DashboardSidebar"
 import { ChatList } from "../components/ChatList"
@@ -9,6 +9,13 @@ import { Breadcrumb } from "../components/Breadcrumb"
 
 export default function ChatsPage() {
   const [selectedChatId, setSelectedChatId] = useState<string | undefined>(undefined)
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const handleConversationClosed = useCallback(() => {
+    // Clear selection and refresh list
+    setSelectedChatId(undefined)
+    setRefreshKey(prev => prev + 1)
+  }, [])
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -34,13 +41,17 @@ export default function ChatsPage() {
               {/* Chat List */}
               <div className="w-[400px] flex-shrink-0">
                 <ChatList
+                  key={refreshKey}
                   onChatSelect={(chatId) => setSelectedChatId(chatId)}
                   selectedChatId={selectedChatId}
                 />
               </div>
 
               {/* Chat Messages */}
-              <ChatMessages chatId={selectedChatId} />
+              <ChatMessages 
+                chatId={selectedChatId} 
+                onConversationClosed={handleConversationClosed}
+              />
             </div>
           </div>
         </main>

@@ -1,9 +1,10 @@
 "use client"
 
-import { X, Settings } from "lucide-react"
+import { Settings, Loader2, XCircle, AlertTriangle, Ban, MessageSquareWarning } from "lucide-react"
 import Image from "next/image"
 
 interface Participant {
+  id: string
   name: string
   avatar?: string
 }
@@ -13,9 +14,11 @@ interface ChatOptionsModalProps {
   onClose: () => void
   participant1: Participant
   participant2: Participant
-  onBlockUser?: (user: string) => void
+  onBlockUser?: (userId: string, userName: string) => void
   onBlockBoth?: () => void
-  onSendWarning?: (user: string) => void
+  onSendWarning?: (userId: string, userName: string) => void
+  onCloseConversation?: () => void
+  isClosingConversation?: boolean
 }
 
 export function ChatOptionsModal({
@@ -25,50 +28,64 @@ export function ChatOptionsModal({
   participant2,
   onBlockUser,
   onBlockBoth,
-  onSendWarning
+  onSendWarning,
+  onCloseConversation,
+  isClosingConversation = false
 }: ChatOptionsModalProps) {
   if (!isOpen) return null
 
-  const options = [
+  const blockOptions = [
     {
       type: "block",
       label: `Block ${participant1.name}`,
       avatar: participant1.avatar,
       name: participant1.name,
+      id: participant1.id,
+      icon: Ban,
       textColor: "text-[#DF1C41]",
-      onClick: () => onBlockUser?.(participant1.name)
+      onClick: () => onBlockUser?.(participant1.id, participant1.name)
     },
     {
       type: "block",
       label: `Block ${participant2.name} Only`,
       avatar: participant2.avatar,
       name: participant2.name,
+      id: participant2.id,
+      icon: Ban,
       textColor: "text-[#DF1C41]",
-      onClick: () => onBlockUser?.(participant2.name)
+      onClick: () => onBlockUser?.(participant2.id, participant2.name)
     },
     {
       type: "block-both",
-      label: `Block ${participant2.name} and ${participant1.name}`,
+      label: `Block Both Users`,
       avatars: [participant2.avatar, participant1.avatar],
       names: [participant2.name, participant1.name],
+      icon: Ban,
       textColor: "text-[#DF1C41]",
       onClick: () => onBlockBoth?.()
-    },
+    }
+  ]
+
+  const warningOptions = [
     {
       type: "warning",
-      label: `Send Warning massage to ${participant2.name}`,
-      avatar: participant2.avatar,
-      name: participant2.name,
-      textColor: "text-[#301B69]",
-      onClick: () => onSendWarning?.(participant2.name)
-    },
-    {
-      type: "warning",
-      label: `Send Warning massage to ${participant1.name}`,
+      label: `Send Warning to ${participant1.name}`,
       avatar: participant1.avatar,
       name: participant1.name,
-      textColor: "text-[#301B69]",
-      onClick: () => onSendWarning?.(participant1.name)
+      id: participant1.id,
+      icon: MessageSquareWarning,
+      textColor: "text-[#F59E0B]",
+      onClick: () => onSendWarning?.(participant1.id, participant1.name)
+    },
+    {
+      type: "warning",
+      label: `Send Warning to ${participant2.name}`,
+      avatar: participant2.avatar,
+      name: participant2.name,
+      id: participant2.id,
+      icon: MessageSquareWarning,
+      textColor: "text-[#F59E0B]",
+      onClick: () => onSendWarning?.(participant2.id, participant2.name)
     }
   ]
 
@@ -93,13 +110,52 @@ export function ChatOptionsModal({
           </button>
         </div>
 
-        {/* Options */}
+        {/* Warning Options */}
         <div className="p-3 space-y-1">
-          {options.map((option, index) => (
+          <p className="text-xs text-[#666D80] font-medium px-2.5 mb-2">Send Warning</p>
+          {warningOptions.map((option, index) => (
             <button
-              key={index}
+              key={`warning-${index}`}
               onClick={option.onClick}
-              className="w-full flex items-center gap-3 p-2.5 hover:bg-[#F9FAFB] rounded-xl transition-colors"
+              className="w-full flex items-center gap-3 p-2.5 hover:bg-[#FEF3C7] rounded-xl transition-colors"
+            >
+              {/* Avatar */}
+              <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[#F5F5F5] flex-shrink-0">
+                {option.avatar ? (
+                  <Image
+                    src={option.avatar}
+                    alt={option.name || ""}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-sm font-semibold text-[#301B69]">
+                    {option.name?.charAt(0)}
+                  </div>
+                )}
+              </div>
+
+              {/* Label */}
+              <span className={`text-sm font-medium ${option.textColor} flex-1 text-left`}>
+                {option.label}
+              </span>
+              
+              <option.icon className="w-4 h-4 text-[#F59E0B]" />
+            </button>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-[#DFE1E7] mx-3" />
+
+        {/* Block Options */}
+        <div className="p-3 space-y-1">
+          <p className="text-xs text-[#666D80] font-medium px-2.5 mb-2">Block Users</p>
+          {blockOptions.map((option, index) => (
+            <button
+              key={`block-${index}`}
+              onClick={option.onClick}
+              className="w-full flex items-center gap-3 p-2.5 hover:bg-[#FEE2E2] rounded-xl transition-colors"
             >
               {/* Avatar(s) */}
               {option.type === "block-both" ? (
@@ -151,11 +207,34 @@ export function ChatOptionsModal({
               )}
 
               {/* Label */}
-              <span className={`text-sm font-medium ${option.textColor}`}>
+              <span className={`text-sm font-medium ${option.textColor} flex-1 text-left`}>
                 {option.label}
               </span>
+              
+              <option.icon className="w-4 h-4 text-[#DF1C41]" />
             </button>
           ))}
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-[#DFE1E7] mx-3" />
+
+        {/* Close Conversation */}
+        <div className="p-3">
+          <button
+            onClick={onCloseConversation}
+            disabled={isClosingConversation}
+            className="w-full flex items-center justify-center gap-2 p-2.5 bg-[#FEE2E2] hover:bg-[#FECACA] rounded-xl transition-colors disabled:opacity-50"
+          >
+            {isClosingConversation ? (
+              <Loader2 className="w-4 h-4 text-[#DF1C41] animate-spin" />
+            ) : (
+              <XCircle className="w-4 h-4 text-[#DF1C41]" />
+            )}
+            <span className="text-sm font-medium text-[#DF1C41]">
+              {isClosingConversation ? "Closing..." : "Close Conversation"}
+            </span>
+          </button>
         </div>
 
         {/* Done Button */}

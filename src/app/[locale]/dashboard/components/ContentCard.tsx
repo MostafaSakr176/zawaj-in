@@ -3,47 +3,73 @@
 import { useState } from "react"
 import { Badge } from "./Badge"
 import Image from "next/image"
+import { Loader2 } from "lucide-react"
 
 interface ContentCardProps {
   title: string
   status: "Active" | "Inactive"
-  content: string
+  contentEn: string
+  contentAr: string
+  contentType: string
+  settingKey: string
   imageUrl?: string
   imageName?: string
   onDelete?: () => void
-  onSave?: (content: string) => void
+  onSave?: (contentEn: string, contentAr: string) => Promise<void>
+  loading?: boolean
 }
 
 export function ContentCard({
   title,
   status,
-  content: initialContent,
+  contentEn: initialContentEn,
+  contentAr: initialContentAr,
+  contentType,
+  settingKey,
   imageUrl,
   imageName = "Image1121234346",
   onDelete,
-  onSave
+  onSave,
+  loading = false
 }: ContentCardProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [editedContent, setEditedContent] = useState(initialContent)
+  const [editedContentEn, setEditedContentEn] = useState(initialContentEn)
+  const [editedContentAr, setEditedContentAr] = useState(initialContentAr)
+  const [saving, setSaving] = useState(false)
+  const [activeLanguage, setActiveLanguage] = useState<"en" | "ar">("en")
 
   const handleEdit = () => {
     setIsEditing(true)
-    setEditedContent(initialContent)
+    setEditedContentEn(initialContentEn)
+    setEditedContentAr(initialContentAr)
   }
 
   const handleCancel = () => {
     setIsEditing(false)
-    setEditedContent(initialContent)
+    setEditedContentEn(initialContentEn)
+    setEditedContentAr(initialContentAr)
   }
 
-  const handleApply = () => {
-    onSave?.(editedContent)
-    setIsEditing(false)
+  const handleApply = async () => {
+    if (onSave) {
+      setSaving(true)
+      try {
+        await onSave(editedContentEn, editedContentAr)
+        setIsEditing(false)
+      } catch (error) {
+        // Error handling done in parent
+      } finally {
+        setSaving(false)
+      }
+    }
   }
 
   const handleUpdateImage = () => {
     console.log("Update image clicked")
   }
+
+  const displayContent = activeLanguage === "en" ? initialContentEn : initialContentAr
+  const editedContent = activeLanguage === "en" ? editedContentEn : editedContentAr
 
   return (
     <div className="bg-white rounded-2xl border border-[#DFE1E7] p-6 shadow-sm">
@@ -61,12 +87,15 @@ export function ContentCard({
             <>
               <button
                 onClick={handleApply}
-                className="px-4 py-2 bg-[#301B69] text-white text-sm font-medium rounded-lg hover:bg-[#301B69]/90 transition-colors"
+                disabled={saving}
+                className="px-4 py-2 bg-[#301B69] text-white text-sm font-medium rounded-lg hover:bg-[#301B69]/90 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
+                {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 Apply
               </button>
               <button
                 onClick={handleCancel}
+                disabled={saving}
                 className="px-4 py-2 bg-white border border-[#DFE1E7] text-[#0D0D12] text-sm font-medium rounded-lg hover:bg-[#F9FAFB] transition-colors"
               >
                 Cancel
@@ -76,7 +105,8 @@ export function ContentCard({
             <>
               <button
                 onClick={onDelete}
-                className="px-4 py-2 bg-[#DF1C41] text-white text-sm font-medium rounded-lg hover:bg-[#DF1C41]/90 transition-colors"
+                disabled={loading}
+                className="px-4 py-2 bg-[#DF1C41] text-white text-sm font-medium rounded-lg hover:bg-[#DF1C41]/90 transition-colors disabled:opacity-50"
               >
                 Delete
               </button>
@@ -91,16 +121,55 @@ export function ContentCard({
         </div>
       </div>
 
+      {/* Language Tabs */}
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={() => setActiveLanguage("en")}
+          className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+            activeLanguage === "en"
+              ? "bg-[#301B69] text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          🇺🇸 English
+        </button>
+        <button
+          onClick={() => setActiveLanguage("ar")}
+          className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+            activeLanguage === "ar"
+              ? "bg-[#301B69] text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          🇸🇦 العربية
+        </button>
+      </div>
+
       {/* Content */}
       {isEditing ? (
-        <textarea
-          value={editedContent}
-          onChange={(e) => setEditedContent(e.target.value)}
-          className="w-full h-48 p-4 text-sm text-[#666D80] leading-relaxed mb-6 border border-[#DFE1E7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#301B69]/20 resize-none"
-        />
+        <div className="space-y-3">
+          {activeLanguage === "en" ? (
+            <textarea
+              value={editedContentEn}
+              onChange={(e) => setEditedContentEn(e.target.value)}
+              dir="ltr"
+              className="w-full h-48 p-4 text-sm text-[#666D80] leading-relaxed mb-6 border border-[#DFE1E7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#301B69]/20 resize-none"
+            />
+          ) : (
+            <textarea
+              value={editedContentAr}
+              onChange={(e) => setEditedContentAr(e.target.value)}
+              dir="rtl"
+              className="w-full h-48 p-4 text-sm text-[#666D80] leading-relaxed mb-6 border border-[#DFE1E7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#301B69]/20 resize-none"
+            />
+          )}
+        </div>
       ) : (
-        <p className="text-sm text-[#666D80] leading-relaxed mb-6">
-          {initialContent}
+        <p 
+          className="text-sm text-[#666D80] leading-relaxed mb-6"
+          dir={activeLanguage === "ar" ? "rtl" : "ltr"}
+        >
+          {displayContent || <span className="text-gray-400 italic">No content</span>}
         </p>
       )}
 

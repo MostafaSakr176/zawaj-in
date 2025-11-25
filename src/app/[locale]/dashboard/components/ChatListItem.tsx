@@ -9,11 +9,13 @@ interface ChatListItemProps {
   number: string
   status: "Active" | "Reported" | "Closed"
   participant1: {
+    id: string
     name: string
     package: "Free" | "Gold"
     avatar?: string
   }
   participant2: {
+    id: string
     name: string
     package: "Free" | "Gold"
     avatar?: string
