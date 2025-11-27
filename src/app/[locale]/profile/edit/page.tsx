@@ -62,7 +62,7 @@ type FormData = {
   religiousPractice: string;
   sect: string;
   prayerLevel: string;
-  hijab_style: string | null; // ensure nullable
+  hijabStyle: string | null; // ensure nullable
 };
 
 // Define payload type (what we send)
@@ -87,7 +87,7 @@ type ProfileUpdatePayload = {
   religiosityLevel: string | null;
   // female only (optional)
   acceptPolygamy?: string | null;
-  hijab_style?: string | null;
+  hijabStyle?: string | null;
 };
 
 export default function EditProfilePage() {
@@ -133,7 +133,7 @@ export default function EditProfilePage() {
     sect: "",
     prayerLevel: "",
     acceptPolygamy: null,          // now string | null
-    hijab_style: null,
+    hijabStyle: null,
   });
 
   // Social contact validation function
@@ -218,7 +218,7 @@ export default function EditProfilePage() {
           religiousPractice: profile.religiousPractice || "",
           sect: profile.sect || "",
           prayerLevel: profile.prayerLevel || "",
-          hijab_style: profile.hijab_style || "",
+          hijabStyle: profile.hijabStyle || "",
         });
       }
     };
@@ -271,7 +271,7 @@ export default function EditProfilePage() {
       // Only add female-specific fields
       if (profile?.gender === "female" || profile?.gender === "أنثى") {
         profileData.acceptPolygamy = formData.acceptPolygamy || null;
-        profileData.hijab_style = formData.hijab_style || null;
+        profileData.hijabStyle = formData.hijabStyle || null;
       };
 
       await api.put("/users/profile", profileData);
@@ -587,7 +587,7 @@ export default function EditProfilePage() {
                             />
                           </FormField>
                           <FormField
-                            label={<Label>{t("fields.hijab_style")}</Label>}
+                            label={<Label>{t("fields.hijabStyle")}</Label>}
                             required
                           >
                             <Select
@@ -596,8 +596,8 @@ export default function EditProfilePage() {
                                 { value: "hijab", label: tEdit("veiled") },
                                 { value: "no_hijab", label: tEdit("unveiled") }
                               ]}
-                              value={formData.hijab_style?.toString()}
-                              onChange={(val) => updateField("hijab_style", val)}
+                              value={formData.hijabStyle?.toString()}
+                              onChange={(val) => updateField("hijabStyle", val)}
                               placeholder={t("placeholders.choose")}
                             />
                           </FormField>

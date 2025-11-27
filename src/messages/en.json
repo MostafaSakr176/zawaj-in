@@ -206,7 +206,7 @@
             "preferredPolygamy": "Accept Polygamy",
             "preferredMarriageType": "Marriage Type",
             "acceptPolygamy": "Accepts Polygamy?",
-            "hijab_style": "Al Hijab"
+            "hijabStyle": "Al Hijab"
         },
         "placeholders": {
             "choose": "Choose...",
@@ -493,7 +493,7 @@
         "basicInfo": "Basic Information",
         "personalDetails": "Personal Details",
         "about": "Additional information about you or your partner",
-        "hijab_style": "Al Hijab"
+        "hijabStyle": "Al Hijab"
     },
     "profile": {
         "online": "Online",

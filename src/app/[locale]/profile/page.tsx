@@ -265,7 +265,7 @@ const Profile = () => {
                         <Field label={tPartner("acceptPolygamy")} value={profile.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
                       </div>
                       <div>
-                        <Field label={tPartner("hijab_style")} value={profile.hijab_style} />
+                        <Field label={tPartner("hijabStyle")} value={profile.hijabStyle} />
                       </div>
                     </>
                   }
