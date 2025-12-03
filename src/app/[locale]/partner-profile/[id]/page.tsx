@@ -121,7 +121,7 @@ type UserDetails = {
     isliked: boolean;
     matching: boolean;
     lastSeenAt: string;
-    hijab_style: string;
+    hijabStyle: string;
 };
 
 const PartnerProfile = () => {
@@ -408,7 +408,7 @@ const PartnerProfile = () => {
                                     <Field label={tPartner("acceptPolygamy")} value={user.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
                                 </div>
                                 <div>
-                                    <Field label={tPartner("hijab_style")} value={user.hijab_style} />
+                                    <Field label={tPartner("hijabStyle")} value={user.hijabStyle} />
                                 </div>
                             </>
                         }

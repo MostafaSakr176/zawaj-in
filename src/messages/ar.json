@@ -188,7 +188,7 @@
       "preferredPolygamy": "قبول التعدد",
       "preferredMarriageType": "نوع الزواج",
     "acceptPolygamy": "تقبلين التعدد؟",
-    "hijab_style":"الحجاب"
+    "hijabStyle":"الحجاب"
     },
     "placeholders": {
       "choose": "فضلاً اختر",
@@ -474,7 +474,7 @@
     "basicInfo": "المعلومات الأساسية",
     "personalDetails": "التفاصيل الشخصية",
     "about": "معلومات اضافية عنك او الشريك",
-    "hijab_style":"الحجاب"
+    "hijabStyle":"الحجاب"
   },
   "profile": {
     "online": "متصل",

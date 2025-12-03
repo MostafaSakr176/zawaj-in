@@ -97,7 +97,7 @@ type FilterData = {
   financialStatus: string;
   healthStatus: string;
   religiosityLevel: string;
-  hijab_style?: string; // add to support female-specific filter
+  hijabStyle?: string; // add to support female-specific filter
 };
 
 const MyFavorites = () => {
@@ -174,7 +174,7 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
     financialStatus: "",
     healthStatus: "",
     religiosityLevel: "",
-    hijab_style: "",
+    hijabStyle: "",
   });
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -281,7 +281,7 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
       financialStatus: "",
       healthStatus: "",
       religiosityLevel: "",
-      hijab_style: "",
+      hijabStyle: "",
     });
     setPagination(prev => ({ ...prev, page: 1 })); // Reset to first page
     setIsSheetOpen(false);
