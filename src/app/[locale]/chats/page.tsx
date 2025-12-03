@@ -20,6 +20,7 @@ import api from "@/lib/axiosClient";
 import { useTranslations } from "next-intl";
 import { chatService } from "@/services/chatService";
 import { useSocket } from "@/context/SocketContext";
+import { useRouter } from "@/i18n/navigation";
 
 function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duration?: number; fromMe: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -290,6 +291,7 @@ const Chats = () => {
   const conversationId = searchParams.get('conversation');
   const locale = useLocale();
   const t = useTranslations("chats");
+  const router = useRouter(); // Add this line
 
 
   // Load conversations list
@@ -346,7 +348,8 @@ const Chats = () => {
   const openChat = (c: Conversation) => {
     setActiveConversation(c);
     setIsOpen(true);
-    // Mark messages as read when opening conversation
+    // Update the URL with the new conversation ID
+    router.push(`/chats?conversation=${c.id}`);
     setTimeout(() => {
       markAsRead();
     }, 500);

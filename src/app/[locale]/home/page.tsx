@@ -226,7 +226,12 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
   useEffect(() => {
     fetchUsers(pagination.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.page, profile]);
+  }, [pagination.page, profile, filters]);
+
+  // useEffect(() => {
+  //   fetchUsers(1);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [filters]);
 
   const handlePrev = () => {
     if (pagination.page > 1) {
@@ -278,7 +283,6 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
       religiosityLevel: "",
       hijab_style: "",
     });
-    fetchUsers(1);
     setPagination(prev => ({ ...prev, page: 1 })); // Reset to first page
     setIsSheetOpen(false);
   };
