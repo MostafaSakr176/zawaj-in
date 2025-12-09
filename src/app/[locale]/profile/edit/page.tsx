@@ -182,6 +182,181 @@ export default function EditProfilePage() {
   React.useEffect(() => {
     const initializeFormData = async () => {
       if (profile) {
+        // Map translated values back to English for form fields
+        const mapValueToEnglish = (field: string, value: string | null): string | null => {
+          if (!value) return value;
+
+          // Gender mappings
+          if (field === 'gender') {
+            if (value === 'ذكر' || value === 'male') return 'male';
+            if (value === 'أنثى' || value === 'female') return 'female';
+          }
+
+          // Marital status mappings
+          if (field === 'maritalStatus') {
+            const maleMap: { [key: string]: string } = {
+              'أعزب': 'single',
+              'أرمل': 'widowed',
+              'مطلق': 'divorced',
+              'متزوج': 'married'
+            };
+            const femaleMap: { [key: string]: string } = {
+              'عزباء': 'virgin',
+              'أرملة': 'f_widowed',
+              'مطلقة': 'f_divorced'
+            };
+            if (maleMap[value]) return maleMap[value];
+            if (femaleMap[value]) return femaleMap[value];
+          }
+
+          // Tribe mappings
+          if (field === 'tribe') {
+            const maleMap: { [key: string]: string } = {
+              'قبلي': 'tribal',
+              'غير قبلي': 'non_tribal'
+            };
+            const femaleMap: { [key: string]: string } = {
+              'قبلية': 'f_tribal',
+              'غير قبلية': 'f_non_tribal'
+            };
+            if (maleMap[value]) return maleMap[value];
+            if (femaleMap[value]) return femaleMap[value];
+          }
+
+          // Health status mappings
+          if (field === 'healthStatus') {
+            const maleMap: { [key: string]: string } = {
+              'سليم': 'healthy',
+              'مزمن المرض': 'chronically_ill',
+              'معاق': 'disabled'
+            };
+            const femaleMap: { [key: string]: string } = {
+              'سليمة': 'f_healthy',
+              'مزمنة المرض': 'f_chronically_ill',
+              'معاقة': 'f_disabled'
+            };
+            if (maleMap[value]) return maleMap[value];
+            if (femaleMap[value]) return femaleMap[value];
+          }
+
+          // Financial status mappings
+          if (field === 'financialStatus') {
+            const map: { [key: string]: string } = {
+              'ممتاز': 'excellent',
+              'جيد': 'good',
+              'متوسط': 'average'
+            };
+            if (map[value]) return map[value];
+          }
+
+          // Religiosity level mappings
+          if (field === 'religiosityLevel') {
+            const maleMap: { [key: string]: string } = {
+              'عادي': 'normal',
+              'محافظ': 'conservative',
+              'ملتزم': 'committed'
+            };
+            const femaleMap: { [key: string]: string } = {
+              'عادية': 'f_normal',
+              'محافظة': 'f_conservative',
+              'ملتزمة': 'f_committed'
+            };
+            if (maleMap[value]) return maleMap[value];
+            if (femaleMap[value]) return femaleMap[value];
+          }
+
+          // Education level mappings
+          if (field === 'educationLevel') {
+            const map: { [key: string]: string } = {
+              'ثانوي': 'secondary',
+              'دبلوم': 'diploma',
+              'جامعي': 'university',
+              'دراسات عليا': 'higher_education'
+            };
+            if (map[value]) return map[value];
+          }
+
+          // Nature of work mappings
+          if (field === 'natureOfWork') {
+            const maleMap: { [key: string]: string } = {
+              'عاطل': 'unemployed',
+              'موظف': 'employed',
+              'صاحب عمل': 'self_employed'
+            };
+            const femaleMap: { [key: string]: string } = {
+              'عاطلة': 'f_unemployed',
+              'موظفة': 'f_employed',
+              'صاحبة عمل': 'self_employed'
+            };
+            if (maleMap[value]) return maleMap[value];
+            if (femaleMap[value]) return femaleMap[value];
+          }
+
+          // Skin color mappings
+          if (field === 'skinColor') {
+            const maleMap: { [key: string]: string } = {
+              'أبيض': 'white',
+              'بني': 'brown',
+              'أسود': 'black'
+            };
+            const femaleMap: { [key: string]: string } = {
+              'بيضاء': 'f_white',
+              'بنية': 'f_brown',
+              'سمراء': 'f_black'
+            };
+            if (maleMap[value]) return maleMap[value];
+            if (femaleMap[value]) return femaleMap[value];
+          }
+
+          // Beauty mappings
+          if (field === 'beauty') {
+            const maleMap: { [key: string]: string } = {
+              'مقبول': 'acceptable',
+              'متوسط': 'average',
+              'وسيم': 'handsome'
+            };
+            const femaleMap: { [key: string]: string } = {
+              'مقبولة': 'f_acceptable',
+              'متوسطة': 'f_average',
+              'جميلة': 'f_beautiful',
+              'جميلة جدا': 'f_very_beautiful'
+            };
+            if (maleMap[value]) return maleMap[value];
+            if (femaleMap[value]) return femaleMap[value];
+          }
+
+          // Marriage type mappings
+          if (field === 'marriageType') {
+            const map: { [key: string]: string } = {
+              'تقليدي': 'traditional',
+              'مدني': 'mesyar'
+            };
+            if (map[value]) return map[value];
+          }
+
+          // Accept polygamy mappings
+          if (field === 'acceptPolygamy') {
+            const map: { [key: string]: string } = {
+              'نعم': 'yes',
+              'لا': 'no',
+              'أفكر': 'thinking'
+            };
+            if (map[value]) return map[value];
+          }
+
+          // Hijab style mappings
+          if (field === 'hijabStyle') {
+            const map: { [key: string]: string } = {
+              'نقاب': 'niqab',
+              'حجاب': 'hijab',
+              'بدون حجاب': 'no_hijab'
+            };
+            if (map[value]) return map[value];
+          }
+
+          return value;
+        };
+
         setFormData({
           username: profile.username || "",
           dateOfBirth: profile.dateOfBirth || "",
@@ -193,32 +368,32 @@ export default function EditProfilePage() {
           origin: profile.origin || "",
           nationality: profile.nationality || "",
           placeOfResidence: profile.placeOfResidence || "",
-          tribe: profile.tribe || "",
-          maritalStatus: profile.maritalStatus || "",
+          tribe: mapValueToEnglish('tribe', profile.tribe) || "",
+          maritalStatus: mapValueToEnglish('maritalStatus', profile.maritalStatus) || "",
           numberOfChildren: profile.numberOfChildren,
           profession: profile.profession || "",
-          educationLevel: profile.educationLevel || "",
-          natureOfWork: profile.natureOfWork || "",
-          financialStatus: profile.financialStatus || "",
-          healthStatus: profile.healthStatus || "",
-          religiosityLevel: profile.religiosityLevel || "",
+          educationLevel: mapValueToEnglish('educationLevel', profile.educationLevel) || "",
+          natureOfWork: mapValueToEnglish('natureOfWork', profile.natureOfWork) || "",
+          financialStatus: mapValueToEnglish('financialStatus', profile.financialStatus) || "",
+          healthStatus: mapValueToEnglish('healthStatus', profile.healthStatus) || "",
+          religiosityLevel: mapValueToEnglish('religiosityLevel', profile.religiosityLevel) || "",
           weight: profile.weight,
           height: profile.height,
-          skinColor: profile.skinColor || "",
-          beauty: profile.beauty || "",
+          skinColor: mapValueToEnglish('skinColor', profile.skinColor) || "",
+          beauty: mapValueToEnglish('beauty', profile.beauty) || "",
           bodyColor: profile.bodyColor || "",
           hairColor: profile.hairColor || "",
           hairType: profile.hairType || "",
           eyeColor: profile.eyeColor || "",
           houseAvailable: profile.houseAvailable,
           bio: profile.bio || "",
-          marriageType: profile.marriageType || "",
-          acceptPolygamy: profile.acceptPolygamy || "",  // CHANGED
+          marriageType: mapValueToEnglish('marriageType', profile.marriageType) || "",
+          acceptPolygamy: mapValueToEnglish('acceptPolygamy', profile.acceptPolygamy) || "",
           polygamyStatus: profile.polygamyStatus || "",
           religiousPractice: profile.religiousPractice || "",
           sect: profile.sect || "",
           prayerLevel: profile.prayerLevel || "",
-          hijabStyle: profile.hijabStyle || "",
+          hijabStyle: mapValueToEnglish('hijabStyle', profile.hijabStyle) || "",
         });
       }
     };
