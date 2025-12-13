@@ -145,8 +145,20 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
 }
 
 // Helper function to normalize Arabic values to English keys
+// Also handles cases where API returns English keys directly (including f_ prefixed values)
 function normalizeToEnglishKey(value: string, field: string, userGender?: string): string {
   const isFemale = userGender === "female" || userGender === "أنثى";
+  
+  // If value already starts with f_ or is a known English key, return as-is
+  // This handles cases where API returns English keys directly
+  if (value.startsWith('f_') || 
+      ['single', 'divorced', 'widowed', 'married', 'virgin', 
+       'unemployed', 'employed', 'self_employed',
+       'white', 'brown', 'black',
+       'traditional', 'mesyar', 'civil',
+       'acceptable', 'average', 'handsome', 'beautiful', 'very_beautiful'].includes(value)) {
+    return value;
+  }
   
   // Marital status mappings
   if (field === 'maritalStatus') {
@@ -205,6 +217,23 @@ function normalizeToEnglishKey(value: string, field: string, userGender?: string
       'مسيار': 'mesyar'
     };
     if (map[value]) return map[value];
+  }
+  
+  // Beauty mappings
+  if (field === 'beauty') {
+    const maleMap: { [key: string]: string } = {
+      'مقبول': 'acceptable',
+      'متوسط': 'average',
+      'وسيم': 'handsome'
+    };
+    const femaleMap: { [key: string]: string } = {
+      'مقبولة': 'f_acceptable',
+      'متوسطة': 'f_average',
+      'جميلة': 'f_beautiful',
+      'جميلة جدا': 'f_very_beautiful'
+    };
+    if (isFemale && femaleMap[value]) return femaleMap[value];
+    if (maleMap[value]) return maleMap[value];
   }
   
   return value; // Return as-is if no mapping found
@@ -277,6 +306,26 @@ function translateMarriageType(value: string | null, locale: string, tEdit: any)
   const translations: { [key: string]: string } = {
     "traditional": tEdit("traditional"),
     "mesyar": tEdit("civil"),
+  };
+  
+  return translations[normalizedValue] || value;
+}
+
+function translateBeauty(value: string | null, locale: string, tEdit: any, userGender?: string): string | null {
+  if (!value) return null;
+  
+  // Normalize Arabic values to English keys
+  const normalizedValue = normalizeToEnglishKey(value, 'beauty', userGender);
+  const isFemale = userGender === "female" || userGender === "أنثى";
+  
+  const translations: { [key: string]: string } = {
+    "acceptable": isFemale ? tEdit("f_acceptable") : tEdit("acceptable"),
+    "average": isFemale ? tEdit("f_average") : tEdit("average"),
+    "handsome": tEdit("handsome"),
+    "f_acceptable": tEdit("f_acceptable"),
+    "f_average": tEdit("f_average"),
+    "f_beautiful": tEdit("f_beautiful"),
+    "f_very_beautiful": tEdit("f_very_beautiful"),
   };
   
   return translations[normalizedValue] || value;
