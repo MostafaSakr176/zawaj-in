@@ -547,7 +547,7 @@
     "f_unemployed": "عاطلة",
     "employed": "موظف",
     "f_employed": "موظفة",
-    "selfEmployed": "أعمال حرة",
+    "self_employed": "أعمال حرة",
     "selectCountryFirst": "اختر البلد أولاً",
     "noCitiesAvailable": "لا توجد مدن متاحة",
     "tribal": "قبلي",

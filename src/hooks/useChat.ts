@@ -68,6 +68,7 @@ export function useConversations() {
     loading,
     error,
     refreshConversations,
+    setConversations, // <-- add this line
   };
 }
 

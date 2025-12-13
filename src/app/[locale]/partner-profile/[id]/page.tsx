@@ -93,7 +93,7 @@ type UserDetails = {
     preferredEyeColors: string[] | null;
     partnerPreferencesBio: string | null;
     marriageType: string | null;
-    acceptPolygamy: boolean | null;
+    acceptPolygamy: string | null;
     polygamyStatus: string | null;
     detailedProfile: string | null;
     religiousPractice: string | null;
@@ -195,7 +195,7 @@ const PartnerProfile = () => {
             toast.error(tPartner("pleaseLoginToSendMessage"))
             return
         }
-        if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 80) {
+        if (profile && profile.profileCompletion && profile.profileCompletion.percentage < 70) {
             toast.error(tPartner("completeProfileToSendMessage"));
             router.push('/profile/edit');
             return;
@@ -314,7 +314,7 @@ const PartnerProfile = () => {
                         <div className="relative group">
                             <button
                                 onClick={handleSendMessage}
-                                disabled={profile && profile.profileCompletion.percentage < 80 || chatLoading}
+                                disabled={profile && profile.profileCompletion.percentage < 70 || chatLoading}
                                 aria-describedby="send-msg-tip"
                                 className="flex items-center gap-2 rounded-full border border-[#E9E6FF] bg-[#301B6914] px-5 py-2 text-[#2D1F55] font-semibold hover:bg-white transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                             >
@@ -326,7 +326,7 @@ const PartnerProfile = () => {
                                 id="send-msg-tip"
                                 className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#2D1F55] px-3 py-1 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                             >
-                                {profile && profile.profileCompletion.percentage < 80
+                                {profile && profile.profileCompletion.percentage < 70
                                     ? tPartner("completeProfileToSendMessage")
                                     : tPartner("sendMessage")}
                             </div>
@@ -405,10 +405,10 @@ const PartnerProfile = () => {
                         {user?.gender === "female" || user?.gender === "أنثى" &&
                             <>
                                 <div>
-                                    <Field label={tPartner("acceptPolygamy")} value={user.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
+                                    <Field label={tPartner("acceptPolygamy")} value={user?.acceptPolygamy} />
                                 </div>
                                 <div>
-                                    <Field label={tPartner("hijabStyle")} value={user.hijabStyle} />
+                                    <Field label={tPartner("hijabStyle")} value={user?.hijabStyle} />
                                 </div>
                             </>
                         }

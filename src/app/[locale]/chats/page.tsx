@@ -295,7 +295,7 @@ const Chats = () => {
 
 
   // Load conversations list
-  const { conversations, loading: conversationsLoading, refreshConversations } = useConversations();
+  const { conversations, loading: conversationsLoading, refreshConversations, setConversations } = useConversations();
 
   // Load messages for active conversation
   const {
@@ -352,6 +352,12 @@ const Chats = () => {
     router.push(`/chats?conversation=${c.id}`);
     setTimeout(() => {
       markAsRead();
+      // Locally update unreadCount for this conversation
+      setConversations((prev: Conversation[]) =>
+        prev.map(conv =>
+          conv.id === c.id ? { ...conv, unreadCount: 0 } : conv
+        )
+      );
     }, 500);
   };
 

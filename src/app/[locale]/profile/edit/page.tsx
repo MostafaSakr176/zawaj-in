@@ -227,12 +227,12 @@ export default function EditProfilePage() {
           if (field === 'healthStatus') {
             const maleMap: { [key: string]: string } = {
               'سليم': 'healthy',
-              'مزمن المرض': 'chronically_ill',
+              'مريض مزمن': 'chronically_ill',
               'معاق': 'disabled'
             };
             const femaleMap: { [key: string]: string } = {
               'سليمة': 'f_healthy',
-              'مزمنة المرض': 'f_chronically_ill',
+              'مريضة مزمنة': 'f_chronically_ill',
               'معاقة': 'f_disabled'
             };
             if (maleMap[value]) return maleMap[value];
@@ -281,12 +281,12 @@ export default function EditProfilePage() {
             const maleMap: { [key: string]: string } = {
               'عاطل': 'unemployed',
               'موظف': 'employed',
-              'صاحب عمل': 'self_employed'
+              'عمل حر': 'self_employed'
             };
             const femaleMap: { [key: string]: string } = {
               'عاطلة': 'f_unemployed',
               'موظفة': 'f_employed',
-              'صاحبة عمل': 'self_employed'
+              'عمل حر': 'self_employed'
             };
             if (maleMap[value]) return maleMap[value];
             if (femaleMap[value]) return femaleMap[value];
@@ -296,12 +296,12 @@ export default function EditProfilePage() {
           if (field === 'skinColor') {
             const maleMap: { [key: string]: string } = {
               'أبيض': 'white',
-              'بني': 'brown',
+              'حنطي': 'brown',
               'أسود': 'black'
             };
             const femaleMap: { [key: string]: string } = {
               'بيضاء': 'f_white',
-              'بنية': 'f_brown',
+              'حنطية': 'f_brown',
               'سمراء': 'f_black'
             };
             if (maleMap[value]) return maleMap[value];
@@ -348,7 +348,7 @@ export default function EditProfilePage() {
           if (field === 'hijabStyle') {
             const map: { [key: string]: string } = {
               'نقاب': 'niqab',
-              'حجاب': 'hijab',
+              'محجبة': 'hijab',
               'بدون حجاب': 'no_hijab'
             };
             if (map[value]) return map[value];
@@ -652,11 +652,11 @@ export default function EditProfilePage() {
                           options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_unemployed", label: tEdit("f_unemployed") },
                             { value: "f_employed", label: tEdit("f_employed") },
-                            { value: "self_employed", label: tEdit("selfEmployed") },
+                            { value: "self_employed", label: tEdit("self_employed") },
                           ] : [
                             { value: "unemployed", label: tEdit("unemployed") },
                             { value: "employed", label: tEdit("employed") },
-                            { value: "self_employed", label: tEdit("selfEmployed") },
+                            { value: "self_employed", label: tEdit("self_employed") },
                           ]}
                           value={formData.natureOfWork}
                           onChange={(val) => updateField("natureOfWork", val)}

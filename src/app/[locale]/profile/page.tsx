@@ -262,7 +262,7 @@ const Profile = () => {
                   {profile?.gender === "female" || profile?.gender === "أنثى" &&
                     <>
                       <div>
-                        <Field label={tPartner("acceptPolygamy")} value={profile.acceptPolygamy ? tPartner("yes") : tPartner("no")} />
+                        <Field label={tPartner("acceptPolygamy")} value={profile.acceptPolygamy} />
                       </div>
                       <div>
                         <Field label={tPartner("hijabStyle")} value={profile.hijabStyle} />

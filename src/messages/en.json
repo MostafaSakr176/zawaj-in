@@ -566,7 +566,7 @@
         "f_unemployed": "Unemployed",
         "employed": "Employed",
         "f_employed": "Employed",
-        "selfEmployed": "Self-employed",
+        "self_employed": "Self-employed",
         "selectCountryFirst": "Select country first",
         "noCitiesAvailable": "No cities available",
         "tribal": "Tribal",
