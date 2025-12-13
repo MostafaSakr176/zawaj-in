@@ -144,6 +144,144 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
   return item ? (locale === "ar" ? item.ar ?? item.en : item.en) : code;
 }
 
+// Helper function to normalize Arabic values to English keys
+function normalizeToEnglishKey(value: string, field: string, userGender?: string): string {
+  const isFemale = userGender === "female" || userGender === "أنثى";
+  
+  // Marital status mappings
+  if (field === 'maritalStatus') {
+    const maleMap: { [key: string]: string } = {
+      'أعزب': 'single',
+      'مطلق': 'divorced',
+      'أرمل': 'widowed',
+      'متزوج': 'married',
+    };
+    const femaleMap: { [key: string]: string } = {
+      'بكر': 'virgin',
+      'مطلقة': 'f_divorced',
+      'أرملة': 'f_widowed',
+      'متزوجة': 'married',
+    };
+    if (isFemale && femaleMap[value]) return femaleMap[value];
+    if (maleMap[value]) return maleMap[value];
+  }
+  
+  // Nature of work mappings
+  if (field === 'natureOfWork') {
+    const maleMap: { [key: string]: string } = {
+      'عاطل': 'unemployed',
+      'موظف': 'employed',
+      'صاحب عمل': 'self_employed'
+    };
+    const femaleMap: { [key: string]: string } = {
+      'عاطلة': 'f_unemployed',
+      'موظفة': 'f_employed',
+      'صاحبة عمل': 'self_employed'
+    };
+    if (isFemale && femaleMap[value]) return femaleMap[value];
+    if (maleMap[value]) return maleMap[value];
+  }
+  
+  // Skin color mappings
+  if (field === 'skinColor') {
+    const maleMap: { [key: string]: string } = {
+      'أبيض': 'white',
+      'بني': 'brown',
+      'أسود': 'black'
+    };
+    const femaleMap: { [key: string]: string } = {
+      'بيضاء': 'f_white',
+      'بنية': 'f_brown',
+      'سمراء': 'f_black'
+    };
+    if (isFemale && femaleMap[value]) return femaleMap[value];
+    if (maleMap[value]) return maleMap[value];
+  }
+  
+  // Marriage type mappings
+  if (field === 'marriageType') {
+    const map: { [key: string]: string } = {
+      'تقليدي': 'traditional',
+      'مسيار': 'mesyar'
+    };
+    if (map[value]) return map[value];
+  }
+  
+  return value; // Return as-is if no mapping found
+}
+
+// Translation functions for user data fields
+function translateMaritalStatus(value: string | null, locale: string, tEdit: any, userGender?: string): string | null {
+  if (!value) return null;
+  
+  // Normalize Arabic values to English keys
+  const normalizedValue = normalizeToEnglishKey(value, 'maritalStatus', userGender);
+  const isFemale = userGender === "female" || userGender === "أنثى";
+  
+  const translations: { [key: string]: string } = {
+    "single": tEdit("single"),
+    "divorced": isFemale ? tEdit("f_divorced") : tEdit("divorced"),
+    "widowed": isFemale ? tEdit("f_widowed") : tEdit("widowed"),
+    "married": tEdit("married"),
+    "virgin": tEdit("virgin"),
+    "f_divorced": tEdit("f_divorced"),
+    "f_widowed": tEdit("f_widowed"),
+  };
+  
+  return translations[normalizedValue] || value;
+}
+
+function translateNatureOfWork(value: string | null, locale: string, tEdit: any, userGender?: string): string | null {
+  if (!value) return null;
+  
+  // Normalize Arabic values to English keys
+  const normalizedValue = normalizeToEnglishKey(value, 'natureOfWork', userGender);
+  const isFemale = userGender === "female" || userGender === "أنثى";
+  
+  const translations: { [key: string]: string } = {
+    "unemployed": isFemale ? tEdit("f_unemployed") : tEdit("unemployed"),
+    "employed": isFemale ? tEdit("f_employed") : tEdit("employed"),
+    "self_employed": tEdit("selfEmployed"),
+    "f_unemployed": tEdit("f_unemployed"),
+    "f_employed": tEdit("f_employed"),
+  };
+  
+  return translations[normalizedValue] || value;
+}
+
+function translateSkinColor(value: string | null, locale: string, tEdit: any, userGender?: string): string | null {
+  if (!value) return null;
+  
+  // Normalize Arabic values to English keys
+  const normalizedValue = normalizeToEnglishKey(value, 'skinColor', userGender);
+  const isFemale = userGender === "female" || userGender === "أنثى";
+  
+  const translations: { [key: string]: string } = {
+    "white": isFemale ? tEdit("f_white") : tEdit("white"),
+    "brown": isFemale ? tEdit("f_brown") : tEdit("brown"),
+    "black": isFemale ? tEdit("f_dark") : tEdit("dark"),
+    "f_white": tEdit("f_white"),
+    "f_brown": tEdit("f_brown"),
+    "f_black": tEdit("f_dark"),
+  };
+  
+  return translations[normalizedValue] || value;
+}
+
+function translateMarriageType(value: string | null, locale: string, tEdit: any): string | null {
+  if (!value) return null;
+  
+  // Normalize Arabic values to English keys
+  const normalizedValue = normalizeToEnglishKey(value, 'marriageType');
+  
+  const translations: { [key: string]: string } = {
+    "traditional": tEdit("traditional"),
+    "mesyar": tEdit("civil"),
+  };
+  
+  return translations[normalizedValue] || value;
+}
+
   // Filter state
   const [filters, setFilters] = useState<FilterData>({
     minAge: null,
@@ -587,12 +725,12 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
                     name={user.fullName || "User"}
                     avatar={user.gender === "female" || user.gender === "أنثى" ? "/icons/female-img.webp" : "/photos/male-icon.png"}
                     age={user.age}
-                    placeOfResidence={getPlaceOfResidenceLabel(user?.placeOfResidence, currentLocale)}
-                    nationality={getNationalityLabel(user?.nationality, currentLocale)}
-                    job={user?.natureOfWork}
-                    marriageType={user?.marriageType}
-                    skinColor={user?.skinColor}
-                    status={user?.maritalStatus}
+                    placeOfResidence={getPlaceOfResidenceLabel(user?.placeOfResidence, currentLocale) || ""}
+                    nationality={getNationalityLabel(user?.nationality, currentLocale) || ""}
+                    job={translateNatureOfWork(user?.natureOfWork, currentLocale, tEdit, user.gender)}
+                    marriageType={translateMarriageType(user?.marriageType, currentLocale, tEdit)}
+                    skinColor={translateSkinColor(user?.skinColor, currentLocale, tEdit, user.gender)}
+                    status={translateMaritalStatus(user?.maritalStatus, currentLocale, tEdit, user.gender) || ""}
                     online={user?.isOnline} // This will now show real-time status
                   />
                 ))
