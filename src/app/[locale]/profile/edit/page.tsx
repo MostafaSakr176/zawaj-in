@@ -329,7 +329,7 @@ export default function EditProfilePage() {
           if (field === 'marriageType') {
             const map: { [key: string]: string } = {
               'تقليدي': 'traditional',
-              'مدني': 'mesyar'
+              'مسيار': 'mesyar',
             };
             if (map[value]) return map[value];
           }
@@ -357,6 +357,30 @@ export default function EditProfilePage() {
           return value;
         };
 
+        // Map nationality text (Arabic/English) to code
+        const mapNationalityToCode = (value: string | null): string | null => {
+          if (!value) return value;
+          // If it's already a code (3 uppercase letters), return as is
+          if (/^[A-Z]{3}$/.test(value)) return value;
+          // Find by Arabic or English name
+          const country = countriesData.find((c: any) => 
+            c.ar === value || c.en === value || c.code === value
+          );
+          return country ? country.code : value;
+        };
+
+        // Map placeOfResidence text (Arabic/English) to code
+        const mapPlaceOfResidenceToCode = (value: string | null): string | null => {
+          if (!value) return value;
+          // If it's already a code (3 uppercase letters), return as is
+          if (/^[A-Z]{3}$/.test(value)) return value;
+          // Find by Arabic or English name
+          const city = citiesData.find((c: any) => 
+            c.ar === value || c.en === value || c.code === value
+          );
+          return city ? city.code : value;
+        };
+
         setFormData({
           username: profile.username || "",
           dateOfBirth: profile.dateOfBirth || "",
@@ -366,8 +390,8 @@ export default function EditProfilePage() {
             country: profile.location?.country || "",
           },
           origin: profile.origin || "",
-          nationality: profile.nationality || "",
-          placeOfResidence: profile.placeOfResidence || "",
+          nationality: mapNationalityToCode(profile.nationality) || "",
+          placeOfResidence: mapPlaceOfResidenceToCode(profile.placeOfResidence) || "",
           tribe: mapValueToEnglish('tribe', profile.tribe) || "",
           maritalStatus: mapValueToEnglish('maritalStatus', profile.maritalStatus) || "",
           numberOfChildren: profile.numberOfChildren,
