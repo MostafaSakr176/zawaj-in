@@ -579,8 +579,23 @@
     "needToThink": "يحتاج الموضوع لتفكير",
     "niqab":"منقبة",
     "veiled":"محجبة",
-    "unveiled":"غير محجبة"
-
+    "unveiled":"غير محجبة",
+    "validation": {
+      "dateOfBirthRequired": "تاريخ الميلاد مطلوب",
+      "dateOfBirthInvalid": "صيغة التاريخ غير صحيحة",
+      "ageMinimum": "يجب أن يكون عمرك 18 عاماً على الأقل",
+      "ageMaximum": "يرجى إدخال تاريخ ميلاد صحيح",
+      "dateOfBirthFuture": "تاريخ الميلاد لا يمكن أن يكون في المستقبل",
+      "weightRequired": "الوزن مطلوب",
+      "weightInvalid": "يرجى إدخال وزن صحيح",
+      "weightRange": "الوزن يجب أن يكون بين 30 و 300 كيلوغرام",
+      "heightRequired": "الطول مطلوب",
+      "heightInvalid": "يرجى إدخال طول صحيح",
+      "heightRange": "الطول يجب أن يكون بين 100 و 250 سنتيمتر",
+      "fieldRequired": "هذا الحقل مطلوب",
+      "formInvalid": "يرجى إصلاح جميع الأخطاء قبل الإرسال",
+      "pleaseFixErrors": "يرجى إصلاح الأخطاء التالية:"
+    }
   },
   "terms": {
     "imageHeading": "نربط بين القلوب بنية الزواج، لا للتسلية",

@@ -96,6 +96,7 @@ export default function EditProfilePage() {
   const { profile, refreshProfile } = useAuth();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
   const router = useRouter();
   const [success, setSuccess] = React.useState<boolean>(false);
   const locale = useLocale();
@@ -201,9 +202,9 @@ export default function EditProfilePage() {
               'متزوج': 'married'
             };
             const femaleMap: { [key: string]: string } = {
-              'عزباء': 'virgin',
+              'عذراء': 'virgin',
               'أرملة': 'f_widowed',
-              'مطلقة': 'f_divorced'
+              'مطلقة': 'f_divorced',
             };
             if (maleMap[value]) return maleMap[value];
             if (femaleMap[value]) return femaleMap[value];
@@ -213,11 +214,13 @@ export default function EditProfilePage() {
           if (field === 'tribe') {
             const maleMap: { [key: string]: string } = {
               'قبلي': 'tribal',
-              'غير قبلي': 'non_tribal'
+              'غير قبلي': 'non_tribal',
+              'غير ذلك': 'other'
             };
             const femaleMap: { [key: string]: string } = {
               'قبلية': 'f_tribal',
-              'غير قبلية': 'f_non_tribal'
+              'غير قبلية': 'f_non_tribal',
+              'غير ذلك': 'f_other'
             };
             if (maleMap[value]) return maleMap[value];
             if (femaleMap[value]) return femaleMap[value];
@@ -232,7 +235,7 @@ export default function EditProfilePage() {
             };
             const femaleMap: { [key: string]: string } = {
               'سليمة': 'f_healthy',
-              'مريضة مزمنة': 'f_chronically_ill',
+              'مريضة مرض مزمن': 'f_chronically_ill',
               'معاقة': 'f_disabled'
             };
             if (maleMap[value]) return maleMap[value];
@@ -279,12 +282,12 @@ export default function EditProfilePage() {
           // Nature of work mappings
           if (field === 'natureOfWork') {
             const maleMap: { [key: string]: string } = {
-              'عاطل': 'unemployed',
+              'عاطل عن العمل': 'unemployed',
               'موظف': 'employed',
               'عمل حر': 'self_employed'
             };
             const femaleMap: { [key: string]: string } = {
-              'عاطلة': 'f_unemployed',
+              'عاطلة عن العمل': 'f_unemployed',
               'موظفة': 'f_employed',
               'عمل حر': 'self_employed'
             };
@@ -297,7 +300,7 @@ export default function EditProfilePage() {
             const maleMap: { [key: string]: string } = {
               'أبيض': 'white',
               'حنطي': 'brown',
-              'أسود': 'black'
+              'أسمر': 'black'
             };
             const femaleMap: { [key: string]: string } = {
               'بيضاء': 'f_white',
@@ -319,7 +322,7 @@ export default function EditProfilePage() {
               'مقبولة': 'f_acceptable',
               'متوسطة': 'f_average',
               'جميلة': 'f_beautiful',
-              'جميلة جدا': 'f_very_beautiful'
+              'جميلة جداً': 'f_very_beautiful'
             };
             if (maleMap[value]) return maleMap[value];
             if (femaleMap[value]) return femaleMap[value];
@@ -339,7 +342,7 @@ export default function EditProfilePage() {
             const map: { [key: string]: string } = {
               'نعم': 'yes',
               'لا': 'no',
-              'أفكر': 'thinking'
+              'أحتاج للتفكير': 'thinking'
             };
             if (map[value]) return map[value];
           }
@@ -347,9 +350,9 @@ export default function EditProfilePage() {
           // Hijab style mappings
           if (field === 'hijabStyle') {
             const map: { [key: string]: string } = {
-              'نقاب': 'niqab',
+              'منقبة': 'niqab',
               'محجبة': 'hijab',
-              'بدون حجاب': 'no_hijab'
+              'غير محجبة': 'no_hijab'
             };
             if (map[value]) return map[value];
           }
@@ -424,16 +427,169 @@ export default function EditProfilePage() {
     initializeFormData();
   }, [profile]);
 
-  const updateField = (field: string, value: any) => {
-    // Validate social contacts for text fields
+  const validateField = (field: string, value: any): string | null => {
+    // Date of Birth validation
+    if (field === 'dateOfBirth') {
+      if (!value || value.trim() === '') {
+        return tEdit("validation.dateOfBirthRequired") || "Date of birth is required";
+      }
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        return tEdit("validation.dateOfBirthInvalid") || "Invalid date";
+      }
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const actualAge = monthDiff < 0 || (monthDiff === 0 && today.getDate() < date.getDate()) ? age - 1 : age;
+      
+      if (actualAge < 18) {
+        return tEdit("validation.ageMinimum") || "You must be at least 18 years old";
+      }
+      if (actualAge > 120) {
+        return tEdit("validation.ageMaximum") || "Please enter a valid date of birth";
+      }
+      if (date > today) {
+        return tEdit("validation.dateOfBirthFuture") || "Date of birth cannot be in the future";
+      }
+    }
+
+    // Weight validation
+    if (field === 'weight') {
+      if (value === null || value === undefined || value === '') {
+        return tEdit("validation.weightRequired") || "Weight is required";
+      }
+      const weightNum = typeof value === 'string' ? parseFloat(value) : value;
+      if (isNaN(weightNum) || weightNum <= 0) {
+        return tEdit("validation.weightInvalid") || "Please enter a valid weight";
+      }
+      if (weightNum < 30 || weightNum > 300) {
+        return tEdit("validation.weightRange") || "Weight must be between 30 and 300 kg";
+      }
+    }
+
+    // Height validation
+    if (field === 'height') {
+      if (value === null || value === undefined || value === '') {
+        return tEdit("validation.heightRequired") || "Height is required";
+      }
+      const heightNum = typeof value === 'string' ? parseFloat(value) : value;
+      if (isNaN(heightNum) || heightNum <= 0) {
+        return tEdit("validation.heightInvalid") || "Please enter a valid height";
+      }
+      if (heightNum < 100 || heightNum > 250) {
+        return tEdit("validation.heightRange") || "Height must be between 100 and 250 cm";
+      }
+    }
+
+    // Required select fields validation
+    const requiredFields = ['maritalStatus', 'nationality', 'placeOfResidence', 'tribe', 'natureOfWork', 'skinColor', 'beauty', 'marriageType'];
+    if (requiredFields.includes(field)) {
+      if (!value || value.trim() === '') {
+        return tEdit("validation.fieldRequired") || "This field is required";
+      }
+    }
+
+    // Female-specific required fields
+    if ((profile?.gender === "female" || profile?.gender === "أنثى") && (field === 'acceptPolygamy' || field === 'hijabStyle')) {
+      if (!value || value.trim() === '') {
+        return tEdit("validation.fieldRequired") || "This field is required";
+      }
+    }
+
+    // House available validation
+    if (field === 'houseAvailable') {
+      if (value === null || value === undefined) {
+        return tEdit("validation.fieldRequired") || "This field is required";
+      }
+    }
+
+    // Bio validation (social contacts)
     if (field === 'bio' && typeof value === 'string') {
       const validationError = validateSocialContacts(value);
       if (validationError) {
-        setError(validationError);
-        return;
-      } else {
-        setError(null);
+        return validationError;
       }
+    }
+
+    return null;
+  };
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    // Validate all required fields
+    const dateOfBirthError = validateField('dateOfBirth', formData.dateOfBirth);
+    if (dateOfBirthError) errors.dateOfBirth = dateOfBirthError;
+
+    const maritalStatusError = validateField('maritalStatus', formData.maritalStatus);
+    if (maritalStatusError) errors.maritalStatus = maritalStatusError;
+
+    const nationalityError = validateField('nationality', formData.nationality);
+    if (nationalityError) errors.nationality = nationalityError;
+
+    const placeOfResidenceError = validateField('placeOfResidence', formData.placeOfResidence);
+    if (placeOfResidenceError) errors.placeOfResidence = placeOfResidenceError;
+
+    const tribeError = validateField('tribe', formData.tribe);
+    if (tribeError) errors.tribe = tribeError;
+
+    const natureOfWorkError = validateField('natureOfWork', formData.natureOfWork);
+    if (natureOfWorkError) errors.natureOfWork = natureOfWorkError;
+
+    const weightError = validateField('weight', formData.weight);
+    if (weightError) errors.weight = weightError;
+
+    const heightError = validateField('height', formData.height);
+    if (heightError) errors.height = heightError;
+
+    const skinColorError = validateField('skinColor', formData.skinColor);
+    if (skinColorError) errors.skinColor = skinColorError;
+
+    const beautyError = validateField('beauty', formData.beauty);
+    if (beautyError) errors.beauty = beautyError;
+
+    const houseAvailableError = validateField('houseAvailable', formData.houseAvailable);
+    if (houseAvailableError) errors.houseAvailable = houseAvailableError;
+
+    const marriageTypeError = validateField('marriageType', formData.marriageType);
+    if (marriageTypeError) errors.marriageType = marriageTypeError;
+
+    // Female-specific fields
+    if (profile?.gender === "female" || profile?.gender === "أنثى") {
+      const acceptPolygamyError = validateField('acceptPolygamy', formData.acceptPolygamy);
+      if (acceptPolygamyError) errors.acceptPolygamy = acceptPolygamyError;
+
+      const hijabStyleError = validateField('hijabStyle', formData.hijabStyle);
+      if (hijabStyleError) errors.hijabStyle = hijabStyleError;
+    }
+
+    // Bio validation
+    const bioError = validateField('bio', formData.bio);
+    if (bioError) errors.bio = bioError;
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const updateField = (field: string, value: any) => {
+    // Clear field error when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+
+    // Clear general error if it was a social contact error
+    if (field === 'bio' && error && error.includes("socialContactError")) {
+      setError(null);
+    }
+
+    // Validate the field
+    const fieldError = validateField(field, value);
+    if (fieldError) {
+      setFieldErrors(prev => ({ ...prev, [field]: fieldError }));
     }
 
     setFormData(prev => ({
@@ -443,8 +599,23 @@ export default function EditProfilePage() {
   };
 
   const saveProfile = async () => {
+    // Validate form before submission
+    if (!validateForm()) {
+      setError(tEdit("validation.formInvalid") || "Please fix all errors before submitting");
+      // Scroll to first error
+      const firstErrorField = Object.keys(fieldErrors)[0];
+      if (firstErrorField) {
+        const element = document.querySelector(`[data-field="${firstErrorField}"]`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      return;
+    }
+
     setLoading(true);
     setError(null);
+    setFieldErrors({});
     try {
       const profileData: ProfileUpdatePayload = {
         username: formData.username || null,
@@ -529,11 +700,22 @@ export default function EditProfilePage() {
                 </CardHeader>
                 <CardContent className="space-y-8 px-4 md:px-10 pb-10">
 
-                  {error && (
+                  {/* {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                       {error}
                     </div>
-                  )}
+                  )} */}
+
+                  {/* {Object.keys(fieldErrors).length > 0 && (
+                    <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg">
+                      <p className="font-semibold mb-1">{tEdit("validation.pleaseFixErrors") || "Please fix the following errors:"}</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        {Object.entries(fieldErrors).map(([field, message]) => (
+                          <li key={field}>{message}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )} */}
 
                   {/* Basic Information Section */}
                   <div className="space-y-6">
@@ -541,17 +723,24 @@ export default function EditProfilePage() {
                       {t("sections.basicInfo")}
                     </h3>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                      <FormField label={<Label>{tEdit("dateOfBirth")}</Label>} required>
+                      <FormField 
+                        label={<Label>{tEdit("dateOfBirth")}</Label>} 
+                        required
+                        error={fieldErrors.dateOfBirth}
+                      >
                         <TextField
                           type="date"
                           value={formData.dateOfBirth}
                           onChange={(e) => updateField("dateOfBirth", e.target.value)}
+                          data-field="dateOfBirth"
+                          className={fieldErrors.dateOfBirth ? "border-red-500 focus:border-red-500" : ""}
                         />
                       </FormField>
 
                       <FormField
                         label={<Label>{t("fields.marital")}</Label>}
                         required
+                        error={fieldErrors.maritalStatus}
                       >
                         <Select
                           options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
@@ -567,28 +756,46 @@ export default function EditProfilePage() {
                           value={formData.maritalStatus}
                           onChange={(val) => updateField("maritalStatus", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="maritalStatus"
+                          error={!!fieldErrors.maritalStatus}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.nationality2")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.nationality2")}</Label>} 
+                        required
+                        error={fieldErrors.nationality}
+                      >
                         <Select
                           options={nationalityOptions}
                           value={formData.nationality}
                           onChange={(val) => updateField("nationality", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="nationality"
+                          error={!!fieldErrors.nationality}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.residence")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.residence")}</Label>} 
+                        required
+                        error={fieldErrors.placeOfResidence}
+                      >
                         <Select
                           options={placeOfResidenceOptions}
                           value={formData.placeOfResidence}
                           onChange={(val) => updateField("placeOfResidence", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="placeOfResidence"
+                          error={!!fieldErrors.placeOfResidence}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.tribe")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.tribe")}</Label>} 
+                        required
+                        error={fieldErrors.tribe}
+                      >
                         <Select
                           options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_tribal", label: tEdit("f_tribal") },
@@ -602,6 +809,8 @@ export default function EditProfilePage() {
                           value={formData.tribe}
                           onChange={(val) => updateField("tribe", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="tribe"
+                          error={!!fieldErrors.tribe}
                         />
                       </FormField>
                     </div>
@@ -671,7 +880,11 @@ export default function EditProfilePage() {
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.job")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.job")}</Label>} 
+                        required
+                        error={fieldErrors.natureOfWork}
+                      >
                         <Select
                           options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_unemployed", label: tEdit("f_unemployed") },
@@ -685,28 +898,46 @@ export default function EditProfilePage() {
                           value={formData.natureOfWork}
                           onChange={(val) => updateField("natureOfWork", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="natureOfWork"
+                          error={!!fieldErrors.natureOfWork}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.weight")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.weight")}</Label>} 
+                        required
+                        error={fieldErrors.weight}
+                      >
                         <TextField
                           type="number"
                           value={formData.weight || ""}
                           onChange={(e) => updateField("weight", e.target.value ? Number(e.target.value) : null)}
                           placeholder={t("placeholders.weight")}
+                          data-field="weight"
+                          className={fieldErrors.weight ? "border-red-500 focus:border-red-500" : ""}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.height")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.height")}</Label>} 
+                        required
+                        error={fieldErrors.height}
+                      >
                         <TextField
                           type="number"
                           value={formData.height || ""}
                           onChange={(e) => updateField("height", e.target.value ? Number(e.target.value) : null)}
                           placeholder={t("placeholders.height")}
+                          data-field="height"
+                          className={fieldErrors.height ? "border-red-500 focus:border-red-500" : ""}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.skin")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.skin")}</Label>} 
+                        required
+                        error={fieldErrors.skinColor}
+                      >
                         <Select
                           options={profile?.gender === "female" || profile?.gender === "أنثى" ? [
                             { value: "f_white", label: tEdit("f_white") },
@@ -720,10 +951,16 @@ export default function EditProfilePage() {
                           value={formData.skinColor}
                           onChange={(val) => updateField("skinColor", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="skinColor"
+                          error={!!fieldErrors.skinColor}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.beauty")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.beauty")}</Label>} 
+                        required
+                        error={fieldErrors.beauty}
+                      >
                         <Select
                           options={(profile?.gender === "female" || profile?.gender === "أنثى") ? [
                             { value: "f_acceptable", label: tEdit("f_acceptable") },
@@ -738,10 +975,16 @@ export default function EditProfilePage() {
                           value={formData.beauty}
                           onChange={(val) => updateField("beauty", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="beauty"
+                          error={!!fieldErrors.beauty}
                         />
                       </FormField>
 
-                      <FormField label={<Label>{t("fields.home")}</Label>} required>
+                      <FormField 
+                        label={<Label>{t("fields.home")}</Label>} 
+                        required
+                        error={fieldErrors.houseAvailable}
+                      >
                         <Select
                           options={[
                             { value: "true", label: tEdit("available") },
@@ -750,12 +993,15 @@ export default function EditProfilePage() {
                           value={formData.houseAvailable?.toString()}
                           onChange={(val) => updateField("houseAvailable", val === "true")}
                           placeholder={t("placeholders.choose")}
+                          data-field="houseAvailable"
+                          error={!!fieldErrors.houseAvailable}
                         />
                       </FormField>
 
                       <FormField
                         label={<Label>{t("fields.marriageType")}</Label>}
                         required
+                        error={fieldErrors.marriageType}
                       >
                         <Select
                           options={[
@@ -765,6 +1011,8 @@ export default function EditProfilePage() {
                           value={formData.marriageType}
                           onChange={(val) => updateField("marriageType", val)}
                           placeholder={t("placeholders.choose")}
+                          data-field="marriageType"
+                          error={!!fieldErrors.marriageType}
                         />
                       </FormField>
 
@@ -773,6 +1021,7 @@ export default function EditProfilePage() {
                           <FormField
                             label={<Label>{t("fields.acceptPolygamy")}</Label>}
                             required
+                            error={fieldErrors.acceptPolygamy}
                           >
                             <Select
                               options={[
@@ -783,11 +1032,14 @@ export default function EditProfilePage() {
                               value={formData.acceptPolygamy?.toString()}
                               onChange={(val) => updateField("acceptPolygamy", val)}
                               placeholder={t("placeholders.choose")}
+                              data-field="acceptPolygamy"
+                              error={!!fieldErrors.acceptPolygamy}
                             />
                           </FormField>
                           <FormField
                             label={<Label>{t("fields.hijabStyle")}</Label>}
                             required
+                            error={fieldErrors.hijabStyle}
                           >
                             <Select
                               options={[
@@ -798,6 +1050,8 @@ export default function EditProfilePage() {
                               value={formData.hijabStyle?.toString()}
                               onChange={(val) => updateField("hijabStyle", val)}
                               placeholder={t("placeholders.choose")}
+                              data-field="hijabStyle"
+                              error={!!fieldErrors.hijabStyle}
                             />
                           </FormField>
                         </>

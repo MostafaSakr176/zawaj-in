@@ -270,7 +270,7 @@ function translateNatureOfWork(value: string | null, locale: string, tEdit: any,
   const translations: { [key: string]: string } = {
     "unemployed": isFemale ? tEdit("f_unemployed") : tEdit("unemployed"),
     "employed": isFemale ? tEdit("f_employed") : tEdit("employed"),
-    "self_employed": tEdit("selfEmployed"),
+    "self_employed": tEdit("self_employed"),
     "f_unemployed": tEdit("f_unemployed"),
     "f_employed": tEdit("f_employed"),
   };
@@ -632,12 +632,12 @@ function translateBeauty(value: string | null, locale: string, tEdit: any, userG
                             
                             { value: "f_unemployed", label: tEdit("f_unemployed") },
                             { value: "f_employed", label: tEdit("f_employed") },
-                            { value: "self_employed", label: tEdit("selfEmployed") },
+                            { value: "self_employed", label: tEdit("self_employed") },
                           ] : [
                             
                             { value: "unemployed", label: tEdit("unemployed") },
                             { value: "employed", label: tEdit("employed") },
-                            { value: "self_employed", label: tEdit("selfEmployed") },
+                            { value: "self_employed", label: tEdit("self_employed") },
                           ]}
                         value={filters.natureOfWork}
                         onChange={(val) => updateFilter("natureOfWork", val)}

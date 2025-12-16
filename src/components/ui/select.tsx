@@ -21,11 +21,13 @@ export type SelectProps = {
   value?: string;
   onChange?: (value: string) => void;
   className?: string;
-  disabled?: boolean; // <-- Add this line
+  disabled?: boolean;
+  "data-field"?: string;
+  error?: boolean;
 };
 
 export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
-  ({ className, options, placeholder, value, onChange, disabled }, ref) => {
+  ({ className, options, placeholder, value, onChange, disabled, "data-field": dataField, error }, ref) => {
     const [open, setOpen] = React.useState(false);
     const [search, setSearch] = React.useState("");
     const fieldProps = useFieldProps();
@@ -67,11 +69,15 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           ref={containerRef}
           className={cn("relative", className)}
           tabIndex={0}
+          data-field={dataField}
         >
           <button
             type="button"
             className={cn(
-              "appearance-none bg-white h-11 w-full rounded-[8px] border border-[#D0D5DD] px-3 text-[1rem] shadow-xs outline-none flex items-center justify-between transition-[color,box-shadow]",
+              "appearance-none bg-white h-11 w-full rounded-[8px] border px-3 text-[1rem] shadow-xs outline-none flex items-center justify-between transition-[color,box-shadow]",
+              error || className?.includes("border-red-500")
+                ? "border-red-500 focus:border-red-500" 
+                : "border-[#D0D5DD]",
               open && "ring-2 ring-[#AFAFAF]"
             )}
             onClick={() => setOpen((v) => !v)}
