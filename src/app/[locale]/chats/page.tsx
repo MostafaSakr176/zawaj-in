@@ -69,7 +69,7 @@ function AudioPlayer({ audioUrl, duration, fromMe }: { audioUrl: string; duratio
   const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0;
 
   return (
-    <div className={`rounded-full ${fromMe ? 'rounded-bl-none bg-[#3B0C46]' : 'rounded-br-none bg-white border border-[#0000001A]'} px-3 py-2 flex items-center gap-3`}>
+    <div className={`rounded-full ${fromMe ? 'ltr:rounded-br-none rtl:rounded-bl-none bg-[#3B0C46]' : 'ltr:rounded-bl-none rtl:rounded-br-none bg-white border border-[#0000001A]'} px-3 py-2 flex items-center gap-3`}>
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
       <button
         onClick={togglePlay}
@@ -113,7 +113,7 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
 
   return fromMe ? (
     <div className="flex items-end justify-end gap-2">
-      <div className={`${common} bg-[#3B0C46] text-white rounded-bl-none`}>
+      <div className={`${common} bg-[#3B0C46] text-white ltr:rounded-bl-none rtl:rounded-br-none`}>
         {m.content}
         {m.status === "sent" ? (<Check color="#8A97AB" size={16} />) : m.status === "delivered" ? (<CheckCheck color="#8A97AB" size={16} />) : m.status === "read" ? (<CheckCheck color="#3B0C46" size={16} />) : null}
       </div>
@@ -122,7 +122,7 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
   ) : (
     <div className="flex items-end justify-start gap-2">
       <Image src={profile?.gender === "male" || profile?.gender === "ذكر" ? "/icons/female-img.webp" : "/photos/male-icon.png"} alt="" width={36} height={36} className="rounded-full" />
-      <div className={`${common} bg-[#EDF3FF] text-[#2D1F55] rounded-br-none`}>
+      <div className={`${common} bg-[#EDF3FF] text-[#2D1F55] ltr:rounded-bl-none rtl:rounded-br-none`}>
         {m.content}
       </div>
     </div>
