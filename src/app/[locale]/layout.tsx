@@ -14,28 +14,35 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = {
-  title: "ZwajIn",
-  description: "ZwajIn is a modern matchmaking platform for serious relationships.",
-  keywords: [
-    "marriage",
-    "matchmaking",
-    "zawaj",
-    "zwaj",
-    "halal dating",
-    "serious relationships",
-    "Muslim marriage",
-    "زواج",
-    "تعارف",
-    "خطبة"
-  ],
-  icons: {
-    icon: "/favicon.ico"
-  },
-  other: {
-    "apple-mobile-web-app-capable": "yes"
-  }
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const logoPath = locale === "ar" ? "/photos/logo-ar.webp" : "/photos/logo-en.webp";
+  
+  return {
+    title: locale === "ar" ? "زواج إن" : "ZwajIn",
+    description: "ZwajIn is a modern matchmaking platform for serious relationships.",
+    keywords: [
+      "marriage",
+      "matchmaking",
+      "zawaj",
+      "zwaj",
+      "halal dating",
+      "serious relationships",
+      "Muslim marriage",
+      "زواج",
+      "تعارف",
+      "خطبة"
+    ],
+    icons: {
+      icon: logoPath,
+      shortcut: logoPath,
+      apple: logoPath
+    },
+    other: {
+      "apple-mobile-web-app-capable": "yes"
+    }
+  };
+}
 
 export default async function RootLayout({
   children,
