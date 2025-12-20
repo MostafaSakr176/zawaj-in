@@ -17,7 +17,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Crown,
-  FileText
+  FileText,
+  Mail
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -47,6 +48,7 @@ const menuSections: MenuSection[] = [
       { icon: Crown, label: "Subscription Plans", href: "/dashboard/plans" },
       { icon: BarChart3, label: "Analytics & Insights", href: "/dashboard/analytics" },
       { icon: MessageSquare, label: "Chats", href: "/dashboard/chats" },
+      { icon: Mail, label: "Contact Us Messages", href: "/dashboard/contact-us" },
       { icon: FileText, label: "Content", href: "/dashboard/content" },
       { icon: Lock, label: "Security & Privacy", href: "/dashboard/security" },
       { icon: MessageCircle, label: "Reviews & Feedback", href: "/dashboard/reviews" },

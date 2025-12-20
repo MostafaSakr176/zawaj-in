@@ -771,3 +771,49 @@ export async function getTopCountries(): Promise<GetTopCountriesResponse> {
   const response = await api.get("/admin/analytics/top-countries")
   return response.data
 }
+
+// ==================== Contact Us Messages Management ====================
+
+export interface ContactMessage {
+  id: string
+  userId: string | null
+  email: string
+  name: string
+  message: string
+  satisfactionRating: number | null
+  serviceRating: number | null
+  status: "pending" | "in_progress" | "resolved" | "closed"
+  priority: "low" | "medium" | "high"
+  assignedToAdminId: string | null
+  adminResponse: string | null
+  respondedAt: string | null
+  metadata: any | null
+  createdAt: string
+  updatedAt: string
+  user: any | null
+  assignedToAdmin: any | null
+}
+
+export interface GetContactMessagesParams {
+  page?: number
+  limit?: number
+  status?: string
+  priority?: string
+}
+
+export interface GetContactMessagesResponse {
+  data: ContactMessage[]
+  total: number
+  page: number
+  limit: number
+}
+
+/**
+ * Get all contact us messages with pagination
+ */
+export async function getContactMessages(
+  params?: GetContactMessagesParams
+): Promise<GetContactMessagesResponse> {
+  const response = await api.get("/contact-us", { params })
+  return response.data
+}
