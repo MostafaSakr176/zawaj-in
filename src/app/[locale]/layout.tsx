@@ -16,7 +16,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  const logoPath = locale === "ar" ? "/photos/logo-ar.webp" : "/photos/logo-en.webp";
+  const logoPath = locale === "ar" ? "/photos/tab-icon.png" : "/photos/tab-icon.png";
   
   return {
     title: locale === "ar" ? "زواج إن" : "ZwajIn",
