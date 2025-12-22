@@ -27,7 +27,7 @@ const NewSubscribers = React.memo(() => {
 
     // Filters and pagination state
     const [gender, setGender] = useState<string | undefined>(undefined);
-    const [country, setCountry] = useState<string | undefined>(undefined); // ISO2
+    const [nationality, setNationality] = useState<string | undefined>(undefined); // ISO2
     const [placeOfResidence, setPlaceOfResidence] = useState<string | undefined>(undefined); // free text
     const [marriageType, setMarriageType] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
@@ -77,17 +77,18 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
         };
         if (gender && gender !== "all") params.gender = gender;
         
-        // Send country as ISO2 code (or convert to English name if backend expects it)
-        if (country) {
+        // Send nationality as ISO2 code (or convert to English name if backend expects it)
+        if (nationality) {
             // Option 1: Send ISO2 directly
-            params.country = country;
-            // Option 2: Convert to English name if backend expects country name
-            // const countryNameEn = countriesLib.getName(country, "en", { select: "official" }) || country;
-            // params.country = countryNameEn;
+            params.nationality = nationality;
+            // Option 2: Convert to English name if backend expects nationality name
+            // const nationalityNameEn = countriesLib.getName(nationality, "en", { select: "official" }) || nationality;
+            // params.nationality = nationalityNameEn;
         }
         
-        if (placeOfResidence) params.city = placeOfResidence; // Send as city param
+        if (placeOfResidence) params.placeOfResidence = placeOfResidence; // Send as city param
         if (marriageType) params.marriageType = marriageType;
+        params.lang = currentLocale
 
         const token = Cookies.get("access_token");
 
@@ -105,7 +106,7 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
                 setPagination({ total: 0, page: 1, limit: PAGE_SIZE, totalPages: 1 });
             })
             .finally(() => setLoading(false));
-    }, [gender, country, placeOfResidence, marriageType, page]);
+    }, [gender, nationality, placeOfResidence, marriageType, page]);
 
     // Handle tab change
     const handleTabChange = (tab: string) => {
@@ -115,7 +116,7 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
 
     // Handle filter change
     const handleCountryChange = (val: string) => {
-        setCountry(val);
+        setNationality(val);
         setPage(1);
     };
 
@@ -157,7 +158,7 @@ function getPlaceOfResidenceLabel(code: string, locale: string) {
                                     className="bg-white/40"
                                     options={nationalityOptions}
                                     placeholder={t("nationality")}
-                                    value={country}
+                                    value={nationality}
                                     onChange={handleCountryChange}
                                 />
                             </FormField>

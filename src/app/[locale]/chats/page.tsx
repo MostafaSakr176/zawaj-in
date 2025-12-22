@@ -113,7 +113,7 @@ function ChatBubble({ m, currentUserId }: { m: Message; currentUserId: string })
 
   return fromMe ? (
     <div className="flex items-end justify-end gap-2">
-      <div className={`${common} bg-[#3B0C46] text-white ltr:rounded-bl-none rtl:rounded-br-none`}>
+      <div className={`${common} bg-[#3B0C46] text-white ltr:rounded-br-none rtl:rounded-bl-none`}>
         {m.content}
         {m.status === "sent" ? (<Check color="#8A97AB" size={16} />) : m.status === "delivered" ? (<CheckCheck color="#8A97AB" size={16} />) : m.status === "read" ? (<CheckCheck color="#3B0C46" size={16} />) : null}
       </div>
